@@ -5,7 +5,7 @@ RBQFetchedResultsController
 
 The `RBQFetchedResultsController` (FRC) is a replacement for `NSFetchedResultsController` when used in conjunction with `RBQRealmNotificationManager`. The controller and delegate follow the same paradigm as `NSFetchedResultsController`, and allow the developer to monitor changes of a `RLMObject` subclass.
 
-`RBQFetcheResultsController` supports tableview sections and implements a drop-in replacement delegate to pass the changes to the tableview for section and row animations.
+`RBQFetchedResultsController` supports tableview sections and implements a drop-in replacement delegate to pass the changes to the tableview for section and row animations.
 
 ####How It Works:
 
@@ -66,9 +66,9 @@ open RBQFetchedResultsControllerExample.xcworkspace
 
 ####Current Limitations:
 
-1. The FRC performance degrades as the result set grows. ~1000 rows or less results in acceptable performance in testing from iPhone 4s and greater. The bottleneck is having to iterate through all the `RLMResults` after every change to recreate the section information. If Realm implemented a method to retrieve all of the distinct values for a keypath (i.e. the section keypath), this would allow prevent the need to iterate over every result (i.e. with all the section keypath values, individual `RLMResults` could be created for each section, to identify the number of sections and rows within each section without iterating over every object within each `RLMResults`).
+1. The FRC performance degrades as the result set grows. ~1000 rows or less results in acceptable performance in testing from iPhone 4s and greater. The bottleneck is having to iterate through all the `RLMResults` after every change to recreate the section information. If Realm implemented a method to retrieve all of the distinct values for a key path (i.e. the section key path), this would allow prevent the need to iterate over every result (i.e. with all the section key path values, individual `RLMResults` could be created for each section and used to identify the number of sections and rows within each section without iterating over every object within each `RLMResults`).
 
-2. The `RBQRealmNotificationManager` requires manually logging of changes. A better solution would be to abstract this away by creating a `RLMRealm` and `RLMObject` subclass that performs the log whenever the keyPath value is changed on the object or an object is added or deleted from Realm.
+2. The `RBQRealmNotificationManager` requires manually logging of changes. A better solution would be to abstract this away by creating a `RLMRealm` and `RLMObject` subclass that performs the log whenever the key path value is changed on the object or an object is added or deleted from Realm.
 
-3. Finer-grained notifications down to the keyPath value change would enable even further performance improvements to the FRC. This should be possible if #2 solution above is implemented as logging value changes wouldn't require additional developer input.
+3. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC. This should be possible if #2 solution above is implemented as logging value changes wouldn't require additional developer input.
  
