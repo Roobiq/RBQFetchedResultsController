@@ -16,14 +16,21 @@
 // Realm Class name
 @property (nonatomic, readonly, strong) NSString *entityName;
 
+// The Realm in which this object is persisted. Returns nil for standalone objects.
+@property (nonatomic, readonly) RLMRealm *realm;
+
 @property (nonatomic, strong) NSPredicate *predicate;
 
 // Array of RLMSortDescriptors
 @property(nonatomic, strong) NSArray *sortDescriptors;
 
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
+                                        inRealm:(RLMRealm *)realm
                                       predicate:(NSPredicate *)predicate;
 
-- (instancetype)initWithEntityName:(NSString *)entityName;
+- (RLMResults *)fetchObjects;
+
+- (instancetype)initWithEntityName:(NSString *)entityName
+                           inRealm:(RLMRealm *)realm;
 
 @end

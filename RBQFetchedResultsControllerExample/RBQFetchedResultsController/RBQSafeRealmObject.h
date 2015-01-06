@@ -14,7 +14,9 @@
 @property (strong, nonatomic, readonly) NSString *className;
 @property (strong, nonatomic, readonly) id primaryKeyValue;
 @property (strong, nonatomic, readonly) RLMProperty *primaryKeyProperty;
-@property (strong, nonatomic, readonly) RLMRealm *realm;
+
+// The Realm in which this object is persisted. Returns nil for standalone objects.
+@property (nonatomic, readonly) RLMRealm *realm;
 
 + (instancetype)safeObjectFromObject:(RLMObject *)object;
 

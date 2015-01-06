@@ -8,26 +8,60 @@
 
 #import "RBQFetchRequest.h"
 
+@interface RBQFetchRequest ()
+
+@property (strong, nonatomic) NSString *realmPath;
+
+@end
+
 @implementation RBQFetchRequest
 
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
+                                        inRealm:(RLMRealm *)realm
                                       predicate:(NSPredicate *)predicate
 {
-    RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName];
+    RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
+                                                                        inRealm:realm];
     fetchRequest.predicate = predicate;
     
     return fetchRequest;
 }
 
 - (instancetype)initWithEntityName:(NSString *)entityName
+                           inRealm:(RLMRealm *)realm
 {
     self = [super init];
     
     if (self) {
         _entityName = entityName;
+        _realmPath = realm.path;
     }
     
     return self;
+}
+
+- (RLMResults *)fetchObjects
+{
+    RLMResults *fetchResults = [NSClassFromString(self.entityName) allObjectsInRealm:self.realm];
+    
+    // If we have a predicate use it
+    if (self.predicate) {
+        fetchResults = [fetchResults objectsWithPredicate:self.predicate];
+    }
+    
+    // If we have sort descriptors then use them
+    if (self.sortDescriptors.count > 0) {
+        fetchResults = [fetchResults sortedResultsUsingDescriptors:self.sortDescriptors];
+    }
+    
+    return fetchResults;
+}
+
+#pragma mark - Getter
+
+- (RLMRealm *)realm
+{
+    return [RLMRealm realmWithPath:self.realmPath];
 }
 
 @end

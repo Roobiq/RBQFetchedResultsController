@@ -12,6 +12,8 @@
 #import "TestObject.h"
 #import "RBQRealmNotificationManager.h"
 
+id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
+
 @interface ExampleTableViewController () <RBQFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) RBQFetchedResultsController *fetchedResultsController;
@@ -24,11 +26,13 @@
 {
     [super viewDidLoad];
     
-    [[RLMRealm defaultRealm] beginWriteTransaction];
+    RLMRealm *realm = [RLMRealm defaultRealm];
     
-    [[RLMRealm defaultRealm] deleteAllObjects];
+    [realm beginWriteTransaction];
     
-    for (NSUInteger i = 0; i < 1000; i++) {
+    [realm deleteAllObjects];
+    
+    for (NSUInteger i = 0; i < 500; i++) {
         
         NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
         
@@ -41,14 +45,15 @@
             object.sectionName = @"Second Section";
         }
         
-        [[RLMRealm defaultRealm] addObject:object];
+        [realm addObject:object];
     }
     
-    [[RLMRealm defaultRealm] commitWriteTransaction];
+    [realm commitWriteTransaction];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
+                                                                        inRealm:realm
                                                                       predicate:predicate];
     
     RLMSortDescriptor *sortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sortIndex"
@@ -118,9 +123,15 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customCell" forIndexPath:indexPath];
     
     // Configure the cell...
-    TestObject *objectForCell = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    @autoreleasepool {
+        RLMRealm *realm = [RLMRealm defaultRealm];
+        
+        TestObject *objectForCell = [self.fetchedResultsController objectInRealm:realm
+                                                                     atIndexPath:indexPath];
+        
+        cell.textLabel.text = objectForCell.title;
+    }
     
-    cell.textLabel.text = objectForCell.title;
     
     return cell;
 }
@@ -233,7 +244,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller
 {
     NSLog(@"Ending updates");
-    [self.tableView endUpdates];
+    @try {
+        [self.tableView endUpdates];
+    }
+    @catch (NSException *ex) {
+        NSLog(@"RBQFecthResultsTVC caught exception updating table view: %@. Falling back to reload.", ex);
+        [self.tableView reloadData];
+    }
 }
 
 #pragma mark - UIBarButton Actions
@@ -267,7 +284,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)deleteObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-    TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    
+    TestObject *object = [self.fetchedResultsController objectInRealm:realm
+                                                          atIndexPath:indexPath];
     if (!object) {
         return;
     }
@@ -277,25 +297,28 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     //    NSIndexPath *fifthObjectIndexPath = [NSIndexPath indexPathForRow:5 inSection:0];
     //    TestObject *changeObject = [self.fetchedResultsController objectAtIndexPath:fifthObjectIndexPath];
     
-    [[RLMRealm defaultRealm] beginWriteTransaction];
+    [realm beginWriteTransaction];
     
     [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
     
-    [[RLMRealm defaultRealm] deleteObject:object];
+    [realm deleteObject:object];
     
     //    changeObject.title = @"Changed";
     
     //    [[RBQRealmNotificationManager defaultManager] didChangeObject:changeObject];
     
-    [[RLMRealm defaultRealm] commitWriteTransaction];
+    [realm commitWriteTransaction];
     NSLog(@"Finished transaction with object %@", title);
 }
 
 - (void)insertObject
 {
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    
     NSIndexPath *indexPathFirstRow = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPathFirstRow];
+    TestObject *object = [self.fetchedResultsController objectInRealm:realm
+                                                          atIndexPath:indexPathFirstRow];
     
     if (object.sortIndex > 0) {
         [[RLMRealm defaultRealm] beginWriteTransaction];
@@ -305,7 +328,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)sortIndex];
         
         
-        TestObject *newObject = [TestObject objectForPrimaryKey:[NSString stringWithFormat:@"%@%ld",title, (long)sortIndex]];
+        TestObject *newObject = [TestObject objectInRealm:realm
+                                            forPrimaryKey:[NSString stringWithFormat:@"%@%ld",title, (long)sortIndex]];
         
         if (!newObject) {
             newObject = [[TestObject alloc] init];
@@ -313,47 +337,56 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             newObject.sortIndex = sortIndex;
             newObject.sectionName = @"First Section";
             newObject.key = [NSString stringWithFormat:@"%@%ld",title, (long)sortIndex];
+            newObject.inTable = YES;
             
-            [[RLMRealm defaultRealm] addObject:newObject];
+            [realm addObject:newObject];
+            NSLog(@"DID AN INSERT");
             [[RBQRealmNotificationManager defaultManager] didAddObject:newObject];
         }
+        // So unless this is a real change.... the FRC can get tripped up!!!
         else {
+            newObject.inTable = YES;
+            NSLog(@"DID A CHANGE");
             [[RBQRealmNotificationManager defaultManager] didChangeObject:newObject];
         }
         
-        newObject.inTable = YES;
         
         
-        
-        [[RLMRealm defaultRealm] commitWriteTransaction];
+        [realm commitWriteTransaction];
     }
     // Test Moves
     else {
-        [[RLMRealm defaultRealm] beginWriteTransaction];
+        RLMRealm *realm = [RLMRealm defaultRealm];
+        
+        [realm beginWriteTransaction];
         
         NSIndexPath *indexPathFifthRow = [NSIndexPath indexPathForRow:5 inSection:0];
         NSIndexPath *indexPathThirdRow = [NSIndexPath indexPathForRow:3 inSection:0];
         NSIndexPath *indexPathSixthRow = [NSIndexPath indexPathForRow:6 inSection:0];
         NSIndexPath *indexPathFirstRow = [NSIndexPath indexPathForRow:0 inSection:0];
         
-        TestObject *firstObject = [self.fetchedResultsController objectAtIndexPath:indexPathFirstRow];
-        TestObject *thirdObject = [self.fetchedResultsController objectAtIndexPath:indexPathThirdRow];
-        TestObject *fifthObject = [self.fetchedResultsController objectAtIndexPath:indexPathFifthRow];
-        TestObject *sixthObject = [self.fetchedResultsController objectAtIndexPath:indexPathSixthRow];
+        TestObject *firstObject = [self.fetchedResultsController objectInRealm:realm
+                                                                   atIndexPath:indexPathFirstRow];
+        TestObject *thirdObject = [self.fetchedResultsController objectInRealm:realm
+                                                                   atIndexPath:indexPathThirdRow];
+        TestObject *fifthObject = [self.fetchedResultsController objectInRealm:realm
+                                                                   atIndexPath:indexPathFifthRow];
+        TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
+                                                                   atIndexPath:indexPathSixthRow];
         
         [[RBQRealmNotificationManager defaultManager] didAddObjects:nil
                                                   willDeleteObjects:nil
-                                                   didChangeObjects:@[fifthObject,
-                                                                      sixthObject,
-                                                                      firstObject,
-                                                                      thirdObject]];
+                                                   didChangeObjects:@[NULL_IF_NIL(fifthObject),
+                                                                      NULL_IF_NIL(sixthObject),
+                                                                      NULL_IF_NIL(firstObject),
+                                                                      NULL_IF_NIL(thirdObject)]];
         
         fifthObject.sortIndex += 1;
         sixthObject.sortIndex -= 1;
         firstObject.inTable = NO;
         thirdObject.title = @"New Title";
         
-        [[RLMRealm defaultRealm] commitWriteTransaction];
+        [realm commitWriteTransaction];
     }
 }
 

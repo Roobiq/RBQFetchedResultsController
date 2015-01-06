@@ -18,7 +18,9 @@
 @interface RBQFetchedResultsSectionInfo : NSObject
 
 @property(nonatomic, readonly) NSUInteger numberOfObjects;
+
 @property(nonatomic, readonly) NSArray *objects;
+
 @property(nonatomic, readonly) NSString *name;
 
 @end
@@ -99,6 +101,9 @@
 
 // Returns a RLMObject on current thread
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
+
+- (id)objectInRealm:(RLMRealm *)realm
+        atIndexPath:(NSIndexPath *)indexPath;
 
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject;
 

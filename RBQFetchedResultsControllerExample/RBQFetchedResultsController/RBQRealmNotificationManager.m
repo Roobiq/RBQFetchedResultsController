@@ -126,7 +126,9 @@
     // Save a safe object to use across threads
     RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:addedObject];
     
-    [self.addedSafeObjects addObject:safeObject];
+    if (![self.addedSafeObjects containsObject:safeObject]) {
+        [self.addedSafeObjects addObject:safeObject];
+    }
 }
 
 - (void)willDeleteObject:(RLMObject *)deletedObject
@@ -134,7 +136,9 @@
     // Save a safe object to use across threads
     RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:deletedObject];
     
-    [self.deletedSafeObjects addObject:safeObject];
+    if (![self.deletedSafeObjects containsObject:safeObject]) {
+        [self.deletedSafeObjects addObject:safeObject];
+    }
 }
 
 - (void)didChangeObject:(RLMObject *)changedObject
@@ -142,7 +146,9 @@
     // Save a safe object to use across threads
     RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:changedObject];
     
-    [self.changedSafeObjects addObject:safeObject];
+    if (![self.changedSafeObjects containsObject:safeObject]) {
+        [self.changedSafeObjects addObject:safeObject];
+    }
 }
 
 - (void)didAddObjects:(NSArray *)addedObjects
@@ -150,29 +156,53 @@
      didChangeObjects:(NSArray *)changedObjects
 {
     if (addedObjects) {
+        
         for (RLMObject *addedObject in addedObjects) {
-            // Save a safe object to use across threads
-            RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:addedObject];
             
-            [self.addedSafeObjects addObject:safeObject];
+            if (addedObject &&
+                addedObject != (id)[NSNull null]) {
+                
+                // Save a safe object to use across threads
+                RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:addedObject];
+                
+                if (![self.addedSafeObjects containsObject:safeObject]) {
+                    [self.addedSafeObjects addObject:safeObject];
+                }
+            }
         }
     }
     
     if (deletedObjects) {
+        
         for (RLMObject *deletedObject in deletedObjects) {
-            // Save a safe object to use across threads
-            RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:deletedObject];
             
-            [self.deletedSafeObjects addObject:safeObject];
+            if (deletedObject &&
+                deletedObject != (id)[NSNull null]) {
+                
+                // Save a safe object to use across threads
+                RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:deletedObject];
+                
+                if (![self.deletedSafeObjects containsObject:safeObject]) {
+                    [self.deletedSafeObjects addObject:safeObject];
+                }
+            }
         }
     }
     
     if (changedObjects) {
+        
         for (RLMObject *changedObject in changedObjects) {
-            // Save a safe object to use across threads
-            RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:changedObject];
             
-            [self.changedSafeObjects addObject:safeObject];
+            if (changedObject &&
+                changedObject != (id)[NSNull null]) {
+                
+                // Save a safe object to use across threads
+                RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:changedObject];
+                
+                if (![self.changedSafeObjects containsObject:safeObject]) {
+                    [self.changedSafeObjects addObject:safeObject];
+                }
+            }
         }
     }
 }
@@ -212,7 +242,7 @@
 {
     self.token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *note, RLMRealm *realm) {
         if ([note isEqualToString:RLMRealmDidChangeNotification]) {
-            [self sendNotifications];
+            [self sendNotificationsWithRealm:realm];
         }
     }];
 }
@@ -220,7 +250,7 @@
 #pragma mark - RBQNotification
 
 // Calling this method will broadcast any registered changes
-- (void)sendNotifications
+- (void)sendNotificationsWithRealm:(RLMRealm *)realm
 {
     // call this realms notification blocks
     for (RBQNotificationToken *token in [_notificationHandlers copy]) {
@@ -228,7 +258,7 @@
             token.block(self.addedSafeObjects.copy,
                         self.deletedSafeObjects.copy,
                         self.changedSafeObjects.copy,
-                        [RLMRealm realmWithPath:self.realmPath]);
+                        realm);
         }
     }
     

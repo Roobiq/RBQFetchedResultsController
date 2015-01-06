@@ -148,7 +148,8 @@
     if (self.fetchRequest) {
         
         dispatch_barrier_sync(self.concurrentResultsQueue, ^{
-            RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
+            RLMResults *fetchResults = [self fetchResultsInRealm:self.fetchRequest.realm
+                                                 forFetchRequest:self.fetchRequest];
             
             self.fetchedResultsObject =
                 [self fetchedResultsObjectWithFetchResults:fetchResults
@@ -175,6 +176,14 @@
     NSIndexPath *key = [self keyForIndexPath:indexPath];
     RBQSafeRealmObject *safeObject = self.fetchedResultsObject.indexPathKeyMap[key];
     return [safeObject RLMObject];
+}
+
+- (id)objectInRealm:(RLMRealm *)realm
+        atIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath *key = [self keyForIndexPath:indexPath];
+    RBQSafeRealmObject *safeObject = self.fetchedResultsObject.indexPathKeyMap[key];
+    return [RBQSafeRealmObject objectInRealm:realm fromSafeObject:safeObject];
 }
 
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject
@@ -211,69 +220,90 @@
           NSArray *changedSafeObjects,
           RLMRealm *realm)
         {
-            dispatch_barrier_async(self.concurrentResultsQueue, ^{
-                NSLog(@"Processing notification");
-                // Get the new list of safe fetch objects
-                RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
-                
-                // -------------------
-                // There is an error that can occur here becaues RLMResults is not frozen during
-                // enumeration.
-                // -------------------
-                
-                RBQFetchedResultsObject *newFetchedResultsObject =
+            RLMResults *sameRealmFetchResults = [self fetchResultsInRealm:realm
+                                                          forFetchRequest:self.fetchRequest];
+            
+            NSUInteger sameRealmCount = sameRealmFetchResults.count;
+            
+            if (addedSafeObjects.count > 0 ||
+                deletedSafeObjects.count > 0 ||
+                changedSafeObjects.count > 0) {
+                dispatch_barrier_async(self.concurrentResultsQueue, ^{
+                    
+                    NSLog(@"Processing notification");
+                    RLMRealm *realm = self.fetchRequest.realm;
+                    
+                    if (deletedSafeObjects.count > 0) {
+                        [realm refresh];
+                    }
+                    
+                    // Get the new list of safe fetch objects
+                    RLMResults *fetchResults = [self fetchResultsInRealm:realm
+                                                         forFetchRequest:self.fetchRequest];
+                    
+                    NSUInteger newRealmCount = fetchResults.count;
+                    
+                    NSLog(@"Same realm count: %d", sameRealmCount);
+                    NSLog(@"New realm count: %d", newRealmCount);
+                    
+                    RBQFetchedResultsObject *newFetchedResultsObject =
                     [self fetchedResultsObjectWithFetchResults:fetchResults
                                             sectionNameKeyPath:self.sectionNameKeyPath];
-                
-                // Is copy necessary here?
-                RBQFetchedResultsObject *oldFetchedResultsObject = self.fetchedResultsObject.copy;
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)])
-                    {
-                        [self.delegate controllerWillChangeContent:self];
+                    
+                    // Is copy necessary here?
+                    RBQFetchedResultsObject *oldFetchedResultsObject = self.fetchedResultsObject.copy;
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)])
+                        {
+                            [self.delegate controllerWillChangeContent:self];
+                        }
+                    });
+                    
+                    self.fetchedResultsObject = newFetchedResultsObject;
+                    
+                    // Identify section changes
+                    [self identifySectionChangesFromLatestResults:newFetchedResultsObject
+                                                      oldSections:oldFetchedResultsObject.sections];
+                    
+                    // Process changes, additions, deletions
+                    // Run all three from "changed" logic to catch weird edge cases where what client
+                    // reported isn't what fetch diff observers (eg, user reports deletion but we still
+                    // see it in fetch). What we report to delegate has to match what
+                    // UITableViewDataSource delegate methods report, so if user-reported changes don't
+                    // match fetched results, stick with fetch.
+                    for (NSArray *changedObjects in @[changedSafeObjects, addedSafeObjects, deletedSafeObjects]) {
+                        [self identifyChangesFromLatestResults:newFetchedResultsObject
+                                       oldFetchedResultsObject:oldFetchedResultsObject
+                                        withChangedSafeObjects:changedObjects];
                     }
+                    
+                    /*
+                     [self identifyChangesFromLatestResults:newFetchedResultsObject
+                     oldFetchedResultsObject:oldFetchedResultsObject
+                     withChangedSafeObjects:changedSafeObjects];
+                     
+                     [self identifyChangesFromLatestResults:newFetchedResultsObject
+                     withAddedSafeObjects:addedSafeObjects];
+                     
+                     [self identifyChangesFromLatestResults:newFetchedResultsObject
+                     oldFetchedResultsObject:oldFetchedResultsObject
+                     withDeletedSafeObjects:deletedSafeObjects];
+                     */
+                    
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        NSLog(@"Added Safe Objects: %d", addedSafeObjects.count);
+                        NSLog(@"Deleted Safe Objects: %d", deletedSafeObjects.count);
+                        NSLog(@"Changed Safe Objects: %d", changedSafeObjects.count);
+                        
+                        if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
+                            [self.delegate controllerDidChangeContent:self];
+                        }
+                    });
+                    NSLog(@"Processed notification");
                 });
-                
-                self.fetchedResultsObject = newFetchedResultsObject;
-                
-                // Identify section changes
-                [self identifySectionChangesFromLatestResults:newFetchedResultsObject
-                                                  oldSections:oldFetchedResultsObject.sections];
-                
-                // Process changes, additions, deletions
-                // Run all three from "changed" logic to catch weird edge cases where what client
-                // reported isn't what fetch diff observers (eg, user reports deletion but we still
-                // see it in fetch). What we report to delegate has to match what
-                // UITableViewDataSource delegate methods report, so if user-reported changes don't
-                // match fetched results, stick with fetch.
-                for (NSArray *changedObjects in @[changedSafeObjects, addedSafeObjects, deletedSafeObjects]) {
-                    [self identifyChangesFromLatestResults:newFetchedResultsObject
-                                   oldFetchedResultsObject:oldFetchedResultsObject
-                                    withChangedSafeObjects:changedObjects];
-                }
-                
-                /*
-                [self identifyChangesFromLatestResults:newFetchedResultsObject
-                               oldFetchedResultsObject:oldFetchedResultsObject
-                                withChangedSafeObjects:changedSafeObjects];
-                
-                [self identifyChangesFromLatestResults:newFetchedResultsObject
-                                  withAddedSafeObjects:addedSafeObjects];
-                
-                [self identifyChangesFromLatestResults:newFetchedResultsObject
-                               oldFetchedResultsObject:oldFetchedResultsObject
-                                withDeletedSafeObjects:deletedSafeObjects];
-                */
-                
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-                        [self.delegate controllerDidChangeContent:self];
-                    }
-                });
-                NSLog(@"Processed notification");
-            });
+            }
     }];
 }
 
@@ -365,7 +395,8 @@
             }
         }
         // Item was moved from change
-        else if ([newIndexPath compare:oldIndexPath]) {
+        else if ([newIndexPath compare:oldIndexPath] != NSOrderedSame) {
+            
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
@@ -379,7 +410,8 @@
             }
         }
         // Item updated -- may have to redraw
-        else if ([newIndexPath isEqual:oldIndexPath]) {
+        else if ([newIndexPath compare:oldIndexPath] == NSOrderedSame) {
+            
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
@@ -446,9 +478,10 @@
     }
 }
 
-- (RLMResults *)fetchResultsForFetchRequest:(RBQFetchRequest *)fetchRequest
+- (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
+                    forFetchRequest:(RBQFetchRequest *)fetchRequest
 {
-    RLMResults *fetchResults = [NSClassFromString(fetchRequest.entityName) allObjects];
+    RLMResults *fetchResults = [NSClassFromString(fetchRequest.entityName) allObjectsInRealm:realm];
     
     // If we have a predicate use it
     if (fetchRequest.predicate) {
