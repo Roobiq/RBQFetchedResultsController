@@ -20,6 +20,10 @@
 
 + (instancetype)safeObjectFromObject:(RLMObject *)object
 {
+    if (!object) {
+        return nil;
+    }
+    
     NSString *className = [[object class] className];
     
     id value = [RBQSafeRealmObject primaryKeyValueForObject:object];
@@ -47,6 +51,10 @@
 
 + (id)primaryKeyValueForObject:(RLMObject *)object
 {
+    if (!object) {
+        return nil;
+    }
+    
     RLMProperty *primaryKeyProperty = object.objectSchema.primaryKeyProperty;
     
     if (primaryKeyProperty) {
