@@ -210,12 +210,9 @@
 
 - (void)registerChangeNotification
 {
-    self.token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *note, RLMRealm * realm) {
+    self.token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *note, RLMRealm *realm) {
         if ([note isEqualToString:RLMRealmDidChangeNotification]) {
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-                [self sendNotifications];
-            });
+            [self sendNotifications];
         }
     }];
 }

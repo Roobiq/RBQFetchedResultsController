@@ -167,73 +167,37 @@
 
 - (RBQSafeRealmObject *)safeObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-    __block RBQSafeRealmObject *object;
-    
-    dispatch_sync(self.concurrentResultsQueue, ^{
-        object = self.fetchedResultsObject.indexPathKeyMap[[self keyForIndexPath:indexPath]];
-    });
-    
-    return object;
+    return self.fetchedResultsObject.indexPathKeyMap[[self keyForIndexPath:indexPath]];
 }
 
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath
 {
-    __block id object;
-    
-    dispatch_sync(self.concurrentResultsQueue, ^{
-        NSIndexPath *key = [self keyForIndexPath:indexPath];
-        RBQSafeRealmObject *safeObject = self.fetchedResultsObject.indexPathKeyMap[key];
-        object = [safeObject RLMObject];
-    });
-    
-    return object;
+    NSIndexPath *key = [self keyForIndexPath:indexPath];
+    RBQSafeRealmObject *safeObject = self.fetchedResultsObject.indexPathKeyMap[key];
+    return [safeObject RLMObject];
 }
 
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject
 {
-    __block NSIndexPath *path;
-    
-    dispatch_sync(self.concurrentResultsQueue, ^{
-        path = self.fetchedResultsObject.objectKeyMap[safeObject];
-    });
-    
-    return path;
+    return self.fetchedResultsObject.objectKeyMap[safeObject];
 }
 
 - (NSIndexPath *)indexPathForObject:(RLMObject *)object
 {
-    __block NSIndexPath *path;
-    
-    dispatch_sync(self.concurrentResultsQueue, ^{
-        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
-        path = self.fetchedResultsObject.objectKeyMap[safeObject];
-    });
-    
-    return path;
+    RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
+    return self.fetchedResultsObject.objectKeyMap[safeObject];
 }
 
 #pragma mark - Getters
 
 - (NSArray *)fetchedObjects
 {
-    __block NSArray *objects;
-    
-    dispatch_sync(self.concurrentResultsQueue, ^{
-        objects = self.fetchedResultsObject.fetchedObjects;
-    });
-    
-    return objects;
+    return self.fetchedResultsObject.fetchedObjects;
 }
 
 - (NSArray *)sections
 {
-    __block NSArray *sections;
-    
-    dispatch_sync(self.concurrentResultsQueue, ^{
-        sections = self.fetchedResultsObject.sections;
-    });
-    
-    return sections;
+    return self.fetchedResultsObject.sections;
 }
 
 #pragma mark - Private
@@ -247,7 +211,8 @@
           NSArray *changedSafeObjects,
           RLMRealm *realm)
         {
-            dispatch_barrier_sync(self.concurrentResultsQueue, ^{
+            dispatch_barrier_async(self.concurrentResultsQueue, ^{
+                NSLog(@"Processing notification");
                 // Get the new list of safe fetch objects
                 RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
                 
@@ -263,18 +228,32 @@
                 // Is copy necessary here?
                 RBQFetchedResultsObject *oldFetchedResultsObject = self.fetchedResultsObject.copy;
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)])
                     {
                         [self.delegate controllerWillChangeContent:self];
                     }
                 });
-                    
+                
+                self.fetchedResultsObject = newFetchedResultsObject;
+                
                 // Identify section changes
                 [self identifySectionChangesFromLatestResults:newFetchedResultsObject
                                                   oldSections:oldFetchedResultsObject.sections];
                 
-                // Identify changes and moves first
+                // Process changes, additions, deletions
+                // Run all three from "changed" logic to catch weird edge cases where what client
+                // reported isn't what fetch diff observers (eg, user reports deletion but we still
+                // see it in fetch). What we report to delegate has to match what
+                // UITableViewDataSource delegate methods report, so if user-reported changes don't
+                // match fetched results, stick with fetch.
+                for (NSArray *changedObjects in @[changedSafeObjects, addedSafeObjects, deletedSafeObjects]) {
+                    [self identifyChangesFromLatestResults:newFetchedResultsObject
+                                   oldFetchedResultsObject:oldFetchedResultsObject
+                                    withChangedSafeObjects:changedObjects];
+                }
+                
+                /*
                 [self identifyChangesFromLatestResults:newFetchedResultsObject
                                oldFetchedResultsObject:oldFetchedResultsObject
                                 withChangedSafeObjects:changedSafeObjects];
@@ -285,16 +264,15 @@
                 [self identifyChangesFromLatestResults:newFetchedResultsObject
                                oldFetchedResultsObject:oldFetchedResultsObject
                                 withDeletedSafeObjects:deletedSafeObjects];
+                */
                 
-                // Should this be set before notifying delegate of changes? Delegate implementations
-                // may want to grab results, no?
-                _fetchedResultsObject = newFetchedResultsObject;
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
                         [self.delegate controllerDidChangeContent:self];
                     }
                 });
+                NSLog(@"Processed notification");
             });
     }];
 }
@@ -315,7 +293,7 @@
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                              didChangeSection:sectionInfo
                                       atIndex:oldSectionIndex
@@ -336,7 +314,7 @@
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                              didChangeSection:sectionInfo
                                       atIndex:newSectionIndex
@@ -362,7 +340,7 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:oldIndexPath
@@ -377,7 +355,7 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:nil
@@ -391,7 +369,7 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:oldIndexPath
@@ -400,11 +378,12 @@
                 });
             }
         }
-        else {
+        // Item updated -- may have to redraw
+        else if ([newIndexPath isEqual:oldIndexPath]) {
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:newIndexPath
@@ -413,6 +392,7 @@
                 });
             }
         }
+        // Missing else: item wasn't there before or after, but was edited -- don't care
     }
 }
 
@@ -428,7 +408,7 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:nil
@@ -446,14 +426,15 @@
 {
     for (RBQSafeRealmObject *object in deletedSafeObjects) {
         NSIndexPath *oldIndexPath = oldFetchedResultsObject.objectKeyMap[object];
+        NSIndexPath *newIndexPath = newFetchedResultsObject.objectKeyMap[object];
         
         // Item was deleted
-        if (oldIndexPath) {
+        if (oldIndexPath && !newIndexPath) {
             
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:oldIndexPath
@@ -478,6 +459,8 @@
     if (fetchRequest.sortDescriptors.count > 0) {
         fetchResults = [fetchResults sortedResultsUsingDescriptors:fetchRequest.sortDescriptors];
     }
+    
+    NSLog(@"Fetched %u objects", fetchResults.count);
     
     return fetchResults;
 }
