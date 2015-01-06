@@ -490,20 +490,40 @@ sectionNameKeyPath = _sectionNameKeyPath;
     // Create our maps
     NSMutableArray *fetchedObjects = @[].mutableCopy;
     NSMutableArray *sections = @[].mutableCopy;
+    NSMutableArray *sectionTitles = @[].mutableCopy;
     NSMutableDictionary *indexPathKeyMap = @{}.mutableCopy;
     NSMutableDictionary *objectKeyMap = @{}.mutableCopy;
     
     NSString *currentSectionTitle = nil;
     NSUInteger sectionIndex = 0;
     NSUInteger rowIndex = 0;
+    NSUInteger count = 0;
+    
+    NSMutableArray *sectionObjects = @[].mutableCopy;
+    
+    /*  This loop processes the objects in one pass.
+     
+        The sectionTitles array keeps track of the sections and the logic is
+        that as we advance to a new section, we save the previous one. Then on
+        the final object, we save the last section.
+    */
     
     for (RLMObject *object in fetchResults) {
+        // Keep track of the count
+        count ++;
+        
+        // Create the safe object
+        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
         
         if (sectionNameKeyPath) {
+            
             NSString *sectionTitle = [object valueForKey:sectionNameKeyPath];
             
-            if (!currentSectionTitle ||
-                ![sectionTitle isEqualToString:currentSectionTitle]) {
+            // New Section Found --> Process It
+            if (![sectionTitles containsObject:sectionTitle]) {
+                
+                // Keep track of the section titles to process sections once
+                [sectionTitles addObject:sectionTitle];
                 
                 // Advance the section index if we already found first section
                 if (currentSectionTitle) {
@@ -513,36 +533,39 @@ sectionNameKeyPath = _sectionNameKeyPath;
                 // Reset the row index everytime we move to a new section
                 rowIndex = 0;
                 
-                currentSectionTitle = sectionTitle;
-                
-                // Get the slice of results for the section
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@",
-                                          sectionNameKeyPath,
-                                          currentSectionTitle];
-                
-                RLMResults *sectionResults = [fetchResults objectsWithPredicate:predicate];
-                
-                NSMutableArray *sectionObjects = @[].mutableCopy;
-                
-                for (RLMObject *sectionObject in sectionResults) {
-                    RBQSafeRealmObject *safeSectionObject = [RBQSafeRealmObject safeObjectFromObject:sectionObject];
+                // If we already gathered up the section objects, then save them
+                if (sectionObjects.count > 0) {
                     
-                    [sectionObjects addObject:safeSectionObject];
+                    RBQFetchedResultsSectionInfo *sectionInfo =
+                    [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
+                                                               objects:sectionObjects.copy];
+                    
+                    [sections addObject:sectionInfo];
                 }
                 
-                RBQFetchedResultsSectionInfo *sectionInfo =
-                [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
-                                                           objects:sectionObjects.copy];
+                currentSectionTitle = sectionTitle;
                 
-                [sections addObject:sectionInfo];
+                // Reset the section object array
+                sectionObjects = @[].mutableCopy;
             }
+        }
+        
+        // Add the object to the section object array
+        [sectionObjects addObject:safeObject];
+        
+        // Save the final section
+        if (count == fetchResults.count &&
+            sectionNameKeyPath) {
+
+            RBQFetchedResultsSectionInfo *sectionInfo =
+            [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
+                                                       objects:sectionObjects.copy];
+            
+            [sections addObject:sectionInfo];
         }
         
         // Create the indexPath for the object
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-        
-        // Create the safe object
-        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
         
         // Save the safe object
         [fetchedObjects addObject:safeObject];
@@ -559,7 +582,7 @@ sectionNameKeyPath = _sectionNameKeyPath;
     if (sections.count == 0) {
         RBQFetchedResultsSectionInfo *sectionInfo =
         [[RBQFetchedResultsSectionInfo alloc] initWithName:@"SingleSection"
-                                                   objects:fetchedObjects.copy];
+                                                   objects:sectionObjects.copy];
         
         [sections addObject:sectionInfo];
     }
