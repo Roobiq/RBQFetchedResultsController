@@ -98,7 +98,7 @@
 
 - (RLMObject *)RLMObject
 {
-    return [RBQSafeRealmObject objectInRealm:[RLMRealm defaultRealm] fromSafeObject:self];
+    return [RBQSafeRealmObject objectInRealm:self.realm fromSafeObject:self];
 }
 
 #pragma mark - Equality
