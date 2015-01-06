@@ -17,9 +17,6 @@
 @end
 
 @implementation RBQSafeRealmObject
-@synthesize className = _className,
-primaryKeyValue = _primaryKeyValue,
-primaryKeyProperty = _primaryKeyProperty;
 
 + (instancetype)safeObjectFromObject:(RLMObject *)object
 {

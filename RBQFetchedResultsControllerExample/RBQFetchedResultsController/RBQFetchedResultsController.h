@@ -18,12 +18,11 @@
 @interface RBQFetchedResultsSectionInfo : NSObject
 
 @property(nonatomic, readonly) NSUInteger numberOfObjects;
-
 @property(nonatomic, readonly) NSArray *objects;
-
 @property(nonatomic, readonly) NSString *name;
 
 @end
+
 
 @class RBQFetchedResultsController;
 
@@ -35,23 +34,27 @@
 
 - (void)controllerWillChangeContent:(RBQFetchedResultsController *)controller;
 
-/*  Notifies the delegate that a fetched object has been changed due to an add, remove, move, or update.
-    Enables RBQFetchedResultsController change tracking.
+/**
+ Notifies the delegate that a fetched object has been changed due to an add, remove, move, or
+ update. Enables RBQFetchedResultsController change tracking.
  
-	controller - controller instance that noticed the change on its fetched objects
-	anObject - changed object represented as a RBQSafeRealmObject for thread safety
-	indexPath - indexPath of changed object (nil for inserts)
-	type - indicates if the change was an insert, delete, move, or update
-	newIndexPath - the destination path for inserted or moved objects, nil otherwise
-	
-	Changes are reported with the following heuristics:
+ Changes are reported with the following heuristics:
  
-	On add and remove operations, only the added/removed object is reported. It’s assumed that all objects that come after the affected object are also moved, but these moves are not reported.
+  * On add and remove operations, only the added/removed object is reported. It’s assumed that all
+    objects that come after the affected object are also moved, but these moves are not reported.
  
-	A move is reported when the changed attribute on the object is one of the sort descriptors used in the fetch request.
-    An update of the object is assumed in this case, but no separate update message is sent to the delegate.
+  * A move is reported when the changed attribute on the object is one of the sort descriptors used
+    in the fetch request. An update of the object is assumed in this case, but no separate update
+    message is sent to the delegate.
  
-	An update is reported when an object’s state changes, but the changed attributes aren’t part of the sort keys.
+  * An update is reported when an object’s state changes, but the changed attributes aren’t part of
+   the sort keys.
+ 
+ @param controller controller instance that noticed the change on its fetched objects
+ @param anObject changed object represented as a RBQSafeRealmObject for thread safety
+ @param indexPath indexPath of changed object (nil for inserts)
+ @param type indicates if the change was an insert, delete, move, or update
+ @param newIndexPath the destination path for inserted or moved objects, nil otherwise
  */
 
 - (void)controller:(RBQFetchedResultsController *)controller
@@ -60,10 +63,10 @@
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath;
 
-/*
-    The fetched results controller reports changes to its section before changes to the fetched result objects.
-*/
-
+/**
+ The fetched results controller reports changes to its section before changes to the fetched result
+ objects.
+ */
 - (void)controller:(RBQFetchedResultsController *)controller
   didChangeSection:(RBQFetchedResultsSectionInfo *)sectionInfo
            atIndex:(NSUInteger)sectionIndex
@@ -78,15 +81,13 @@
 @interface RBQFetchedResultsController : NSObject
 
 @property (nonatomic, readonly) RBQFetchRequest *fetchRequest;
+@property (nonatomic, readonly) NSString *sectionNameKeyPath;
 
-@property(nonatomic, readonly) NSString *sectionNameKeyPath;
-
-@property (nonatomic, assign) id <RBQFetchedResultsControllerDelegate> delegate;
+@property (nonatomic, weak) id <RBQFetchedResultsControllerDelegate> delegate;
 
 // Array of RBQSafeRealmObjects to ensure thread safety when performing fetches
 @property (nonatomic, readonly) NSArray *fetchedObjects;
-
-@property(nonatomic, readonly) NSArray *sections;
+@property (nonatomic, readonly) NSArray *sections;
 
 - (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
         sectionNameKeyPath:(NSString *)sectionNameKeyPath;

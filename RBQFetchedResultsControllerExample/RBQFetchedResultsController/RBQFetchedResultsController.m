@@ -23,9 +23,6 @@
 @end
 
 @implementation RBQFetchedResultsSectionInfo
-@synthesize numberOfObjects = _numberOfObjects,
-objects = _objects,
-name = _name;
 
 - (instancetype)initWithName:(NSString *)name
                      objects:(NSArray *)objects
@@ -71,6 +68,8 @@ name = _name;
 {
     if (_name) {
         // modify the hash of our primary key value to avoid potential (although unlikely) collisions
+        // (Adam -- is the point here to avoid collisions if sections names are the same? Because xor'ing with 1
+        //  still results in the same hash for matching names...)
         return [_name hash] ^ 1;
     }
     else {
@@ -99,7 +98,6 @@ name = _name;
 @interface RBQFetchedResultsController ()
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
-
 @property (strong, nonatomic) RBQFetchedResultsObject *fetchedResultsObject;
 
 @end
@@ -107,11 +105,6 @@ name = _name;
 #pragma mark - RBQFetchedResultsController
 
 @implementation RBQFetchedResultsController
-
-@synthesize fetchedObjects = _fetchedObjects,
-fetchRequest = _fetchRequest,
-sectionNameKeyPath = _sectionNameKeyPath,
-sections = _sections;
 
 #pragma mark - Public
 

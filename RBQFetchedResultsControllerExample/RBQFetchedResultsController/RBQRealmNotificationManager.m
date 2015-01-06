@@ -28,6 +28,7 @@
               removeNotification: when you no longer wish to recieve RBQRealm notifications.");
     }
 }
+
 @end
 
 #pragma mark - RBQRealmNotificationManager
@@ -127,6 +128,7 @@
     
     [self.addedSafeObjects addObject:safeObject];
 }
+
 - (void)willDeleteObject:(RLMObject *)deletedObject
 {
     // Save a safe object to use across threads
@@ -134,6 +136,7 @@
     
     [self.deletedSafeObjects addObject:safeObject];
 }
+
 - (void)didChangeObject:(RLMObject *)changedObject
 {
     // Save a safe object to use across threads

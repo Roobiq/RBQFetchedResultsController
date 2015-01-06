@@ -9,7 +9,6 @@
 #import "RBQFetchRequest.h"
 
 @implementation RBQFetchRequest
-@synthesize entityName = _entityName;
 
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
                                       predicate:(NSPredicate *)predicate
