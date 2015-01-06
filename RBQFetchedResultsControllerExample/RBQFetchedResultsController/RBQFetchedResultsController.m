@@ -114,7 +114,7 @@
 @property (strong, nonatomic) RBQFetchedResultsObject *fetchedResultsObject;
 
 // Queue to manage the reads and writes
-@property (nonatomic, strong) dispatch_queue_t concurrentResultsQueue;
+@property (strong, nonatomic) dispatch_queue_t concurrentResultsQueue;
 
 @end
 
@@ -132,7 +132,10 @@
     if (self) {
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
-        _concurrentResultsQueue = dispatch_queue_create("com.Roobiq.RBQFetchedResultsController.fetchedResultsQueue", DISPATCH_QUEUE_CONCURRENT);
+        _concurrentResultsQueue = dispatch_queue_create(
+            "com.Roobiq.RBQFetchedResultsController.fetchedResultsQueue",
+            DISPATCH_QUEUE_CONCURRENT
+        );
         
         [self registerChangeNotification];
     }
@@ -613,9 +616,13 @@
     return nil;
 }
 
-/*  Apparently iOS 7+ NSIndexPath's can sometimes be NSMutableIndexPaths:
-    http://stackoverflow.com/questions/18919459/ios-7-beginupdates-endupdates-inconsistent/18920573#18920573
-*/
+/**
+ Apparently iOS 7+ NSIndexPath's can sometimes be UIMutableIndexPaths:
+ http://stackoverflow.com/questions/18919459/ios-7-beginupdates-endupdates-inconsistent/18920573#18920573
+ 
+ This foils using them as dictionary keys since isEqual: fails between an equivalent NSIndexPath and
+ UIMutableIndexPath.
+ */
 - (NSIndexPath *)keyForIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath class] == [NSIndexPath class]) {
