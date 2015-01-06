@@ -20,7 +20,7 @@
 
 + (instancetype)safeObjectFromObject:(RLMObject *)object
 {
-    NSString *className = [[object class] performSelector:@selector(className)];
+    NSString *className = [[object class] className];
     
     id value = [RBQSafeRealmObject primaryKeyValueForObject:object];
     

@@ -68,8 +68,8 @@
 {
     if (_name) {
         // modify the hash of our primary key value to avoid potential (although unlikely) collisions
-        // (Adam -- is the point here to avoid collisions if sections names are the same? Because xor'ing with 1
-        //  still results in the same hash for matching names...)
+        // (Adam -- is the point here to avoid collisions if sections names are the same? Because
+        //  xor'ing with 1 still results in the same hash for matching names...)
         return [_name hash] ^ 1;
     }
     else {
@@ -150,15 +150,16 @@
         dispatch_barrier_sync(self.concurrentResultsQueue, ^{
             RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
             
-            _fetchedResultsObject = [self fetchedResultsObjectWithFetchResults:fetchResults
-                                                            sectionNameKeyPath:self.sectionNameKeyPath];
+            self.fetchedResultsObject =
+                [self fetchedResultsObjectWithFetchResults:fetchResults
+                                        sectionNameKeyPath:self.sectionNameKeyPath];
         });
         
         return YES;
     }
     
     @throw [NSException exceptionWithName:@"RBQException"
-                                   reason:@"Unable to perform fetch; fetchRequest must be set first."
+                                   reason:@"Unable to perform fetch; fetchRequest must be set."
                                  userInfo:nil];
     
     return NO;
@@ -169,7 +170,7 @@
     __block RBQSafeRealmObject *object;
     
     dispatch_sync(self.concurrentResultsQueue, ^{
-        object = [_fetchedResultsObject.indexPathKeyMap objectForKey:[self keyForIndexPath:indexPath]];
+        object = self.fetchedResultsObject.indexPathKeyMap[[self keyForIndexPath:indexPath]];
     });
     
     return object;
@@ -180,8 +181,8 @@
     __block id object;
     
     dispatch_sync(self.concurrentResultsQueue, ^{
-        RBQSafeRealmObject *safeObject = [_fetchedResultsObject.indexPathKeyMap objectForKey:[self keyForIndexPath:indexPath]];
-        
+        NSIndexPath *key = [self keyForIndexPath:indexPath];
+        RBQSafeRealmObject *safeObject = self.fetchedResultsObject.indexPathKeyMap[key];
         object = [safeObject RLMObject];
     });
     
@@ -193,7 +194,7 @@
     __block NSIndexPath *path;
     
     dispatch_sync(self.concurrentResultsQueue, ^{
-        path = [_fetchedResultsObject.objectKeyMap objectForKey:safeObject];
+        path = self.fetchedResultsObject.objectKeyMap[safeObject];
     });
     
     return path;
@@ -205,8 +206,7 @@
     
     dispatch_sync(self.concurrentResultsQueue, ^{
         RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
-        
-        path = [_fetchedResultsObject.objectKeyMap objectForKey:safeObject];
+        path = self.fetchedResultsObject.objectKeyMap[safeObject];
     });
     
     return path;
@@ -219,7 +219,7 @@
     __block NSArray *objects;
     
     dispatch_sync(self.concurrentResultsQueue, ^{
-        objects = _fetchedResultsObject.fetchedObjects;
+        objects = self.fetchedResultsObject.fetchedObjects;
     });
     
     return objects;
@@ -230,7 +230,7 @@
     __block NSArray *sections;
     
     dispatch_sync(self.concurrentResultsQueue, ^{
-        sections = _fetchedResultsObject.sections;
+        sections = self.fetchedResultsObject.sections;
     });
     
     return sections;
@@ -241,55 +241,61 @@
 - (void)registerChangeNotification
 {
     // Start Notifications
-    self.notificationToken =
-    [[RBQRealmNotificationManager defaultManager] addNotificationBlock:^(NSArray *addedSafeObjects,
-                                                                         NSArray *deletedSafeObjects,
-                                                                         NSArray *changedSafeObjects,
-                                                                         RLMRealm *realm) {
-        dispatch_barrier_sync(self.concurrentResultsQueue, ^{
-            // Get the new list of safe fetch objects
-            RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
-            
-            // -------------------
-            // There is an error that can occur here becaues RLMResults is not frozen during enumeration
-            // -------------------
-            
-            RBQFetchedResultsObject *newFetchedResultsObject =
-            [self fetchedResultsObjectWithFetchResults:fetchResults
-                                    sectionNameKeyPath:self.sectionNameKeyPath];
-            
-            RBQFetchedResultsObject *oldFetchedResultsObject = self.fetchedResultsObject.copy;
-            
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
-                    [self.delegate controllerWillChangeContent:self];
-                }
-            });
+    self.notificationToken = [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
+        ^(NSArray *addedSafeObjects,
+          NSArray *deletedSafeObjects,
+          NSArray *changedSafeObjects,
+          RLMRealm *realm)
+        {
+            dispatch_barrier_sync(self.concurrentResultsQueue, ^{
+                // Get the new list of safe fetch objects
+                RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
                 
-            // Identify section changes
-            [self identifySectionChangesFromLatestResults:newFetchedResultsObject
-                                              oldSections:oldFetchedResultsObject.sections];
-            
-            // Identify changes and moves first
-            [self identifyChangesFromLatestResults:newFetchedResultsObject
-                           oldFetchedResultsObject:oldFetchedResultsObject
-                            withChangedSafeObjects:changedSafeObjects];
-            
-            [self identifyChangesFromLatestResults:newFetchedResultsObject
-                              withAddedSafeObjects:addedSafeObjects];
-            
-            [self identifyChangesFromLatestResults:newFetchedResultsObject
-                           oldFetchedResultsObject:oldFetchedResultsObject
-                            withDeletedSafeObjects:deletedSafeObjects];
-            
-            _fetchedResultsObject = newFetchedResultsObject;
-            
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-                    [self.delegate controllerDidChangeContent:self];
-                }
+                // -------------------
+                // There is an error that can occur here becaues RLMResults is not frozen during
+                // enumeration.
+                // -------------------
+                
+                RBQFetchedResultsObject *newFetchedResultsObject =
+                    [self fetchedResultsObjectWithFetchResults:fetchResults
+                                            sectionNameKeyPath:self.sectionNameKeyPath];
+                
+                // Is copy necessary here?
+                RBQFetchedResultsObject *oldFetchedResultsObject = self.fetchedResultsObject.copy;
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)])
+                    {
+                        [self.delegate controllerWillChangeContent:self];
+                    }
+                });
+                    
+                // Identify section changes
+                [self identifySectionChangesFromLatestResults:newFetchedResultsObject
+                                                  oldSections:oldFetchedResultsObject.sections];
+                
+                // Identify changes and moves first
+                [self identifyChangesFromLatestResults:newFetchedResultsObject
+                               oldFetchedResultsObject:oldFetchedResultsObject
+                                withChangedSafeObjects:changedSafeObjects];
+                
+                [self identifyChangesFromLatestResults:newFetchedResultsObject
+                                  withAddedSafeObjects:addedSafeObjects];
+                
+                [self identifyChangesFromLatestResults:newFetchedResultsObject
+                               oldFetchedResultsObject:oldFetchedResultsObject
+                                withDeletedSafeObjects:deletedSafeObjects];
+                
+                // Should this be set before notifying delegate of changes? Delegate implementations
+                // may want to grab results, no?
+                _fetchedResultsObject = newFetchedResultsObject;
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
+                        [self.delegate controllerDidChangeContent:self];
+                    }
+                });
             });
-        });
     }];
 }
 
@@ -299,46 +305,43 @@
     if (newFetchedResultsObject.sections.count != oldSections.count) {
         
         // Find deleted sections
-        NSMutableArray *deletedSections = [NSMutableArray arrayWithArray:oldSections];
+        NSMutableArray *deletedSections = [oldSections mutableCopy];
         // Remove the sections in new, to identify any deleted sections
         [deletedSections removeObjectsInArray:newFetchedResultsObject.sections];
         
-        if (deletedSections.count > 0) {
-            for (RBQFetchedResultsSectionInfo *sectionInfo in deletedSections) {
-                NSUInteger oldSectionIndex = [oldSections indexOfObjectIdenticalTo:sectionInfo];
-                
-                if ([self.delegate
-                     respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^(){
-                        [self.delegate controller:self
-                                 didChangeSection:sectionInfo
-                                          atIndex:oldSectionIndex
-                                    forChangeType:NSFetchedResultsChangeDelete];
-                    });
-                }
+        for (RBQFetchedResultsSectionInfo *sectionInfo in deletedSections) {
+            NSUInteger oldSectionIndex = [oldSections indexOfObjectIdenticalTo:sectionInfo];
+            
+            if ([self.delegate
+                 respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.delegate controller:self
+                             didChangeSection:sectionInfo
+                                      atIndex:oldSectionIndex
+                                forChangeType:NSFetchedResultsChangeDelete];
+                });
             }
         }
         
         // Find inserted sections
-        NSMutableArray *insertedSections = [NSMutableArray arrayWithArray:newFetchedResultsObject.sections];
+        NSMutableArray *insertedSections = [newFetchedResultsObject.sections mutableCopy];
         // Remove the sections in new, to identify any deleted sections
         [insertedSections removeObjectsInArray:oldSections];
         
-        if (insertedSections.count > 0) {
-            for (RBQFetchedResultsSectionInfo *sectionInfo in insertedSections) {
-                NSUInteger newSectionIndex = [newFetchedResultsObject.sections indexOfObjectIdenticalTo:sectionInfo];
-                
-                if ([self.delegate
-                     respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^(){
-                        [self.delegate controller:self
-                                 didChangeSection:sectionInfo
-                                          atIndex:newSectionIndex
-                                    forChangeType:NSFetchedResultsChangeInsert];
-                    });
-                }
+        for (RBQFetchedResultsSectionInfo *sectionInfo in insertedSections) {
+            NSUInteger newSectionIndex = [newFetchedResultsObject.sections
+                                          indexOfObjectIdenticalTo:sectionInfo];
+            
+            if ([self.delegate
+                 respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.delegate controller:self
+                             didChangeSection:sectionInfo
+                                      atIndex:newSectionIndex
+                                forChangeType:NSFetchedResultsChangeInsert];
+                });
             }
         }
     }
@@ -350,18 +353,16 @@
 {
     for (RBQSafeRealmObject *object in changedSafeObjects) {
         
-        NSIndexPath *newIndexPath = [newFetchedResultsObject.objectKeyMap objectForKey:object];
-        
-        NSIndexPath *oldIndexPath = [oldFetchedResultsObject.objectKeyMap objectForKey:object];
+        NSIndexPath *newIndexPath = newFetchedResultsObject.objectKeyMap[object];
+        NSIndexPath *oldIndexPath = oldFetchedResultsObject.objectKeyMap[object];
         
         // Item was removed from change
-        if (!newIndexPath &&
-            oldIndexPath) {
+        if (!newIndexPath && oldIndexPath) {
             
-            if ([self.delegate
-                 respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
+            if ([self.delegate respondsToSelector:
+                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:oldIndexPath
@@ -371,13 +372,12 @@
             }
         }
         // Item was inserted from change
-        else if (newIndexPath &&
-                 !oldIndexPath) {
+        else if (newIndexPath && !oldIndexPath) {
             
-            if ([self.delegate
-                 respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
+            if ([self.delegate respondsToSelector:
+                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:nil
@@ -388,10 +388,10 @@
         }
         // Item was moved from change
         else if ([newIndexPath compare:oldIndexPath]) {
-            if ([self.delegate
-                 respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
+            if ([self.delegate respondsToSelector:
+                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:oldIndexPath
@@ -401,10 +401,10 @@
             }
         }
         else {
-            if ([self.delegate
-                 respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
+            if ([self.delegate respondsToSelector:
+                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:newIndexPath
@@ -420,15 +420,15 @@
                     withAddedSafeObjects:(NSArray *)addedSafeObjects
 {
     for (RBQSafeRealmObject *object in addedSafeObjects) {
-        NSIndexPath *newIndexPath = [newFetchedResultsObject.objectKeyMap objectForKey:object];
+        NSIndexPath *newIndexPath = newFetchedResultsObject.objectKeyMap[object];
         
         // Added item was inserted
         if (newIndexPath) {
             
-            if ([self.delegate
-                 respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
+            if ([self.delegate respondsToSelector:
+                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:nil
@@ -445,15 +445,15 @@
                   withDeletedSafeObjects:(NSArray *)deletedSafeObjects
 {
     for (RBQSafeRealmObject *object in deletedSafeObjects) {
-        NSIndexPath *oldIndexPath = [oldFetchedResultsObject.objectKeyMap objectForKey:object];
+        NSIndexPath *oldIndexPath = oldFetchedResultsObject.objectKeyMap[object];
         
         // Item was deleted
         if (oldIndexPath) {
             
-            if ([self.delegate
-                 respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
+            if ([self.delegate respondsToSelector:
+                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:object
                                   atIndexPath:oldIndexPath
@@ -499,13 +499,13 @@
     
     NSMutableArray *sectionObjects = @[].mutableCopy;
     
-    /*  This loop processes the objects in one pass.
+    /**
+     This loop processes the objects in one pass.
      
-        The sectionTitles array keeps track of the sections and the logic is
-        that as we advance to a new section, we save the previous one. Then on
-        the final object, we save the last section.
-    */
-    
+     The sectionTitles array keeps track of the sections and the logic is
+     that as we advance to a new section, we save the previous one. Then on
+     the final object, we save the last section.
+     */
     for (RLMObject *object in fetchResults) {
         // Keep track of the count
         count ++;
@@ -535,9 +535,8 @@
                 if (sectionObjects.count > 0) {
                     
                     RBQFetchedResultsSectionInfo *sectionInfo =
-                    [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
-                                                               objects:sectionObjects.copy];
-                    
+                        [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
+                                                                   objects:sectionObjects.copy];
                     [sections addObject:sectionInfo];
                 }
                 
@@ -552,13 +551,11 @@
         [sectionObjects addObject:safeObject];
         
         // Save the final section
-        if (count == fetchResults.count &&
-            sectionNameKeyPath) {
+        if (count == fetchResults.count && sectionNameKeyPath) {
 
             RBQFetchedResultsSectionInfo *sectionInfo =
-            [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
-                                                       objects:sectionObjects.copy];
-            
+                [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
+                                                           objects:sectionObjects.copy];
             [sections addObject:sectionInfo];
         }
         
@@ -569,19 +566,18 @@
         [fetchedObjects addObject:safeObject];
         
         // Set the maps
-        [indexPathKeyMap setObject:safeObject forKey:indexPath];
-        [objectKeyMap setObject:indexPath forKey:safeObject];
+        indexPathKeyMap[indexPath] = safeObject;
+        objectKeyMap[safeObject] = indexPath;
         
         // Advance the row index for each object
-        rowIndex ++;
+        rowIndex++;
     }
     
     // If we aren't using sections, create a mock one
     if (sections.count == 0) {
         RBQFetchedResultsSectionInfo *sectionInfo =
-        [[RBQFetchedResultsSectionInfo alloc] initWithName:@"SingleSection"
-                                                   objects:sectionObjects.copy];
-        
+            [[RBQFetchedResultsSectionInfo alloc] initWithName:@"SingleSection"
+                                                       objects:sectionObjects.copy];
         [sections addObject:sectionInfo];
     }
     
