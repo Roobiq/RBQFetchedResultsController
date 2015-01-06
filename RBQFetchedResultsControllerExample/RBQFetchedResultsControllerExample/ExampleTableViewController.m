@@ -92,6 +92,9 @@
     // Return the number of rows in the section.
     if (self.fetchedResultsController.sections.count > 0) {
         RBQFetchedResultsSectionInfo *sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
+        if (section == 0) {
+            NSLog(@"%d rows in first section", sectionInfo.numberOfObjects);
+        }
         
         return sectionInfo.numberOfObjects;
     }
@@ -160,6 +163,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)controllerWillChangeContent:(RBQFetchedResultsController *)controller
 {
+    NSLog(@"Beginning updates");
     [self.tableView beginUpdates];
 }
 
@@ -175,17 +179,20 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             
         case NSFetchedResultsChangeInsert:
         {
+            NSLog(@"Inserting at path %@", newIndexPath);
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             break;
         }
         case NSFetchedResultsChangeDelete:
         {
+            NSLog(@"Deleting at path %@", indexPath);
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             break;
         }
         case NSFetchedResultsChangeUpdate:
+            NSLog(@"Updating at path %@", indexPath);
             if ([[tableView indexPathsForVisibleRows] containsObject:indexPath]) {
                 [tableView reloadRowsAtIndexPaths:@[indexPath]
                                  withRowAnimation:UITableViewRowAnimationFade];
@@ -193,6 +200,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             break;
             
         case NSFetchedResultsChangeMove:
+            NSLog(@"Moving from path %@ to %@", indexPath, newIndexPath);
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
@@ -209,11 +217,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     UITableView *tableView = self.tableView;
     
     if (type == NSFetchedResultsChangeInsert) {
+        NSLog(@"Inserting section at %u", sectionIndex);
         NSIndexSet *insertedSection = [NSIndexSet indexSetWithIndex:sectionIndex];
         
         [tableView insertSections:insertedSection withRowAnimation:UITableViewRowAnimationFade];
     }
     else if (type == NSFetchedResultsChangeDelete) {
+        NSLog(@"Deleting section at %u", sectionIndex);
         NSIndexSet *deletedSection = [NSIndexSet indexSetWithIndex:sectionIndex];
         
         [tableView deleteSections:deletedSection withRowAnimation:UITableViewRowAnimationFade];
@@ -222,6 +232,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller
 {
+    NSLog(@"Ending updates");
     [self.tableView endUpdates];
 }
 
@@ -257,6 +268,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)deleteObjectAtIndexPath:(NSIndexPath *)indexPath
 {
     TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    if (!object) {
+        return;
+    }
+    NSString *title = object.title;
+    NSLog(@"Deleting object %@ at path %@", title, indexPath);
     
     //    NSIndexPath *fifthObjectIndexPath = [NSIndexPath indexPathForRow:5 inSection:0];
     //    TestObject *changeObject = [self.fetchedResultsController objectAtIndexPath:fifthObjectIndexPath];
@@ -272,6 +288,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     //    [[RBQRealmNotificationManager defaultManager] didChangeObject:changeObject];
     
     [[RLMRealm defaultRealm] commitWriteTransaction];
+    NSLog(@"Finished transaction with object %@", title);
 }
 
 - (void)insertObject
@@ -296,13 +313,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             newObject.sortIndex = sortIndex;
             newObject.sectionName = @"First Section";
             newObject.key = [NSString stringWithFormat:@"%@%ld",title, (long)sortIndex];
+            
+            [[RLMRealm defaultRealm] addObject:newObject];
+            [[RBQRealmNotificationManager defaultManager] didAddObject:newObject];
+        }
+        else {
+            [[RBQRealmNotificationManager defaultManager] didChangeObject:newObject];
         }
         
         newObject.inTable = YES;
         
-        [[RLMRealm defaultRealm] addObject:newObject];
         
-        [[RBQRealmNotificationManager defaultManager] didAddObject:newObject];
         
         [[RLMRealm defaultRealm] commitWriteTransaction];
     }
