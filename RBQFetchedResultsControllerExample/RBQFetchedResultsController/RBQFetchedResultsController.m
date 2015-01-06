@@ -82,7 +82,7 @@
 #pragma mark - RBQFetchedResultsObject
 
 // Object representing all of the various structures needed
-@interface RBQFetchedResultsObject : NSObject
+@interface RBQFetchedResultsObject : NSObject <NSCopying>
 
 @property (strong, nonatomic) NSArray *fetchedObjects;
 @property (strong, nonatomic) NSArray *sections;
@@ -93,12 +93,28 @@
 
 @implementation RBQFetchedResultsObject
 
+#pragma mark - <NSCopying>
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    RBQFetchedResultsObject *object = [[RBQFetchedResultsObject allocWithZone:zone] init];
+    object->_fetchedObjects = _fetchedObjects;
+    object->_sections = _sections;
+    object->_indexPathKeyMap = _indexPathKeyMap;
+    object->_objectKeyMap = _objectKeyMap;
+    
+    return object;
+}
+
 @end
 
 @interface RBQFetchedResultsController ()
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
 @property (strong, nonatomic) RBQFetchedResultsObject *fetchedResultsObject;
+
+// Queue to manage the reads and writes
+@property (nonatomic, strong) dispatch_queue_t concurrentResultsQueue;
 
 @end
 
@@ -116,6 +132,7 @@
     if (self) {
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
+        _concurrentResultsQueue = dispatch_queue_create("com.Roobiq.RBQFetchedResultsController.fetchedResultsQueue", DISPATCH_QUEUE_CONCURRENT);
         
         [self registerChangeNotification];
     }
@@ -127,12 +144,12 @@
 {
     if (self.fetchRequest) {
         
-        RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
-        
-        RBQFetchedResultsObject *fetchedResultsObject = [self fetchedResultsObjectWithFetchResults:fetchResults
-                                                                                sectionNameKeyPath:self.sectionNameKeyPath];
-        
-        [self updatePropertiesWithFetchedResults:fetchedResultsObject];
+        dispatch_barrier_sync(self.concurrentResultsQueue, ^{
+            RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
+            
+            _fetchedResultsObject = [self fetchedResultsObjectWithFetchResults:fetchResults
+                                                            sectionNameKeyPath:self.sectionNameKeyPath];
+        });
         
         return YES;
     }
@@ -144,35 +161,76 @@
     return NO;
 }
 
-- (void)updatePropertiesWithFetchedResults:(RBQFetchedResultsObject *)fetchedResultsObject
-{
-    _sections = fetchedResultsObject.sections;
-    _fetchedObjects = fetchedResultsObject.fetchedObjects;
-    _fetchedResultsObject = fetchedResultsObject;
-}
-
 - (RBQSafeRealmObject *)safeObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [_fetchedResultsObject.indexPathKeyMap objectForKey:[self keyForIndexPath:indexPath]];
+    __block RBQSafeRealmObject *object;
+    
+    dispatch_sync(self.concurrentResultsQueue, ^{
+        object = [_fetchedResultsObject.indexPathKeyMap objectForKey:[self keyForIndexPath:indexPath]];
+    });
+    
+    return object;
 }
 
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath
 {
-    RBQSafeRealmObject *safeObject = [_fetchedResultsObject.indexPathKeyMap objectForKey:[self keyForIndexPath:indexPath]];
+    __block id object;
     
-    return [safeObject RLMObject];
+    dispatch_sync(self.concurrentResultsQueue, ^{
+        RBQSafeRealmObject *safeObject = [_fetchedResultsObject.indexPathKeyMap objectForKey:[self keyForIndexPath:indexPath]];
+        
+        object = [safeObject RLMObject];
+    });
+    
+    return object;
 }
 
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject
 {
-    return [_fetchedResultsObject.objectKeyMap objectForKey:safeObject];
+    __block NSIndexPath *path;
+    
+    dispatch_sync(self.concurrentResultsQueue, ^{
+        path = [_fetchedResultsObject.objectKeyMap objectForKey:safeObject];
+    });
+    
+    return path;
 }
 
 - (NSIndexPath *)indexPathForObject:(RLMObject *)object
 {
-    RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
+    __block NSIndexPath *path;
     
-    return [_fetchedResultsObject.objectKeyMap objectForKey:safeObject];
+    dispatch_sync(self.concurrentResultsQueue, ^{
+        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
+        
+        path = [_fetchedResultsObject.objectKeyMap objectForKey:safeObject];
+    });
+    
+    return path;
+}
+
+#pragma mark - Getters
+
+- (NSArray *)fetchedObjects
+{
+    __block NSArray *objects;
+    
+    dispatch_sync(self.concurrentResultsQueue, ^{
+        objects = _fetchedResultsObject.fetchedObjects;
+    });
+    
+    return objects;
+}
+
+- (NSArray *)sections
+{
+    __block NSArray *sections;
+    
+    dispatch_sync(self.concurrentResultsQueue, ^{
+        sections = _fetchedResultsObject.sections;
+    });
+    
+    return sections;
 }
 
 #pragma mark - Private
@@ -185,37 +243,49 @@
                                                                          NSArray *deletedSafeObjects,
                                                                          NSArray *changedSafeObjects,
                                                                          RLMRealm *realm) {
-        // Get the new list of safe fetch objects
-        RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
-        
-        RBQFetchedResultsObject *fetchedResultsObject = [self fetchedResultsObjectWithFetchResults:fetchResults
-                                                                                sectionNameKeyPath:self.sectionNameKeyPath];
-
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
-                [self.delegate controllerWillChangeContent:self];
-            }
+        dispatch_barrier_sync(self.concurrentResultsQueue, ^{
+            // Get the new list of safe fetch objects
+            RLMResults *fetchResults = [self fetchResultsForFetchRequest:self.fetchRequest];
             
+            // -------------------
+            // There is an error that can occur here becaues RLMResults is not frozen during enumeration
+            // -------------------
+            
+            RBQFetchedResultsObject *newFetchedResultsObject =
+            [self fetchedResultsObjectWithFetchResults:fetchResults
+                                    sectionNameKeyPath:self.sectionNameKeyPath];
+            
+            RBQFetchedResultsObject *oldFetchedResultsObject = self.fetchedResultsObject.copy;
+            
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
+                    [self.delegate controllerWillChangeContent:self];
+                }
+            });
+                
             // Identify section changes
-            [self identifySectionChangesFromLatestResults:fetchedResultsObject
-                                              oldSections:self.sections];
+            [self identifySectionChangesFromLatestResults:newFetchedResultsObject
+                                              oldSections:oldFetchedResultsObject.sections];
             
             // Identify changes and moves first
-            [self identifyChangesFromLatestResults:fetchedResultsObject
+            [self identifyChangesFromLatestResults:newFetchedResultsObject
+                           oldFetchedResultsObject:oldFetchedResultsObject
                             withChangedSafeObjects:changedSafeObjects];
             
-            [self identifyChangesFromLatestResults:fetchedResultsObject
+            [self identifyChangesFromLatestResults:newFetchedResultsObject
                               withAddedSafeObjects:addedSafeObjects];
             
-            [self identifyChangesFromLatestResults:fetchedResultsObject
+            [self identifyChangesFromLatestResults:newFetchedResultsObject
+                           oldFetchedResultsObject:oldFetchedResultsObject
                             withDeletedSafeObjects:deletedSafeObjects];
             
-            // Now update our properties
-            [self updatePropertiesWithFetchedResults:fetchedResultsObject];
+            _fetchedResultsObject = newFetchedResultsObject;
             
-            if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-                [self.delegate controllerDidChangeContent:self];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
+                    [self.delegate controllerDidChangeContent:self];
+                }
+            });
         });
     }];
 }
@@ -234,11 +304,15 @@
             for (RBQFetchedResultsSectionInfo *sectionInfo in deletedSections) {
                 NSUInteger oldSectionIndex = [oldSections indexOfObjectIdenticalTo:sectionInfo];
                 
-                if ([self.delegate respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
-                    [self.delegate controller:self
-                             didChangeSection:sectionInfo
-                                      atIndex:oldSectionIndex
-                                forChangeType:NSFetchedResultsChangeDelete];
+                if ([self.delegate
+                     respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^(){
+                        [self.delegate controller:self
+                                 didChangeSection:sectionInfo
+                                          atIndex:oldSectionIndex
+                                    forChangeType:NSFetchedResultsChangeDelete];
+                    });
                 }
             }
         }
@@ -252,11 +326,15 @@
             for (RBQFetchedResultsSectionInfo *sectionInfo in insertedSections) {
                 NSUInteger newSectionIndex = [newFetchedResultsObject.sections indexOfObjectIdenticalTo:sectionInfo];
                 
-                if ([self.delegate respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
-                    [self.delegate controller:self
-                             didChangeSection:sectionInfo
-                                      atIndex:newSectionIndex
-                                forChangeType:NSFetchedResultsChangeInsert];
+                if ([self.delegate
+                     respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^(){
+                        [self.delegate controller:self
+                                 didChangeSection:sectionInfo
+                                          atIndex:newSectionIndex
+                                    forChangeType:NSFetchedResultsChangeInsert];
+                    });
                 }
             }
         }
@@ -264,13 +342,14 @@
 }
 
 - (void)identifyChangesFromLatestResults:(RBQFetchedResultsObject *)newFetchedResultsObject
+                 oldFetchedResultsObject:(RBQFetchedResultsObject *)oldFetchedResultsObject
                   withChangedSafeObjects:(NSArray *)changedSafeObjects
 {
     for (RBQSafeRealmObject *object in changedSafeObjects) {
         
         NSIndexPath *newIndexPath = [newFetchedResultsObject.objectKeyMap objectForKey:object];
         
-        NSIndexPath *oldIndexPath = [_fetchedResultsObject.objectKeyMap objectForKey:object];
+        NSIndexPath *oldIndexPath = [oldFetchedResultsObject.objectKeyMap objectForKey:object];
         
         // Item was removed from change
         if (!newIndexPath &&
@@ -279,11 +358,13 @@
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
                 
-                [self.delegate controller:self
-                          didChangeObject:object
-                              atIndexPath:oldIndexPath
-                            forChangeType:NSFetchedResultsChangeDelete
-                             newIndexPath:nil];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.delegate controller:self
+                              didChangeObject:object
+                                  atIndexPath:oldIndexPath
+                                forChangeType:NSFetchedResultsChangeDelete
+                                 newIndexPath:nil];
+                });
             }
         }
         // Item was inserted from change
@@ -293,11 +374,13 @@
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
                 
-                [self.delegate controller:self
-                          didChangeObject:object
-                              atIndexPath:nil
-                            forChangeType:NSFetchedResultsChangeInsert
-                             newIndexPath:newIndexPath];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.delegate controller:self
+                              didChangeObject:object
+                                  atIndexPath:nil
+                                forChangeType:NSFetchedResultsChangeInsert
+                                 newIndexPath:newIndexPath];
+                });
             }
         }
         // Item was moved from change
@@ -305,22 +388,26 @@
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
                 
-                [self.delegate controller:self
-                          didChangeObject:object
-                              atIndexPath:oldIndexPath
-                            forChangeType:NSFetchedResultsChangeMove
-                             newIndexPath:newIndexPath];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.delegate controller:self
+                              didChangeObject:object
+                                  atIndexPath:oldIndexPath
+                                forChangeType:NSFetchedResultsChangeMove
+                                 newIndexPath:newIndexPath];
+                });
             }
         }
         else {
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
                 
-                [self.delegate controller:self
-                          didChangeObject:object
-                              atIndexPath:newIndexPath
-                            forChangeType:NSFetchedResultsChangeUpdate
-                             newIndexPath:nil];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.delegate controller:self
+                              didChangeObject:object
+                                  atIndexPath:newIndexPath
+                                forChangeType:NSFetchedResultsChangeUpdate
+                                 newIndexPath:nil];
+                });
             }
         }
     }
@@ -338,21 +425,24 @@
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
                 
-                [self.delegate controller:self
-                          didChangeObject:object
-                              atIndexPath:nil
-                            forChangeType:NSFetchedResultsChangeInsert
-                             newIndexPath:newIndexPath];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.delegate controller:self
+                              didChangeObject:object
+                                  atIndexPath:nil
+                                forChangeType:NSFetchedResultsChangeInsert
+                                 newIndexPath:newIndexPath];
+                });
             }
         }
     }
 }
 
 - (void)identifyChangesFromLatestResults:(RBQFetchedResultsObject *)newFetchedResultsObject
+                 oldFetchedResultsObject:(RBQFetchedResultsObject *)oldFetchedResultsObject
                   withDeletedSafeObjects:(NSArray *)deletedSafeObjects
 {
     for (RBQSafeRealmObject *object in deletedSafeObjects) {
-        NSIndexPath *oldIndexPath = [_fetchedResultsObject.objectKeyMap objectForKey:object];
+        NSIndexPath *oldIndexPath = [oldFetchedResultsObject.objectKeyMap objectForKey:object];
         
         // Item was deleted
         if (oldIndexPath) {
@@ -360,11 +450,13 @@
             if ([self.delegate
                  respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
                 
-                [self.delegate controller:self
-                          didChangeObject:object
-                              atIndexPath:oldIndexPath
-                            forChangeType:NSFetchedResultsChangeDelete
-                             newIndexPath:nil];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.delegate controller:self
+                              didChangeObject:object
+                                  atIndexPath:oldIndexPath
+                                forChangeType:NSFetchedResultsChangeDelete
+                                 newIndexPath:nil];
+                });
             }
         }
     }
@@ -393,20 +485,40 @@
     // Create our maps
     NSMutableArray *fetchedObjects = @[].mutableCopy;
     NSMutableArray *sections = @[].mutableCopy;
+    NSMutableArray *sectionTitles = @[].mutableCopy;
     NSMutableDictionary *indexPathKeyMap = @{}.mutableCopy;
     NSMutableDictionary *objectKeyMap = @{}.mutableCopy;
     
     NSString *currentSectionTitle = nil;
     NSUInteger sectionIndex = 0;
     NSUInteger rowIndex = 0;
+    NSUInteger count = 0;
+    
+    NSMutableArray *sectionObjects = @[].mutableCopy;
+    
+    /*  This loop processes the objects in one pass.
+     
+        The sectionTitles array keeps track of the sections and the logic is
+        that as we advance to a new section, we save the previous one. Then on
+        the final object, we save the last section.
+    */
     
     for (RLMObject *object in fetchResults) {
+        // Keep track of the count
+        count ++;
+        
+        // Create the safe object
+        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
         
         if (sectionNameKeyPath) {
+            
             NSString *sectionTitle = [object valueForKey:sectionNameKeyPath];
             
-            if (!currentSectionTitle ||
-                ![sectionTitle isEqualToString:currentSectionTitle]) {
+            // New Section Found --> Process It
+            if (![sectionTitles containsObject:sectionTitle]) {
+                
+                // Keep track of the section titles to process sections once
+                [sectionTitles addObject:sectionTitle];
                 
                 // Advance the section index if we already found first section
                 if (currentSectionTitle) {
@@ -416,36 +528,39 @@
                 // Reset the row index everytime we move to a new section
                 rowIndex = 0;
                 
-                currentSectionTitle = sectionTitle;
-                
-                // Get the slice of results for the section
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@",
-                                          sectionNameKeyPath,
-                                          currentSectionTitle];
-                
-                RLMResults *sectionResults = [fetchResults objectsWithPredicate:predicate];
-                
-                NSMutableArray *sectionObjects = @[].mutableCopy;
-                
-                for (RLMObject *sectionObject in sectionResults) {
-                    RBQSafeRealmObject *safeSectionObject = [RBQSafeRealmObject safeObjectFromObject:sectionObject];
+                // If we already gathered up the section objects, then save them
+                if (sectionObjects.count > 0) {
                     
-                    [sectionObjects addObject:safeSectionObject];
+                    RBQFetchedResultsSectionInfo *sectionInfo =
+                    [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
+                                                               objects:sectionObjects.copy];
+                    
+                    [sections addObject:sectionInfo];
                 }
                 
-                RBQFetchedResultsSectionInfo *sectionInfo =
-                [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
-                                                           objects:sectionObjects.copy];
+                currentSectionTitle = sectionTitle;
                 
-                [sections addObject:sectionInfo];
+                // Reset the section object array
+                sectionObjects = @[].mutableCopy;
             }
+        }
+        
+        // Add the object to the section object array
+        [sectionObjects addObject:safeObject];
+        
+        // Save the final section
+        if (count == fetchResults.count &&
+            sectionNameKeyPath) {
+
+            RBQFetchedResultsSectionInfo *sectionInfo =
+            [[RBQFetchedResultsSectionInfo alloc] initWithName:currentSectionTitle
+                                                       objects:sectionObjects.copy];
+            
+            [sections addObject:sectionInfo];
         }
         
         // Create the indexPath for the object
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-        
-        // Create the safe object
-        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
         
         // Save the safe object
         [fetchedObjects addObject:safeObject];
@@ -462,7 +577,7 @@
     if (sections.count == 0) {
         RBQFetchedResultsSectionInfo *sectionInfo =
         [[RBQFetchedResultsSectionInfo alloc] initWithName:@"SingleSection"
-                                                   objects:fetchedObjects.copy];
+                                                   objects:sectionObjects.copy];
         
         [sections addObject:sectionInfo];
     }
