@@ -410,7 +410,7 @@
             }
         }
         // Item updated -- may have to redraw
-        else if ([newIndexPath compare:oldIndexPath] == NSOrderedSame) {
+        else if (newIndexPath && [newIndexPath compare:oldIndexPath] == NSOrderedSame) {
             
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
