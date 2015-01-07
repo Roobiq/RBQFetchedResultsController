@@ -231,14 +231,14 @@
                 dispatch_barrier_async(self.concurrentResultsQueue, ^{
                     
                     NSLog(@"Processing notification");
-                    RLMRealm *realm = self.fetchRequest.realm;
+                    RLMRealm *newRealm = self.fetchRequest.realm;
                     
                     if (deletedSafeObjects.count > 0) {
-                        [realm refresh];
+                        [newRealm refresh];
                     }
                     
                     // Get the new list of safe fetch objects
-                    RLMResults *fetchResults = [self fetchResultsInRealm:realm
+                    RLMResults *fetchResults = [self fetchResultsInRealm:newRealm
                                                          forFetchRequest:self.fetchRequest];
                     
                     NSUInteger newRealmCount = fetchResults.count;
