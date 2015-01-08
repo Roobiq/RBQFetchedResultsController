@@ -301,7 +301,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
                                                           atIndexPath:indexPathFirstRow];
     
     if (object.sortIndex > 0) {
-        [[RLMRealm defaultRealm] beginWriteTransaction];
+        [realm beginWriteTransaction];
         
         NSInteger sortIndex = object.sortIndex - 1;
         
@@ -335,8 +335,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
     // Test Moves
     else {
-        RLMRealm *realm = [RLMRealm defaultRealm];
-        
         [realm beginWriteTransaction];
         
         NSIndexPath *indexPathFifthRow = [NSIndexPath indexPathForRow:5 inSection:0];
