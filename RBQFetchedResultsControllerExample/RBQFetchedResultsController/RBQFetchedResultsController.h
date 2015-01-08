@@ -9,22 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "RBQFetchRequest.h"
 #import "RBQSafeRealmObject.h"
+#import "RBQSectionCacheObject.h"
 
 @import CoreData;
-
-#pragma mark - RBQFetchedResultsSectionInfo
-
-// Object to use for relaying section info
-@interface RBQFetchedResultsSectionInfo : NSObject
-
-@property(nonatomic, readonly) NSUInteger numberOfObjects;
-
-@property(nonatomic, readonly) NSArray *objects;
-
-@property(nonatomic, readonly) NSString *name;
-
-@end
-
 
 @class RBQFetchedResultsController;
 
@@ -70,7 +57,7 @@
  objects.
  */
 - (void)controller:(RBQFetchedResultsController *)controller
-  didChangeSection:(RBQFetchedResultsSectionInfo *)sectionInfo
+  didChangeSection:(NSString *)sectionName
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type;
 
@@ -87,12 +74,17 @@
 
 @property (nonatomic, weak) id <RBQFetchedResultsControllerDelegate> delegate;
 
-// Array of RBQSafeRealmObjects to ensure thread safety when performing fetches
-@property (nonatomic, readonly) NSArray *fetchedObjects;
-@property (nonatomic, readonly) NSArray *sections;
+@property(nonatomic, readonly) NSString *cacheName;
+
+/*  Deletes the cached section information with the given name.
+    
+    If name is nil, deletes all cache files.
+*/
++ (void)deleteCacheWithName:(NSString *)name;
 
 - (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
-        sectionNameKeyPath:(NSString *)sectionNameKeyPath;
+        sectionNameKeyPath:(NSString *)sectionNameKeyPath
+                 cacheName:(NSString *)name;
 
 // Thread-safe
 - (BOOL)performFetch;
@@ -108,5 +100,11 @@
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject;
 
 - (NSIndexPath *)indexPathForObject:(RLMObject *)object;
+
+- (NSInteger)numberOfRowsForSectionIndex:(NSInteger)index;
+
+- (NSInteger)numberOfSections;
+
+- (NSString *)titleForHeaderInSection:(NSInteger)section;
 
 @end

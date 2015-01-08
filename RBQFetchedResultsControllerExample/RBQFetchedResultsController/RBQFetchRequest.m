@@ -64,4 +64,17 @@
     return [RLMRealm realmWithPath:self.realmPath];
 }
 
+#pragma mark - Hash
+
+- (NSUInteger)hash
+{
+    if (self.predicate &&
+        self.sortDescriptors) {
+        return self.predicate.hash ^ self.sortDescriptors.hash;
+    }
+    else {
+        return [super hash];
+    }
+}
+
 @end

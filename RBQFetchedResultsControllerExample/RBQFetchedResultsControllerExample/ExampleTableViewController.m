@@ -65,7 +65,7 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     fetchRequest.sortDescriptors = @[sortDescriptor, sortDescriptorSection];
     
     self.fetchedResultsController = [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                           sectionNameKeyPath:@"sectionName"];
+                                                                           sectionNameKeyPath:@"sectionName" cacheName:@"testCache"];
     
     self.fetchedResultsController.delegate = self;
     
@@ -89,33 +89,17 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return self.fetchedResultsController.sections.count;
+    return [self.fetchedResultsController numberOfSections];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    if (self.fetchedResultsController.sections.count > 0) {
-        RBQFetchedResultsSectionInfo *sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
-        if (section == 0) {
-            NSLog(@"%d rows in first section", sectionInfo.numberOfObjects);
-        }
-        
-        return sectionInfo.numberOfObjects;
-    }
-    
-    return 1;
+    return [self.fetchedResultsController numberOfRowsForSectionIndex:section];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (self.fetchedResultsController.sections.count > 0) {
-        RBQFetchedResultsSectionInfo *sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
-        
-        return sectionInfo.name;
-    }
-    
-    return nil;
+    return [self.fetchedResultsController titleForHeaderInSection:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -123,14 +107,10 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customCell" forIndexPath:indexPath];
     
     // Configure the cell...
-    @autoreleasepool {
-        RLMRealm *realm = [RLMRealm defaultRealm];
-        
-        TestObject *objectForCell = [self.fetchedResultsController objectInRealm:realm
-                                                                     atIndexPath:indexPath];
-        
-        cell.textLabel.text = objectForCell.title;
-    }
+    TestObject *objectForCell = [self.fetchedResultsController objectInRealm:[RLMRealm defaultRealm]
+                                                                 atIndexPath:indexPath];
+    
+    cell.textLabel.text = objectForCell.title;
     
     
     return cell;
@@ -197,7 +177,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         }
         case NSFetchedResultsChangeDelete:
         {
-            NSLog(@"Deleting at path %@", indexPath);
+            NSLog(@"Deleting at path %d", indexPath.row);
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -221,7 +201,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 - (void)controller:(RBQFetchedResultsController *)controller
-  didChangeSection:(RBQFetchedResultsSectionInfo *)sectionInfo
+  didChangeSection:(NSString *)sectionName
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type
 {
@@ -258,21 +238,21 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (IBAction)didClickDeleteButton:(UIBarButtonItem *)sender
 {
     // Delete the object in the first row
-    NSIndexPath *firstObjectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self deleteObjectAtIndexPath:firstObjectIndexPath];
+//    NSIndexPath *firstObjectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//    [self deleteObjectAtIndexPath:firstObjectIndexPath];
     
-    //    // Test deleting a section (comment out above to test)
-    //    RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
-    //
-    //    [[RLMRealm defaultRealm] beginWriteTransaction];
-    //
-    //    for (TestObject *object in objectInFirstSection) {
-    //        [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
-    //
-    //        [[RLMRealm defaultRealm] deleteObject:object];
-    //    }
-    //
-    //    [[RLMRealm defaultRealm] commitWriteTransaction];
+    // Test deleting a section (comment out above to test)
+    RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
+
+    [[RLMRealm defaultRealm] beginWriteTransaction];
+
+    for (TestObject *object in objectInFirstSection) {
+        [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
+
+        [[RLMRealm defaultRealm] deleteObject:object];
+    }
+
+    [[RLMRealm defaultRealm] commitWriteTransaction];
 }
 
 - (IBAction)didClickInsertButton:(UIBarButtonItem *)sender
@@ -343,7 +323,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             NSLog(@"DID AN INSERT");
             [[RBQRealmNotificationManager defaultManager] didAddObject:newObject];
         }
-        // So unless this is a real change.... the FRC can get tripped up!!!
         else {
             newObject.inTable = YES;
             NSLog(@"DID A CHANGE");

@@ -242,7 +242,9 @@
 {
     self.token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *note, RLMRealm *realm) {
         if ([note isEqualToString:RLMRealmDidChangeNotification]) {
-            [self sendNotificationsWithRealm:realm];
+            if (realm == [RLMRealm defaultRealm]) {
+                [self sendNotificationsWithRealm:realm];
+            }
         }
     }];
 }
@@ -254,7 +256,11 @@
 {
     // call this realms notification blocks
     for (RBQNotificationToken *token in [_notificationHandlers copy]) {
-        if (token.block) {
+        if (token.block &&
+            (self.addedSafeObjects.count > 0 ||
+            self.deletedSafeObjects.count > 0 ||
+            self.changedSafeObjects.count > 0)) {
+                
             token.block(self.addedSafeObjects.copy,
                         self.deletedSafeObjects.copy,
                         self.changedSafeObjects.copy,
