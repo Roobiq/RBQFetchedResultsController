@@ -15,6 +15,17 @@
 
 @class RBQFetchedResultsController;
 
+#pragma mark - RBQFetchedResultsSectionInfo
+
+// Object to use for relaying section info
+@interface RBQFetchedResultsSectionInfo : NSObject
+
+@property (nonatomic, readonly) NSUInteger numberOfObjects;
+@property (nonatomic, readonly) RLMResults *objects;
+@property (nonatomic, readonly) NSString *name;
+
+@end
+
 #pragma mark - RBQFetchedResultsControllerDelegate
 
 @protocol RBQFetchedResultsControllerDelegate <NSObject>
@@ -57,7 +68,7 @@
  objects.
  */
 - (void)controller:(RBQFetchedResultsController *)controller
-  didChangeSection:(NSString *)sectionName
+  didChangeSection:(RBQFetchedResultsSectionInfo *)section
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type;
 
@@ -70,11 +81,14 @@
 @interface RBQFetchedResultsController : NSObject
 
 @property (nonatomic, readonly) RBQFetchRequest *fetchRequest;
+
 @property (nonatomic, readonly) NSString *sectionNameKeyPath;
 
 @property (nonatomic, weak) id <RBQFetchedResultsControllerDelegate> delegate;
 
-@property(nonatomic, readonly) NSString *cacheName;
+@property (nonatomic, readonly) NSString *cacheName;
+
+@property (nonatomic, readonly) RLMResults *fetchedObjects;
 
 /*  Deletes the cached section information with the given name.
     
@@ -82,6 +96,11 @@
 */
 + (void)deleteCacheWithName:(NSString *)name;
 
+/*  Caching is always used. Specify a name to manually delete later on
+    
+    If name is nil, a cache will be created with a name generated from
+    the hash of the fetch request.
+*/
 - (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
                  cacheName:(NSString *)name;
@@ -89,9 +108,22 @@
 // Thread-safe
 - (BOOL)performFetch;
 
+// -----------------------------
+// Accessing Section Information
+// -----------------------------
+- (NSInteger)numberOfRowsForSectionIndex:(NSInteger)index;
+
+- (NSInteger)numberOfSections;
+
+- (NSString *)titleForHeaderInSection:(NSInteger)section;
+
+// ----------------------------
+// Accessing Object Information
+// ----------------------------
+
 - (RBQSafeRealmObject *)safeObjectAtIndexPath:(NSIndexPath *)indexPath;
 
-// Returns a RLMObject on current thread
+// Note: RLMObject returned is not thread-safe
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
 
 - (id)objectInRealm:(RLMRealm *)realm
@@ -100,11 +132,5 @@
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject;
 
 - (NSIndexPath *)indexPathForObject:(RLMObject *)object;
-
-- (NSInteger)numberOfRowsForSectionIndex:(NSInteger)index;
-
-- (NSInteger)numberOfSections;
-
-- (NSString *)titleForHeaderInSection:(NSInteger)section;
 
 @end

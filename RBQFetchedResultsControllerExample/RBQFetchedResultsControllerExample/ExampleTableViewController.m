@@ -32,7 +32,7 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     
     [realm deleteAllObjects];
     
-    for (NSUInteger i = 0; i < 15; i++) {
+    for (NSUInteger i = 0; i < 1000; i++) {
         
         NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
         
@@ -354,7 +354,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         fifthObject.sortIndex += 1;
         sixthObject.sortIndex -= 1;
         firstObject.inTable = NO;
-        thirdObject.title = @"New Title";
+        thirdObject.title = @"Testing Move And Update";
         
         [realm commitWriteTransaction];
     }
