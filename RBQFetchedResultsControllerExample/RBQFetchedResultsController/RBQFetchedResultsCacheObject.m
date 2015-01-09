@@ -42,4 +42,35 @@
              };
 }
 
+#pragma mark - Equality
+
+- (BOOL)isEqualToObject:(RBQFetchedResultsCacheObject *)object
+{
+    if (self.primaryKeyType == RLMPropertyTypeString &&
+        object.primaryKeyType == RLMPropertyTypeString) {
+        
+        return [self.primaryKeyStringValue isEqualToString:object.primaryKeyStringValue];
+    }
+    else if (self.primaryKeyType == RLMPropertyTypeInt &&
+             object.primaryKeyType == RLMPropertyTypeInt) {
+        
+        return self.primaryKeyStringValue.integerValue == object.primaryKeyStringValue.integerValue;
+    }
+    else {
+        return [super isEqual:object];
+    }
+}
+
+- (BOOL)isEqual:(id)object
+{
+    NSString *className = NSStringFromClass(self.class);
+    
+    if ([className hasPrefix:@"RLMStandalone_"]) {
+        return [self isEqualToObject:object];
+    }
+    else {
+        return [super isEqual:object];
+    }
+}
+
 @end

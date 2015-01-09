@@ -31,4 +31,23 @@
 }
 
 
+#pragma mark - Equality
+
+- (BOOL)isEqualToObject:(RBQSectionCacheObject *)object
+{
+    return [self.name isEqualToString:object.name];
+}
+
+- (BOOL)isEqual:(id)object
+{
+    NSString *className = NSStringFromClass(self.class);
+    
+    if ([className hasPrefix:@"RLMStandalone_"]) {
+        return [self isEqualToObject:object];
+    }
+    else {
+        return [super isEqual:object];
+    }
+}
+
 @end

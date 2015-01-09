@@ -32,7 +32,7 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     
     [realm deleteAllObjects];
     
-    for (NSUInteger i = 0; i < 1000; i++) {
+    for (NSUInteger i = 0; i < 15; i++) {
         
         NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
         
@@ -274,18 +274,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     NSString *title = object.title;
     NSLog(@"Deleting object %@ at path %@", title, indexPath);
     
-    //    NSIndexPath *fifthObjectIndexPath = [NSIndexPath indexPathForRow:5 inSection:0];
-    //    TestObject *changeObject = [self.fetchedResultsController objectAtIndexPath:fifthObjectIndexPath];
-    
     [realm beginWriteTransaction];
     
     [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
     
     [realm deleteObject:object];
-    
-    //    changeObject.title = @"Changed";
-    
-    //    [[RBQRealmNotificationManager defaultManager] didChangeObject:changeObject];
     
     [realm commitWriteTransaction];
     NSLog(@"Finished transaction with object %@", title);
