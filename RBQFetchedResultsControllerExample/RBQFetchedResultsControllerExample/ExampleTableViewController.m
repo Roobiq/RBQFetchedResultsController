@@ -62,7 +62,7 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     RLMSortDescriptor *sortDescriptorSection = [RLMSortDescriptor sortDescriptorWithProperty:@"sectionName"
                                                                                    ascending:YES];
     
-    fetchRequest.sortDescriptors = @[sortDescriptor, sortDescriptorSection];
+    fetchRequest.sortDescriptors = @[sortDescriptorSection,sortDescriptor];
     
     self.fetchedResultsController = [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                            sectionNameKeyPath:@"sectionName" cacheName:@"testCache"];
@@ -247,9 +247,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [[RLMRealm defaultRealm] beginWriteTransaction];
 
     for (TestObject *object in objectInFirstSection) {
-        [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
+        if (!object.invalidated) {
+            [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
 
-        [[RLMRealm defaultRealm] deleteObject:object];
+            [[RLMRealm defaultRealm] deleteObject:object];
+        }
     }
 
     [[RLMRealm defaultRealm] commitWriteTransaction];
@@ -343,6 +345,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
                                                                    atIndexPath:indexPathFifthRow];
         TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
                                                                    atIndexPath:indexPathSixthRow];
+        
+//        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
+//        extraObjectInSection.sectionName = @"Middle Section";
+//        [realm addObject:extraObjectInSection];
         
         [[RBQRealmNotificationManager defaultManager] didAddObjects:nil
                                                   willDeleteObjects:nil

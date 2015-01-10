@@ -39,7 +39,6 @@
 /* Begin PBXFileReference section */
 		046CBCDEC612CA02850EB2FF /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		55AAFFD7A898D4859B81F711 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		662C466F1A60AE0D00A8D145 /* RBQFetchedResultsController_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsController_Private.h; sourceTree = "<group>"; };
 		662C46801A60C4AD00A8D145 /* RBQFetchedResultsCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsCacheObject.h; sourceTree = "<group>"; };
 		662C46811A60C4AD00A8D145 /* RBQFetchedResultsCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsCacheObject.m; sourceTree = "<group>"; };
 		662C46821A60C4AD00A8D145 /* RBQFetchedResultsControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsControllerCacheObject.h; sourceTree = "<group>"; };
@@ -204,7 +203,6 @@
 				662C467F1A60C4AD00A8D145 /* CacheObjects */,
 				662C468D1A60C4DF00A8D145 /* Helpers */,
 				662C46891A60C4B700A8D145 /* NotificationManager */,
-				662C466F1A60AE0D00A8D145 /* RBQFetchedResultsController_Private.h */,
 				667F382F1A5B2690008E3052 /* RBQFetchedResultsController.h */,
 				667F38301A5B2690008E3052 /* RBQFetchedResultsController.m */,
 				667F38311A5B2690008E3052 /* RBQFetchRequest.h */,

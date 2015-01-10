@@ -7,8 +7,6 @@
 //
 
 #import "RBQFetchedResultsController.h"
-#import "RBQFetchedResultsController_Private.h"
-
 
 #import "RLMObject+Utilities.h"
 #import "RBQRealmNotificationManager.h"
@@ -17,7 +15,33 @@
 
 @import UIKit;
 
+#pragma mark - RBQFetchedResultsController
+
+@interface RBQFetchedResultsController ()
+
+@property (strong, nonatomic) RBQNotificationToken *notificationToken;
+
++ (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
+                    forFetchRequest:(RBQFetchRequest *)fetchRequest;
+
+@end
+
 #pragma mark - RBQFetchedResultsSectionInfo
+
+@interface RBQFetchedResultsSectionInfo ()
+
+// RBQFetchRequest to support retrieving section objects
+@property (strong, nonatomic) RBQFetchRequest *fetchRequest;
+
+// Section name key path to support retrieving section objects
+@property (strong, nonatomic) NSString *sectionNameKeyPath;
+
+// Create a RBQFetchedResultsSectionInfo
++ (instancetype)createSectionWithName:(NSString *)sectionName
+                   sectionNameKeyPath:(NSString *)sectionNameKeyPath
+                         fetchRequest:(RBQFetchRequest *)fetchRequest;
+
+@end
 
 @implementation RBQFetchedResultsSectionInfo
 @synthesize name = _name;
@@ -59,11 +83,41 @@
 
 #pragma mark - RBQChangeSet
 
+//------------------
+// TODO: Break apart
+//------------------
+
+@interface RBQChangeSet : NSObject
+
+@property (strong, nonatomic) NSArray *cacheObjectsChangeSet;
+@property (strong, nonatomic) NSArray *cacheSectionsChangeSet;
+@property (strong, nonatomic) NSArray *oldCacheSections;
+@property (strong, nonatomic) NSArray *sortedNewCacheSections;
+@property (strong, nonatomic) NSArray *deletedCacheSections;
+@property (strong, nonatomic) NSArray *insertedCacheSections;
+@property (strong, nonatomic) NSArray *safeObjectsSet;
+
+@property (strong, nonatomic) RLMRealm *realm;
+@property (strong, nonatomic) RLMRealm *cacheRealm;
+@property (strong, nonatomic) RLMResults *fetchResults;
+@property (strong, nonatomic) RBQFetchedResultsControllerCacheObject *cache;
+
+@end
+
 @implementation RBQChangeSet
 
 @end
 
 #pragma mark - RBQSectionChange
+
+@interface RBQSectionChange : NSObject
+
+@property (strong, nonatomic) NSNumber *previousIndex;
+@property (strong, nonatomic) NSNumber *updatedIndex;
+@property (strong, nonatomic) RBQSectionCacheObject *section;
+@property (assign, nonatomic) NSFetchedResultsChangeType changeType;
+
+@end
 
 @implementation RBQSectionChange
 
@@ -71,8 +125,26 @@
 
 #pragma mark - RBQObjectChange
 
+@interface RBQObjectChange : NSObject
+
+@property (strong, nonatomic) NSIndexPath *previousIndexPath;
+@property (strong, nonatomic) NSIndexPath *updatedIndexpath;
+@property (assign, nonatomic) NSFetchedResultsChangeType changeType;
+@property (strong, nonatomic) RBQSafeRealmObject *object;
+@property (strong, nonatomic) RBQFetchedResultsCacheObject *previousCacheObject;
+@property (strong, nonatomic) RBQFetchedResultsCacheObject *updatedCacheObject;
+
+// Create a RBQObjectChange
++ (instancetype)objectChangeWithCacheObject:(RBQFetchedResultsCacheObject *)cacheObject
+                                  changeSet:(RBQChangeSet *)changeSet;
+
+@end
+
 @implementation RBQObjectChange
 
+//----------------------------------------------
+// TODO: Update To Handle Broken Up RBQChangeSet
+//----------------------------------------------
 + (RBQObjectChange *)objectChangeWithCacheObject:(RBQFetchedResultsCacheObject *)cacheObject
                                        changeSet:(RBQChangeSet *)changeSet
 {
@@ -108,7 +180,9 @@
             NSInteger newSectionIndex = 0;
             
             for (RBQSectionCacheObject *section in changeSet.sortedNewCacheSections) {
-                if (newAllObjectIndex >= section.firstObjectIndex) {
+                if (newAllObjectIndex >= section.firstObjectIndex &&
+                    newAllObjectIndex <= section.lastObjectIndex) {
+                    
                     newSection = section;
                     
                     break;
@@ -124,49 +198,42 @@
         }
     }
     
-    return objectChange;
+    if (objectChange.previousIndexPath ||
+        objectChange.updatedIndexpath) {
+        
+        return objectChange;
+    }
+    
+    return nil;
 }
 
 @end
 
 #pragma mark - RBQFetchedResultsChanges
 
+@interface RBQFetchedResultsChanges : NSObject
+
+@property (nonatomic, strong) NSMutableArray *sectionChanges;
+@property (nonatomic, strong) NSMutableArray *deletedObjectChanges;
+@property (nonatomic, strong) NSMutableArray *insertedObjectChanges;
+@property (nonatomic, strong) NSMutableArray *movedObjectChanges;
+
+@end
+
 @implementation RBQFetchedResultsChanges
 
-- (NSMutableArray *)sectionChanges
+- (id)init
 {
-    if (!_sectionChanges) {
-        _sectionChanges = @[].mutableCopy;
-    }
+    self = [super init];
     
-    return _sectionChanges;
-}
-
-- (NSMutableArray *)deletedObjectChanges
-{
-    if (!_deletedObjectChanges) {
+    if (self) {
+        _sectionChanges = _sectionChanges = @[].mutableCopy;
         _deletedObjectChanges = @[].mutableCopy;
-    }
-    
-    return _deletedObjectChanges;
-}
-
-- (NSMutableArray *)insertedObjectChanges
-{
-    if (!_insertedObjectChanges) {
         _insertedObjectChanges = @[].mutableCopy;
-    }
-    
-    return _insertedObjectChanges;
-}
-
-- (NSMutableArray *)movedObjectChanges
-{
-    if (!_movedObjectChanges) {
         _movedObjectChanges = @[].mutableCopy;
     }
     
-    return _movedObjectChanges;
+    return self;
 }
 
 @end
@@ -187,11 +254,13 @@
 
 #pragma mark - Private Class
 
+// Create Realm instance for cache name
 + (RLMRealm *)realmForCacheName:(NSString *)cacheName
 {
     return [RLMRealm realmWithPath:[RBQFetchedResultsController cachePathWithName:cacheName]];
 }
 
+//  Create a file path for Realm cache with a given name
 + (NSString *)cachePathWithName:(NSString *)name
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -212,6 +281,7 @@
     return cachePath;
 }
 
+// Retrieve results with an already created Realm instance
 + (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
                     forFetchRequest:(RBQFetchRequest *)fetchRequest
 {
@@ -390,6 +460,11 @@
 
 #pragma mark - Private
 
+//------------------
+// TODO: Break apart
+//------------------
+
+// Register the change notification from RBQRealmNotificationManager
 - (void)registerChangeNotification
 {
     // Start Notifications
@@ -497,6 +572,11 @@
                 
                 RBQObjectChange *objectChange = [RBQObjectChange objectChangeWithCacheObject:cacheObject
                                                                                    changeSet:changeSet];
+                
+                // If we didn't get an object change then skip
+                if (!objectChange) {
+                    continue;
+                }
                 
                 // Deleted Objects
                 if (!objectChange.updatedIndexpath &&
@@ -647,14 +727,12 @@
     }];
 }
 
-// Create index backed by Realm
+// Create the internal cache for a fetch request
 - (void)createCacheWithRealm:(RLMRealm *)cacheRealm
                    cacheName:(NSString *)cacheName
              forFetchRequest:(RBQFetchRequest *)fetchRequest
           sectionNameKeyPath:(NSString *)sectionNameKeyPath
 {
-    
-    
     RLMResults *fetchResults = [RBQFetchedResultsController fetchResultsInRealm:fetchRequest.realm
                                                                 forFetchRequest:fetchRequest];
     
@@ -745,6 +823,11 @@
 
 #pragma mark - Create Internal Change Objects
 
+//------------------
+// TODO: Break apart
+//------------------
+
+// Create the internal RBQChange set to represent the changes reported
 - (RBQChangeSet *)createChangeSetsWithAddedObjects:(NSArray *)addedSafeObjects
                                   deletedSafeObject:(NSArray *)deletedSafeObjects
                                  changedSafeObjects:(NSArray *)changedSafeObjects
@@ -837,6 +920,11 @@
     return nil;
 }
 
+//------------------
+// TODO: Break apart
+//------------------
+
+// Update the RBQChange set to include the collections that represent section changes
 - (void)updateChangeSetForSections:(RBQChangeSet *)changeSet
 {
     
@@ -856,7 +944,7 @@
     }
     
     // Combine Old With Change Set (without dupes!)
-    NSMutableArray *oldAndChange = oldSections.mutableCopy;
+    NSMutableArray *oldAndChange = [NSMutableArray arrayWithArray:oldSections];
     
     for (RBQSectionCacheObject *section in changeSet.cacheSectionsChangeSet) {
         if (![oldAndChange containsObject:section]) {
@@ -876,15 +964,19 @@
         
         if (sectionResults.count > 0) {
             RLMObject *firstObject = [sectionResults firstObject];
+            RLMObject *lastObject = [sectionResults lastObject];
             NSInteger firstObjectIndex = [changeSet.fetchResults indexOfObject:firstObject];
+            NSInteger lastObjectIndex = [changeSet.fetchResults indexOfObject:lastObject];
             
             // Write change to object index to cache Realm
             [changeSet.cacheRealm beginWriteTransaction];
             
             section.firstObjectIndex = firstObjectIndex;
+            section.lastObjectIndex = lastObjectIndex;
             
             [changeSet.cacheRealm commitWriteTransaction];
             
+            // Get the entire list of all sections after the change
             [newSections addObject:section];
         }
         else {
@@ -899,10 +991,10 @@
     NSSortDescriptor* sortByFirstIndex =
     [NSSortDescriptor sortDescriptorWithKey:@"firstObjectIndex" ascending:YES];
     [newSections sortUsingDescriptors:@[sortByFirstIndex]];
-    
+
     // Find inserted sections
-    NSMutableArray *insertedSections = newSections;
-    // Remove the sections in new, to identify any deleted sections
+    NSMutableArray *insertedSections = [NSMutableArray arrayWithArray:newSections];
+    // Remove the old sections to identify only the inserted
     [insertedSections removeObjectsInArray:oldSections];
     
     // Save the section collections
@@ -929,6 +1021,7 @@
     return [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
 }
 
+// Create instance of Realm for internal cache
 - (RLMRealm *)cacheRealm
 {
     if (self.cacheName) {
@@ -941,6 +1034,7 @@
     return nil;
 }
 
+// Retrieve internal cache
 - (RBQFetchedResultsControllerCacheObject *)cache
 {
     if (self.cacheName) {
@@ -956,6 +1050,7 @@
     return nil;
 }
 
+// Create a computed name for a fetch request
 - (NSString *)nameForFetchRequest:(RBQFetchRequest *)fetchRequest
 {
     return [NSString stringWithFormat:@"%lu-cache",(unsigned long)fetchRequest.hash];

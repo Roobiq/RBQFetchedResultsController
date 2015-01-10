@@ -26,6 +26,7 @@
 + (NSDictionary *)defaultPropertyValues
 {
     return @{@"firstObjectIndex" : @(NSIntegerMin),
+             @"lastObjectIndex" : @(NSIntegerMin),
              @"name" : @""
              };
 }

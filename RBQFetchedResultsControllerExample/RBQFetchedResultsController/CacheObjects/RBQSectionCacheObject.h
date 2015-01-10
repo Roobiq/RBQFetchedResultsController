@@ -19,6 +19,9 @@ RLM_ARRAY_TYPE(RBQFetchedResultsCacheObject)
 // Index of the first object contained within the section
 @property NSInteger firstObjectIndex;
 
+// Index of the first object contained within the section
+@property NSInteger lastObjectIndex;
+
 // Sorted RBQFetchedResultsCacheObjects in section
 @property RLMArray<RBQFetchedResultsCacheObject> *objects;
 
