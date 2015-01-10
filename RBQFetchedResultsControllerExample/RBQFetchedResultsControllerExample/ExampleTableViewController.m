@@ -177,7 +177,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         }
         case NSFetchedResultsChangeDelete:
         {
-            NSLog(@"Deleting at path %d", indexPath.row);
+            NSLog(@"Deleting at path %ld", (long)indexPath.row);
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -208,13 +208,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     UITableView *tableView = self.tableView;
     
     if (type == NSFetchedResultsChangeInsert) {
-        NSLog(@"Inserting section at %u", sectionIndex);
+        NSLog(@"Inserting section at %lu", (unsigned long)sectionIndex);
         NSIndexSet *insertedSection = [NSIndexSet indexSetWithIndex:sectionIndex];
         
         [tableView insertSections:insertedSection withRowAnimation:UITableViewRowAnimationFade];
     }
     else if (type == NSFetchedResultsChangeDelete) {
-        NSLog(@"Deleting section at %u", sectionIndex);
+        NSLog(@"Deleting section at %lu", (unsigned long)sectionIndex);
         NSIndexSet *deletedSection = [NSIndexSet indexSetWithIndex:sectionIndex];
         
         [tableView deleteSections:deletedSection withRowAnimation:UITableViewRowAnimationFade];

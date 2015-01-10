@@ -7,8 +7,7 @@
 //
 
 #import "RBQSafeRealmObject.h"
-#import <Realm/RLMProperty_Private.h>
-#import <objc/message.h>
+#import "RLMObject+Utilities.h"
 
 @interface RBQSafeRealmObject ()
 
@@ -24,9 +23,9 @@
         return nil;
     }
     
-    NSString *className = [[object class] className];
+    NSString *className = [RLMObject classNameForObject:object];
     
-    id value = [RBQSafeRealmObject primaryKeyValueForObject:object];
+    id value = [RLMObject primaryKeyValueForObject:object];
     
     RLMProperty *primaryKeyProperty = object.objectSchema.primaryKeyProperty.copy;
     
@@ -47,37 +46,6 @@
               fromSafeObject:(RBQSafeRealmObject *)safeObject
 {
     return [NSClassFromString(safeObject.className) objectInRealm:realm forPrimaryKey:safeObject.primaryKeyValue];
-}
-
-+ (id)primaryKeyValueForObject:(RLMObject *)object
-{
-    if (!object) {
-        return nil;
-    }
-    
-    RLMProperty *primaryKeyProperty = object.objectSchema.primaryKeyProperty;
-    
-    if (primaryKeyProperty) {
-        id value = nil;
-        
-        if ([object respondsToSelector:primaryKeyProperty.getterSel]) {
-            value = [object valueForKey:primaryKeyProperty.getterName];
-        }
-        
-        if (!value) {
-            @throw [NSException exceptionWithName:@"RBQException"
-                                           reason:@"Primary key is nil"
-                                         userInfo:nil];
-        }
-        
-        return value;
-    }
-    
-    @throw [NSException exceptionWithName:@"RBQException"
-                                   reason:@"Object does not have a primary key"
-                                 userInfo:nil];
-    
-    return @"InvalidObject";
 }
 
 - (id)initWithClassName:(NSString *)className

@@ -19,6 +19,7 @@
 // The Realm in which this object is persisted. Returns nil for standalone objects.
 @property (nonatomic, readonly) RLMRealm *realm;
 
+// Predicate supported by Realm
 @property (nonatomic, strong) NSPredicate *predicate;
 
 // Array of RLMSortDescriptors
@@ -28,8 +29,10 @@
                                         inRealm:(RLMRealm *)realm
                                       predicate:(NSPredicate *)predicate;
 
+// Retrieve all the RLMObjects for this fetch request
 - (RLMResults *)fetchObjects;
 
+// Create RBQFetchRequest in RLMRealm instance with an entity name
 - (instancetype)initWithEntityName:(NSString *)entityName
                            inRealm:(RLMRealm *)realm;
 

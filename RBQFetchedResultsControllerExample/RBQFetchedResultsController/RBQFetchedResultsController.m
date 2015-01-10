@@ -7,37 +7,17 @@
 //
 
 #import "RBQFetchedResultsController.h"
+#import "RBQFetchedResultsController_Private.h"
+
+
+#import "RLMObject+Utilities.h"
 #import "RBQRealmNotificationManager.h"
 #import "RBQFetchedResultsControllerCacheObject.h"
 #import "RBQSectionCacheObject.h"
 
-#import <objc/message.h>
-
 @import UIKit;
 
-#pragma mark - RBQFetchedResultsController Private Category
-
-@interface RBQFetchedResultsController ()
-
-@property (strong, nonatomic) RBQNotificationToken *notificationToken;
-
-+ (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
-                    forFetchRequest:(RBQFetchRequest *)fetchRequest;
-
-@end
-
 #pragma mark - RBQFetchedResultsSectionInfo
-
-@interface RBQFetchedResultsSectionInfo ()
-
-@property (strong, nonatomic) RBQFetchRequest *fetchRequest;
-@property (strong, nonatomic) NSString *sectionNameKeyPath;
-
-+ (instancetype)createSectionWithName:(NSString *)sectionName
-                   sectionNameKeyPath:(NSString *)sectionNameKeyPath
-                         fetchRequest:(RBQFetchRequest *)fetchRequest;
-
-@end
 
 @implementation RBQFetchedResultsSectionInfo
 @synthesize name = _name;
@@ -79,67 +59,77 @@
 
 #pragma mark - RBQChangeSet
 
-@interface RBQChangeSet : NSObject
-
-@property (strong, nonatomic) NSArray *cacheObjectsChangeSet;
-@property (strong, nonatomic) NSArray *cacheSectionsChangeSet;
-@property (strong, nonatomic) NSArray *oldCacheSections;
-@property (strong, nonatomic) NSArray *sortedNewCacheSections;
-@property (strong, nonatomic) NSArray *deletedCacheSections;
-@property (strong, nonatomic) NSArray *insertedCacheSections;
-@property (strong, nonatomic) NSArray *safeObjectsSet;
-
-@property (strong, nonatomic) RLMRealm *realm;
-@property (strong, nonatomic) RLMRealm *cacheRealm;
-@property (strong, nonatomic) RLMResults *fetchResults;
-@property (strong, nonatomic) RBQFetchedResultsControllerCacheObject *cache;
-
-@end
-
 @implementation RBQChangeSet
-
-@end
-
-#pragma mark - RBQObjectChange
-
-@interface RBQObjectChange : NSObject
-
-@property (strong, nonatomic) NSIndexPath *previousIndexPath;
-@property (strong, nonatomic) NSIndexPath *updatedIndexpath;
-@property (assign, nonatomic) NSFetchedResultsChangeType changeType;
-@property (strong, nonatomic) RBQSafeRealmObject *object;
-@property (strong, nonatomic) RBQFetchedResultsCacheObject *previousCacheObject;
-@property (strong, nonatomic) RBQFetchedResultsCacheObject *updatedCacheObject;
-
-@end
-
-@implementation RBQObjectChange
 
 @end
 
 #pragma mark - RBQSectionChange
 
-@interface RBQSectionChange : NSObject
-
-@property (strong, nonatomic) NSNumber *previousIndex;
-@property (strong, nonatomic) NSNumber *updatedIndex;
-@property (strong, nonatomic) RBQSectionCacheObject *section;
-@property (assign, nonatomic) NSFetchedResultsChangeType changeType;
-
-@end
-
 @implementation RBQSectionChange
 
 @end
 
-@interface RBQFetchedResultsChanges : NSObject
+#pragma mark - RBQObjectChange
 
-@property (nonatomic, strong) NSMutableArray *sectionChanges;
-@property (nonatomic, strong) NSMutableArray *deletedObjectChanges;
-@property (nonatomic, strong) NSMutableArray *insertedObjectChanges;
-@property (nonatomic, strong) NSMutableArray *movedObjectChanges;
+@implementation RBQObjectChange
+
++ (RBQObjectChange *)objectChangeWithCacheObject:(RBQFetchedResultsCacheObject *)cacheObject
+                                       changeSet:(RBQChangeSet *)changeSet
+{
+    RBQObjectChange *objectChange = [[RBQObjectChange alloc] init];
+    
+    objectChange.previousCacheObject =
+    [RBQFetchedResultsCacheObject objectInRealm:changeSet.cacheRealm
+                                  forPrimaryKey:cacheObject.primaryKeyStringValue];
+    
+    RBQSectionCacheObject *oldSectionForObject = objectChange.previousCacheObject.section;
+    
+    // Get old indexPath if we can
+    if (oldSectionForObject &&
+        objectChange.previousCacheObject) {
+        
+        NSInteger oldSectionIndex = [changeSet.oldCacheSections indexOfObject:oldSectionForObject];
+        
+        NSInteger oldRowIndex = [oldSectionForObject.objects indexOfObject:objectChange.previousCacheObject];
+        
+        objectChange.previousIndexPath = [NSIndexPath indexPathForRow:oldRowIndex inSection:oldSectionIndex];
+    }
+    
+    // Get new indexPath if we can
+    RLMObject *updatedObject = [RBQFetchedResultsCacheObject objectForCacheObject:cacheObject
+                                                                          inRealm:changeSet.realm];
+    
+    if (updatedObject) {
+        NSInteger newAllObjectIndex = [changeSet.fetchResults indexOfObject:updatedObject];
+        
+        if (newAllObjectIndex != NSNotFound) {
+            RBQSectionCacheObject *newSection = nil;
+            
+            NSInteger newSectionIndex = 0;
+            
+            for (RBQSectionCacheObject *section in changeSet.sortedNewCacheSections) {
+                if (newAllObjectIndex >= section.firstObjectIndex) {
+                    newSection = section;
+                    
+                    break;
+                }
+                
+                newSectionIndex ++;
+            }
+            
+            NSInteger newRowIndex = newAllObjectIndex - newSection.firstObjectIndex;
+            
+            objectChange.updatedCacheObject = cacheObject;
+            objectChange.updatedIndexpath = [NSIndexPath indexPathForRow:newRowIndex inSection:newSectionIndex];
+        }
+    }
+    
+    return objectChange;
+}
 
 @end
+
+#pragma mark - RBQFetchedResultsChanges
 
 @implementation RBQFetchedResultsChanges
 
@@ -180,6 +170,8 @@
 }
 
 @end
+
+#pragma mark - RBQFetchedResultsController
 
 @implementation RBQFetchedResultsController
 @synthesize cacheName = _cacheName;
@@ -265,13 +257,13 @@
         
         if (self.cacheName) {
             
-            [self createCacheWithRealm:[self realmForCache]
+            [self createCacheWithRealm:[self cacheRealm]
                              cacheName:self.cacheName
                        forFetchRequest:self.fetchRequest
                     sectionNameKeyPath:self.sectionNameKeyPath];
         }
         else {
-            [self createCacheWithRealm:[self realmForCache]
+            [self createCacheWithRealm:[self cacheRealm]
                              cacheName:[self nameForFetchRequest:self.fetchRequest]
                        forFetchRequest:self.fetchRequest
                     sectionNameKeyPath:self.sectionNameKeyPath];
@@ -295,7 +287,8 @@
     
     RBQFetchedResultsCacheObject *cacheObject = section.objects[indexPath.row];
     
-    RLMObject *object = [self objectForCacheObject:cacheObject inRealm:self.fetchRequest.realm];
+    RLMObject *object = [RBQFetchedResultsCacheObject objectForCacheObject:cacheObject
+                                                                   inRealm:self.fetchRequest.realm];
     
     return [RBQSafeRealmObject safeObjectFromObject:object];
 }
@@ -308,7 +301,8 @@
     
     RBQFetchedResultsCacheObject *cacheObject = section.objects[indexPath.row];
     
-    return [self objectForCacheObject:cacheObject inRealm:self.fetchRequest.realm];
+    return [RBQFetchedResultsCacheObject objectForCacheObject:cacheObject
+                                                      inRealm:self.fetchRequest.realm];
 }
 
 - (id)objectInRealm:(RLMRealm *)realm
@@ -320,12 +314,13 @@
     
     RBQFetchedResultsCacheObject *cacheObject = section.objects[indexPath.row];
     
-    return [self objectForCacheObject:cacheObject inRealm:realm];
+    return [RBQFetchedResultsCacheObject objectForCacheObject:cacheObject
+                                                      inRealm:realm];
 }
 
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject
 {
-    RLMRealm *realm = [self realmForCache];
+    RLMRealm *realm = [self cacheRealm];
     
     RBQFetchedResultsControllerCacheObject *cache = [self cache];
     
@@ -344,7 +339,9 @@
 {
     RBQFetchedResultsControllerCacheObject *cache = [self cache];
     
-    RBQFetchedResultsCacheObject *cacheObject = [self cacheObjectForObject:object];
+    RBQFetchedResultsCacheObject *cacheObject =
+    [RBQFetchedResultsCacheObject cacheObjectInRealm:[self cacheRealm]
+                                           forObject:object];
     
     NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
     NSInteger rowIndex = [cacheObject.section.objects indexOfObject:cacheObject];
@@ -498,8 +495,8 @@
             
             for (RBQFetchedResultsCacheObject *cacheObject in changeSet.cacheObjectsChangeSet) {
                 
-                RBQObjectChange *objectChange = [self createObjectChanges:cacheObject
-                                                                changeSet:changeSet];
+                RBQObjectChange *objectChange = [RBQObjectChange objectChangeWithCacheObject:cacheObject
+                                                                                   changeSet:changeSet];
                 
                 // Deleted Objects
                 if (!objectChange.updatedIndexpath &&
@@ -726,11 +723,9 @@
             }
             
             // Create the cache object
-            id primaryKeyValue = [RBQSafeRealmObject primaryKeyValueForObject:object];
-            
             RBQFetchedResultsCacheObject *cacheObject =
-            [RBQFetchedResultsCacheObject cacheObjectWithPrimaryKeyValue:primaryKeyValue
-                                                          primaryKeyType:object.objectSchema.primaryKeyProperty.type sectionKeyPathValue:currentSectionTitle];
+            [RBQFetchedResultsCacheObject createCacheObjectWithObject:object
+                                                  sectionKeyPathValue:currentSectionTitle];
             
             cacheObject.section = section;
             
@@ -746,65 +741,6 @@
     }
     
     [cacheRealm commitWriteTransaction];
-}
-
-- (NSArray *)sectionTitlesFromFetchResults:(NSArray *)fetchResults
-                        sectionNameKeyPath:(NSString *)sectionNameKeyPath
-{
-    if (fetchResults) {
-        NSMutableArray *sectionTitles = @[].mutableCopy;
-        
-        for (RBQSafeRealmObject *safeObject in fetchResults) {
-            RLMObject *object = [safeObject RLMObject];
-            
-            NSString *sectionTitle = [object valueForKey:sectionNameKeyPath];
-            
-            if (![sectionTitles containsObject:sectionTitle]) {
-                [sectionTitles addObject:sectionTitle];
-            }
-        }
-        
-        return sectionTitles.copy;
-    }
-
-    return nil;
-}
-
-- (RBQFetchedResultsCacheObject *)cacheObjectForObject:(RLMObject *)object
-{
-    if (object) {
-        NSString *primaryKeyValue = (NSString *)[RBQSafeRealmObject primaryKeyValueForObject:object];
-        
-        if (object.objectSchema.primaryKeyProperty.type == RLMPropertyTypeString) {
-            
-            return [RBQFetchedResultsCacheObject objectInRealm:[self realmForCache]
-                                                 forPrimaryKey:primaryKeyValue];
-        }
-        else {
-            NSNumber *numberFromString = @(primaryKeyValue.integerValue);
-            
-            return [RBQFetchedResultsCacheObject objectInRealm:[self realmForCache]
-                                                 forPrimaryKey:(id)numberFromString];
-        }
-    }
-    
-    return nil;
-}
-
-- (RLMObject *)objectForCacheObject:(RBQFetchedResultsCacheObject *)cacheObject
-                            inRealm:(RLMRealm *)realm
-{
-    if (cacheObject.primaryKeyType == RLMPropertyTypeString) {
-        
-        return [NSClassFromString(self.fetchRequest.entityName) objectInRealm:realm
-                                                                forPrimaryKey:cacheObject.primaryKeyStringValue];
-    }
-    else {
-        NSNumber *numberFromString = @(cacheObject.primaryKeyStringValue.integerValue);
-        
-        return [NSClassFromString(self.fetchRequest.entityName) objectInRealm:realm
-                                                                forPrimaryKey:(id)numberFromString];
-    }
 }
 
 #pragma mark - Create Internal Change Objects
@@ -831,7 +767,7 @@
     
     changeSet.cache = [self cache];
     
-    changeSet.cacheRealm = [self realmForCache];
+    changeSet.cacheRealm = [self cacheRealm];
     
     // Get Sections In Change Set
     NSMutableArray *cacheSectionsInChangeSet = @[].mutableCopy;
@@ -874,9 +810,8 @@
                 
                 // Get the cache object
                 RBQFetchedResultsCacheObject *cacheObject =
-                [RBQFetchedResultsCacheObject cacheObjectWithPrimaryKeyValue:safeObject.primaryKeyValue
-                                                              primaryKeyType:safeObject.primaryKeyProperty.type
-                                                         sectionKeyPathValue:sectionTitle];
+                [RBQFetchedResultsCacheObject createCacheObjectWithSafeObject:safeObject
+                                                          sectionKeyPathValue:sectionTitle];
                 
                 [safeObjectSet addObject:safeObject];
                 
@@ -977,61 +912,7 @@
     changeSet.sortedNewCacheSections = newSections.copy;
 }
 
-- (RBQObjectChange *)createObjectChanges:(RBQFetchedResultsCacheObject *)cacheObject
-                               changeSet:(RBQChangeSet *)changeSet
-{
-    RBQObjectChange *objectChange = [[RBQObjectChange alloc] init];
-    
-    objectChange.previousCacheObject =
-    [RBQFetchedResultsCacheObject objectInRealm:changeSet.cacheRealm
-                                  forPrimaryKey:cacheObject.primaryKeyStringValue];
-    
-    RBQSectionCacheObject *oldSectionForObject = objectChange.previousCacheObject.section;
-    
-    // Get old indexPath if we can
-    if (oldSectionForObject &&
-        objectChange.previousCacheObject) {
-        
-        NSInteger oldSectionIndex = [changeSet.oldCacheSections indexOfObject:oldSectionForObject];
-        
-        NSInteger oldRowIndex = [oldSectionForObject.objects indexOfObject:objectChange.previousCacheObject];
-        
-        objectChange.previousIndexPath = [NSIndexPath indexPathForRow:oldRowIndex inSection:oldSectionIndex];
-    }
-    
-    // Get new indexPath if we can
-    RLMObject *updatedObject = [self objectForCacheObject:cacheObject
-                                                  inRealm:changeSet.realm];
-    
-    if (updatedObject) {
-        NSInteger newAllObjectIndex = [changeSet.fetchResults indexOfObject:updatedObject];
-        
-        if (newAllObjectIndex != NSNotFound) {
-            RBQSectionCacheObject *newSection = nil;
-            
-            NSInteger newSectionIndex = 0;
-            
-            for (RBQSectionCacheObject *section in changeSet.sortedNewCacheSections) {
-                if (newAllObjectIndex >= section.firstObjectIndex) {
-                    newSection = section;
-                    
-                    break;
-                }
-                
-                newSectionIndex ++;
-            }
-            
-            NSInteger newRowIndex = newAllObjectIndex - newSection.firstObjectIndex;
-            
-            objectChange.updatedCacheObject = cacheObject;
-            objectChange.updatedIndexpath = [NSIndexPath indexPathForRow:newRowIndex inSection:newSectionIndex];
-        }
-    }
-    
-    return objectChange;
-}
-
-#pragma mark - Utilities
+#pragma mark - Helpers
 
 /**
  Apparently iOS 7+ NSIndexPath's can sometimes be UIMutableIndexPaths:
@@ -1048,7 +929,7 @@
     return [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
 }
 
-- (RLMRealm *)realmForCache
+- (RLMRealm *)cacheRealm
 {
     if (self.cacheName) {
         return [RBQFetchedResultsController realmForCacheName:self.cacheName];
@@ -1064,11 +945,11 @@
 {
     if (self.cacheName) {
         
-        return [RBQFetchedResultsControllerCacheObject objectInRealm:[self realmForCache]
+        return [RBQFetchedResultsControllerCacheObject objectInRealm:[self cacheRealm]
                                                        forPrimaryKey:self.cacheName];
     }
     else {
-        return [RBQFetchedResultsControllerCacheObject objectInRealm:[self realmForCache]
+        return [RBQFetchedResultsControllerCacheObject objectInRealm:[self cacheRealm]
                                                        forPrimaryKey:[self nameForFetchRequest:self.fetchRequest]];
     }
     

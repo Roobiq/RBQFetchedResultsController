@@ -34,14 +34,24 @@ typedef void(^RBQNotificationBlock)(NSArray *addedSafeObjects,
 // Create a manager for a different Realm
 + (instancetype)managerForRealm:(RLMRealm *)realm;
 
-// Use these methods to register changes
+// ---------------------------
+// Methods to register changes
+// ---------------------------
+
+// Register an add for a given RLMObject
+// NOTE: Can be called before or after change to Realm
 - (void)didAddObject:(RLMObject *)addedObject;
 
-// Must be called before the object is deleted from Realm
+// Register a delete for a given RLMObject
+// NOTE: MUST BE CALLED BEFORE DELETE IN REALM
 - (void)willDeleteObject:(RLMObject *)deletedObject;
 
+// Register a change for a given RLMObject
+// NOTE: Can be called before or after change to Realm
 - (void)didChangeObject:(RLMObject *)changedObject;
 
+// Convenience method to pass array of objects changed
+// Will ignore nil NSArray values
 - (void)didAddObjects:(NSArray *)addedObjects
     willDeleteObjects:(NSArray *)deletedObjects
      didChangeObjects:(NSArray *)changedObjects;
@@ -50,6 +60,7 @@ typedef void(^RBQNotificationBlock)(NSArray *addedSafeObjects,
 // Must hold a strong reference to the returned token
 - (RBQNotificationToken *)addNotificationBlock:(RBQNotificationBlock)block;
 
+// De-register a notification given a RBQNotificationToken
 - (void)removeNotification:(RBQNotificationToken *)token;
 
 @end
