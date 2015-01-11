@@ -296,26 +296,13 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 
 - (void)registerChangeNotification
 {
-    if (self.inMemoryRealm) {
-        typeof(self) __weak weakSelf = self;
-        
-        self.token = [self.inMemoryRealm
-                      addNotificationBlock:^(NSString *note, RLMRealm *realm) {
-                          
-            if ([note isEqualToString:RLMRealmDidChangeNotification]) {
-                [weakSelf sendNotificationsWithRealm:realm];
-            }
-        }];
-    }
-    else {
-        self.token = [[RLMRealm realmWithPath:self.realmPath]
-                      addNotificationBlock:^(NSString *note, RLMRealm *realm) {
-                          
-            if ([note isEqualToString:RLMRealmDidChangeNotification]) {
-                [self sendNotificationsWithRealm:realm];
-            }
-        }];
-    }
+    self.token = [[self realmForManager]
+                  addNotificationBlock:^(NSString *note, RLMRealm *realm) {
+                      
+                      if ([note isEqualToString:RLMRealmDidChangeNotification]) {
+                          [self sendNotificationsWithRealm:realm];
+                      }
+                  }];
 }
 
 #pragma mark - RBQNotification
@@ -349,7 +336,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
     NSMutableArray *addedObjects = @[].mutableCopy;
     
     for (RBQSafeRealmObject *safeObject in self.addedSafeObjects) {
-        RLMObject *object = [RBQSafeRealmObject objectInRealm:[RLMRealm defaultRealm]
+        RLMObject *object = [RBQSafeRealmObject objectInRealm:[self realmForManager]
                                                fromSafeObject:safeObject];
         
         if (object) {
@@ -365,7 +352,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
     NSMutableArray *deletedObjects = @[].mutableCopy;
     
     for (RBQSafeRealmObject *safeObject in self.deletedSafeObjects) {
-        RLMObject *object = [RBQSafeRealmObject objectInRealm:[RLMRealm defaultRealm]
+        RLMObject *object = [RBQSafeRealmObject objectInRealm:[self realmForManager]
                                                fromSafeObject:safeObject];
         
         if (object) {
@@ -381,7 +368,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
     NSMutableArray *changedObjects = @[].mutableCopy;
     
     for (RBQSafeRealmObject *safeObject in self.changedSafeObjects) {
-        RLMObject *object = [RBQSafeRealmObject objectInRealm:[RLMRealm defaultRealm]
+        RLMObject *object = [RBQSafeRealmObject objectInRealm:[self realmForManager]
                                                fromSafeObject:safeObject];
         
         if (object) {
@@ -390,6 +377,20 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
     }
     
     return changedObjects.copy;
+}
+
+#pragma mark - Helper
+
+- (RLMRealm *)realmForManager
+{
+    if (self.inMemoryRealm) {
+        return self.inMemoryRealm;
+    }
+    else if (self.realmPath) {
+        return [RLMRealm realmWithPath:self.realmPath];
+    }
+    
+    return nil;
 }
 
 @end
