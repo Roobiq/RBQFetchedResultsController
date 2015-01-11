@@ -58,10 +58,7 @@
     static RBQRealmNotificationManager *defaultManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        defaultManager = [[self alloc] init];
-        
-        // Use the default Realm
-        defaultManager.realmPath = [RLMRealm defaultRealm].path;
+        defaultManager = [RBQRealmNotificationManager managerForRealm:[RLMRealm defaultRealm]];
     });
     return defaultManager;
 }
@@ -72,9 +69,10 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         defaultManager = [[self alloc] init];
-        
-        // Use the default Realm
+
         defaultManager.realmPath = realm.path;
+        
+        [defaultManager registerChangeNotification];
     });
     return defaultManager;
 }
@@ -88,6 +86,8 @@
         
         // Use the default Realm
         defaultManager.inMemoryRealm = inMemoryRealm;
+        
+        [defaultManager registerChangeNotification];
     });
     return defaultManager;
 }
@@ -104,22 +104,6 @@
     }
     
     return self;
-}
-
-- (void)setRealmPath:(NSString *)realmPath
-{
-    _realmPath = realmPath;
-    
-    // Setup the notification (requires the realm path)
-    [self registerChangeNotification];
-}
-
-- (void)setInMemoryRealm:(RLMRealm *)inMemoryRealm
-{
-    _inMemoryRealm = inMemoryRealm;
-    
-    // Setup the notification (requires the realm path)
-    [self registerChangeNotification];
 }
 
 #pragma mark - Public Notification Methods
