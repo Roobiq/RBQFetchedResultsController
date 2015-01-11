@@ -1,5 +1,5 @@
 //
-//  RBQFetchedResultsCacheObject.h
+//  RBQObjectCacheObject.h
 //  RBQFetchedResultsControllerExample
 //
 //  Created by Adam Fish on 1/6/15.
@@ -12,7 +12,7 @@
 
 @class RBQSectionCacheObject;
 
-@interface RBQFetchedResultsCacheObject : RLMObject
+@interface RBQObjectCacheObject : RLMObject <NSCopying>
 
 // Original RLMObject class name
 @property NSString *className;
@@ -42,10 +42,10 @@
                          forObject:(RLMObject *)object;
 
 // Retrieve RLMObject in given Realm instance for RBQFetchedResultsCacheObject
-+ (RLMObject *)objectForCacheObject:(RBQFetchedResultsCacheObject *)cacheObject
-                            inRealm:(RLMRealm *)realm;
++ (RLMObject *)objectInRealm:(RLMRealm *)realm
+              forCacheObject:(RBQObjectCacheObject *)cacheObject;
 
 @end
 
 // This protocol enables typed collections. i.e.:
-// RLMArray<RBQFetchedResultsCacheObject>
+// RLMArray<RBQObjectCacheObject>

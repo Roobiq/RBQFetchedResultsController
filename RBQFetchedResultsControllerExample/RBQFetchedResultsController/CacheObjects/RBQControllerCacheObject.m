@@ -1,28 +1,29 @@
 //
-//  RBQFetchedResultsControllerCacheObject.m
+//  RBQControllerCacheObject.m
 //  RBQFetchedResultsControllerExample
 //
 //  Created by Adam Fish on 1/6/15.
 //  Copyright (c) 2015 Roobiq. All rights reserved.
 //
 
-#import "RBQFetchedResultsControllerCacheObject.h"
+#import "RBQControllerCacheObject.h"
 
-@implementation RBQFetchedResultsControllerCacheObject
+@implementation RBQControllerCacheObject
 
 + (instancetype)cacheWithName:(NSString *)name
              fetchRequestHash:(NSInteger)hash
 {
-    RBQFetchedResultsControllerCacheObject *cache = [[RBQFetchedResultsControllerCacheObject alloc] init];
-    cache.cacheName = name;
+    RBQControllerCacheObject *cache = [[RBQControllerCacheObject alloc] init];
+    cache.name = name;
     cache.fetchRequestHash = hash;
+    cache.state = RBQControllerCacheStateReady;
     
     return cache;
 }
 
 + (NSString *)primaryKey
 {
-    return @"cacheName";
+    return @"name";
 }
 
 @end

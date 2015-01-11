@@ -346,16 +346,24 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
                                                                    atIndexPath:indexPathSixthRow];
         
-//        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
-//        extraObjectInSection.sectionName = @"Middle Section";
-//        [realm addObject:extraObjectInSection];
-        
         [[RBQRealmNotificationManager defaultManager] didAddObjects:nil
                                                   willDeleteObjects:nil
                                                    didChangeObjects:@[NULL_IF_NIL(fifthObject),
                                                                       NULL_IF_NIL(sixthObject),
                                                                       NULL_IF_NIL(firstObject),
                                                                       NULL_IF_NIL(thirdObject)]];
+        
+        // Test an inserted section that's not first
+//        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
+//        extraObjectInSection.sectionName = @"Middle Section";
+//        [realm addObject:extraObjectInSection];
+//        
+//        [[RBQRealmNotificationManager defaultManager] didAddObjects:@[extraObjectInSection]
+//                                                  willDeleteObjects:nil
+//                                                   didChangeObjects:@[NULL_IF_NIL(fifthObject),
+//                                                                      NULL_IF_NIL(sixthObject),
+//                                                                      NULL_IF_NIL(firstObject),
+//                                                                      NULL_IF_NIL(thirdObject)]];
         
         fifthObject.sortIndex += 1;
         sixthObject.sortIndex -= 1;

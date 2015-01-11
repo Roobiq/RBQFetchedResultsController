@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "RBQFetchRequest.h"
 #import "RBQSafeRealmObject.h"
-#import "RBQSectionCacheObject.h"
 
 @import CoreData;
 

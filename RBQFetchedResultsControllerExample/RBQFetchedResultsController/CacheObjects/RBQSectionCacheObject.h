@@ -7,9 +7,9 @@
 //
 
 #import <Realm/Realm.h>
-#import "RBQFetchedResultsCacheObject.h"
+#import "RBQObjectCacheObject.h"
 
-RLM_ARRAY_TYPE(RBQFetchedResultsCacheObject)
+RLM_ARRAY_TYPE(RBQObjectCacheObject)
 
 @interface RBQSectionCacheObject : RLMObject
 
@@ -23,7 +23,7 @@ RLM_ARRAY_TYPE(RBQFetchedResultsCacheObject)
 @property NSInteger lastObjectIndex;
 
 // Sorted RBQFetchedResultsCacheObjects in section
-@property RLMArray<RBQFetchedResultsCacheObject> *objects;
+@property RLMArray<RBQObjectCacheObject> *objects;
 
 // Create RBQSectionCacheObject with a given section name
 + (instancetype)cacheWithName:(NSString *)name;

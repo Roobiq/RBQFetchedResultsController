@@ -1,23 +1,23 @@
 //
-//  RBQFetchedResultsCacheObject.m
+//  RBQObjectCacheObject.m
 //  RBQFetchedResultsControllerExample
 //
 //  Created by Adam Fish on 1/6/15.
 //  Copyright (c) 2015 Roobiq. All rights reserved.
 //
 
-#import "RBQFetchedResultsCacheObject.h"
+#import "RBQObjectCacheObject.h"
 #import <Realm/RLMProperty_Private.h>
 #import "RLMObject+Utilities.h"
 
-@implementation RBQFetchedResultsCacheObject
+@implementation RBQObjectCacheObject
 
 #pragma mark - Public Class
 
 + (instancetype)createCacheObjectWithObject:(RLMObject *)object
                         sectionKeyPathValue:(NSString *)sectionValue
 {
-    RBQFetchedResultsCacheObject *cacheObject = [[RBQFetchedResultsCacheObject alloc] init];
+    RBQObjectCacheObject *cacheObject = [[RBQObjectCacheObject alloc] init];
     cacheObject.primaryKeyType = object.objectSchema.primaryKeyProperty.type;
     cacheObject.sectionKeyPathValue = sectionValue;
     cacheObject.className = [RLMObject classNameForObject:object];
@@ -37,7 +37,7 @@
 + (instancetype)createCacheObjectWithSafeObject:(RBQSafeRealmObject *)safeObject
                             sectionKeyPathValue:(NSString *)sectionValue
 {
-    RBQFetchedResultsCacheObject *cacheObject = [[RBQFetchedResultsCacheObject alloc] init];
+    RBQObjectCacheObject *cacheObject = [[RBQObjectCacheObject alloc] init];
     cacheObject.primaryKeyType = safeObject.primaryKeyProperty.type;
     cacheObject.sectionKeyPathValue = sectionValue;
     cacheObject.className = safeObject.className;
@@ -60,22 +60,22 @@
         
         if (object.objectSchema.primaryKeyProperty.type == RLMPropertyTypeString) {
             
-            return [RBQFetchedResultsCacheObject objectInRealm:realm
-                                                 forPrimaryKey:primaryKeyValue];
+            return [RBQObjectCacheObject objectInRealm:realm
+                                         forPrimaryKey:primaryKeyValue];
         }
         else {
             NSNumber *numberFromString = @(primaryKeyValue.integerValue);
             
-            return [RBQFetchedResultsCacheObject objectInRealm:realm
-                                                 forPrimaryKey:(id)numberFromString];
+            return [RBQObjectCacheObject objectInRealm:realm
+                                         forPrimaryKey:(id)numberFromString];
         }
     }
     
     return nil;
 }
 
-+ (RLMObject *)objectForCacheObject:(RBQFetchedResultsCacheObject *)cacheObject
-                            inRealm:(RLMRealm *)realm
++ (RLMObject *)objectInRealm:(RLMRealm *)realm
+              forCacheObject:(RBQObjectCacheObject *)cacheObject
 {
     if (cacheObject.primaryKeyType == RLMPropertyTypeString) {
         
@@ -108,7 +108,7 @@
 
 #pragma mark - Equality
 
-- (BOOL)isEqualToObject:(RBQFetchedResultsCacheObject *)object
+- (BOOL)isEqualToObject:(RBQObjectCacheObject *)object
 {
     if (self.primaryKeyType == RLMPropertyTypeString &&
         object.primaryKeyType == RLMPropertyTypeString) {
@@ -135,6 +135,20 @@
     else {
         return [super isEqual:object];
     }
+}
+
+#pragma mark - <NSCopying>
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    RBQObjectCacheObject *objectCache = [[RBQObjectCacheObject allocWithZone:zone] init];
+    objectCache.className = self.className;
+    objectCache.primaryKeyStringValue = self.primaryKeyStringValue;
+    objectCache.primaryKeyType = self.primaryKeyType;
+    objectCache.sectionKeyPathValue = self.sectionKeyPathValue;
+    objectCache.section = self.section;
+    
+    return objectCache;
 }
 
 @end
