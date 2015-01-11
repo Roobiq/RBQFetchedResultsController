@@ -49,6 +49,26 @@
 
 @end
 
+#pragma mark - Global
+
+// Global map to return the same notification manager for each Realm
+NSMapTable *pathToManagerMap;
+
+RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
+    @synchronized(pathToManagerMap) {
+        
+        // Create the map if not initialized
+        if (!pathToManagerMap) {
+            pathToManagerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory
+                                                     valueOptions:NSPointerFunctionsWeakMemory];
+            
+            return nil;
+        }
+        
+        return [pathToManagerMap objectForKey:path];
+    }
+}
+
 @implementation RBQRealmNotificationManager
 
 #pragma mark - Class
@@ -68,11 +88,19 @@
     static RBQRealmNotificationManager *defaultManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        defaultManager = [[self alloc] init];
-
-        defaultManager.realmPath = realm.path;
         
-        [defaultManager registerChangeNotification];
+        defaultManager = cachedRealmNotificationManager(realm.path);
+        
+        if (!defaultManager) {
+            defaultManager = [[self alloc] init];
+            
+            defaultManager.realmPath = realm.path;
+            
+            [defaultManager registerChangeNotification];
+            
+            // Add the manager to the cache
+            [pathToManagerMap setObject:defaultManager forKey:realm.path];
+        }
     });
     return defaultManager;
 }
@@ -82,12 +110,19 @@
     static RBQRealmNotificationManager *defaultManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        defaultManager = [[self alloc] init];
         
-        // Use the default Realm
-        defaultManager.inMemoryRealm = inMemoryRealm;
+        defaultManager = cachedRealmNotificationManager(inMemoryRealm.path);
         
-        [defaultManager registerChangeNotification];
+        if (!defaultManager) {
+            defaultManager = [[self alloc] init];
+            
+            defaultManager.inMemoryRealm = inMemoryRealm;
+            
+            [defaultManager registerChangeNotification];
+            
+            // Add the manager to the cache
+            [pathToManagerMap setObject:defaultManager forKey:inMemoryRealm.path];
+        }
     });
     return defaultManager;
 }
