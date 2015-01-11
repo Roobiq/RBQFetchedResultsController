@@ -7,23 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17FA8445467D84155B36A094 /* libPods-RBQFetchedResultsControllerExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */; };
 		662C46861A60C4AD00A8D145 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46811A60C4AD00A8D145 /* RBQObjectCacheObject.m */; };
 		662C46871A60C4AD00A8D145 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46831A60C4AD00A8D145 /* RBQControllerCacheObject.m */; };
 		662C46881A60C4AD00A8D145 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46851A60C4AD00A8D145 /* RBQSectionCacheObject.m */; };
 		662C468C1A60C4B700A8D145 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C468B1A60C4B700A8D145 /* RBQRealmNotificationManager.m */; };
 		662C46921A60C4DF00A8D145 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C468F1A60C4DF00A8D145 /* RBQSafeRealmObject.m */; };
 		662C46931A60C4DF00A8D145 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46911A60C4DF00A8D145 /* RLMObject+Utilities.m */; };
+		662C46951A623B6200A8D145 /* RBQFetchedResultsControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46941A623B6200A8D145 /* RBQFetchedResultsControllerTests.m */; };
+		662C46971A6243A900A8D145 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F383E1A5B26C5008E3052 /* TestObject.m */; };
+		662C46991A62440500A8D145 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C468B1A60C4B700A8D145 /* RBQRealmNotificationManager.m */; };
+		662C469B1A62441300A8D145 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46811A60C4AD00A8D145 /* RBQObjectCacheObject.m */; };
+		662C469D1A62442100A8D145 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46831A60C4AD00A8D145 /* RBQControllerCacheObject.m */; };
+		662C469F1A62442100A8D145 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46851A60C4AD00A8D145 /* RBQSectionCacheObject.m */; };
+		662C46A11A62442100A8D145 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C468F1A60C4DF00A8D145 /* RBQSafeRealmObject.m */; };
+		662C46A31A62442100A8D145 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46911A60C4DF00A8D145 /* RLMObject+Utilities.m */; };
+		662C46A51A62442100A8D145 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F38301A5B2690008E3052 /* RBQFetchedResultsController.m */; };
+		662C46A71A62442100A8D145 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F38321A5B2690008E3052 /* RBQFetchRequest.m */; };
 		667F380B1A5B2682008E3052 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F380A1A5B2682008E3052 /* main.m */; };
 		667F380E1A5B2682008E3052 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F380D1A5B2682008E3052 /* AppDelegate.m */; };
 		667F38141A5B2682008E3052 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 667F38121A5B2682008E3052 /* Main.storyboard */; };
 		667F38161A5B2682008E3052 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 667F38151A5B2682008E3052 /* Images.xcassets */; };
 		667F38191A5B2682008E3052 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 667F38171A5B2682008E3052 /* LaunchScreen.xib */; };
-		667F38251A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F38241A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests.m */; };
 		667F38371A5B2690008E3052 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F38301A5B2690008E3052 /* RBQFetchedResultsController.m */; };
 		667F38381A5B2690008E3052 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F38321A5B2690008E3052 /* RBQFetchRequest.m */; };
 		667F38401A5B26C5008E3052 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F383E1A5B26C5008E3052 /* TestObject.m */; };
 		667F38431A5B27E4008E3052 /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F38421A5B27E4008E3052 /* ExampleTableViewController.m */; };
 		A6FE5186583EA58E5BF84969 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 046CBCDEC612CA02850EB2FF /* libPods.a */; };
+		C4B3210938A228A125D7A4CC /* libPods-RBQFetchedResultsControllerExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB1486A8BB288C322B55EABE /* libPods-RBQFetchedResultsControllerExampleTests.a */; };
+		DF13CAE8AFEFC0EB41EB81B5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 046CBCDEC612CA02850EB2FF /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +50,8 @@
 
 /* Begin PBXFileReference section */
 		046CBCDEC612CA02850EB2FF /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		23DF3779C69223EEBB05695E /* Pods-RBQFetchedResultsControllerExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample.release.xcconfig"; sourceTree = "<group>"; };
+		24302DAE5BB92578C9C97C31 /* Pods-RBQFetchedResultsControllerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; sourceTree = "<group>"; };
 		55AAFFD7A898D4859B81F711 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		662C46801A60C4AD00A8D145 /* RBQObjectCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQObjectCacheObject.h; sourceTree = "<group>"; };
 		662C46811A60C4AD00A8D145 /* RBQObjectCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQObjectCacheObject.m; sourceTree = "<group>"; };
@@ -51,6 +65,7 @@
 		662C468F1A60C4DF00A8D145 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
 		662C46901A60C4DF00A8D145 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
 		662C46911A60C4DF00A8D145 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
+		662C46941A623B6200A8D145 /* RBQFetchedResultsControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsControllerTests.m; sourceTree = "<group>"; };
 		667F38051A5B2682008E3052 /* RBQFetchedResultsControllerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RBQFetchedResultsControllerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		667F38091A5B2682008E3052 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		667F380A1A5B2682008E3052 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -61,7 +76,6 @@
 		667F38181A5B2682008E3052 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		667F381E1A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RBQFetchedResultsControllerExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		667F38231A5B2682008E3052 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		667F38241A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsControllerExampleTests.m; sourceTree = "<group>"; };
 		667F382F1A5B2690008E3052 /* RBQFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsController.h; sourceTree = "<group>"; };
 		667F38301A5B2690008E3052 /* RBQFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsController.m; sourceTree = "<group>"; };
 		667F38311A5B2690008E3052 /* RBQFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchRequest.h; sourceTree = "<group>"; };
@@ -70,7 +84,11 @@
 		667F383E1A5B26C5008E3052 /* TestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
 		667F38411A5B27E4008E3052 /* ExampleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleTableViewController.h; sourceTree = "<group>"; };
 		667F38421A5B27E4008E3052 /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleTableViewController.m; sourceTree = "<group>"; };
+		A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RBQFetchedResultsControllerExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1E9F0B065E9219B62951CAC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		C2E60F6FE175B391587A17E0 /* Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExampleTests/Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		EB1486A8BB288C322B55EABE /* libPods-RBQFetchedResultsControllerExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RBQFetchedResultsControllerExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F37DD26C52E0B721F48A0FF9 /* Pods-RBQFetchedResultsControllerExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExampleTests/Pods-RBQFetchedResultsControllerExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +97,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6FE5186583EA58E5BF84969 /* libPods.a in Frameworks */,
+				17FA8445467D84155B36A094 /* libPods-RBQFetchedResultsControllerExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +105,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF13CAE8AFEFC0EB41EB81B5 /* libPods.a in Frameworks */,
+				C4B3210938A228A125D7A4CC /* libPods-RBQFetchedResultsControllerExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +117,8 @@
 			isa = PBXGroup;
 			children = (
 				046CBCDEC612CA02850EB2FF /* libPods.a */,
+				A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */,
+				EB1486A8BB288C322B55EABE /* libPods-RBQFetchedResultsControllerExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -183,7 +206,7 @@
 		667F38211A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				667F38241A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests.m */,
+				662C46941A623B6200A8D145 /* RBQFetchedResultsControllerTests.m */,
 				667F38221A5B2682008E3052 /* Supporting Files */,
 			);
 			path = RBQFetchedResultsControllerExampleTests;
@@ -216,6 +239,10 @@
 			children = (
 				A1E9F0B065E9219B62951CAC /* Pods.debug.xcconfig */,
 				55AAFFD7A898D4859B81F711 /* Pods.release.xcconfig */,
+				24302DAE5BB92578C9C97C31 /* Pods-RBQFetchedResultsControllerExample.debug.xcconfig */,
+				23DF3779C69223EEBB05695E /* Pods-RBQFetchedResultsControllerExample.release.xcconfig */,
+				F37DD26C52E0B721F48A0FF9 /* Pods-RBQFetchedResultsControllerExampleTests.debug.xcconfig */,
+				C2E60F6FE175B391587A17E0 /* Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -246,9 +273,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 667F382B1A5B2682008E3052 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerExampleTests" */;
 			buildPhases = (
+				9B401FA15D601D5CB3315A09 /* Check Pods Manifest.lock */,
 				667F381A1A5B2682008E3052 /* Sources */,
 				667F381B1A5B2682008E3052 /* Frameworks */,
 				667F381C1A5B2682008E3052 /* Resources */,
+				B6FCDB37CDC4597707C67FAB /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -318,6 +347,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		9B401FA15D601D5CB3315A09 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B6FCDB37CDC4597707C67FAB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFetchedResultsControllerExampleTests/Pods-RBQFetchedResultsControllerExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B9BFA561CD25E6C9E9B29EFC /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -330,7 +389,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C2363A6E112DFA1F5D0CC63D /* Check Pods Manifest.lock */ = {
@@ -374,7 +433,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				667F38251A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests.m in Sources */,
+				662C469D1A62442100A8D145 /* RBQControllerCacheObject.m in Sources */,
+				662C469F1A62442100A8D145 /* RBQSectionCacheObject.m in Sources */,
+				662C46A11A62442100A8D145 /* RBQSafeRealmObject.m in Sources */,
+				662C46A31A62442100A8D145 /* RLMObject+Utilities.m in Sources */,
+				662C46A51A62442100A8D145 /* RBQFetchedResultsController.m in Sources */,
+				662C46A71A62442100A8D145 /* RBQFetchRequest.m in Sources */,
+				662C469B1A62441300A8D145 /* RBQObjectCacheObject.m in Sources */,
+				662C46991A62440500A8D145 /* RBQRealmNotificationManager.m in Sources */,
+				662C46971A6243A900A8D145 /* TestObject.m in Sources */,
+				662C46951A623B6200A8D145 /* RBQFetchedResultsControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,7 +556,7 @@
 		};
 		667F38291A5B2682008E3052 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1E9F0B065E9219B62951CAC /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 24302DAE5BB92578C9C97C31 /* Pods-RBQFetchedResultsControllerExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RBQFetchedResultsControllerExample/Info.plist;
@@ -500,7 +568,7 @@
 		};
 		667F382A1A5B2682008E3052 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 55AAFFD7A898D4859B81F711 /* Pods.release.xcconfig */;
+			baseConfigurationReference = 23DF3779C69223EEBB05695E /* Pods-RBQFetchedResultsControllerExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RBQFetchedResultsControllerExample/Info.plist;
@@ -512,6 +580,7 @@
 		};
 		667F382C1A5B2682008E3052 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F37DD26C52E0B721F48A0FF9 /* Pods-RBQFetchedResultsControllerExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -531,6 +600,7 @@
 		};
 		667F382D1A5B2682008E3052 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2E60F6FE175B391587A17E0 /* Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

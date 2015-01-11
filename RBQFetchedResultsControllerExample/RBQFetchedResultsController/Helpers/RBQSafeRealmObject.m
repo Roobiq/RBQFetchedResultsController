@@ -16,6 +16,9 @@
 @end
 
 @implementation RBQSafeRealmObject
+@synthesize className = _className,
+primaryKeyProperty = _primaryKeyProperty,
+primaryKeyValue = _primaryKeyValue;
 
 + (instancetype)safeObjectFromObject:(RLMObject *)object
 {
@@ -27,7 +30,7 @@
     
     id value = [RLMObject primaryKeyValueForObject:object];
     
-    RLMProperty *primaryKeyProperty = object.objectSchema.primaryKeyProperty.copy;
+    RLMProperty *primaryKeyProperty = object.objectSchema.primaryKeyProperty;
     
     RBQSafeRealmObject *safeObject = [[RBQSafeRealmObject alloc] initWithClassName:className
                                                                    primaryKeyValue:value

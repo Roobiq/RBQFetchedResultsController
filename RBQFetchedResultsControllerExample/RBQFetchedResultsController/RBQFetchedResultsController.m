@@ -21,6 +21,7 @@
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
 @property (strong, nonatomic) RLMNotificationToken *cacheNotificationToken;
+@property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
 
 + (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
                     forFetchRequest:(RBQFetchRequest *)fetchRequest;
@@ -205,8 +206,6 @@
         fetchResults = [fetchResults sortedResultsUsingDescriptors:fetchRequest.sortDescriptors];
     }
     
-    NSLog(@"Fetched %ld objects", (long)fetchResults.count);
-    
     return fetchResults;
 }
 
@@ -256,12 +255,28 @@
     return self;
 }
 
+- (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
+        sectionNameKeyPath:(NSString *)sectionNameKeyPath
+        inMemoryRealmCache:(RLMRealm *)inMemoryRealm
+{
+    self = [super init];
+    
+    if (self) {
+        _inMemoryRealmCache = inMemoryRealm;
+        _fetchRequest = fetchRequest;
+        _sectionNameKeyPath = sectionNameKeyPath;
+        
+        [self registerChangeNotifications];
+    }
+    
+    return self;
+}
+
 - (BOOL)performFetch
 {
     if (self.fetchRequest) {
         
         if (self.cacheName) {
-            
             [self createCacheWithRealm:[self cacheRealm]
                              cacheName:self.cacheName
                        forFetchRequest:self.fetchRequest
@@ -398,18 +413,34 @@
 // Register the change notification from RBQRealmNotificationManager
 - (void)registerChangeNotifications
 {
-    // Start Notifications
-    self.notificationToken = [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
-        ^(NSArray *addedSafeObjects,
-          NSArray *deletedSafeObjects,
-          NSArray *changedSafeObjects,
-          RLMRealm *realm)
-        {
-            [self calculateChangesWithAddedSafeObjects:addedSafeObjects
-                                    deletedSafeObjects:deletedSafeObjects
-                                    changedSafeObjects:changedSafeObjects
-                                                 realm:realm];
-    }];
+    if (self.fetchRequest.isInMemoryRealm) {
+        self.notificationToken =
+        [[RBQRealmNotificationManager managerForInMemoryRealm:self.fetchRequest.realm] addNotificationBlock:
+         ^(NSArray *addedSafeObjects,
+           NSArray *deletedSafeObjects,
+           NSArray *changedSafeObjects,
+           RLMRealm *realm)
+         {
+             [self calculateChangesWithAddedSafeObjects:addedSafeObjects
+                                     deletedSafeObjects:deletedSafeObjects
+                                     changedSafeObjects:changedSafeObjects
+                                                  realm:realm];
+         }];
+    }
+    else {
+        self.notificationToken =
+        [[RBQRealmNotificationManager managerForRealm:self.fetchRequest.realm] addNotificationBlock:
+         ^(NSArray *addedSafeObjects,
+           NSArray *deletedSafeObjects,
+           NSArray *changedSafeObjects,
+           RLMRealm *realm)
+         {
+             [self calculateChangesWithAddedSafeObjects:addedSafeObjects
+                                     deletedSafeObjects:deletedSafeObjects
+                                     changedSafeObjects:changedSafeObjects
+                                                  realm:realm];
+         }];
+    }
     
     // Notification block to update the state of the cache when the cache Realm updates
     self.cacheNotificationToken =
@@ -481,10 +512,6 @@
     [state.cacheRealm commitWriteTransaction];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"Added Safe Objects: %lu", (unsigned long)addedSafeObjects.count);
-        NSLog(@"Deleted Safe Objects: %lu", (unsigned long)deletedSafeObjects.count);
-        NSLog(@"Changed Safe Objects: %lu", (unsigned long)changedSafeObjects.count);
-        
         if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
             [self.delegate controllerDidChangeContent:self];
         }
@@ -1191,6 +1218,9 @@
 {
     if (self.cacheName) {
         return [RBQFetchedResultsController realmForCacheName:self.cacheName];
+    }
+    else if (self.inMemoryRealmCache) {
+        return self.inMemoryRealmCache;
     }
     else {
         return [RBQFetchedResultsController realmForCacheName:[self nameForFetchRequest:self.fetchRequest]];

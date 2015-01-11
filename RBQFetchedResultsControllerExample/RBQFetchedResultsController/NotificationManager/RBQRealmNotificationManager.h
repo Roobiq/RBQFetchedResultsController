@@ -34,6 +34,9 @@ typedef void(^RBQNotificationBlock)(NSArray *addedSafeObjects,
 // Create a manager for a different Realm
 + (instancetype)managerForRealm:(RLMRealm *)realm;
 
+// Create a manager for an in-memory Realm
++ (instancetype)managerForInMemoryRealm:(RLMRealm *)inMemoryRealm;
+
 // ---------------------------
 // Methods to register changes
 // ---------------------------

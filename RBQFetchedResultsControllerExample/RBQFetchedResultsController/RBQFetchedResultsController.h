@@ -104,6 +104,10 @@
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
                  cacheName:(NSString *)name;
 
+- (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
+        sectionNameKeyPath:(NSString *)sectionNameKeyPath
+        inMemoryRealmCache:(RLMRealm *)inMemoryRealm;
+
 // Thread-safe
 - (BOOL)performFetch;
 

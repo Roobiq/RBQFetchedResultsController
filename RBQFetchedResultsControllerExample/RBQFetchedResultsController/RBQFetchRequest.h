@@ -14,10 +14,12 @@
 @interface RBQFetchRequest : NSObject
 
 // Realm Class name
-@property (nonatomic, readonly, strong) NSString *entityName;
+@property (nonatomic, readonly) NSString *entityName;
 
 // The Realm in which this object is persisted. Returns nil for standalone objects.
 @property (nonatomic, readonly) RLMRealm *realm;
+
+@property (nonatomic, readonly) BOOL isInMemoryRealm;
 
 // Predicate supported by Realm
 @property (nonatomic, strong) NSPredicate *predicate;
@@ -27,6 +29,10 @@
 
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
                                         inRealm:(RLMRealm *)realm
+                                      predicate:(NSPredicate *)predicate;
+
++ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
+                                  inMemoryRealm:(RLMRealm *)inMemoryRealm
                                       predicate:(NSPredicate *)predicate;
 
 // Retrieve all the RLMObjects for this fetch request

@@ -11,10 +11,12 @@
 @interface RBQFetchRequest ()
 
 @property (strong, nonatomic) NSString *realmPath;
+@property (strong, nonatomic) RLMRealm *inMemoryRealm;
 
 @end
 
 @implementation RBQFetchRequest
+@synthesize entityName = _entityName, isInMemoryRealm = _isInMemoryRealm;
 
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
                                         inRealm:(RLMRealm *)realm
@@ -25,6 +27,31 @@
     fetchRequest.predicate = predicate;
     
     return fetchRequest;
+}
+
++ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
+                                  inMemoryRealm:(RLMRealm *)inMemoryRealm
+                                      predicate:(NSPredicate *)predicate
+{
+    RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
+                                                        inMemoryRealm:inMemoryRealm];
+    fetchRequest.predicate = predicate;
+    
+    return fetchRequest;
+}
+
+- (instancetype)initWithEntityName:(NSString *)entityName
+                     inMemoryRealm:(RLMRealm *)inMemoryRealm
+{
+    self = [super init];
+    
+    if (self) {
+        _entityName = entityName;
+        _inMemoryRealm = inMemoryRealm;
+        _isInMemoryRealm = YES;
+    }
+    
+    return self;
 }
 
 - (instancetype)initWithEntityName:(NSString *)entityName
@@ -61,6 +88,10 @@
 
 - (RLMRealm *)realm
 {
+    if (self.inMemoryRealm) {
+        return self.inMemoryRealm;
+    }
+    
     return [RLMRealm realmWithPath:self.realmPath];
 }
 

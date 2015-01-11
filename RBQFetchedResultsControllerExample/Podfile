@@ -1,3 +1,9 @@
 platform :ios, '8.0'
 
-pod 'Realm'
+target 'RBQFetchedResultsControllerExample', exclusive: true do
+    pod 'Realm'
+end
+
+target 'RBQFetchedResultsControllerExampleTests', exclusive: true do
+    pod 'Realm/Headers'
+end

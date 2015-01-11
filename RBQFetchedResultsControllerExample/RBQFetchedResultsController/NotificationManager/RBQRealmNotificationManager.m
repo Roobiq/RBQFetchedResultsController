@@ -14,6 +14,7 @@
 @interface RBQNotificationToken ()
 
 @property (nonatomic, strong) NSString *realmPath;
+@property (nonatomic, strong) RLMRealm *inMemoryRealm;
 @property (nonatomic, copy) RBQNotificationBlock block;
 
 @end
@@ -36,6 +37,7 @@
 @interface RBQRealmNotificationManager ()
 
 @property (strong, nonatomic) NSString *realmPath;
+@property (strong, nonatomic) RLMRealm *inMemoryRealm;
 
 @property (strong, nonatomic) NSMutableArray *addedSafeObjects;
 @property (strong, nonatomic) NSMutableArray *deletedSafeObjects;
@@ -77,6 +79,19 @@
     return defaultManager;
 }
 
++ (instancetype)managerForInMemoryRealm:(RLMRealm *)inMemoryRealm
+{
+    static RBQRealmNotificationManager *defaultManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        defaultManager = [[self alloc] init];
+        
+        // Use the default Realm
+        defaultManager.inMemoryRealm = inMemoryRealm;
+    });
+    return defaultManager;
+}
+
 #pragma mark - Instance
 
 - (id)init
@@ -86,11 +101,25 @@
     if (self) {
         _notificationHandlers = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory
                                                       valueOptions:NSPointerFunctionsWeakMemory];
-        
-        [self registerChangeNotification];
     }
     
     return self;
+}
+
+- (void)setRealmPath:(NSString *)realmPath
+{
+    _realmPath = realmPath;
+    
+    // Setup the notification (requires the realm path)
+    [self registerChangeNotification];
+}
+
+- (void)setInMemoryRealm:(RLMRealm *)inMemoryRealm
+{
+    _inMemoryRealm = inMemoryRealm;
+    
+    // Setup the notification (requires the realm path)
+    [self registerChangeNotification];
 }
 
 #pragma mark - Public Notification Methods
@@ -104,7 +133,14 @@
     }
     
     RBQNotificationToken *token = [[RBQNotificationToken alloc] init];
-    token.realmPath = self.realmPath;
+    
+    if (self.inMemoryRealm) {
+        token.inMemoryRealm = self.inMemoryRealm;
+    }
+    else {
+        token.realmPath = self.realmPath;
+    }
+    
     token.block = block;
     [_notificationHandlers setObject:token forKey:token];
     return token;
@@ -115,6 +151,7 @@
     if (token) {
         [_notificationHandlers removeObjectForKey:token];
         token.realmPath = nil;
+        token.inMemoryRealm = nil;
         token.block = nil;
     }
 }
@@ -240,13 +277,26 @@
 
 - (void)registerChangeNotification
 {
-    self.token = [[RLMRealm defaultRealm] addNotificationBlock:^(NSString *note, RLMRealm *realm) {
-        if ([note isEqualToString:RLMRealmDidChangeNotification]) {
-            if (realm == [RLMRealm defaultRealm]) {
+    if (self.inMemoryRealm) {
+        typeof(self) __weak weakSelf = self;
+        
+        self.token = [self.inMemoryRealm
+                      addNotificationBlock:^(NSString *note, RLMRealm *realm) {
+                          
+            if ([note isEqualToString:RLMRealmDidChangeNotification]) {
+                [weakSelf sendNotificationsWithRealm:realm];
+            }
+        }];
+    }
+    else {
+        self.token = [[RLMRealm realmWithPath:self.realmPath]
+                      addNotificationBlock:^(NSString *note, RLMRealm *realm) {
+                          
+            if ([note isEqualToString:RLMRealmDidChangeNotification]) {
                 [self sendNotificationsWithRealm:realm];
             }
-        }
-    }];
+        }];
+    }
 }
 
 #pragma mark - RBQNotification

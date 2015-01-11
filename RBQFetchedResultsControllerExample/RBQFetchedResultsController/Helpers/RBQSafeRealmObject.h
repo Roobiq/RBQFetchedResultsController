@@ -12,13 +12,13 @@
 @interface RBQSafeRealmObject : NSObject <NSCopying>
 
 // Original RLMObject's class name
-@property (strong, nonatomic, readonly) NSString *className;
+@property (nonatomic, readonly) NSString *className;
 
 // Original RLMObject's primary key value
-@property (strong, nonatomic, readonly) id primaryKeyValue;
+@property (nonatomic, readonly) id primaryKeyValue;
 
 // Original RLMObject's primary key property
-@property (strong, nonatomic, readonly) RLMProperty *primaryKeyProperty;
+@property (nonatomic, readonly, copy) RLMProperty *primaryKeyProperty;
 
 // The Realm in which this object is persisted
 @property (nonatomic, readonly) RLMRealm *realm;
