@@ -60,7 +60,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
         // Create the map if not initialized
         if (!pathToManagerMap) {
             pathToManagerMap = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory
-                                                     valueOptions:NSPointerFunctionsWeakMemory];
+                                                     valueOptions:NSPointerFunctionsStrongMemory];
             
             return nil;
         }
@@ -75,55 +75,40 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 
 + (instancetype)defaultManager
 {
-    static RBQRealmNotificationManager *defaultManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        defaultManager = [RBQRealmNotificationManager managerForRealm:[RLMRealm defaultRealm]];
-    });
-    return defaultManager;
+    return [RBQRealmNotificationManager managerForRealm:[RLMRealm defaultRealm]];
 }
 
 + (instancetype)managerForRealm:(RLMRealm *)realm
 {
-    static RBQRealmNotificationManager *defaultManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    RBQRealmNotificationManager *defaultManager = cachedRealmNotificationManager(realm.path);
+    
+    if (!defaultManager) {
+        defaultManager = [[self alloc] init];
         
-        defaultManager = cachedRealmNotificationManager(realm.path);
+        defaultManager.realmPath = realm.path;
         
-        if (!defaultManager) {
-            defaultManager = [[self alloc] init];
-            
-            defaultManager.realmPath = realm.path;
-            
-            [defaultManager registerChangeNotification];
-            
-            // Add the manager to the cache
-            [pathToManagerMap setObject:defaultManager forKey:realm.path];
-        }
-    });
+        [defaultManager registerChangeNotification];
+        
+        // Add the manager to the cache
+        [pathToManagerMap setObject:defaultManager forKey:realm.path];
+    }
     return defaultManager;
 }
 
 + (instancetype)managerForInMemoryRealm:(RLMRealm *)inMemoryRealm
 {
-    static RBQRealmNotificationManager *defaultManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    RBQRealmNotificationManager *defaultManager = cachedRealmNotificationManager(inMemoryRealm.path);
+    
+    if (!defaultManager) {
+        defaultManager = [[self alloc] init];
         
-        defaultManager = cachedRealmNotificationManager(inMemoryRealm.path);
+        defaultManager.inMemoryRealm = inMemoryRealm;
         
-        if (!defaultManager) {
-            defaultManager = [[self alloc] init];
-            
-            defaultManager.inMemoryRealm = inMemoryRealm;
-            
-            [defaultManager registerChangeNotification];
-            
-            // Add the manager to the cache
-            [pathToManagerMap setObject:defaultManager forKey:inMemoryRealm.path];
-        }
-    });
+        [defaultManager registerChangeNotification];
+        
+        // Add the manager to the cache
+        [pathToManagerMap setObject:defaultManager forKey:inMemoryRealm.path];
+    }
     return defaultManager;
 }
 
