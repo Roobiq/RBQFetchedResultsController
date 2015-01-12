@@ -28,27 +28,27 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     
     RLMRealm *realm = [RLMRealm defaultRealm];
     
-    [realm beginWriteTransaction];
-    
-    [realm deleteAllObjects];
-    
-    for (NSUInteger i = 0; i < 1000; i++) {
-        
-        NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
-        
-        TestObject *object = [TestObject testObjectWithTitle:title sortIndex:i inTable:YES];
-        
-        if (i < 10) {
-            object.sectionName = @"First Section";
-        }
-        else {
-            object.sectionName = @"Second Section";
-        }
-        
-        [realm addObject:object];
-    }
-    
-    [realm commitWriteTransaction];
+//    [realm beginWriteTransaction];
+//    
+//    [realm deleteAllObjects];
+//    
+//    for (NSUInteger i = 0; i < 1000; i++) {
+//        
+//        NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
+//        
+//        TestObject *object = [TestObject testObjectWithTitle:title sortIndex:i inTable:YES];
+//        
+//        if (i < 10) {
+//            object.sectionName = @"First Section";
+//        }
+//        else {
+//            object.sectionName = @"Second Section";
+//        }
+//        
+//        [realm addObject:object];
+//    }
+//    
+//    [realm commitWriteTransaction];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
@@ -137,19 +137,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
- }
- */
-
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-
 #pragma mark - <RBQFetchedResultsControllerDelegate>
 
 - (void)controllerWillChangeContent:(RBQFetchedResultsController *)controller
@@ -224,6 +211,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller
 {
     NSLog(@"Ending updates");
+    NSLog(@"Fetched %ld Items After Change", self.fetchedResultsController.fetchedObjects.count);
     @try {
         [self.tableView endUpdates];
     }
@@ -241,6 +229,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 //    NSIndexPath *firstObjectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
 //    [self deleteObjectAtIndexPath:firstObjectIndexPath];
     
+    NSLog(@"DID BEGIN DELETE");
+    
+    NSLog(@"Fetched %ld Items Before Delete", self.fetchedResultsController.fetchedObjects.count);
+    
     // Test deleting a section (comment out above to test)
     RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
 
@@ -255,11 +247,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
 
     [[RLMRealm defaultRealm] commitWriteTransaction];
+    NSLog(@"DID END DELETE");
 }
 
 - (IBAction)didClickInsertButton:(UIBarButtonItem *)sender
 {
+    NSLog(@"DID BEGIN INSERT");
+    NSLog(@"Fetched %ld Items Before Insert", self.fetchedResultsController.fetchedObjects.count);
     [self insertObject];
+    NSLog(@"DID END INSERT");
 }
 
 #pragma mark - Private
@@ -273,8 +269,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if (!object) {
         return;
     }
-    NSString *title = object.title;
-    NSLog(@"Deleting object %@ at path %@", title, indexPath);
     
     [realm beginWriteTransaction];
     
@@ -283,7 +277,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [realm deleteObject:object];
     
     [realm commitWriteTransaction];
-    NSLog(@"Finished transaction with object %@", title);
 }
 
 - (void)insertObject
@@ -315,12 +308,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             newObject.inTable = YES;
             
             [realm addObject:newObject];
-            NSLog(@"DID AN INSERT");
             [[RBQRealmNotificationManager defaultManager] didAddObject:newObject];
         }
         else {
             newObject.inTable = YES;
-            NSLog(@"DID A CHANGE");
             [[RBQRealmNotificationManager defaultManager] didChangeObject:newObject];
         }
         

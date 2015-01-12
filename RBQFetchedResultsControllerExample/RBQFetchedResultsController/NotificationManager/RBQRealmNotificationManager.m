@@ -32,6 +32,12 @@
 
 @end
 
+#pragma mark - Constants
+
+NSString * const kRBQAddedSafeObjectsKey = @"RBQAddedSafeObjectsKey";
+NSString * const kRBQDeletedSafeObjectsKey = @"RBQDeletedSafeObjectsKey";
+NSString * const kRBQChangedSafeObjectsKey = @"RBQChangedSafeObjectsKey ";
+
 #pragma mark - RBQRealmNotificationManager
 
 @interface RBQRealmNotificationManager ()
@@ -90,7 +96,9 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
         [defaultManager registerChangeNotification];
         
         // Add the manager to the cache
-        [pathToManagerMap setObject:defaultManager forKey:realm.path];
+        @synchronized(pathToManagerMap) {
+            [pathToManagerMap setObject:defaultManager forKey:realm.path];
+        }
     }
     return defaultManager;
 }
@@ -107,7 +115,9 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
         [defaultManager registerChangeNotification];
         
         // Add the manager to the cache
-        [pathToManagerMap setObject:defaultManager forKey:inMemoryRealm.path];
+        @synchronized(pathToManagerMap) {
+            [pathToManagerMap setObject:defaultManager forKey:inMemoryRealm.path];
+        }
     }
     return defaultManager;
 }
@@ -146,14 +156,18 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
     }
     
     token.block = block;
-    [_notificationHandlers setObject:token forKey:token];
+    @synchronized(_notificationHandlers) {
+        [_notificationHandlers setObject:token forKey:token];
+    }
     return token;
 }
 
 - (void)removeNotification:(RBQNotificationToken *)token
 {
     if (token) {
-        [_notificationHandlers removeObjectForKey:token];
+        @synchronized(_notificationHandlers) {
+            [_notificationHandlers removeObjectForKey:token];
+        }
         token.realmPath = nil;
         token.inMemoryRealm = nil;
         token.block = nil;
@@ -164,50 +178,70 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 
 - (void)didAddObject:(RLMObject *)addedObject
 {
-    // Save a safe object to use across threads
-    RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:addedObject];
-    
-    if (![self.addedSafeObjects containsObject:safeObject]) {
-        [self.addedSafeObjects addObject:safeObject];
+    if (addedObject &&
+        !addedObject.invalidated) {
+        
+        // Save a safe object to use across threads
+        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:addedObject];
+        
+        if (![self.addedSafeObjects containsObject:safeObject]) {
+            @synchronized(kRBQAddedSafeObjectsKey) {
+                [self.addedSafeObjects addObject:safeObject];
+            }
+        }
     }
 }
 
 - (void)willDeleteObject:(RLMObject *)deletedObject
 {
-    // Save a safe object to use across threads
-    RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:deletedObject];
-    
-    if (![self.deletedSafeObjects containsObject:safeObject]) {
-        [self.deletedSafeObjects addObject:safeObject];
+    if (deletedObject &&
+        !deletedObject.invalidated) {
+        
+        // Save a safe object to use across threads
+        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:deletedObject];
+        
+        if (![self.deletedSafeObjects containsObject:safeObject]) {
+            @synchronized(kRBQDeletedSafeObjectsKey) {
+                [self.deletedSafeObjects addObject:safeObject];
+            }
+        }
     }
 }
 
 - (void)didChangeObject:(RLMObject *)changedObject
 {
-    // Save a safe object to use across threads
-    RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:changedObject];
-    
-    if (![self.changedSafeObjects containsObject:safeObject]) {
-        [self.changedSafeObjects addObject:safeObject];
+    if (changedObject &&
+        !changedObject.invalidated) {
+        
+        // Save a safe object to use across threads
+        RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:changedObject];
+        
+        if (![self.changedSafeObjects containsObject:safeObject]) {
+            @synchronized(kRBQChangedSafeObjectsKey) {
+                [self.changedSafeObjects addObject:safeObject];
+            }
+        }
     }
 }
 
-- (void)didAddObjects:(NSArray *)addedObjects
-    willDeleteObjects:(NSArray *)deletedObjects
-     didChangeObjects:(NSArray *)changedObjects
+- (void)didAddObjects:(id<NSFastEnumeration>)addedObjects
+    willDeleteObjects:(id<NSFastEnumeration>)deletedObjects
+     didChangeObjects:(id<NSFastEnumeration>)changedObjects
 {
     if (addedObjects) {
         
         for (RLMObject *addedObject in addedObjects) {
             
-            if (addedObject &&
+            if (!addedObject.invalidated &&
                 addedObject != (id)[NSNull null]) {
                 
                 // Save a safe object to use across threads
                 RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:addedObject];
                 
                 if (![self.addedSafeObjects containsObject:safeObject]) {
-                    [self.addedSafeObjects addObject:safeObject];
+                    @synchronized(kRBQAddedSafeObjectsKey) {
+                        [self.addedSafeObjects addObject:safeObject];
+                    }
                 }
             }
         }
@@ -217,14 +251,16 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
         
         for (RLMObject *deletedObject in deletedObjects) {
             
-            if (deletedObject &&
+            if (!deletedObject.invalidated &&
                 deletedObject != (id)[NSNull null]) {
                 
                 // Save a safe object to use across threads
                 RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:deletedObject];
                 
                 if (![self.deletedSafeObjects containsObject:safeObject]) {
-                    [self.deletedSafeObjects addObject:safeObject];
+                    @synchronized(kRBQDeletedSafeObjectsKey) {
+                        [self.deletedSafeObjects addObject:safeObject];
+                    }
                 }
             }
         }
@@ -234,14 +270,16 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
         
         for (RLMObject *changedObject in changedObjects) {
             
-            if (changedObject &&
+            if (!changedObject.invalidated &&
                 changedObject != (id)[NSNull null]) {
                 
                 // Save a safe object to use across threads
                 RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:changedObject];
                 
                 if (![self.changedSafeObjects containsObject:safeObject]) {
-                    [self.changedSafeObjects addObject:safeObject];
+                    @synchronized(kRBQChangedSafeObjectsKey) {
+                        [self.changedSafeObjects addObject:safeObject];
+                    }
                 }
             }
         }
@@ -252,29 +290,35 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 
 - (NSMutableArray *)addedSafeObjects
 {
-    if (!_addedSafeObjects) {
-        _addedSafeObjects = @[].mutableCopy;
+    @synchronized(kRBQAddedSafeObjectsKey) {
+        if (!_addedSafeObjects) {
+            _addedSafeObjects = @[].mutableCopy;
+        }
+        
+        return _addedSafeObjects;
     }
-    
-    return _addedSafeObjects;
 }
 
 - (NSMutableArray *)deletedSafeObjects
 {
-    if (!_deletedSafeObjects) {
-        _deletedSafeObjects = @[].mutableCopy;
+    @synchronized(kRBQDeletedSafeObjectsKey) {
+        if (!_deletedSafeObjects) {
+            _deletedSafeObjects = @[].mutableCopy;
+        }
+        
+        return _deletedSafeObjects;
     }
-    
-    return _deletedSafeObjects;
 }
 
 - (NSMutableArray *)changedSafeObjects
 {
-    if (!_changedSafeObjects) {
-        _changedSafeObjects = @[].mutableCopy;
+    @synchronized(kRBQChangedSafeObjectsKey) {
+        if (!_changedSafeObjects) {
+            _changedSafeObjects = @[].mutableCopy;
+        }
+        
+        return _changedSafeObjects;
     }
-    
-    return _changedSafeObjects;
 }
 
 #pragma mark - RLMNotification
@@ -297,10 +341,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 {
     // call this realms notification blocks
     for (RBQNotificationToken *token in [_notificationHandlers copy]) {
-        if (token.block &&
-            (self.addedSafeObjects.count > 0 ||
-            self.deletedSafeObjects.count > 0 ||
-            self.changedSafeObjects.count > 0)) {
+        if (token.block) {
                 
             token.block(self.addedSafeObjects.copy,
                         self.deletedSafeObjects.copy,
@@ -320,7 +361,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 {
     NSMutableArray *addedObjects = @[].mutableCopy;
     
-    for (RBQSafeRealmObject *safeObject in self.addedSafeObjects) {
+    for (RBQSafeRealmObject *safeObject in self.addedSafeObjects.copy) {
         RLMObject *object = [RBQSafeRealmObject objectInRealm:[self realmForManager]
                                                fromSafeObject:safeObject];
         
@@ -336,7 +377,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 {
     NSMutableArray *deletedObjects = @[].mutableCopy;
     
-    for (RBQSafeRealmObject *safeObject in self.deletedSafeObjects) {
+    for (RBQSafeRealmObject *safeObject in self.deletedSafeObjects.copy) {
         RLMObject *object = [RBQSafeRealmObject objectInRealm:[self realmForManager]
                                                fromSafeObject:safeObject];
         
@@ -352,7 +393,7 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
 {
     NSMutableArray *changedObjects = @[].mutableCopy;
     
-    for (RBQSafeRealmObject *safeObject in self.changedSafeObjects) {
+    for (RBQSafeRealmObject *safeObject in self.changedSafeObjects.copy) {
         RLMObject *object = [RBQSafeRealmObject objectInRealm:[self realmForManager]
                                                fromSafeObject:safeObject];
         

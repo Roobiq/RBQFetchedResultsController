@@ -55,9 +55,9 @@ typedef void(^RBQNotificationBlock)(NSArray *addedSafeObjects,
 
 // Convenience method to pass array of objects changed
 // Will ignore nil NSArray values
-- (void)didAddObjects:(NSArray *)addedObjects
-    willDeleteObjects:(NSArray *)deletedObjects
-     didChangeObjects:(NSArray *)changedObjects;
+- (void)didAddObjects:(id<NSFastEnumeration>)addedObjects
+    willDeleteObjects:(id<NSFastEnumeration>)deletedObjects
+     didChangeObjects:(id<NSFastEnumeration>)changedObjects;
 
 // Notifications
 // Must hold a strong reference to the returned token
