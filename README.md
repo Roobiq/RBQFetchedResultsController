@@ -28,7 +28,7 @@ There are methods for adds, removes, and changes on `RBQRealmNotificationManager
 
 Once Realm updates, the notification manager will receive the notification from Realm and broadcast `RBQSafeRealmObjects` for any object originally logged.
 
-**_Note: The RBQSafeRealmObject is a class to get around the lack of thread-safety with RLMObject. Any RLMObject with a primary key can be used to create a RBQSafeRealmObject, which then can be used across threads and recreated into the RLMObject via the primary key._**
+**Note: The RBQSafeRealmObject is a class to get around the lack of thread-safety with RLMObject. Any RLMObject with a primary key can be used to create a RBQSafeRealmObject, which then can be used across threads and recreated into the RLMObject via the primary key.**
 
 The FRC receives the changes from the `RBQRealmNotificationManager` and then identifies changes to sections and rows, which are passed to a tableview controller via the delegate methods:
 
@@ -68,7 +68,31 @@ open RBQFetchedResultsControllerExample.xcworkspace
 
 ~~1. The FRC performance degrades as the result set grows. ~1000 rows or less results in acceptable performance in testing from iPhone 4s and greater. The bottleneck is having to iterate through all the `RLMResults` after every change to recreate the section information. If Realm implemented a method to retrieve all of the distinct values for a key path (i.e. the section key path), this would allow prevent the need to iterate over every result (i.e. with all the section key path values, individual `RLMResults` could be created for each section and used to identify the number of sections and rows within each section without iterating over every object within each `RLMResults`).~~
 
-2. The `RBQRealmNotificationManager` requires manually logging of changes. A better solution would be to abstract this away by creating a `RLMRealm` and `RLMObject` subclass that performs the log whenever the key path value is changed on the object or an object is added or deleted from Realm.
+~~2. The `RBQRealmNotificationManager` requires manually logging of changes. A better solution would be to abstract this away by creating a `RLMRealm` and `RLMObject` subclass that performs the log whenever the key path value is changed on the object or an object is added or deleted from Realm.~~
 
-3. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC. This should be possible if #2 solution above is implemented as logging value changes wouldn't require additional developer input.
+**Note: `RLMRealm` and `RLMObject` categories are included that contain methods to simplify calling the RBQRealmNotificationManager:**
+
+```Objective-C
+// RLMRealm
+- (void)addObjectWithNotification:(RLMObject *)object;
+
+- (void)addObjectsWithNotification:(id<NSFastEnumeration>)array;
+
+- (void)addOrUpdateObjectWithNotification:(RLMObject *)object;
+
+- (void)addOrUpdateObjectsFromArrayWithNotification:(id)array;
+
+- (void)deleteObjectWithNotification:(RLMObject *)object;
+
+- (void)deleteObjectsWithNotification:(id)array;
+
+// RLMObject
+typedef void(^RBQChangeNotificationBlock)(RLMObject *object);
+
+- (void)changeWithNotification:(RBQChangeNotificationBlock)block;
+
+- (void)changeWithNotificationInTransaction:(RBQChangeNotificationBlock)block;
+```
+
+3. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC.
  
