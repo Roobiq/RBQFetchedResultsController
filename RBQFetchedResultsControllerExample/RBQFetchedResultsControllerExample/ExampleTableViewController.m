@@ -302,15 +302,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             newObject.key = [NSString stringWithFormat:@"%@%ld",title, (long)sortIndex];
             newObject.inTable = YES;
             
-            [realm addObject:newObject];
             [realm addObjectWithNotification:newObject];
         }
         else {
-            newObject.inTable = YES;
-            [[RBQRealmNotificationManager defaultManager] didChangeObject:newObject];
+            [newObject changeWithNotification:^(RLMObject *object) {
+                TestObject *testObject = (TestObject *)object;
+                testObject.inTable = YES;
+            }];
         }
-        
-        
         
         [realm commitWriteTransaction];
     }
