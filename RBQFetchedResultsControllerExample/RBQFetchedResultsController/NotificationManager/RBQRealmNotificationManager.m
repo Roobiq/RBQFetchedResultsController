@@ -192,6 +192,28 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
     }
 }
 
+- (void)didAddObjects:(id<NSFastEnumeration>)addedObjects
+{
+    if (addedObjects) {
+        
+        for (RLMObject *addedObject in addedObjects) {
+            
+            if (!addedObject.invalidated &&
+                addedObject != (id)[NSNull null]) {
+                
+                // Save a safe object to use across threads
+                RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:addedObject];
+                
+                if (![self.addedSafeObjects containsObject:safeObject]) {
+                    @synchronized(kRBQAddedSafeObjectsKey) {
+                        [self.addedSafeObjects addObject:safeObject];
+                    }
+                }
+            }
+        }
+    }
+}
+
 - (void)willDeleteObject:(RLMObject *)deletedObject
 {
     if (deletedObject &&
@@ -208,6 +230,28 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
     }
 }
 
+- (void)willDeleteObjects:(id<NSFastEnumeration>)deletedObjects
+{
+    if (deletedObjects) {
+        
+        for (RLMObject *deletedObject in deletedObjects) {
+            
+            if (!deletedObject.invalidated &&
+                deletedObject != (id)[NSNull null]) {
+                
+                // Save a safe object to use across threads
+                RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:deletedObject];
+                
+                if (![self.deletedSafeObjects containsObject:safeObject]) {
+                    @synchronized(kRBQDeletedSafeObjectsKey) {
+                        [self.deletedSafeObjects addObject:safeObject];
+                    }
+                }
+            }
+        }
+    }
+}
+
 - (void)didChangeObject:(RLMObject *)changedObject
 {
     if (changedObject &&
@@ -219,6 +263,28 @@ RBQRealmNotificationManager *cachedRealmNotificationManager(NSString *path) {
         if (![self.changedSafeObjects containsObject:safeObject]) {
             @synchronized(kRBQChangedSafeObjectsKey) {
                 [self.changedSafeObjects addObject:safeObject];
+            }
+        }
+    }
+}
+
+- (void)didChangeObjects:(id<NSFastEnumeration>)changedObjects
+{
+    if (changedObjects) {
+        
+        for (RLMObject *changedObject in changedObjects) {
+            
+            if (!changedObject.invalidated &&
+                changedObject != (id)[NSNull null]) {
+                
+                // Save a safe object to use across threads
+                RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:changedObject];
+                
+                if (![self.changedSafeObjects containsObject:safeObject]) {
+                    @synchronized(kRBQChangedSafeObjectsKey) {
+                        [self.changedSafeObjects addObject:safeObject];
+                    }
+                }
             }
         }
     }

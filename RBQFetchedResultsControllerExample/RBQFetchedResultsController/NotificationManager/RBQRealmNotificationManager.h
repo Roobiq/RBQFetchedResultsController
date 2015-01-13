@@ -41,17 +41,29 @@ typedef void(^RBQNotificationBlock)(NSArray *addedSafeObjects,
 // Methods to register changes
 // ---------------------------
 
-// Register an add for a given RLMObject
+// Register an insert for a given RLMObject
 // NOTE: Can be called before or after change to Realm
 - (void)didAddObject:(RLMObject *)addedObject;
+
+// Register inserts for a given RLMObject
+// NOTE: Can be called before or after change to Realm
+- (void)didAddObjects:(id<NSFastEnumeration>)addedObjects;
 
 // Register a delete for a given RLMObject
 // NOTE: MUST BE CALLED BEFORE DELETE IN REALM
 - (void)willDeleteObject:(RLMObject *)deletedObject;
 
+// Register deletes for a given RLMObject
+// NOTE: MUST BE CALLED BEFORE DELETE IN REALM
+- (void)willDeleteObjects:(id<NSFastEnumeration>)deletedObjects;
+
 // Register a change for a given RLMObject
 // NOTE: Can be called before or after change to Realm
 - (void)didChangeObject:(RLMObject *)changedObject;
+
+// Register changes for a given RLMObject
+// NOTE: Can be called before or after change to Realm
+- (void)didChangeObjects:(id<NSFastEnumeration>)changedObjects;
 
 // Convenience method to pass array of objects changed
 // Will ignore nil NSArray values

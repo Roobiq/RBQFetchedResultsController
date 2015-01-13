@@ -11,6 +11,7 @@
 #import "RBQFetchedResultsController.h"
 #import "TestObject.h"
 #import "RBQRealmNotificationManager.h"
+#import "RLMRealm+Notifications.h"
 
 id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
 
@@ -28,27 +29,27 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     
     RLMRealm *realm = [RLMRealm defaultRealm];
     
-//    [realm beginWriteTransaction];
-//    
-//    [realm deleteAllObjects];
-//    
-//    for (NSUInteger i = 0; i < 1000; i++) {
-//        
-//        NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
-//        
-//        TestObject *object = [TestObject testObjectWithTitle:title sortIndex:i inTable:YES];
-//        
-//        if (i < 10) {
-//            object.sectionName = @"First Section";
-//        }
-//        else {
-//            object.sectionName = @"Second Section";
-//        }
-//        
-//        [realm addObject:object];
-//    }
-//    
-//    [realm commitWriteTransaction];
+    [realm beginWriteTransaction];
+    
+    [realm deleteAllObjects];
+    
+    for (NSUInteger i = 0; i < 1000; i++) {
+        
+        NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
+        
+        TestObject *object = [TestObject testObjectWithTitle:title sortIndex:i inTable:YES];
+        
+        if (i < 10) {
+            object.sectionName = @"First Section";
+        }
+        else {
+            object.sectionName = @"Second Section";
+        }
+        
+        [realm addObject:object];
+    }
+    
+    [realm commitWriteTransaction];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
@@ -236,17 +237,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     // Test deleting a section (comment out above to test)
     RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
 
-    [[RLMRealm defaultRealm] beginWriteTransaction];
-
-    for (TestObject *object in objectInFirstSection) {
-        if (!object.invalidated) {
-            [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
-
-            [[RLMRealm defaultRealm] deleteObject:object];
-        }
-    }
-
-    [[RLMRealm defaultRealm] commitWriteTransaction];
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    
+    [realm beginWriteTransaction];
+    [realm deleteObjectsWithNotification:objectInFirstSection];
+    [realm commitWriteTransaction];
+    
     NSLog(@"DID END DELETE");
 }
 
@@ -272,9 +268,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     [realm beginWriteTransaction];
     
-    [[RBQRealmNotificationManager defaultManager] willDeleteObject:object];
-    
-    [realm deleteObject:object];
+    [realm deleteObjectWithNotification:object];
     
     [realm commitWriteTransaction];
 }
@@ -308,7 +302,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             newObject.inTable = YES;
             
             [realm addObject:newObject];
-            [[RBQRealmNotificationManager defaultManager] didAddObject:newObject];
+            [realm addObjectWithNotification:newObject];
         }
         else {
             newObject.inTable = YES;
@@ -337,29 +331,27 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
                                                                    atIndexPath:indexPathSixthRow];
         
-        [[RBQRealmNotificationManager defaultManager] didAddObjects:nil
-                                                  willDeleteObjects:nil
-                                                   didChangeObjects:@[NULL_IF_NIL(fifthObject),
-                                                                      NULL_IF_NIL(sixthObject),
-                                                                      NULL_IF_NIL(firstObject),
-                                                                      NULL_IF_NIL(thirdObject)]];
+        fifthObject.sortIndex += 1;
+        sixthObject.sortIndex -= 1;
+        firstObject.inTable = NO;
+        thirdObject.title = @"Testing Move And Update";
         
-        // Test an inserted section that's not first
+        [[RBQRealmNotificationManager defaultManager] didChangeObjects:@[NULL_IF_NIL(fifthObject),
+                                                                         NULL_IF_NIL(sixthObject),
+                                                                         NULL_IF_NIL(firstObject),
+                                                                         NULL_IF_NIL(thirdObject)]];
+        
+         //Test an inserted section that's not first
 //        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
 //        extraObjectInSection.sectionName = @"Middle Section";
 //        [realm addObject:extraObjectInSection];
-//        
+//
 //        [[RBQRealmNotificationManager defaultManager] didAddObjects:@[extraObjectInSection]
 //                                                  willDeleteObjects:nil
 //                                                   didChangeObjects:@[NULL_IF_NIL(fifthObject),
 //                                                                      NULL_IF_NIL(sixthObject),
 //                                                                      NULL_IF_NIL(firstObject),
 //                                                                      NULL_IF_NIL(thirdObject)]];
-        
-        fifthObject.sortIndex += 1;
-        sixthObject.sortIndex -= 1;
-        firstObject.inTable = NO;
-        thirdObject.title = @"Testing Move And Update";
         
         [realm commitWriteTransaction];
     }
