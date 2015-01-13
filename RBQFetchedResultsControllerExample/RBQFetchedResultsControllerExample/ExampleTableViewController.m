@@ -12,6 +12,7 @@
 #import "TestObject.h"
 #import "RBQRealmNotificationManager.h"
 #import "RLMRealm+Notifications.h"
+#import "RLMObject+Notifications.h"
 
 id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
 
@@ -331,15 +332,29 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
                                                                    atIndexPath:indexPathSixthRow];
         
-        fifthObject.sortIndex += 1;
-        sixthObject.sortIndex -= 1;
-        firstObject.inTable = NO;
-        thirdObject.title = @"Testing Move And Update";
+        [fifthObject changeWithNotification:^(RLMObject *object) {
+            TestObject *testObject = (TestObject *)object;
+            
+            testObject.sortIndex += 1;
+        }];
         
-        [[RBQRealmNotificationManager defaultManager] didChangeObjects:@[NULL_IF_NIL(fifthObject),
-                                                                         NULL_IF_NIL(sixthObject),
-                                                                         NULL_IF_NIL(firstObject),
-                                                                         NULL_IF_NIL(thirdObject)]];
+        [sixthObject changeWithNotification:^(RLMObject *object) {
+            TestObject *testObject = (TestObject *)object;
+            
+            testObject.sortIndex -= 1;
+        }];
+        
+        [firstObject changeWithNotification:^(RLMObject *object) {
+            TestObject *testObject = (TestObject *)object;
+            
+            testObject.inTable = NO;
+        }];
+        
+        [thirdObject changeWithNotification:^(RLMObject *object) {
+            TestObject *testObject = (TestObject *)object;
+            
+            testObject.title = @"Testing Move And Update";
+        }];
         
          //Test an inserted section that's not first
 //        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
