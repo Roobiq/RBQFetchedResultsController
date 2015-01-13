@@ -1,5 +1,5 @@
 //
-//  RBQFetchedResultsControllerTests.m
+//  RBQFetchedResultsControllerDelegateTests.m
 //  RBQFetchedResultsControllerExample
 //
 //  Created by Adam Fish on 1/10/15.
@@ -13,7 +13,7 @@
 #import "RBQRealmNotificationManager.h"
 #import "TestObject.h"
 
-@interface RBQFetchedResultsControllerTests : XCTestCase <RBQFetchedResultsControllerDelegate>
+@interface RBQFetchedResultsControllerDelegateTests : XCTestCase <RBQFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) XCTestExpectation *controllerWillChangeContentExpectation;
 @property (strong, nonatomic) XCTestExpectation *controllerDidChangeObjectExpectation;
@@ -23,20 +23,24 @@
 @property (strong, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
 @property (strong, nonatomic) RBQFetchedResultsController *fetchedResultsController;
+@property (assign, nonatomic) NSUInteger count;
 
 @end
 
-@implementation RBQFetchedResultsControllerTests
+@implementation RBQFetchedResultsControllerDelegateTests
 
 - (void)setUp
 {
     [super setUp];
     
-    // Setup the DB
-    self.inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:@"defaultRealm"];
+    // Setup the DB (use random strings to create new versions each time)
+    NSString *identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+    self.inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:identifier];
     
-    self.inMemoryRealmCache = [RLMRealm inMemoryRealmWithIdentifier:@"cacheRealm"];
+    identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+    self.inMemoryRealmCache = [RLMRealm inMemoryRealmWithIdentifier:identifier];
     
+    // Load the DB with data
     [self.inMemoryRealm beginWriteTransaction];
     
     [self.inMemoryRealm deleteAllObjects];
@@ -59,34 +63,27 @@
     
     [self.inMemoryRealm commitWriteTransaction];
     
-    [self.inMemoryRealmCache beginWriteTransaction];
+    // Setup the FRC
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
-    [self.inMemoryRealmCache deleteAllObjects];
+    RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
+                                                                  inMemoryRealm:self.inMemoryRealm
+                                                                      predicate:predicate];
     
-    [self.inMemoryRealmCache commitWriteTransaction];
+    RLMSortDescriptor *sortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sortIndex"
+                                                                            ascending:YES];
     
-    if (!self.fetchedResultsController) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
-        
-        RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                      inMemoryRealm:self.inMemoryRealm
-                                                                          predicate:predicate];
-        
-        RLMSortDescriptor *sortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sortIndex"
-                                                                                ascending:YES];
-        
-        RLMSortDescriptor *sortDescriptorSection = [RLMSortDescriptor sortDescriptorWithProperty:@"sectionName"
-                                                                                       ascending:YES];
-        
-        fetchRequest.sortDescriptors = @[sortDescriptorSection,sortDescriptor];
-        
-        self.fetchedResultsController =
-        [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                               sectionNameKeyPath:@"sectionName"
-                                               inMemoryRealmCache:self.inMemoryRealmCache];
-        
-        self.fetchedResultsController.delegate = self;
-    }
+    RLMSortDescriptor *sortDescriptorSection = [RLMSortDescriptor sortDescriptorWithProperty:@"sectionName"
+                                                                                   ascending:YES];
+    
+    fetchRequest.sortDescriptors = @[sortDescriptorSection,sortDescriptor];
+    
+    self.fetchedResultsController =
+    [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                           sectionNameKeyPath:@"sectionName"
+                                           inMemoryRealmCache:self.inMemoryRealmCache];
+    
+    self.fetchedResultsController.delegate = self;
     
     [self.fetchedResultsController performFetch];
 }
@@ -100,6 +97,9 @@
     self.controllerDidChangeObjectExpectation = nil;
     self.controllerDidChangeSectionExpectation = nil;
     self.controllerDidChangeContentExpectation = nil;
+    
+    self.fetchedResultsController = nil;
+    self.count = 0;
 }
 
 - (void)testControllerWillChangeContent
@@ -110,26 +110,29 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self deleteObjectAtIndexPath:indexPath];
     
-    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
-        XCTAssertNil(error, @"error should not be nil");
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        XCTAssertNil(error, @"%@", error.localizedDescription);
     }];
 }
 
 - (void)testControllerDidChangeObject
 {
     self.controllerDidChangeObjectExpectation = [self expectationWithDescription:@"FRC Did Change Object Fired"];
+    self.controllerDidChangeContentExpectation = [self expectationWithDescription:@"FRC Did Change Content Fired"];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self deleteObjectAtIndexPath:indexPath];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
-        XCTAssertNil(error, @"error should not be nil");
+        XCTAssertNil(error, @"%@", error.localizedDescription);
     }];
 }
 
 - (void)testControllerDidChangeSection
 {
+    self.controllerDidChangeObjectExpectation = [self expectationWithDescription:@"FRC Did Change Object Fired"];
     self.controllerDidChangeSectionExpectation = [self expectationWithDescription:@"FRC Did Change Section Fired"];
+    self.controllerDidChangeContentExpectation = [self expectationWithDescription:@"FRC Did Change Content Fired"];
     
     // Test deleting a section
     RLMResults *objectInFirstSection = [TestObject objectsInRealm:self.inMemoryRealm
@@ -146,9 +149,9 @@
     }
     
     [self.inMemoryRealm commitWriteTransaction];
-    
+        
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
-        XCTAssertNil(error, @"error should not be nil");
+        XCTAssertNil(error, @"%@", error.localizedDescription);
     }];
 }
 
@@ -158,9 +161,9 @@
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self deleteObjectAtIndexPath:indexPath];
-    
-    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
-        XCTAssertNil(error, @"error should not be nil");
+        
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        XCTAssertNil(error, @"%@", error.localizedDescription);
     }];
 }
 
@@ -183,7 +186,9 @@
 
 - (void)controllerWillChangeContent:(RBQFetchedResultsController *)controller
 {
-    [self.controllerWillChangeContentExpectation fulfill];
+    if (self.controllerWillChangeContentExpectation) {
+        [self.controllerWillChangeContentExpectation fulfill];
+    }
 }
 
 - (void)controller:(RBQFetchedResultsController *)controller
@@ -214,7 +219,21 @@
             break;
     }
     
-    [self.controllerDidChangeObjectExpectation fulfill];
+    // Fulfilling an expectation prematurely seems to cause problems
+    if (self.controllerDidChangeObjectExpectation &&
+        !self.controllerDidChangeSectionExpectation) {
+        
+        [self.controllerDidChangeObjectExpectation fulfill];
+    }
+    else if (self.controllerDidChangeObjectExpectation &&
+             self.controllerDidChangeSectionExpectation) {
+        
+        self.count ++;
+        
+        if (self.count == 10) {
+            [self.controllerDidChangeObjectExpectation fulfill];
+        }
+    }
 }
 
 - (void)controller:(RBQFetchedResultsController *)controller
@@ -229,12 +248,16 @@
         NSLog(@"Deleting section at %lu", (unsigned long)sectionIndex);
     }
 
-    [self.controllerDidChangeSectionExpectation fulfill];
+    if (self.controllerDidChangeSectionExpectation) {
+        [self.controllerDidChangeSectionExpectation fulfill];
+    }
 }
 
 - (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller
 {
-    [self.controllerDidChangeContentExpectation fulfill];
+    if (self.controllerDidChangeContentExpectation) {
+        [self.controllerDidChangeContentExpectation fulfill];
+    }
 }
 
 @end
