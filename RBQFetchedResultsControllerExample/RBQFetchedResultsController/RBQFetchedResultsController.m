@@ -416,29 +416,35 @@
     if (self.fetchRequest.isInMemoryRealm) {
         self.notificationToken =
         [[RBQRealmNotificationManager managerForInMemoryRealm:self.fetchRequest.realm] addNotificationBlock:
-         ^(NSArray *addedSafeObjects,
-           NSArray *deletedSafeObjects,
-           NSArray *changedSafeObjects,
+         ^(NSDictionary *entityChanges,
            RLMRealm *realm)
          {
-             [self calculateChangesWithAddedSafeObjects:addedSafeObjects
-                                     deletedSafeObjects:deletedSafeObjects
-                                     changedSafeObjects:changedSafeObjects
-                                                  realm:realm];
+             // Grab the entity changes object if it is available
+             RBQEntityChangesObject *entityChangesObject = [entityChanges objectForKey:self.fetchRequest.entityName];
+             
+             if (entityChangesObject) {
+                 [self calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
+                                         deletedSafeObjects:entityChangesObject.deletedSafeObjects
+                                         changedSafeObjects:entityChangesObject.changedSafeObjects
+                                                      realm:realm];
+             }
          }];
     }
     else {
         self.notificationToken =
         [[RBQRealmNotificationManager managerForRealm:self.fetchRequest.realm] addNotificationBlock:
-         ^(NSArray *addedSafeObjects,
-           NSArray *deletedSafeObjects,
-           NSArray *changedSafeObjects,
+         ^(NSDictionary *entityChanges,
            RLMRealm *realm)
          {
-             [self calculateChangesWithAddedSafeObjects:addedSafeObjects
-                                     deletedSafeObjects:deletedSafeObjects
-                                     changedSafeObjects:changedSafeObjects
-                                                  realm:realm];
+             // Grab the entity changes object if it is available
+             RBQEntityChangesObject *entityChangesObject = [entityChanges objectForKey:self.fetchRequest.entityName];
+             
+             if (entityChangesObject) {
+                 [self calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
+                                         deletedSafeObjects:entityChangesObject.deletedSafeObjects
+                                         changedSafeObjects:entityChangesObject.changedSafeObjects
+                                                      realm:realm];
+             }
          }];
     }
     
@@ -733,50 +739,47 @@
     NSMutableDictionary *cacheObjectToSafeObject = @{}.mutableCopy;
     
     for (NSArray *changedObjects in @[addedSafeObjects, deletedSafeObjects, changedSafeObjects]) {
+        
         for (RBQSafeRealmObject *safeObject in changedObjects) {
             
-            // Check if this object is an entity we are tracking!
-            if ([safeObject.className isEqualToString:self.fetchRequest.entityName]) {
-                
-                // Get the section titles in change set
-                // Attempt to get the object from non-cache Realm
-                RLMObject *object = [RBQSafeRealmObject objectInRealm:state.realm
-                                                       fromSafeObject:safeObject];
-                
-                NSString *sectionTitle = nil;
-                
-                if (object) {
-                    sectionTitle = [object valueForKey:self.sectionNameKeyPath];
-                }
-                else {
-                    RBQObjectCacheObject *oldCacheObject =
-                    [RBQObjectCacheObject objectInRealm:state.cacheRealm
-                                          forPrimaryKey:safeObject.primaryKeyValue];
-                    
-                    sectionTitle = oldCacheObject.section.name;
-                }
-                
-                if (sectionTitle) {
-                    RBQSectionCacheObject *section = [RBQSectionCacheObject objectInRealm:state.cacheRealm
-                                                                            forPrimaryKey:sectionTitle];
-                    
-                    if (!section) {
-                        section = [RBQSectionCacheObject cacheWithName:sectionTitle];
-                    }
-                    
-                    [cacheSectionsInChangeSet addObject:section];
-                }
-                
-                // Get the cache object
-                RBQObjectCacheObject *cacheObject =
-                [RBQObjectCacheObject createCacheObjectWithSafeObject:safeObject
-                                                  sectionKeyPathValue:sectionTitle];
-                
-                [cacheObjectsChangeSet addObject:cacheObject];
-                
-                // Set the map to quickly retrieve safe objects later on
-                [cacheObjectToSafeObject setObject:safeObject forKey:cacheObject];
+            // Get the section titles in change set
+            // Attempt to get the object from non-cache Realm
+            RLMObject *object = [RBQSafeRealmObject objectInRealm:state.realm
+                                                   fromSafeObject:safeObject];
+            
+            NSString *sectionTitle = nil;
+            
+            if (object) {
+                sectionTitle = [object valueForKey:self.sectionNameKeyPath];
             }
+            else {
+                RBQObjectCacheObject *oldCacheObject =
+                [RBQObjectCacheObject objectInRealm:state.cacheRealm
+                                      forPrimaryKey:safeObject.primaryKeyValue];
+                
+                sectionTitle = oldCacheObject.section.name;
+            }
+            
+            if (sectionTitle) {
+                RBQSectionCacheObject *section = [RBQSectionCacheObject objectInRealm:state.cacheRealm
+                                                                        forPrimaryKey:sectionTitle];
+                
+                if (!section) {
+                    section = [RBQSectionCacheObject cacheWithName:sectionTitle];
+                }
+                
+                [cacheSectionsInChangeSet addObject:section];
+            }
+            
+            // Get the cache object
+            RBQObjectCacheObject *cacheObject =
+            [RBQObjectCacheObject createCacheObjectWithSafeObject:safeObject
+                                              sectionKeyPathValue:sectionTitle];
+            
+            [cacheObjectsChangeSet addObject:cacheObject];
+            
+            // Set the map to quickly retrieve safe objects later on
+            [cacheObjectToSafeObject setObject:safeObject forKey:cacheObject];
         }
     }
     

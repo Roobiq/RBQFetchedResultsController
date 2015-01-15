@@ -213,7 +213,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller
 {
     NSLog(@"Ending updates");
-    NSLog(@"Fetched %ld Items After Change", self.fetchedResultsController.fetchedObjects.count);
+    NSLog(@"Fetched %ld Items After Change", (unsigned long)self.fetchedResultsController.fetchedObjects.count);
     @try {
         [self.tableView endUpdates];
     }
@@ -233,7 +233,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     NSLog(@"DID BEGIN DELETE");
     
-    NSLog(@"Fetched %ld Items Before Delete", self.fetchedResultsController.fetchedObjects.count);
+    NSLog(@"Fetched %ld Items Before Delete", (unsigned long)self.fetchedResultsController.fetchedObjects.count);
     
     // Test deleting a section (comment out above to test)
     RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
@@ -250,7 +250,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (IBAction)didClickInsertButton:(UIBarButtonItem *)sender
 {
     NSLog(@"DID BEGIN INSERT");
-    NSLog(@"Fetched %ld Items Before Insert", self.fetchedResultsController.fetchedObjects.count);
+    NSLog(@"Fetched %ld Items Before Insert", (unsigned long)self.fetchedResultsController.fetchedObjects.count);
     [self insertObject];
     NSLog(@"DID END INSERT");
 }

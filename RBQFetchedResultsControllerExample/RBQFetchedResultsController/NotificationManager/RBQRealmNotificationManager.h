@@ -9,17 +9,26 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
+#pragma mark - RBQClassChangesObject
+
+@interface RBQEntityChangesObject : NSObject
+
+@property (readonly, nonatomic) NSString *className;
+@property (readonly, nonatomic) NSArray *addedSafeObjects;
+@property (readonly, nonatomic) NSArray *deletedSafeObjects;
+@property (readonly, nonatomic) NSArray *changedSafeObjects;
+
+@end
+
 #pragma mark - Constants
 
-/*
-    Block returns an array of:
-        -RBQSafeRealmObjects representing added objects
-        -RBQSafeRealmObjects representing deleted objects
-        -RBQSafeRealmObjects representing changed objects
+/**
+ *  When added to a RBQRealmNotificationManager, this block fires when the tracked Realm changes.
+ *
+ *  @param entityChanges NSDictionary with the keys represented as the class name of an entity that had changes. The object in the dictionary is a RBQEntityChangesObject, which contains the specific changes.
+ *  @param realm         RLMRealm that updated (this is the original RLMRealm instance that was acted on to perform the changes. Not thread-safe).
  */
-typedef void(^RBQNotificationBlock)(NSArray *addedSafeObjects,
-                                    NSArray *deletedSafeObjects,
-                                    NSArray *changedSafeObjects,
+typedef void(^RBQNotificationBlock)(NSDictionary *entityChanges,
                                     RLMRealm *realm);
 
 @interface RBQNotificationToken : NSObject
@@ -27,6 +36,11 @@ typedef void(^RBQNotificationBlock)(NSArray *addedSafeObjects,
 @end
 
 @interface RBQRealmNotificationManager : NSObject
+
+/**
+ *  Current representation of changes logged to the RBQRealmNotificationManager instance.
+ */
+@property (readonly, nonatomic) NSDictionary *entityChanges;
 
 // Utilizing the defaultRealm
 + (instancetype)defaultManager;
