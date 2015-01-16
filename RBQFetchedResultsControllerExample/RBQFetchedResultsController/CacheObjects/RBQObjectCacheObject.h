@@ -14,34 +14,72 @@
 
 @interface RBQObjectCacheObject : RLMObject <NSCopying>
 
-// Original RLMObject class name
+/**
+ *  Original RLMObject class name
+ */
 @property NSString *className;
 
-// Primary key value represented as a string
+/**
+ *  Primary key value represented as a string
+ */
 @property NSString *primaryKeyStringValue;
 
-// Primary key type (to convet value if necessary)
+/**
+ *  Primary key type (use to convert the string value if necessary)
+ */
 @property NSInteger primaryKeyType;
 
-// Value for the section (i.e. the section name)
+/**
+ *  Value for the section (i.e. the section name)
+ */
 @property NSString *sectionKeyPathValue;
 
-// Section for the cache object
+/**
+ *  Section for the cache object
+ */
 @property RBQSectionCacheObject *section;
 
-// Create RBQFetchedResultsCacheObject from RLMObject
+/**
+ *  Create RBQFetchedResultsCacheObject from RLMObject
+ *
+ *  @param object       RLMObject being represented in the cache
+ *  @param sectionValue The section key path value for this object
+ *
+ *  @return A new instance of RBQFetchedResultsCacheObject
+ */
 + (instancetype)createCacheObjectWithObject:(RLMObject *)object
                   sectionKeyPathValue:(NSString *)sectionValue;
 
-// Create RBQFetchedResultsCacheObject from RBQSafeObject
+/**
+ *  Create RBQFetchedResultsCacheObject from RBQSafeObject
+ *
+ *  @param safeObject   RBQSafeRealmObject being represented in the cache
+ *  @param sectionValue The section key path value for this object
+ *
+ *  @return A new instance of RBQFetchedResultsCacheObject
+ */
 + (instancetype)createCacheObjectWithSafeObject:(RBQSafeRealmObject *)safeObject
                       sectionKeyPathValue:(NSString *)sectionValue;
 
-// Retrieve RBQFetchedResultsCacheObject from a Realm instance from RLMObject
+/**
+ *  Retrieve RBQFetchedResultsCacheObject from a Realm instance from RLMObject
+ *
+ *  @param realm  The RLMRealm in which the cache object is persisted
+ *  @param object The RLMObject that is represented by the cache object
+ *
+ *  @return A instance of RBQFetchedResultsCacheObject
+ */
 + (instancetype)cacheObjectInRealm:(RLMRealm *)realm
                          forObject:(RLMObject *)object;
 
-// Retrieve RLMObject in given Realm instance for RBQFetchedResultsCacheObject
+/**
+ *  Retrieve RLMObject in given Realm instance for RBQFetchedResultsCacheObject
+ *
+ *  @param realm       The RLMRealm in which the cache object is persisted
+ *  @param cacheObject The RBQObjectCacheObject representing the RLMObject
+ *
+ *  @return A instance of RLMObject
+ */
 + (RLMObject *)objectInRealm:(RLMRealm *)realm
               forCacheObject:(RBQObjectCacheObject *)cacheObject;
 

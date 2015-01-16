@@ -13,9 +13,9 @@
 
 @interface RBQEntityChangesObject ()
 
-@property (strong, nonatomic) NSMutableArray *internalAddedSafeObjects;
-@property (strong, nonatomic) NSMutableArray *internalDeletedSafeObjects;
-@property (strong, nonatomic) NSMutableArray *internalChangedSafeObjects;
+@property (strong, nonatomic) NSMutableSet *internalAddedSafeObjects;
+@property (strong, nonatomic) NSMutableSet *internalDeletedSafeObjects;
+@property (strong, nonatomic) NSMutableSet *internalChangedSafeObjects;
 
 + (instancetype)createEntityChangeObjectWithClassName:(NSString *)className;
 
@@ -32,9 +32,9 @@
 {
     RBQEntityChangesObject *changeObject = [[RBQEntityChangesObject alloc] init];
     changeObject->_className = className;
-    changeObject.internalAddedSafeObjects = @[].mutableCopy;
-    changeObject.internalDeletedSafeObjects = @[].mutableCopy;
-    changeObject.internalChangedSafeObjects = @[].mutableCopy;
+    changeObject.internalAddedSafeObjects = [[NSMutableSet alloc] init];
+    changeObject.internalDeletedSafeObjects = [[NSMutableSet alloc] init];
+    changeObject.internalChangedSafeObjects = [[NSMutableSet alloc] init];
     
     return changeObject;
 }
@@ -68,17 +68,17 @@
 
 #pragma mark - Getters
 
-- (NSArray *)addedSafeObjects
+- (NSSet *)addedSafeObjects
 {
     return self.internalAddedSafeObjects.copy;
 }
 
-- (NSArray *)deletedSafeObjects
+- (NSSet *)deletedSafeObjects
 {
     return self.internalDeletedSafeObjects.copy;
 }
 
-- (NSArray *)changedSafeObjects
+- (NSSet *)changedSafeObjects
 {
     return self.internalChangedSafeObjects.copy;
 }

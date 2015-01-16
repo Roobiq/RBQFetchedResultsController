@@ -13,19 +13,33 @@ RLM_ARRAY_TYPE(RBQObjectCacheObject)
 
 @interface RBQSectionCacheObject : RLMObject
 
-// Section name
+/**
+ *  Section name
+ */
 @property NSString *name;
 
-// Index of the first object contained within the section
+/**
+ *  Index of the first object contained within the section
+ */
 @property NSInteger firstObjectIndex;
 
-// Index of the first object contained within the section
+/**
+ *  Index of the first object contained within the section
+ */
 @property NSInteger lastObjectIndex;
 
-// Sorted RBQFetchedResultsCacheObjects in section
+/**
+ *  Sorted RBQFetchedResultsCacheObjects in section
+ */
 @property RLMArray<RBQObjectCacheObject> *objects;
 
-// Create RBQSectionCacheObject with a given section name
+/**
+ *  Create RBQSectionCacheObject with a given section name
+ *
+ *  @param name The name of the section
+ *
+ *  @return A new instance of RBQSectionCacheObject
+ */
 + (instancetype)cacheWithName:(NSString *)name;
 
 @end

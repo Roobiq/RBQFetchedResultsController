@@ -8,15 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		17FA8445467D84155B36A094 /* libPods-RBQFetchedResultsControllerExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */; };
+		6617B2711A69CD8600C63F59 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6617B2701A69CD8600C63F59 /* RBQRealmNotificationManager.m */; };
 		662C46861A60C4AD00A8D145 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46811A60C4AD00A8D145 /* RBQObjectCacheObject.m */; };
 		662C46871A60C4AD00A8D145 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46831A60C4AD00A8D145 /* RBQControllerCacheObject.m */; };
 		662C46881A60C4AD00A8D145 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46851A60C4AD00A8D145 /* RBQSectionCacheObject.m */; };
-		662C468C1A60C4B700A8D145 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C468B1A60C4B700A8D145 /* RBQRealmNotificationManager.m */; };
 		662C46921A60C4DF00A8D145 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C468F1A60C4DF00A8D145 /* RBQSafeRealmObject.m */; };
 		662C46931A60C4DF00A8D145 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46911A60C4DF00A8D145 /* RLMObject+Utilities.m */; };
 		662C46951A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46941A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m */; };
 		662C46971A6243A900A8D145 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F383E1A5B26C5008E3052 /* TestObject.m */; };
-		662C46991A62440500A8D145 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C468B1A60C4B700A8D145 /* RBQRealmNotificationManager.m */; };
 		662C469B1A62441300A8D145 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46811A60C4AD00A8D145 /* RBQObjectCacheObject.m */; };
 		662C469D1A62442100A8D145 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46831A60C4AD00A8D145 /* RBQControllerCacheObject.m */; };
 		662C469F1A62442100A8D145 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46851A60C4AD00A8D145 /* RBQSectionCacheObject.m */; };
@@ -55,14 +54,14 @@
 		23DF3779C69223EEBB05695E /* Pods-RBQFetchedResultsControllerExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample.release.xcconfig"; sourceTree = "<group>"; };
 		24302DAE5BB92578C9C97C31 /* Pods-RBQFetchedResultsControllerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; sourceTree = "<group>"; };
 		55AAFFD7A898D4859B81F711 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		6617B26F1A69CD8600C63F59 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
+		6617B2701A69CD8600C63F59 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
 		662C46801A60C4AD00A8D145 /* RBQObjectCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQObjectCacheObject.h; sourceTree = "<group>"; };
 		662C46811A60C4AD00A8D145 /* RBQObjectCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQObjectCacheObject.m; sourceTree = "<group>"; };
 		662C46821A60C4AD00A8D145 /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
 		662C46831A60C4AD00A8D145 /* RBQControllerCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQControllerCacheObject.m; sourceTree = "<group>"; };
 		662C46841A60C4AD00A8D145 /* RBQSectionCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSectionCacheObject.h; sourceTree = "<group>"; };
 		662C46851A60C4AD00A8D145 /* RBQSectionCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSectionCacheObject.m; sourceTree = "<group>"; };
-		662C468A1A60C4B700A8D145 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
-		662C468B1A60C4B700A8D145 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
 		662C468E1A60C4DF00A8D145 /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
 		662C468F1A60C4DF00A8D145 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
 		662C46901A60C4DF00A8D145 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
@@ -145,8 +144,8 @@
 		662C46891A60C4B700A8D145 /* NotificationManager */ = {
 			isa = PBXGroup;
 			children = (
-				662C468A1A60C4B700A8D145 /* RBQRealmNotificationManager.h */,
-				662C468B1A60C4B700A8D145 /* RBQRealmNotificationManager.m */,
+				6617B26F1A69CD8600C63F59 /* RBQRealmNotificationManager.h */,
+				6617B2701A69CD8600C63F59 /* RBQRealmNotificationManager.m */,
 			);
 			path = NotificationManager;
 			sourceTree = "<group>";
@@ -432,7 +431,7 @@
 				667F380E1A5B2682008E3052 /* AppDelegate.m in Sources */,
 				662C46921A60C4DF00A8D145 /* RBQSafeRealmObject.m in Sources */,
 				667F38371A5B2690008E3052 /* RBQFetchedResultsController.m in Sources */,
-				662C468C1A60C4B700A8D145 /* RBQRealmNotificationManager.m in Sources */,
+				6617B2711A69CD8600C63F59 /* RBQRealmNotificationManager.m in Sources */,
 				66F66C911A65D8D00007F189 /* RLMObject+Notifications.m in Sources */,
 				662C46871A60C4AD00A8D145 /* RBQControllerCacheObject.m in Sources */,
 				662C46931A60C4DF00A8D145 /* RLMObject+Utilities.m in Sources */,
@@ -452,7 +451,6 @@
 				662C46A51A62442100A8D145 /* RBQFetchedResultsController.m in Sources */,
 				662C46A71A62442100A8D145 /* RBQFetchRequest.m in Sources */,
 				662C469B1A62441300A8D145 /* RBQObjectCacheObject.m in Sources */,
-				662C46991A62440500A8D145 /* RBQRealmNotificationManager.m in Sources */,
 				662C46971A6243A900A8D145 /* TestObject.m in Sources */,
 				662C46951A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m in Sources */,
 			);

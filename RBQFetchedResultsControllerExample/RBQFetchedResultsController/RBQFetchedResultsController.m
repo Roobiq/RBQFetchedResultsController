@@ -463,9 +463,9 @@
 
 #pragma mark - Change Calculations
 
-- (void)calculateChangesWithAddedSafeObjects:(NSArray *)addedSafeObjects
-                          deletedSafeObjects:(NSArray *)deletedSafeObjects
-                          changedSafeObjects:(NSArray *)changedSafeObjects
+- (void)calculateChangesWithAddedSafeObjects:(NSSet *)addedSafeObjects
+                          deletedSafeObjects:(NSSet *)deletedSafeObjects
+                          changedSafeObjects:(NSSet *)changedSafeObjects
                                        realm:(RLMRealm *)realm
 {
 #ifdef DEBUG
@@ -720,9 +720,9 @@
 
 #pragma mark - RBQChangeSetsObject
 
-- (RBQChangeSetsObject *)createChangeSetsWithAddedSafeObjects:(NSArray *)addedSafeObjects
-                                           deletedSafeObjects:(NSArray *)deletedSafeObjects
-                                           changedSafeObjects:(NSArray *)changedSafeObjects
+- (RBQChangeSetsObject *)createChangeSetsWithAddedSafeObjects:(NSSet *)addedSafeObjects
+                                           deletedSafeObjects:(NSSet *)deletedSafeObjects
+                                           changedSafeObjects:(NSSet *)changedSafeObjects
                                                         state:(RBQStateObject *)state
 {
     
