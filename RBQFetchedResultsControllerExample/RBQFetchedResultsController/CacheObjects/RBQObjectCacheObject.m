@@ -38,7 +38,7 @@
                             sectionKeyPathValue:(NSString *)sectionValue
 {
     RBQObjectCacheObject *cacheObject = [[RBQObjectCacheObject alloc] init];
-    cacheObject.primaryKeyType = safeObject.primaryKeyProperty.type;
+    cacheObject.primaryKeyType = safeObject.primaryKeyType;
     cacheObject.sectionKeyPathValue = sectionValue;
     cacheObject.className = safeObject.className;
     
