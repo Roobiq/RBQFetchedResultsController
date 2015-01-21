@@ -51,10 +51,11 @@ The FRC receives the changes from the `RBQRealmNotificationManager` and then ide
 
 ####Demo
 
-Build and run/test the Example project in Xcode to see `RBQFetchedResultsController` in action. If you don't have [CocoaPods](http://cocoapods.org/) installed, grab it with [sudo] gem install cocoapods.
+Build and run/test the Example project in Xcode to see `RBQFetchedResultsController` in action. This project uses git submodules and CocoaPods. If you don't have [CocoaPods](http://cocoapods.org/) installed, grab it with [sudo] gem install cocoapods.
 
 ```
-cd RBQFetchedResultsControllerExample
+git clone --recursive https://github.com/Roobiq/RBQFetchedResultsController
+cd RBQFetchedResultsController/RBQFetchedResultsControllerExample
 pod install
 open RBQFetchedResultsControllerExample.xcworkspace
 ```
