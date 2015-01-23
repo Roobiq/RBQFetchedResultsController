@@ -11,6 +11,7 @@
 
 #import "RBQFetchedResultsController.h"
 #import "RBQRealmNotificationManager.h"
+#import "RLMRealm+Notifications.h"
 #import "TestObject.h"
 
 @interface RBQFetchedResultsControllerDelegateTests : XCTestCase <RBQFetchedResultsControllerDelegate>
@@ -140,13 +141,7 @@
     
     [self.inMemoryRealm beginWriteTransaction];
     
-    for (TestObject *object in objectInFirstSection) {
-        if (!object.invalidated) {
-            [[RBQRealmNotificationManager managerForInMemoryRealm:self.inMemoryRealm] willDeleteObject:object];
-            
-            [self.inMemoryRealm deleteObject:object];
-        }
-    }
+    [self.inMemoryRealm deleteObjectsWithNotification:objectInFirstSection];
     
     [self.inMemoryRealm commitWriteTransaction];
         
