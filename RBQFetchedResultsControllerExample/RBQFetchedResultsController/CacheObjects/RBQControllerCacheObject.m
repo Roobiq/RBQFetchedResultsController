@@ -26,4 +26,9 @@
     return @"name";
 }
 
++ (NSDictionary *)defaultPropertyValues
+{
+    return @{@"sectionNameKeyPath" : @""};
+}
+
 @end

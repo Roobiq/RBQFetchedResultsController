@@ -616,9 +616,16 @@
     
     [cacheRealm beginWriteTransaction];
     
+    /**
+     *  Reset the cache if the fetchRequest hash doesn't match
+     *  The count in the cache is off from the fetch results
+     *  The state was left in processing
+     *  The section name key path has changed
+     */
     if (controllerCache.fetchRequestHash != fetchRequest.hash ||
         controllerCache.objects.count != fetchResults.count ||
-        controllerCache.state == RBQControllerCacheStateProcessing) {
+        controllerCache.state == RBQControllerCacheStateProcessing ||
+        ![controllerCache.sectionNameKeyPath isEqualToString:sectionNameKeyPath]) {
         
         [cacheRealm deleteAllObjects];
         
@@ -642,6 +649,7 @@
             
             if (sectionNameKeyPath) {
                 
+                // Check your sectionNameKeyPath if a crash occurs...
                 NSString *sectionTitle = [object valueForKey:sectionNameKeyPath];
                 
                 // New Section Found --> Process It
@@ -666,11 +674,13 @@
             }
             //No sections being used, so create default section
             else {
-                section = [RBQSectionCacheObject cacheWithName:@""];
+                currentSectionTitle = @"";
+                
+                section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
             }
             
-            // Save the final section
-            if (count == fetchResults.count && sectionNameKeyPath) {
+            // Save the final section (or if not using sections, the only section)
+            if (count == fetchResults.count) {
                 
                 // Add the section to Realm
                 [cacheRealm addObject:section];
@@ -684,12 +694,16 @@
             
             cacheObject.section = section;
             
-            if (section &&
-                [section.objects indexOfObject:section] == NSNotFound) {
+            if (section) {
                 [section.objects addObject:cacheObject];
             }
             
             [controllerCache.objects addObject:cacheObject];
+        }
+        
+        // Set the section name key path, if available
+        if (sectionNameKeyPath) {
+            controllerCache.sectionNameKeyPath = sectionNameKeyPath;
         }
         
         // Add cache to Realm
@@ -1257,16 +1271,49 @@
 - (RLMRealm *)cacheRealm
 {
     if (self.cacheName) {
+        // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
         return [RBQFetchedResultsController realmForCacheName:self.cacheName];
     }
     else if (self.inMemoryRealmCache) {
         return self.inMemoryRealmCache;
     }
     else {
+        // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
         return [RBQFetchedResultsController realmForCacheName:[self nameForFetchRequest:self.fetchRequest]];
     }
     
     return nil;
+}
+
+/**
+ *  If you need to perform a migration, use this method and call the Realm that contains the cache
+ *
+ *  For example:
+ *
+ *  NSString *path = [RBQFetchedResultsController cachePathWithName:[self nameForFetchRequest:self.fetchRequest]];
+ *
+ *  or
+ *
+ *  NSString *path = [RBQFetchedResultsController cachePathWithName:self.cacheName];
+ *
+ *  IMPORTANT: YOU MUST ALSO RUN A MIGRATION ON ANY OTHER REALMS!
+ *
+ *  @param path path for the Realm that contains the controller cache
+ */
+- (void)performMigrationForRealmAtPath:(NSString *)path
+{
+    [RLMRealm setSchemaVersion:1 forRealmAtPath:path
+            withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {
+        
+        if (oldSchemaVersion < 1) {
+            [migration enumerateObjects:[RBQControllerCacheObject className]
+                                  block:^(RLMObject *oldObject, RLMObject *newObject) {
+                                    
+                                      // Insert an invalid section name key path to make sure cache is rebuilt
+                                      newObject[@"sectionNameKeyPath"] = @"invalidSectionNameKeyPath";
+                                  }];
+        }
+    }];
 }
 
 // Retrieve internal cache

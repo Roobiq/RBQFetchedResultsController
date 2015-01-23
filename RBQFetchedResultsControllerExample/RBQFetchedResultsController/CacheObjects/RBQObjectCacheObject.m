@@ -7,7 +7,6 @@
 //
 
 #import "RBQObjectCacheObject.h"
-#import <Realm/RLMProperty_Private.h>
 #import "RLMObject+Utilities.h"
 
 @implementation RBQObjectCacheObject

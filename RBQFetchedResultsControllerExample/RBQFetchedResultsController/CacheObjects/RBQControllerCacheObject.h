@@ -36,6 +36,11 @@ RLM_ARRAY_TYPE(RBQSectionCacheObject)
 @property NSInteger state;
 
 /**
+ *  Used to track the current section name key path if any for the cache
+ */
+@property NSString *sectionNameKeyPath;
+
+/**
  *  RBQSectionCacheObjects within cache
  */
 @property RLMArray<RBQSectionCacheObject> *sections;
