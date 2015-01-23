@@ -72,6 +72,10 @@
                 self.sectionNameKeyPath,
                 self.name];
     }
+    else if (self.fetchRequest) {
+        return [RBQFetchedResultsController fetchResultsInRealm:self.fetchRequest.realm
+                                                forFetchRequest:self.fetchRequest];
+    }
     
     return nil;
 }
@@ -660,6 +664,10 @@
                     section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
                 }
             }
+            //No sections being used, so create default section
+            else {
+                section = [RBQSectionCacheObject cacheWithName:@""];
+            }
             
             // Save the final section
             if (count == fetchResults.count && sectionNameKeyPath) {
@@ -676,7 +684,8 @@
             
             cacheObject.section = section;
             
-            if (section) {
+            if (section &&
+                [section.objects indexOfObject:section] == NSNotFound) {
                 [section.objects addObject:cacheObject];
             }
             
@@ -752,15 +761,20 @@
             
             NSString *sectionTitle = nil;
             
-            if (object) {
+            if (object &&
+                self.sectionNameKeyPath) {
                 sectionTitle = [object valueForKey:self.sectionNameKeyPath];
             }
-            else {
+            else if (self.sectionNameKeyPath) {
                 RBQObjectCacheObject *oldCacheObject =
                 [RBQObjectCacheObject objectInRealm:state.cacheRealm
                                       forPrimaryKey:safeObject.primaryKeyValue];
                 
                 sectionTitle = oldCacheObject.section.name;
+            }
+            // We aren't using sections so create a dummy one with no text
+            else {
+                sectionTitle = @"";
             }
             
             if (sectionTitle) {
@@ -809,7 +823,6 @@
 #ifdef DEBUG
     NSAssert(changeSets, @"Change sets can't be nil");
     NSAssert(state, @"State can't be nil");
-    NSAssert(self.sectionNameKeyPath, @"sectionNameKeyPath can't be nil");
 #endif
     
     // Get Old Sections
@@ -834,9 +847,17 @@
     // Loop through to identify the new sections in fetchResults
     for (RBQSectionCacheObject *section in oldAndChange) {
         
-        RLMResults *sectionResults = [state.fetchResults objectsWhere:@"%K == %@",
-                                      self.sectionNameKeyPath,
-                                      section.name];
+        RLMResults * sectionResults = nil;
+        
+        if (self.sectionNameKeyPath) {
+            sectionResults = [state.fetchResults objectsWhere:@"%K == %@",
+                              self.sectionNameKeyPath,
+                              section.name];
+        }
+        // We aren't using sections, so just use all results
+        else {
+            sectionResults = state.fetchResults;
+        }
         
         if (sectionResults.count > 0) {
             RLMObject *firstObject = [sectionResults firstObject];
@@ -1010,7 +1031,6 @@
 #ifdef DEBUG
     NSAssert(changeSets, @"Change sets can't be nil!");
     NSAssert(sectionChanges, @"Section changes can't be nil!");
-    NSAssert(self.sectionNameKeyPath, @"Section name key path can't be nil!");
     NSAssert(self.fetchRequest, @"Fetch request can't be nil!");
 #endif
     
