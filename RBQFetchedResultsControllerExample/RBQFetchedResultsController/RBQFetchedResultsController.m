@@ -855,7 +855,9 @@
             // Get the entire list of all sections after the change
             [newSections addObject:section];
         }
-        else {
+        // Add to deleted only if this section was already in cache
+        // Possible to add a section that has no data (so we don't want to insert or delete it)
+        else if ([state.cache.sections indexOfObject:section] != NSNotFound) {
             // Save any that are not found in results (but not dupes)
             if (![deletedSections containsObject:section]) {
                 [deletedSections addObject:section];
@@ -1250,7 +1252,15 @@
 // Retrieve internal cache
 - (RBQControllerCacheObject *)cache
 {
-    return [self cacheInRealm:[self cacheRealm]];
+    RBQControllerCacheObject *cache = [self cacheInRealm:[self cacheRealm]];
+    
+    if (!cache) {
+        [self performFetch];
+        
+        cache = [self cacheInRealm:[self cacheRealm]];
+    }
+    
+    return cache;
 }
 
 - (RBQControllerCacheObject *)cacheInRealm:(RLMRealm *)realm
