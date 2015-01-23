@@ -102,8 +102,8 @@
 
 @interface RBQChangeSetsObject : NSObject
 
-@property (strong, nonatomic) NSArray *cacheObjectsChangeSet;
-@property (strong, nonatomic) NSArray *cacheSectionsChangeSet;
+@property (strong, nonatomic) NSOrderedSet *cacheObjectsChangeSet;
+@property (strong, nonatomic) NSOrderedSet *cacheSectionsChangeSet;
 @property (strong, nonatomic) NSDictionary *cacheObjectToSafeObject;
 
 @end
@@ -116,10 +116,10 @@
 
 @interface RBQSectionChangesObject : NSObject
 
-@property (strong, nonatomic) NSArray *oldCacheSections;
-@property (strong, nonatomic) NSArray *sortedNewCacheSections;
-@property (strong, nonatomic) NSArray *deletedCacheSections;
-@property (strong, nonatomic) NSArray *insertedCacheSections;
+@property (strong, nonatomic) NSOrderedSet *oldCacheSections;
+@property (strong, nonatomic) NSOrderedSet *sortedNewCacheSections;
+@property (strong, nonatomic) NSOrderedSet *deletedCacheSections;
+@property (strong, nonatomic) NSOrderedSet *insertedCacheSections;
 
 @end
 
@@ -163,10 +163,10 @@
 
 @interface RBQDerivedChangesObject : NSObject
 
-@property (nonatomic, strong) NSArray *sectionChanges;
-@property (nonatomic, strong) NSArray *deletedObjectChanges;
-@property (nonatomic, strong) NSArray *insertedObjectChanges;
-@property (nonatomic, strong) NSArray *movedObjectChanges;
+@property (nonatomic, strong) NSOrderedSet *sectionChanges;
+@property (nonatomic, strong) NSOrderedSet *deletedObjectChanges;
+@property (nonatomic, strong) NSOrderedSet *insertedObjectChanges;
+@property (nonatomic, strong) NSOrderedSet *movedObjectChanges;
 
 @end
 
@@ -547,7 +547,7 @@
     }
     
     // Apply Object Changes To Cache (Must apply in correct order!)
-    for (NSArray *objectChanges in @[derivedChanges.deletedObjectChanges,
+    for (NSOrderedSet *objectChanges in @[derivedChanges.deletedObjectChanges,
                                      derivedChanges.insertedObjectChanges,
                                      derivedChanges.movedObjectChanges]) {
         
@@ -566,6 +566,9 @@
                 [RBQSectionCacheObject objectInRealm:state.cacheRealm
                                        forPrimaryKey:objectChange.updatedCacheObject.sectionKeyPathValue];
                 
+#ifdef DEBUG
+                NSAssert(section.objects.count >= objectChange.updatedIndexpath.row, @"Attempting to insert object at index greater than count!");
+#endif
                 [section.objects insertObject:objectChange.updatedCacheObject
                                       atIndex:objectChange.updatedIndexpath.row];
                 
@@ -734,11 +737,11 @@
 #endif
     
     // Get Sections In Change Set
-    NSMutableArray *cacheSectionsInChangeSet = @[].mutableCopy;
-    NSMutableArray *cacheObjectsChangeSet = @[].mutableCopy;
+    NSMutableOrderedSet *cacheSectionsInChangeSet = [[NSMutableOrderedSet alloc] init];
+    NSMutableOrderedSet *cacheObjectsChangeSet = [[NSMutableOrderedSet alloc] init];
     NSMutableDictionary *cacheObjectToSafeObject = @{}.mutableCopy;
     
-    for (NSArray *changedObjects in @[addedSafeObjects, deletedSafeObjects, changedSafeObjects]) {
+    for (NSSet *changedObjects in @[addedSafeObjects, deletedSafeObjects, changedSafeObjects]) {
         
         for (RBQSafeRealmObject *safeObject in changedObjects) {
             
@@ -810,14 +813,14 @@
 #endif
     
     // Get Old Sections
-    NSMutableArray *oldSections = @[].mutableCopy;
+    NSMutableOrderedSet *oldSections = [[NSMutableOrderedSet alloc] init];
     
     for (RBQSectionCacheObject *section in state.cache.sections) {
         [oldSections addObject:section];
     }
     
     // Combine Old With Change Set (without dupes!)
-    NSMutableArray *oldAndChange = [NSMutableArray arrayWithArray:oldSections];
+    NSMutableOrderedSet *oldAndChange = [NSMutableOrderedSet orderedSetWithOrderedSet:oldSections];
     
     for (RBQSectionCacheObject *section in changeSets.cacheSectionsChangeSet) {
         if (![oldAndChange containsObject:section]) {
@@ -825,8 +828,8 @@
         }
     }
     
-    NSMutableArray *newSections = @[].mutableCopy;
-    NSMutableArray *deletedSections = @[].mutableCopy;
+    NSMutableOrderedSet *newSections = [[NSMutableOrderedSet alloc] init];
+    NSMutableOrderedSet *deletedSections = [[NSMutableOrderedSet alloc] init];
     
     // Loop through to identify the new sections in fetchResults
     for (RBQSectionCacheObject *section in oldAndChange) {
@@ -866,9 +869,9 @@
     [newSections sortUsingDescriptors:@[sortByFirstIndex]];
     
     // Find inserted sections
-    NSMutableArray *insertedSections = [NSMutableArray arrayWithArray:newSections];
+    NSMutableOrderedSet *insertedSections = [NSMutableOrderedSet orderedSetWithOrderedSet:newSections];
     // Remove the old sections to identify only the inserted
-    [insertedSections removeObjectsInArray:oldSections];
+    [insertedSections removeObjectsInArray:oldSections.array];
     
     RBQSectionChangesObject *sectionChanges = [[RBQSectionChangesObject alloc] init];
     
@@ -1009,7 +1012,7 @@
     NSAssert(self.fetchRequest, @"Fetch request can't be nil!");
 #endif
     
-    NSMutableArray *derivedSectionChanges = @[].mutableCopy;
+    NSMutableOrderedSet *derivedSectionChanges = [[NSMutableOrderedSet alloc] init];
     
     // Deleted Sections
     for (RBQSectionCacheObject *section in sectionChanges.deletedCacheSections) {
@@ -1085,9 +1088,9 @@
     NSAssert(state, @"State can't be nil!");
 #endif
     
-    NSMutableArray *deletedObjectChanges = @[].mutableCopy;
-    NSMutableArray *insertedObjectChanges = @[].mutableCopy;
-    NSMutableArray *movedObjectChanges = @[].mutableCopy;
+    NSMutableOrderedSet *deletedObjectChanges = [[NSMutableOrderedSet alloc] init];
+    NSMutableOrderedSet *insertedObjectChanges = [[NSMutableOrderedSet alloc] init];
+    NSMutableOrderedSet *movedObjectChanges = [[NSMutableOrderedSet alloc] init];
     
     NSUInteger countChange = ABS(state.fetchResults.count - state.cache.objects.count);
     
@@ -1154,7 +1157,19 @@
             }
             objectChange.changeType = NSFetchedResultsChangeInsert;
             
-            [insertedObjectChanges addObject:objectChange];
+            // Insert and sort items (fixes crashes when there are no objects yet!)
+            NSRange sortRange = NSMakeRange(0, insertedObjectChanges.count);
+            NSUInteger indexToInsert =
+            [insertedObjectChanges indexOfObject:objectChange
+                                   inSortedRange:sortRange
+                                         options:NSBinarySearchingInsertionIndex
+                                 usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                     RBQObjectChangeObject *obj2) {
+                                     // Compare the indexPaths
+                                     return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
+                                     }];
+            
+            [insertedObjectChanges insertObject:objectChange atIndex:indexToInsert];
         }
         // Moved Objects
         // Compare the row changes to the count change
