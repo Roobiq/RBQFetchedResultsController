@@ -16,7 +16,7 @@
     block(self);
     
     // Call Notification
-    [[RBQRealmNotificationManager managerForRealm:self.realm] didChangeObject:self];
+    [[RBQRealmChangeLogger loggerForRealm:self.realm] didChangeObject:self];
 }
 
 - (void)changeWithNotificationInTransaction:(RBQChangeNotificationBlock)block
@@ -28,7 +28,7 @@
     block(self);
     
     // Call Notification
-    [[RBQRealmNotificationManager managerForRealm:realm] didChangeObject:self];
+    [[RBQRealmChangeLogger loggerForRealm:self.realm] didChangeObject:self];
     
     [realm commitWriteTransaction];
 }

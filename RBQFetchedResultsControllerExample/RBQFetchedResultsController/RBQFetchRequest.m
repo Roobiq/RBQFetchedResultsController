@@ -16,7 +16,7 @@
 @end
 
 @implementation RBQFetchRequest
-@synthesize entityName = _entityName, isInMemoryRealm = _isInMemoryRealm;
+@synthesize entityName = _entityName;
 
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
                                         inRealm:(RLMRealm *)realm
@@ -48,7 +48,6 @@
     if (self) {
         _entityName = entityName;
         _inMemoryRealm = inMemoryRealm;
-        _isInMemoryRealm = YES;
     }
     
     return self;

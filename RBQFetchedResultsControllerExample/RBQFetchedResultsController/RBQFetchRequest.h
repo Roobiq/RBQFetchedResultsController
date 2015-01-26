@@ -27,11 +27,6 @@
 @property (nonatomic, readonly) RLMRealm *realm;
 
 /**
- *  Indicates whether the Realm for this RBQFetchRequest is an in-memory Realm.
- */
-@property (nonatomic, readonly) BOOL isInMemoryRealm;
-
-/**
  *  Predicate supported by Realm
  
     http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates

@@ -13,7 +13,7 @@
 
 - (void)addObjectWithNotification:(RLMObject *)object
 {
-    [[RBQRealmNotificationManager managerForRealm:self] didAddObject:object];
+    [[RBQRealmChangeLogger loggerForRealm:self] didAddObject:object];
     
     [self addObject:object];
 }
@@ -35,10 +35,10 @@
     NSString *className = NSStringFromClass(object.class);
     
     if ([className hasPrefix:@"RLMStandalone_"]) {
-        [[RBQRealmNotificationManager managerForRealm:self] didAddObject:object];
+        [[RBQRealmChangeLogger loggerForRealm:self] didAddObject:object];
     }
     else {
-        [[RBQRealmNotificationManager managerForRealm:self] didChangeObject:object];
+        [[RBQRealmChangeLogger loggerForRealm:self] didChangeObject:object];
     }
     
     [self addOrUpdateObject:object];
@@ -53,7 +53,7 @@
 
 - (void)deleteObjectWithNotification:(RLMObject *)object
 {
-    [[RBQRealmNotificationManager managerForRealm:self] willDeleteObject:object];
+    [[RBQRealmChangeLogger loggerForRealm:self] willDeleteObject:object];
     
     [self deleteObject:object];
 }
@@ -61,7 +61,7 @@
 - (void)deleteObjectsWithNotification:(id)array
 {
     for (RLMObject *object in array) {
-        [[RBQRealmNotificationManager managerForRealm:self] willDeleteObject:object];
+        [[RBQRealmChangeLogger loggerForRealm:self] willDeleteObject:object];
     }
     
     [self deleteObjects:array];

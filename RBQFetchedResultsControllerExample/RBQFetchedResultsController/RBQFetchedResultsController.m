@@ -13,6 +13,8 @@
 #import "RBQControllerCacheObject.h"
 #import "RBQSectionCacheObject.h"
 
+#import "RBQTimelineItem.h"
+
 @import UIKit;
 
 #pragma mark - RBQFetchedResultsController
@@ -21,7 +23,7 @@
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
 @property (strong, nonatomic) RLMNotificationToken *cacheNotificationToken;
-@property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
+@property (weak, nonatomic) RLMRealm *inMemoryRealmCache;
 
 + (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
                     forFetchRequest:(RBQFetchRequest *)fetchRequest;
@@ -417,40 +419,25 @@
 // Register the change notification from RBQRealmNotificationManager
 - (void)registerChangeNotifications
 {
-    if (self.fetchRequest.isInMemoryRealm) {
-        self.notificationToken =
-        [[RBQRealmNotificationManager managerForInMemoryRealm:self.fetchRequest.realm] addNotificationBlock:
-         ^(NSDictionary *entityChanges,
-           RLMRealm *realm)
-         {
-             // Grab the entity changes object if it is available
-             RBQEntityChangesObject *entityChangesObject = [entityChanges objectForKey:self.fetchRequest.entityName];
+    self.notificationToken =
+    [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
+     ^(NSDictionary *entityChanges,
+       RLMRealm *realm)
+     {
+         // Grab the entity changes object if it is available
+         RBQEntityChangesObject *entityChangesObject = [entityChanges objectForKey:self.fetchRequest.entityName];
+         
+         if (entityChangesObject) {
+             NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
+             NSLog(@"%lu Deleted Objects",(unsigned long)entityChangesObject.deletedSafeObjects.count);
+             NSLog(@"%lu Changed Objects",(unsigned long)entityChangesObject.changedSafeObjects.count);
              
-             if (entityChangesObject) {
-                 [self calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
-                                         deletedSafeObjects:entityChangesObject.deletedSafeObjects
-                                         changedSafeObjects:entityChangesObject.changedSafeObjects
-                                                      realm:realm];
-             }
-         }];
-    }
-    else {
-        self.notificationToken =
-        [[RBQRealmNotificationManager managerForRealm:self.fetchRequest.realm] addNotificationBlock:
-         ^(NSDictionary *entityChanges,
-           RLMRealm *realm)
-         {
-             // Grab the entity changes object if it is available
-             RBQEntityChangesObject *entityChangesObject = [entityChanges objectForKey:self.fetchRequest.entityName];
-             
-             if (entityChangesObject) {
-                 [self calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
-                                         deletedSafeObjects:entityChangesObject.deletedSafeObjects
-                                         changedSafeObjects:entityChangesObject.changedSafeObjects
-                                                      realm:realm];
-             }
-         }];
-    }
+             [self calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
+                                     deletedSafeObjects:entityChangesObject.deletedSafeObjects
+                                     changedSafeObjects:entityChangesObject.changedSafeObjects
+                                                  realm:realm];
+         }
+     }];
     
     // Notification block to update the state of the cache when the cache Realm updates
     self.cacheNotificationToken =
@@ -495,6 +482,8 @@
                                                               deletedSafeObjects:deletedSafeObjects
                                                               changedSafeObjects:changedSafeObjects
                                                                            state:state];
+    NSLog(@"%lu Object Changes",(unsigned long)changeSets.cacheObjectsChangeSet.count);
+    NSLog(@"%lu Section Changes",(unsigned long)changeSets.cacheSectionsChangeSet.count);
     
     // Make sure we actually identified changes
     // (changes might not match entity name)
@@ -515,6 +504,11 @@
     RBQDerivedChangesObject *derivedChanges = [self deriveChangesWithChangeSets:changeSets
                                                                  sectionChanges:sectionChanges
                                                                           state:state];
+    
+    NSLog(@"%lu Derived Added Objects",(unsigned long)derivedChanges.insertedObjectChanges.count);
+    NSLog(@"%lu Derived Deleted Objects",(unsigned long)derivedChanges.deletedObjectChanges.count);
+    NSLog(@"%lu Derived Moved Objects",(unsigned long)derivedChanges.movedObjectChanges.count);
+    
     // Apply Derived Changes To Cache
     [self applyDerivedChangesToCache:derivedChanges
                                state:state];
