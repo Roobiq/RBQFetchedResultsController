@@ -170,7 +170,7 @@
                                                           atIndexPath:indexPath];
     [self.inMemoryRealm beginWriteTransaction];
     
-    [[RBQRealmNotificationManager managerForInMemoryRealm:self.inMemoryRealm] willDeleteObject:object];
+    [[RBQRealmChangeLogger loggerForRealm:self.inMemoryRealm] willDeleteObject:object];
     
     [self.inMemoryRealm deleteObject:object];
     

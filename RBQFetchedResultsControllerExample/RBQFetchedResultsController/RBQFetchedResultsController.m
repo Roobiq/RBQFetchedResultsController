@@ -13,8 +13,6 @@
 #import "RBQControllerCacheObject.h"
 #import "RBQSectionCacheObject.h"
 
-#import "RBQTimelineItem.h"
-
 @import UIKit;
 
 #pragma mark - RBQFetchedResultsController

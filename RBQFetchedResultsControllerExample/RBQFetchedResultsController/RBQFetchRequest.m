@@ -11,7 +11,7 @@
 @interface RBQFetchRequest ()
 
 @property (strong, nonatomic) NSString *realmPath;
-@property (strong, nonatomic) RLMRealm *inMemoryRealm;
+@property (weak, nonatomic) RLMRealm *inMemoryRealm;
 
 @end
 
