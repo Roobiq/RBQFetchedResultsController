@@ -68,11 +68,18 @@
                                       predicate:(NSPredicate *)predicate;
 
 /**
- *  Retrieve all the RLMObjects for this fetch request
+ *  Retrieve all the RLMObjects for this fetch request in its realm.
  *
  *  @return RLMResults for all the objects in the fetch request (not thread-safe).
  */
 - (RLMResults *)fetchObjects;
+
+/**
+ *  Retrieve all the RLMObjects for this fetch request in the specified realm.
+ *
+ *  @return RLMResults for all the objects in the fetch request (not thread-safe).
+ */
+- (RLMResults *)fetchObjectsInRealm:(RLMRealm *)realm;
 
 /**
  *  Create RBQFetchRequest in RLMRealm instance with an entity name

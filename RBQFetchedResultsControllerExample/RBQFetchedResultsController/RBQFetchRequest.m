@@ -66,9 +66,13 @@
     return self;
 }
 
-- (RLMResults *)fetchObjects
+- (RLMResults *)fetchObjects {
+    return [self fetchObjectsInRealm:self.realm];
+}
+
+- (RLMResults *)fetchObjectsInRealm:(RLMRealm *)realm
 {
-    RLMResults *fetchResults = [NSClassFromString(self.entityName) allObjectsInRealm:self.realm];
+    RLMResults *fetchResults = [NSClassFromString(self.entityName) allObjectsInRealm:realm];
     
     // If we have a predicate use it
     if (self.predicate) {
