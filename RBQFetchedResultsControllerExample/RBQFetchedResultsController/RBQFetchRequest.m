@@ -106,6 +106,9 @@
         self.sortDescriptors) {
         return self.predicate.hash ^ self.sortDescriptors.hash;
     }
+    else if (self.predicate) {
+        return self.predicate.hash;
+    }
     else {
         return [super hash];
     }
