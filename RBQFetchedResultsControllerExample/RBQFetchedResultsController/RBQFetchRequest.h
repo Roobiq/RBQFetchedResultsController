@@ -82,6 +82,19 @@
 - (RLMResults *)fetchObjectsInRealm:(RLMRealm *)realm;
 
 /**
+ *  Should this object be in our fetch results?
+ *
+ *  Intended to be used by the RBQFetchedResultsController to evaluate incremental changes. For
+ *  simple fetch requests this just evaluates the NSPredicate, but subclasses may have a more
+ *  complicated implementaiton.
+ *
+ *  @param object Realm object of appropriate type
+ *
+ *  @return YES if performing fetch would include this object
+ */
+- (BOOL)evaluateObject:(RLMObject *)object;
+
+/**
  *  Create RBQFetchRequest in RLMRealm instance with an entity name
  *
  *  @param entityName Class name for the RLMObject

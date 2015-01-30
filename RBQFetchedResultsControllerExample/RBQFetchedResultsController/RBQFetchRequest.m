@@ -87,6 +87,11 @@
     return fetchResults;
 }
 
+- (BOOL)evaluateObject:(RLMObject *)object
+{
+    return [self.predicate evaluateWithObject:object];
+}
+
 #pragma mark - Getter
 
 - (RLMRealm *)realm
