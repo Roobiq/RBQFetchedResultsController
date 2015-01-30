@@ -601,10 +601,19 @@
                                                  fetchRequestHash:fetchRequest.hash];
         
         RBQSectionCacheObject *section = nil;
-        NSUInteger count = 0;
         
         // Iterate over the results to create the section information
         NSString *currentSectionTitle = nil;
+        
+        //No sections being used, so create default section
+        if (!sectionNameKeyPath) {
+            
+            currentSectionTitle = @"";
+            
+            section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
+        }
+        
+        NSUInteger count = 0;
         
         for (RLMObject *object in fetchResults) {
             // Keep track of the count
@@ -634,12 +643,6 @@
                     // Reset the section object array
                     section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
                 }
-            }
-            //No sections being used, so create default section
-            else {
-                currentSectionTitle = @"";
-                
-                section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
             }
             
             // Save the final section (or if not using sections, the only section)

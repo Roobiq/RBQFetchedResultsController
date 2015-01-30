@@ -104,10 +104,11 @@
 {
     if (self.predicate &&
         self.sortDescriptors) {
-        return self.predicate.hash ^ self.sortDescriptors.hash;
+        return self.predicate.hash ^ self.sortDescriptors.hash ^ self.entityName.hash;
     }
-    else if (self.predicate) {
-        return self.predicate.hash;
+    else if (self.predicate &&
+             self.entityName) {
+        return self.predicate.hash ^ self.entityName.hash;
     }
     else {
         return [super hash];
