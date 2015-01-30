@@ -738,6 +738,14 @@
             RLMObject *object = [RBQSafeRealmObject objectInRealm:state.realm
                                                    fromSafeObject:safeObject];
             
+            // If the changed object doesn't match the predicate and
+            // was not already in the cache, then skip it
+            if (![self.fetchRequest.predicate evaluateWithObject:object] &&
+                [RBQObjectCacheObject objectInRealm:state.cacheRealm
+                                      forPrimaryKey:safeObject.primaryKeyValue]) {
+                continue;
+            }
+            
             NSString *sectionTitle = nil;
             
             if (object &&
