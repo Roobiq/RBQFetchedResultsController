@@ -812,7 +812,7 @@
             
             // If the changed object doesn't match the predicate and
             // was not already in the cache, then skip it
-            if ([self.fetchRequest evaluateObject:object] &&
+            if (![self.fetchRequest evaluateObject:object] &&
                 [RBQObjectCacheObject objectInRealm:state.cacheRealm
                                       forPrimaryKey:safeObject.primaryKeyValue]) {
                 continue;
