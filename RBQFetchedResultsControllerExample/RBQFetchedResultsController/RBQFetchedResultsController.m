@@ -23,9 +23,6 @@
 @property (strong, nonatomic) RLMNotificationToken *cacheNotificationToken;
 @property (weak, nonatomic) RLMRealm *inMemoryRealmCache;
 
-+ (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
-                    forFetchRequest:(RBQFetchRequest *)fetchRequest;
-
 @end
 
 #pragma mark - RBQFetchedResultsSectionInfo
@@ -62,19 +59,14 @@
 
 - (RLMResults *)objects
 {
-    if (self.fetchRequest &&
-        self.sectionNameKeyPath) {
+    if (self.fetchRequest && self.sectionNameKeyPath) {
         
-        RLMResults *fetchResults = [RBQFetchedResultsController fetchResultsInRealm:self.fetchRequest.realm
-                                                                    forFetchRequest:self.fetchRequest];
+        RLMResults *fetchResults = [self.fetchRequest fetchObjects];
         
-        return [fetchResults objectsWhere:@"%K == %@",
-                self.sectionNameKeyPath,
-                self.name];
+        return [fetchResults objectsWhere:@"%K == %@", self.sectionNameKeyPath, self.name];
     }
     else if (self.fetchRequest) {
-        return [RBQFetchedResultsController fetchResultsInRealm:self.fetchRequest.realm
-                                                forFetchRequest:self.fetchRequest];
+        return [self.fetchRequest fetchObjects];
     }
     
     return nil;
@@ -209,25 +201,6 @@
 }
 
 #pragma mark - Private Class
-
-// Retrieve results with an already created Realm instance
-+ (RLMResults *)fetchResultsInRealm:(RLMRealm *)realm
-                    forFetchRequest:(RBQFetchRequest *)fetchRequest
-{
-    RLMResults *fetchResults = [NSClassFromString(fetchRequest.entityName) allObjectsInRealm:realm];
-    
-    // If we have a predicate use it
-    if (fetchRequest.predicate) {
-        fetchResults = [fetchResults objectsWithPredicate:fetchRequest.predicate];
-    }
-    
-    // If we have sort descriptors then use them
-    if (fetchRequest.sortDescriptors.count > 0) {
-        fetchResults = [fetchResults sortedResultsUsingDescriptors:fetchRequest.sortDescriptors];
-    }
-    
-    return fetchResults;
-}
 
 // Create Realm instance for cache name
 + (RLMRealm *)realmForCacheName:(NSString *)cacheName
@@ -469,8 +442,7 @@
 - (RLMResults *)fetchedObjects
 {
     if (self.fetchRequest) {
-        return [RBQFetchedResultsController fetchResultsInRealm:self.fetchRequest.realm
-                                                forFetchRequest:self.fetchRequest];
+        return [self.fetchRequest fetchObjects];
     }
     
     return nil;
@@ -671,8 +643,7 @@
              forFetchRequest:(RBQFetchRequest *)fetchRequest
           sectionNameKeyPath:(NSString *)sectionNameKeyPath
 {
-    RLMResults *fetchResults = [RBQFetchedResultsController fetchResultsInRealm:fetchRequest.realm
-                                                                forFetchRequest:fetchRequest];
+    RLMResults *fetchResults = [fetchRequest fetchObjects];
     
     // Check if we have a cache already
     RBQControllerCacheObject *controllerCache = [RBQControllerCacheObject objectInRealm:cacheRealm
@@ -702,10 +673,19 @@
                                                  fetchRequestHash:fetchRequest.hash];
         
         RBQSectionCacheObject *section = nil;
-        NSUInteger count = 0;
         
         // Iterate over the results to create the section information
         NSString *currentSectionTitle = nil;
+        
+        //No sections being used, so create default section
+        if (!sectionNameKeyPath) {
+            
+            currentSectionTitle = @"";
+            
+            section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
+        }
+        
+        NSUInteger count = 0;
         
         for (RLMObject *object in fetchResults) {
             // Keep track of the count
@@ -735,12 +715,6 @@
                     // Reset the section object array
                     section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
                 }
-            }
-            //No sections being used, so create default section
-            else {
-                currentSectionTitle = @"";
-                
-                section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
             }
             
             // Save the final section (or if not using sections, the only section)
@@ -798,8 +772,7 @@
     stateObject.realm = realm;
     
     // Get the new list of safe fetch objects
-    stateObject.fetchResults = [RBQFetchedResultsController fetchResultsInRealm:realm
-                                                              forFetchRequest:fetchRequest];
+    stateObject.fetchResults = [fetchRequest fetchObjectsInRealm:realm];
     
     stateObject.cache = cache;
     
@@ -836,6 +809,14 @@
             // Attempt to get the object from non-cache Realm
             RLMObject *object = [RBQSafeRealmObject objectInRealm:state.realm
                                                    fromSafeObject:safeObject];
+            
+            // If the changed object doesn't match the predicate and
+            // was not already in the cache, then skip it
+            if (![self.fetchRequest evaluateObject:object] &&
+                [RBQObjectCacheObject objectInRealm:state.cacheRealm
+                                      forPrimaryKey:safeObject.primaryKeyValue]) {
+                continue;
+            }
             
             NSString *sectionTitle = nil;
             

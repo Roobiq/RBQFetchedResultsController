@@ -66,9 +66,13 @@
     return self;
 }
 
-- (RLMResults *)fetchObjects
+- (RLMResults *)fetchObjects {
+    return [self fetchObjectsInRealm:self.realm];
+}
+
+- (RLMResults *)fetchObjectsInRealm:(RLMRealm *)realm
 {
-    RLMResults *fetchResults = [NSClassFromString(self.entityName) allObjectsInRealm:self.realm];
+    RLMResults *fetchResults = [NSClassFromString(self.entityName) allObjectsInRealm:realm];
     
     // If we have a predicate use it
     if (self.predicate) {
@@ -81,6 +85,11 @@
     }
     
     return fetchResults;
+}
+
+- (BOOL)evaluateObject:(RLMObject *)object
+{
+    return [self.predicate evaluateWithObject:object];
 }
 
 #pragma mark - Getter
@@ -100,7 +109,11 @@
 {
     if (self.predicate &&
         self.sortDescriptors) {
-        return self.predicate.hash ^ self.sortDescriptors.hash;
+        return self.predicate.hash ^ self.sortDescriptors.hash ^ self.entityName.hash;
+    }
+    else if (self.predicate &&
+             self.entityName) {
+        return self.predicate.hash ^ self.entityName.hash;
     }
     else {
         return [super hash];
