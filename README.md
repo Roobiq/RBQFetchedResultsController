@@ -65,11 +65,12 @@ open RBQFetchedResultsControllerExample.xcworkspace
 * iOS 7+
 * Xcode 6
 
+####TODO:
+1. Create CocoaPod for the project
+
 ####Current Limitations:
 
-~~1. The FRC performance degrades as the result set grows. ~1000 rows or less results in acceptable performance in testing from iPhone 4s and greater. The bottleneck is having to iterate through all the `RLMResults` after every change to recreate the section information. If Realm implemented a method to retrieve all of the distinct values for a key path (i.e. the section key path), this would allow prevent the need to iterate over every result (i.e. with all the section key path values, individual `RLMResults` could be created for each section and used to identify the number of sections and rows within each section without iterating over every object within each `RLMResults`).~~
-
-~~2. The `RBQRealmNotificationManager` requires manually logging of changes. A better solution would be to abstract this away by creating a `RLMRealm` and `RLMObject` subclass that performs the log whenever the key path value is changed on the object or an object is added or deleted from Realm.~~
+~~1. The `RBQRealmNotificationManager` requires manually logging of changes. A better solution would be to abstract this away by creating a `RLMRealm` and `RLMObject` subclass that performs the log whenever the key path value is changed on the object or an object is added or deleted from Realm.~~
 
 **Note: `RLMRealm` and `RLMObject` categories are included that contain methods to simplify calling RBQRealmChangeLogger:**
 
@@ -95,5 +96,5 @@ typedef void(^RBQChangeNotificationBlock)(RLMObject *object);
 - (void)changeWithNotificationInTransaction:(RBQChangeNotificationBlock)block;
 ```
 
-3. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC.
+2. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC.
  
