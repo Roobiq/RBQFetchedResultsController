@@ -140,8 +140,10 @@
 
 /**
  *  Deletes the cached section information with the given name
+ 
+    @warning This method should only be called if there are no strong references to the FRC that was using the cache. If deleting all caches (by passing nil for name), it is recommended to do this in didFinishLaunchingWithOptions: in AppDelegate.
  *
- *  @param name the name of the cache to be deleted
+ *  @param name The name of the cache file to delete. If name is nil, deletes all cache files.
  */
 + (void)deleteCacheWithName:(NSString *)name;
 
@@ -152,7 +154,7 @@
  *
  *  @param fetchRequest       the RBQFetchRequest for the controller
  *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)
- *  @param name               the cache name (if nil, caching will still be used and an internal name will be given)
+ *  @param name               the cache name (if nil, cache will be built using an in-Memory Realm and not persisted)
  *
  *  @return A new instance of RBQFetchedResultsController
  */
@@ -163,7 +165,7 @@
 /**
  *  Constructor method to initialize the controller
  
- @warning *Important:* Specify a cache name if deletion of the cache later on is necessary
+    @warning This constructor is primarily for use in testing the FRC. If you don't want to persist the cache, then it is recommended to use nil for the cache name which internally will create an in-Memory Realm for you.
  *
  *  @param fetchRequest       the RBQFetchRequest for the controller
  *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)
@@ -181,6 +183,13 @@
  *  @return Indicates if the fetch was successful
  */
 - (BOOL)performFetch;
+
+/**
+ *  Call this method to force the cache to be rebuilt. 
+ 
+    A potential use case would be to call this in a @catch after trying to call endUpdates for the table view. If an exception is thrown, then the cache will be rebuilt and you can call reloadData on the table view.
+ */
+- (void)reset;
 
 /**
  *  Method to retrieve the number of rows for a given section index

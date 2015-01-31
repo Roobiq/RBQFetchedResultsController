@@ -187,9 +187,25 @@
 
 + (void)deleteCacheWithName:(NSString *)name
 {
-    RLMRealm *cacheRealm = [RBQFetchedResultsController realmForCacheName:name];
-    
-    [cacheRealm deleteAllObjects];
+    if (name) {
+        NSError *error;
+        if (![[NSFileManager defaultManager] removeItemAtPath:[RBQFetchedResultsController basePathForCacheWithName:name]
+                                                        error:&error]) {
+#ifdef DEBUG
+            NSLog(@"%@",error.localizedDescription);
+#endif
+        }
+    }
+    // No name, so lets clear all caches
+    else {
+        NSError *error;
+        if (![[NSFileManager defaultManager] removeItemAtPath:[RBQFetchedResultsController basePathForCaches]
+                                                        error:&error]) {
+#ifdef DEBUG
+            NSLog(@"%@",error.localizedDescription);
+#endif
+        }
+    }
 }
 
 #pragma mark - Private Class
@@ -222,12 +238,15 @@
 //  Create a file path for Realm cache with a given name
 + (NSString *)cachePathWithName:(NSString *)name
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentPath = [paths objectAtIndex:0];
+    NSString *basePath = [RBQFetchedResultsController basePathForCaches];
+    
     BOOL isDir = NO;
     NSError *error = nil;
     
-    NSString *cachePath = [documentPath stringByAppendingPathComponent:@"/RBQFetchedResultsControllerCache/"];
+    //Create a unique directory for each cache
+    NSString *uniqueDirectory = [NSString stringWithFormat:@"/%@/",name];
+    
+    NSString *cachePath = [basePath stringByAppendingPathComponent:uniqueDirectory];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath isDirectory:&isDir] && isDir == NO) {
         [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:&error];
@@ -236,6 +255,42 @@
     NSString *fileName = [NSString stringWithFormat:@"%@.realm",name];
     
     cachePath = [cachePath stringByAppendingPathComponent:fileName];
+    
+    return cachePath;
+}
+
++ (NSString *)basePathForCaches
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = [paths objectAtIndex:0];
+    BOOL isDir = NO;
+    NSError *error = nil;
+    
+    //Base path for all caches
+    NSString *basePath = [documentPath stringByAppendingPathComponent:@"/RBQFetchedResultsControllerCache"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:basePath isDirectory:&isDir] && isDir == NO) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:basePath withIntermediateDirectories:NO attributes:nil error:&error];
+    }
+    
+    return basePath;
+}
+
++ (NSString *)basePathForCacheWithName:(NSString *)name
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = [paths objectAtIndex:0];
+    BOOL isDir = NO;
+    NSError *error = nil;
+    
+    //Unique directory for the cache
+    NSString *uniqueDirectory = [NSString stringWithFormat:@"/RBQFetchedResultsControllerCache/%@",name];
+    
+    NSString *cachePath = [documentPath stringByAppendingPathComponent:uniqueDirectory];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath isDirectory:&isDir] && isDir == NO) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:&error];
+    }
     
     return cachePath;
 }
@@ -301,6 +356,15 @@
                                  userInfo:nil];
     
     return NO;
+}
+
+- (void)reset
+{
+    RLMRealm *cacheRealm = [self cacheRealm];
+    
+    [cacheRealm deleteAllObjects];
+    
+    [self performFetch];
 }
 
 - (RBQSafeRealmObject *)safeObjectAtIndexPath:(NSIndexPath *)indexPath
@@ -426,9 +490,12 @@
          RBQEntityChangesObject *entityChangesObject = [entityChanges objectForKey:self.fetchRequest.entityName];
          
          if (entityChangesObject) {
+             
+#ifdef DEBUG
              NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
              NSLog(@"%lu Deleted Objects",(unsigned long)entityChangesObject.deletedSafeObjects.count);
              NSLog(@"%lu Changed Objects",(unsigned long)entityChangesObject.changedSafeObjects.count);
+#endif
              
              [self calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
                                      deletedSafeObjects:entityChangesObject.deletedSafeObjects
@@ -480,13 +547,17 @@
                                                               deletedSafeObjects:deletedSafeObjects
                                                               changedSafeObjects:changedSafeObjects
                                                                            state:state];
+#ifdef DEBUG
     NSLog(@"%lu Object Changes",(unsigned long)changeSets.cacheObjectsChangeSet.count);
     NSLog(@"%lu Section Changes",(unsigned long)changeSets.cacheSectionsChangeSet.count);
+#endif
     
     // Make sure we actually identified changes
     // (changes might not match entity name)
     if (!changeSets) {
+#ifdef DEBUG
         NSLog(@"No change objects or section changes found!");
+#endif
         return;
     }
     
@@ -502,10 +573,11 @@
     RBQDerivedChangesObject *derivedChanges = [self deriveChangesWithChangeSets:changeSets
                                                                  sectionChanges:sectionChanges
                                                                           state:state];
-    
+#ifdef DEBUG
     NSLog(@"%lu Derived Added Objects",(unsigned long)derivedChanges.insertedObjectChanges.count);
     NSLog(@"%lu Derived Deleted Objects",(unsigned long)derivedChanges.deletedObjectChanges.count);
     NSLog(@"%lu Derived Moved Objects",(unsigned long)derivedChanges.movedObjectChanges.count);
+#endif
     
     // Apply Derived Changes To Cache
     [self applyDerivedChangesToCache:derivedChanges
@@ -1271,7 +1343,9 @@
     }
     else {
         // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
-        return [RBQFetchedResultsController realmForCacheName:[self nameForFetchRequest:self.fetchRequest]];
+        self.inMemoryRealmCache = [RLMRealm inMemoryRealmWithIdentifier:[self nameForFetchRequest:self.fetchRequest]];
+        
+        return self.inMemoryRealmCache;
     }
     
     return nil;
