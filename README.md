@@ -48,6 +48,9 @@ The FRC receives the changes from the `RBQRealmNotificationManager` and then ide
 
 -(void)controllerDidChangeContent:(RBQFetchedResultsController *)controller;
 ```
+####Documentation
+[Click Here](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Roobiq/RBQFetchedResultsController/master/Documentation/html/index.html)
+
 ####Installation
 RBQFetchedResultsController is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
@@ -69,6 +72,9 @@ open RBQFetchedResultsControllerExample.xcworkspace
 
 * iOS 7+
 * Xcode 6
+
+####Current State
+The components are partially tested, with a few functional tests provided in the example project. The goal with the project is to put this code into the [Roobiq](http://www.roobiq.com) production app.
 
 ####Current Limitations:
 
