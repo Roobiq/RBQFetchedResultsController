@@ -4,3 +4,9 @@
 [submodule "RBQFetchedResultsControllerExample/RBQFetchedResultsController/RBQRealmNotificationManager"]
 	path = RBQFetchedResultsControllerExample/RBQFetchedResultsController/RBQRealmNotificationManager
 	url = https://github.com/Roobiq/RBQRealmNotificationManager
+[submodule "RBQFetchedResultsController/RBQRealmNotificationManager"]
+	path = RBQFetchedResultsController/RBQRealmNotificationManager
+	url = https://github.com/Roobiq/RBQRealmNotificationManager
+[submodule "RBQFetchedResultsController/RealmUtilities"]
+	path = RBQFetchedResultsController/RealmUtilities
+	url = https://github.com/Roobiq/RealmUtilities
