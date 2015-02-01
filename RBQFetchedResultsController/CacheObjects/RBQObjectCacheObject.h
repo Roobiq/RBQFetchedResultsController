@@ -12,6 +12,11 @@
 
 @class RBQSectionCacheObject;
 
+/**
+ * Internal object used by RBQFetchedResultsController. Object represents the original RLMObject within the FRC cache.
+ *
+ *  @warning This class is not to be used external the RBQFetchedResultsController
+ */
 @interface RBQObjectCacheObject : RLMObject <NSCopying>
 
 /**

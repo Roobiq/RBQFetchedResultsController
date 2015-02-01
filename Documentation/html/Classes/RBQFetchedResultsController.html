@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>RBQFetchedResultsController Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">RBQFetchedResultsController </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">“Roobiq”</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/cacheName">cacheName</option>
+		
+		<option value="//api/name/delegate">delegate</option>
+		
+		<option value="//api/name/fetchRequest">fetchRequest</option>
+		
+		<option value="//api/name/fetchedObjects">fetchedObjects</option>
+		
+		<option value="//api/name/sectionNameKeyPath">sectionNameKeyPath</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/deleteCacheWithName:">+ deleteCacheWithName:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/indexPathForObject:">- indexPathForObject:</option>
+		
+		<option value="//api/name/indexPathForSafeObject:">- indexPathForSafeObject:</option>
+		
+		<option value="//api/name/initWithFetchRequest:sectionNameKeyPath:cacheName:">- initWithFetchRequest:sectionNameKeyPath:cacheName:</option>
+		
+		<option value="//api/name/initWithFetchRequest:sectionNameKeyPath:inMemoryRealmCache:">- initWithFetchRequest:sectionNameKeyPath:inMemoryRealmCache:</option>
+		
+		<option value="//api/name/numberOfRowsForSectionIndex:">- numberOfRowsForSectionIndex:</option>
+		
+		<option value="//api/name/numberOfSections">- numberOfSections</option>
+		
+		<option value="//api/name/objectAtIndexPath:">- objectAtIndexPath:</option>
+		
+		<option value="//api/name/objectInRealm:atIndexPath:">- objectInRealm:atIndexPath:</option>
+		
+		<option value="//api/name/performFetch">- performFetch</option>
+		
+		<option value="//api/name/reset">- reset</option>
+		
+		<option value="//api/name/safeObjectAtIndexPath:">- safeObjectAtIndexPath:</option>
+		
+		<option value="//api/name/titleForHeaderInSection:">- titleForHeaderInSection:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">RBQFetchedResultsController Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>RBQFetchedResultsController.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The class is used to monitor changes from a <a href="../Classes/RBQRealmNotificationManager.html">RBQRealmNotificationManager</a> to convert these changes into specific index path or section index changes. Typically this is used to back a UITableView and support animations when items are inserted, deleted, or changed.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/fetchRequest" title="fetchRequest"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fetchRequest">&nbsp;&nbsp;fetchRequest</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The fetch request for the controller</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) RBQFetchRequest *fetchRequest</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The fetch request for the controller</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sectionNameKeyPath" title="sectionNameKeyPath"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sectionNameKeyPath">&nbsp;&nbsp;sectionNameKeyPath</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The section name key path used to create the sections. Can be nil if no sections.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *sectionNameKeyPath</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The section name key path used to create the sections. Can be nil if no sections.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The delegate to pass the index path and section changes to.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, weak) id&lt;RBQFetchedResultsControllerDelegate&gt; delegate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The delegate to pass the index path and section changes to.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/cacheName" title="cacheName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/cacheName">&nbsp;&nbsp;cacheName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The name of the cache used internally to represent the tableview structure.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *cacheName</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The name of the cache used internally to represent the tableview structure.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fetchedObjects" title="fetchedObjects"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fetchedObjects">&nbsp;&nbsp;fetchedObjects</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>All the objects that match the fetch request.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) RLMResults *fetchedObjects</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>All the objects that match the fetch request.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/deleteCacheWithName:" title="deleteCacheWithName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/deleteCacheWithName:">+&nbsp;deleteCacheWithName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Deletes the cached section information with the given name</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)deleteCacheWithName:(NSString *)<em>name</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The name of the cache file to delete. If name is nil, deletes all cache files.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Deletes the cached section information with the given name</p><div class="warning"><p><strong>Warning:</strong> This method should only be called if there are no strong references to the FRC that was using the cache. If deleting all caches (by passing nil for name), it is recommended to do this in didFinishLaunchingWithOptions: in AppDelegate.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithFetchRequest:sectionNameKeyPath:cacheName:" title="initWithFetchRequest:sectionNameKeyPath:cacheName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithFetchRequest:sectionNameKeyPath:cacheName:">&ndash;&nbsp;initWithFetchRequest:sectionNameKeyPath:cacheName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Constructor method to initialize the controller</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)initWithFetchRequest:(RBQFetchRequest *)<em>fetchRequest</em> sectionNameKeyPath:(NSString *)<em>sectionNameKeyPath</em> cacheName:(NSString *)<em>name</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>fetchRequest</code></th>
+						<td><p>the <a href="../Classes/RBQFetchRequest.html">RBQFetchRequest</a> for the controller</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sectionNameKeyPath</code></th>
+						<td><p>the section name key path used to create sections (can be nil)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>the cache name (if nil, cache will be built using an in-Memory Realm and not persisted)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new instance of RBQFetchedResultsController</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Constructor method to initialize the controller</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Specify a cache name if deletion of the cache later on is necessary</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithFetchRequest:sectionNameKeyPath:inMemoryRealmCache:" title="initWithFetchRequest:sectionNameKeyPath:inMemoryRealmCache:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithFetchRequest:sectionNameKeyPath:inMemoryRealmCache:">&ndash;&nbsp;initWithFetchRequest:sectionNameKeyPath:inMemoryRealmCache:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Constructor method to initialize the controller</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)initWithFetchRequest:(RBQFetchRequest *)<em>fetchRequest</em> sectionNameKeyPath:(NSString *)<em>sectionNameKeyPath</em> inMemoryRealmCache:(RLMRealm *)<em>inMemoryRealm</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>fetchRequest</code></th>
+						<td><p>the <a href="../Classes/RBQFetchRequest.html">RBQFetchRequest</a> for the controller</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sectionNameKeyPath</code></th>
+						<td><p>the section name key path used to create sections (can be nil)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>inMemoryRealm</code></th>
+						<td><p>the in-memory Realm to be used for the internal cache</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new instance of RBQFetchedResultsController</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Constructor method to initialize the controller</p><div class="warning"><p><strong>Warning:</strong> This constructor is primarily for use in testing the FRC. If you don&rsquo;t want to persist the cache, then it is recommended to use nil for the cache name which internally will create an in-Memory Realm for you.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/performFetch" title="performFetch"></a>
+	<h3 class="method-title"><code><a href="#//api/name/performFetch">&ndash;&nbsp;performFetch</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Method to tell the controller to perform the fetch</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)performFetch</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Indicates if the fetch was successful</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Method to tell the controller to perform the fetch</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/reset" title="reset"></a>
+	<h3 class="method-title"><code><a href="#//api/name/reset">&ndash;&nbsp;reset</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Call this method to force the cache to be rebuilt.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)reset</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Call this method to force the cache to be rebuilt.</p>
+
+<p>A potential use case would be to call this in a @catch after trying to call endUpdates for the table view. If an exception is thrown, then the cache will be rebuilt and you can call reloadData on the table view.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/numberOfRowsForSectionIndex:" title="numberOfRowsForSectionIndex:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/numberOfRowsForSectionIndex:">&ndash;&nbsp;numberOfRowsForSectionIndex:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Method to retrieve the number of rows for a given section index</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSInteger)numberOfRowsForSectionIndex:(NSInteger)<em>index</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>index</code></th>
+						<td><p>section index</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>number of rows in the section</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Method to retrieve the number of rows for a given section index</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/numberOfSections" title="numberOfSections"></a>
+	<h3 class="method-title"><code><a href="#//api/name/numberOfSections">&ndash;&nbsp;numberOfSections</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Method to retrieve the number of sections represented by the fetch request</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSInteger)numberOfSections</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>number of sections</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Method to retrieve the number of sections represented by the fetch request</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/titleForHeaderInSection:" title="titleForHeaderInSection:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/titleForHeaderInSection:">&ndash;&nbsp;titleForHeaderInSection:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Method to retrieve the title for a given section index</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)titleForHeaderInSection:(NSInteger)<em>section</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>section</code></th>
+						<td><p>section index</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The title of the section</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Method to retrieve the title for a given section index</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/safeObjectAtIndexPath:" title="safeObjectAtIndexPath:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/safeObjectAtIndexPath:">&ndash;&nbsp;safeObjectAtIndexPath:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve the <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> for a given index path</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RBQSafeRealmObject *)safeObjectAtIndexPath:(NSIndexPath *)<em>indexPath</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>indexPath</code></th>
+						<td><p>the index path of the object</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a></p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Retrieve the <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> for a given index path</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/objectAtIndexPath:" title="objectAtIndexPath:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/objectAtIndexPath:">&ndash;&nbsp;objectAtIndexPath:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve the RLMObject for a given index path</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)objectAtIndexPath:(NSIndexPath *)<em>indexPath</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>indexPath</code></th>
+						<td><p>the index path of the object</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>RLMObject</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Retrieve the RLMObject for a given index path</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Returned object is not thread-safe.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/objectInRealm:atIndexPath:" title="objectInRealm:atIndexPath:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/objectInRealm:atIndexPath:">&ndash;&nbsp;objectInRealm:atIndexPath:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve the RLMObject in a specific Realm for a given index path</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)objectInRealm:(RLMRealm *)<em>realm</em> atIndexPath:(NSIndexPath *)<em>indexPath</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>realm</code></th>
+						<td><p>the Realm in which the RLMObject is persisted</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>indexPath</code></th>
+						<td><p>the index path of the object</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>RLMObject</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Retrieve the RLMObject in a specific Realm for a given index path</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/indexPathForSafeObject:" title="indexPathForSafeObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/indexPathForSafeObject:">&ndash;&nbsp;indexPathForSafeObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve the index path for a safe object in the fetch request</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)<em>safeObject</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>safeObject</code></th>
+						<td><p><a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a></p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>index path of the object</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Retrieve the index path for a safe object in the fetch request</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/indexPathForObject:" title="indexPathForObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/indexPathForObject:">&ndash;&nbsp;indexPathForObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve the index path for a RLMObject in the fetch request</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSIndexPath *)indexPathForObject:(RLMObject *)<em>object</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>object</code></th>
+						<td><p>RLMObject</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>index path of the object</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Retrieve the index path for a RLMObject in the fetch request</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 “Roobiq”. All rights reserved. Updated: 2015-02-01</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

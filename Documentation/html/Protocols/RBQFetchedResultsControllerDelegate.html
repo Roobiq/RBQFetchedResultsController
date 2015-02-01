@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>RBQFetchedResultsControllerDelegate Protocol Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">RBQFetchedResultsController </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">“Roobiq”</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:">- controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:</option>
+		
+		<option value="//api/name/controller:didChangeSection:atIndex:forChangeType:">- controller:didChangeSection:atIndex:forChangeType:</option>
+		
+		<option value="//api/name/controllerDidChangeContent:">- controllerDidChangeContent:</option>
+		
+		<option value="//api/name/controllerWillChangeContent:">- controllerWillChangeContent:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">RBQFetchedResultsControllerDelegate Protocol Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Conforms to</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>RBQFetchedResultsController.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Delegate to pass along the changes identified by the <a href="../Classes/RBQFetchedResultsController.html">RBQFetchedResultsController</a>.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/controllerWillChangeContent:" title="controllerWillChangeContent:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerWillChangeContent:">&ndash;&nbsp;controllerWillChangeContent:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Indicates that the controller has started identifying changes.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerWillChangeContent:(RBQFetchedResultsController *)<em>controller</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>controller</code></th>
+						<td><p>controller instance that noticed the change on its fetched objects</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Indicates that the controller has started identifying changes.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:" title="controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:">&ndash;&nbsp;controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Notifies the delegate that a fetched object has been changed due to an add, remove, move, or update. Enables <a href="../Classes/RBQFetchedResultsController.html">RBQFetchedResultsController</a> change tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controller:(RBQFetchedResultsController *)<em>controller</em> didChangeObject:(RBQSafeRealmObject *)<em>anObject</em> atIndexPath:(NSIndexPath *)<em>indexPath</em> forChangeType:(NSFetchedResultsChangeType)<em>type</em> newIndexPath:(NSIndexPath *)<em>newIndexPath</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>controller</code></th>
+						<td><p>controller instance that noticed the change on its fetched objects</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>anObject</code></th>
+						<td><p>changed object represented as a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> for thread safety</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>indexPath</code></th>
+						<td><p>indexPath of changed object (nil for inserts)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>type</code></th>
+						<td><p>indicates if the change was an insert, delete, move, or update</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>newIndexPath</code></th>
+						<td><p>the destination path for inserted or moved objects, nil otherwise</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Notifies the delegate that a fetched object has been changed due to an add, remove, move, or update. Enables <a href="../Classes/RBQFetchedResultsController.html">RBQFetchedResultsController</a> change tracking.</p>
+
+<p>Changes are reported with the following heuristics:</p>
+
+<p>On add and remove operations, only the added/removed object is reported. It’s assumed that all objects that come after the affected object are also moved, but these moves are not reported.</p>
+
+<p>A move is reported when the changed attribute on the object is one of the sort descriptors used in the fetch request. An update of the object is assumed in this case, but no separate update message is sent to the delegate.</p>
+
+<p>An update is reported when an object’s state changes, but the changed attributes aren’t part of the sort keys.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controller:didChangeSection:atIndex:forChangeType:" title="controller:didChangeSection:atIndex:forChangeType:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controller:didChangeSection:atIndex:forChangeType:">&ndash;&nbsp;controller:didChangeSection:atIndex:forChangeType:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The fetched results controller reports changes to its section before changes to the fetched result objects.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controller:(RBQFetchedResultsController *)<em>controller</em> didChangeSection:(RBQFetchedResultsSectionInfo *)<em>section</em> atIndex:(NSUInteger)<em>sectionIndex</em> forChangeType:(NSFetchedResultsChangeType)<em>type</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>controller</code></th>
+						<td><p>controller controller instance that noticed the change on its fetched objects</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>section</code></th>
+						<td><p>changed section represented as a <a href="../Classes/RBQFetchedResultsSectionInfo.html">RBQFetchedResultsSectionInfo</a> object</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sectionIndex</code></th>
+						<td><p>the section index of the changed section</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>type</code></th>
+						<td><p>indicates if the change was an insert or delete</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The fetched results controller reports changes to its section before changes to the fetched result objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerDidChangeContent:" title="controllerDidChangeContent:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerDidChangeContent:">&ndash;&nbsp;controllerDidChangeContent:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is called at the end of processing changes by the controller</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerDidChangeContent:(RBQFetchedResultsController *)<em>controller</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>controller</code></th>
+						<td><p>controller instance that noticed the change on its fetched objects</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is called at the end of processing changes by the controller</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchedResultsController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 “Roobiq”. All rights reserved. Updated: 2015-02-01</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

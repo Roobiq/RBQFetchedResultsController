@@ -28,15 +28,15 @@
 
 /**
  *  Predicate supported by Realm
- 
-    http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates
+ *
+ *  http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates
  */
 @property (nonatomic, strong) NSPredicate *predicate;
 
 /**
  *  Array of RLMSortDescriptors
- 
-    http://realm.io/docs/cocoa/0.89.2/#ordering-results
+ *
+ *  http://realm.io/docs/cocoa/0.89.2/#ordering-results
  */
 @property(nonatomic, strong) NSArray *sortDescriptors;
 
@@ -58,7 +58,7 @@
  *  Constructor method to create a fetch request for a given entity name in an in-memory Realm.
  *
  *  @param entityName Class name for the RLMObject
- *  @param realm      In-memory RLMRealm in which the RLMObject is persisted
+ *  @param inMemoryRealm In-memory RLMRealm in which the RLMObject is persisted
  *  @param predicate  NSPredicate that represents the search query
  *
  *  @return A new instance of RBQFetchRequest
@@ -76,6 +76,8 @@
 
 /**
  *  Retrieve all the RLMObjects for this fetch request in the specified realm.
+ *
+ *  @param realm RLMRealm in which the RLMObjects are persisted
  *
  *  @return RLMResults for all the objects in the fetch request (not thread-safe).
  */

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>RBQFetchRequest Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">RBQFetchedResultsController </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">“Roobiq”</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/entityName">entityName</option>
+		
+		<option value="//api/name/predicate">predicate</option>
+		
+		<option value="//api/name/realm">realm</option>
+		
+		<option value="//api/name/sortDescriptors">sortDescriptors</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/fetchRequestWithEntityName:inMemoryRealm:predicate:">+ fetchRequestWithEntityName:inMemoryRealm:predicate:</option>
+		
+		<option value="//api/name/fetchRequestWithEntityName:inRealm:predicate:">+ fetchRequestWithEntityName:inRealm:predicate:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/evaluateObject:">- evaluateObject:</option>
+		
+		<option value="//api/name/fetchObjects">- fetchObjects</option>
+		
+		<option value="//api/name/fetchObjectsInRealm:">- fetchObjectsInRealm:</option>
+		
+		<option value="//api/name/initWithEntityName:inRealm:">- initWithEntityName:inRealm:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">RBQFetchRequest Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>RBQFetchRequest.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>This class is used by the <a href="../Classes/RBQFetchedResultsController.html">RBQFetchedResultsController</a> to represent the properties of the fetch. The RBQFetchRequest is specific to one RLMObject and uses an NSPredicate and array of RLMSortDescriptors to define the query.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/entityName" title="entityName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/entityName">&nbsp;&nbsp;entityName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>RLMObject class name for the fetch request</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *entityName</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>RLMObject class name for the fetch request</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/realm" title="realm"></a>
+	<h3 class="method-title"><code><a href="#//api/name/realm">&nbsp;&nbsp;realm</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The Realm in which the entity for the fetch request is persisted.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) RLMRealm *realm</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The Realm in which the entity for the fetch request is persisted.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/predicate" title="predicate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/predicate">&nbsp;&nbsp;predicate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Predicate supported by Realm</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSPredicate *predicate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Predicate supported by Realm</p>
+
+<p><a href="http://realm.io/docs/cocoa/0.89.2/">http://realm.io/docs/cocoa/0.89.2/</a>#querying-with-predicates</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sortDescriptors" title="sortDescriptors"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sortDescriptors">&nbsp;&nbsp;sortDescriptors</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Array of RLMSortDescriptors</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSArray *sortDescriptors</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Array of RLMSortDescriptors</p>
+
+<p><a href="http://realm.io/docs/cocoa/0.89.2/">http://realm.io/docs/cocoa/0.89.2/</a>#ordering-results</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fetchRequestWithEntityName:inRealm:predicate:" title="fetchRequestWithEntityName:inRealm:predicate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fetchRequestWithEntityName:inRealm:predicate:">+&nbsp;fetchRequestWithEntityName:inRealm:predicate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Constructor method to create a fetch request for a given entity name in a specific Realm.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)<em>entityName</em> inRealm:(RLMRealm *)<em>realm</em> predicate:(NSPredicate *)<em>predicate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>entityName</code></th>
+						<td><p>Class name for the RLMObject</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>realm</code></th>
+						<td><p>RLMRealm in which the RLMObject is persisted</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>predicate</code></th>
+						<td><p>NSPredicate that represents the search query</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new instance of RBQFetchRequest</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Constructor method to create a fetch request for a given entity name in a specific Realm.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fetchRequestWithEntityName:inMemoryRealm:predicate:" title="fetchRequestWithEntityName:inMemoryRealm:predicate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fetchRequestWithEntityName:inMemoryRealm:predicate:">+&nbsp;fetchRequestWithEntityName:inMemoryRealm:predicate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Constructor method to create a fetch request for a given entity name in an in-memory Realm.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)<em>entityName</em> inMemoryRealm:(RLMRealm *)<em>inMemoryRealm</em> predicate:(NSPredicate *)<em>predicate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>entityName</code></th>
+						<td><p>Class name for the RLMObject</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>inMemoryRealm</code></th>
+						<td><p>In-memory RLMRealm in which the RLMObject is persisted</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>predicate</code></th>
+						<td><p>NSPredicate that represents the search query</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new instance of RBQFetchRequest</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Constructor method to create a fetch request for a given entity name in an in-memory Realm.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fetchObjects" title="fetchObjects"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fetchObjects">&ndash;&nbsp;fetchObjects</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve all the RLMObjects for this fetch request in its <a href="#//api/name/realm">realm</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RLMResults *)fetchObjects</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>RLMResults for all the objects in the fetch request (not thread-safe).</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Retrieve all the RLMObjects for this fetch request in its <a href="#//api/name/realm">realm</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fetchObjectsInRealm:" title="fetchObjectsInRealm:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fetchObjectsInRealm:">&ndash;&nbsp;fetchObjectsInRealm:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve all the RLMObjects for this fetch request in the specified <a href="#//api/name/realm">realm</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RLMResults *)fetchObjectsInRealm:(RLMRealm *)<em>realm</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>realm</code></th>
+						<td><p>RLMRealm in which the RLMObjects are persisted</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>RLMResults for all the objects in the fetch request (not thread-safe).</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Retrieve all the RLMObjects for this fetch request in the specified <a href="#//api/name/realm">realm</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/evaluateObject:" title="evaluateObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/evaluateObject:">&ndash;&nbsp;evaluateObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Should this object be in our fetch results?</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)evaluateObject:(RLMObject *)<em>object</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>object</code></th>
+						<td><p>Realm object of appropriate type</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES if performing fetch would include this object</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Should this object be in our fetch results?</p>
+
+<p>Intended to be used by the <a href="../Classes/RBQFetchedResultsController.html">RBQFetchedResultsController</a> to evaluate incremental changes. For
+simple fetch requests this just evaluates the NSPredicate, but subclasses may have a more
+complicated implementaiton.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithEntityName:inRealm:" title="initWithEntityName:inRealm:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithEntityName:inRealm:">&ndash;&nbsp;initWithEntityName:inRealm:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Create RBQFetchRequest in RLMRealm instance with an entity name</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithEntityName:(NSString *)<em>entityName</em> inRealm:(RLMRealm *)<em>realm</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>entityName</code></th>
+						<td><p>Class name for the RLMObject</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>realm</code></th>
+						<td><p>RLMRealm in which the RLMObject is persisted</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new instance of RBQFetchRequest</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Create RBQFetchRequest in RLMRealm instance with an entity name</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQFetchRequest.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 “Roobiq”. All rights reserved. Updated: 2015-02-01</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

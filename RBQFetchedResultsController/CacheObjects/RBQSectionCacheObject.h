@@ -11,6 +11,11 @@
 
 RLM_ARRAY_TYPE(RBQObjectCacheObject)
 
+/**
+ * Internal object used by RBQFetchedResultsController cache. Object represents a section within the FRC cache.
+ *
+ * @warning This class is not to be used external the RBQFetchedResultsController
+ */
 @interface RBQSectionCacheObject : RLMObject
 
 /**
