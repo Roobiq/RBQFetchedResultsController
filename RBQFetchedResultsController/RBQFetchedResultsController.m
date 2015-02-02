@@ -694,7 +694,7 @@
             if (sectionNameKeyPath) {
                 
                 // Check your sectionNameKeyPath if a crash occurs...
-                NSString *sectionTitle = [object valueForKey:sectionNameKeyPath];
+                NSString *sectionTitle = object[sectionNameKeyPath];
                 
                 // New Section Found --> Process It
                 if (![sectionTitle isEqualToString:currentSectionTitle]) {
