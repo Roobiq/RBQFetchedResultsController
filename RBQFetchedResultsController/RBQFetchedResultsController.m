@@ -180,13 +180,11 @@
 + (void)deleteCacheWithName:(NSString *)name
 {
     if (name) {
-        NSError *error;
-        if (![[NSFileManager defaultManager] removeItemAtPath:[RBQFetchedResultsController basePathForCacheWithName:name]
-                                                        error:&error]) {
-#ifdef DEBUG
-            NSLog(@"%@",error.localizedDescription);
-#endif
-        }
+        RLMRealm *cacheRealm = [RBQFetchedResultsController realmForCacheName:name];
+        
+        [cacheRealm beginWriteTransaction];
+        [cacheRealm deleteAllObjects];
+        [cacheRealm commitWriteTransaction];
     }
     // No name, so lets clear all caches
     else {
@@ -450,16 +448,26 @@
 
 #pragma mark - Private
 
+- (void)dealloc
+{
+    // Remove the notifications
+    [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
+    [[self cacheRealm] removeNotification:self.cacheNotificationToken];
+}
+
 // Register the change notification from RBQRealmNotificationManager
 - (void)registerChangeNotifications
 {
+    typeof(self) __weak weakSelf = self;
+    
     self.notificationToken =
     [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
      ^(NSDictionary *entityChanges,
        RLMRealm *realm)
      {
          // Grab the entity changes object if it is available
-         RBQEntityChangesObject *entityChangesObject = [entityChanges objectForKey:self.fetchRequest.entityName];
+         RBQEntityChangesObject *entityChangesObject =
+         [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
          
          if (entityChangesObject) {
              
@@ -469,9 +477,9 @@
              NSLog(@"%lu Changed Objects",(unsigned long)entityChangesObject.changedSafeObjects.count);
 #endif
              
-             [self calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
-                                     deletedSafeObjects:entityChangesObject.deletedSafeObjects
-                                     changedSafeObjects:entityChangesObject.changedSafeObjects
+             [weakSelf calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
+                                         deletedSafeObjects:entityChangesObject.deletedSafeObjects
+                                         changedSafeObjects:entityChangesObject.changedSafeObjects
                                                   realm:realm];
          }
      }];
@@ -479,7 +487,7 @@
     // Notification block to update the state of the cache when the cache Realm updates
     self.cacheNotificationToken =
     [[self cacheRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
-        RBQControllerCacheObject *cache = [self cacheInRealm:realm];
+        RBQControllerCacheObject *cache = [weakSelf cacheInRealm:realm];
         
         if (cache.state == RBQControllerCacheStateProcessing) {
             [realm beginWriteTransaction];
@@ -1324,9 +1332,7 @@
     }
     else {
         // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
-        self.inMemoryRealmCache = [RLMRealm inMemoryRealmWithIdentifier:[self nameForFetchRequest:self.fetchRequest]];
-        
-        return self.inMemoryRealmCache;
+        return [RBQFetchedResultsController realmForCacheName:[self nameForFetchRequest:self.fetchRequest]];
     }
     
     return nil;

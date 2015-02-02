@@ -135,7 +135,11 @@
 /**
  *  Deletes the cached section information with the given name
  *
- *  @warning This method should only be called if there are no strong references to the FRC that was using the cache. If deleting all caches (by passing nil for name), it is recommended to do this in didFinishLaunchingWithOptions: in AppDelegate.
+ *  If name is not nil, then the cache will be cleaned, but not deleted from disk. 
+ *
+ *  If name is nil, then all caches will be deleted by removing the files from disk.
+ *
+ *  @warning  If clearing all caches (name is nil), it is recommended to do this in didFinishLaunchingWithOptions: in AppDelegate because RLMRealm files cannot be deleted from disk safely, if there are strong references to them.
  *
  *  @param name The name of the cache file to delete. If name is nil, deletes all cache files.
  */
@@ -144,11 +148,11 @@
 /**
  *  Constructor method to initialize the controller
  *
- *  @warning *Important:* Specify a cache name if deletion of the cache later on is necessary
+ *  @warning Specify a cache name if deletion of the cache later on is necessary
  *
  *  @param fetchRequest       the RBQFetchRequest for the controller
  *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)
- *  @param name               the cache name (if nil, cache will be built using an in-Memory Realm and not persisted)
+ *  @param name               the cache name (if nil, caching will still be used but the name will be generated from the fetch request hash)
  *
  *  @return A new instance of RBQFetchedResultsController
  */
@@ -157,9 +161,7 @@
                  cacheName:(NSString *)name;
 
 /**
- *  Constructor method to initialize the controller
- *
- *  @warning This constructor is primarily for use in testing the FRC. If you don't want to persist the cache, then it is recommended to use nil for the cache name which internally will create an in-Memory Realm for you.
+ *  Constructor method to initialize the controller using an in-memory Realm rather than the persisted cache
  *
  *  @param fetchRequest       the RBQFetchRequest for the controller
  *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)
