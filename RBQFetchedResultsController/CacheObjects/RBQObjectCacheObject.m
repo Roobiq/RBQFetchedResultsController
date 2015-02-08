@@ -27,7 +27,7 @@
         cacheObject.primaryKeyStringValue = (NSString *)primaryKeyValue;
     }
     else {
-        cacheObject.primaryKeyStringValue = @((NSInteger)primaryKeyValue).stringValue;
+        cacheObject.primaryKeyStringValue = ((NSNumber *)primaryKeyValue).stringValue;
     }
     
     return cacheObject;
