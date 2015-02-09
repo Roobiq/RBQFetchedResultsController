@@ -13,7 +13,9 @@
 @class RBQSectionCacheObject;
 
 /**
- * Internal object used by RBQFetchedResultsController. Object represents the original RLMObject within the FRC cache.
+ * Internal object used by RBQFetchedResultsController.
+ *
+ * RBQObjectCacheObject represents the original RLMObject within the FRC cache.
  *
  *  @warning This class is not to be used external the RBQFetchedResultsController
  */
@@ -31,6 +33,9 @@
 
 /**
  *  Primary key type (use to convert the string value if necessary)
+ *
+ * @warning Only supports RLMPropertyTypeInt and RLMPropertyTypeString, which are the only
+ * supported Realm primary key types as of v0.90.5.
  */
 @property NSInteger primaryKeyType;
 

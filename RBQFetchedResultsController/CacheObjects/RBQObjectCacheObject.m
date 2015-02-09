@@ -26,8 +26,11 @@
     if (cacheObject.primaryKeyType == RLMPropertyTypeString) {
         cacheObject.primaryKeyStringValue = (NSString *)primaryKeyValue;
     }
-    else {
+    else if (cacheObject.primaryKeyType == RLMPropertyTypeInt) {
         cacheObject.primaryKeyStringValue = ((NSNumber *)primaryKeyValue).stringValue;
+    }
+    else {
+        @throw([self unsupportedPrimaryKeyTypeException]);
     }
     
     return cacheObject;
@@ -44,8 +47,11 @@
     if (cacheObject.primaryKeyType == RLMPropertyTypeString) {
         cacheObject.primaryKeyStringValue = (NSString *)safeObject.primaryKeyValue;
     }
+    else if (cacheObject.primaryKeyType == RLMPropertyTypeInt) {
+        cacheObject.primaryKeyStringValue = ((NSNumber *)safeObject.primaryKeyValue).stringValue;
+    }
     else {
-        cacheObject.primaryKeyStringValue = @((NSInteger)safeObject.primaryKeyValue).stringValue;
+        @throw([self unsupportedPrimaryKeyTypeException]);
     }
     
     return cacheObject;
@@ -55,18 +61,22 @@
                          forObject:(RLMObject *)object
 {
     if (object) {
-        NSString *primaryKeyValue = (NSString *)[RLMObject primaryKeyValueForObject:object];
+        id primaryKeyValue = [RLMObject primaryKeyValueForObject:object];
+        RLMPropertyType primaryKeyType = object.objectSchema.primaryKeyProperty.type;
         
-        if (object.objectSchema.primaryKeyProperty.type == RLMPropertyTypeString) {
+        if (primaryKeyType == RLMPropertyTypeString) {
             
             return [RBQObjectCacheObject objectInRealm:realm
                                          forPrimaryKey:primaryKeyValue];
         }
-        else {
-            NSNumber *numberFromString = @(primaryKeyValue.integerValue);
+        else if (primaryKeyType == RLMPropertyTypeInt) {
+            NSString *primaryKeyStringValue = ((NSNumber *)primaryKeyValue).stringValue;
             
             return [RBQObjectCacheObject objectInRealm:realm
-                                         forPrimaryKey:(id)numberFromString];
+                                         forPrimaryKey:primaryKeyStringValue];
+        }
+        else {
+            @throw([self unsupportedPrimaryKeyTypeException]);
         }
     }
     
@@ -76,16 +86,18 @@
 + (RLMObject *)objectInRealm:(RLMRealm *)realm
               forCacheObject:(RBQObjectCacheObject *)cacheObject
 {
+    Class realClass = NSClassFromString(cacheObject.className);
     if (cacheObject.primaryKeyType == RLMPropertyTypeString) {
         
-        return [NSClassFromString(cacheObject.className) objectInRealm:realm
-                                                         forPrimaryKey:cacheObject.primaryKeyStringValue];
+        return [realClass objectInRealm:realm forPrimaryKey:cacheObject.primaryKeyStringValue];
     }
-    else {
+    else if (cacheObject.primaryKeyType == RLMPropertyTypeInt) {
         NSNumber *numberFromString = @(cacheObject.primaryKeyStringValue.integerValue);
         
-        return [NSClassFromString(cacheObject.className) objectInRealm:realm
-                                                         forPrimaryKey:(id)numberFromString];
+        return [realClass objectInRealm:realm forPrimaryKey:numberFromString];
+    }
+    else {
+        @throw ([self unsupportedPrimaryKeyTypeException]);
     }
 }
 
@@ -148,6 +160,15 @@
     objectCache.section = self.section;
     
     return objectCache;
+}
+
+#pragma mark - Helper exception
+
++ (NSException *)unsupportedPrimaryKeyTypeException
+{
+    return [NSException exceptionWithName:@"Unsupported primary key type"
+                                   reason:@"RBQFetchedResultsController only supports NSString or int/NSInteger primary keys"
+                                 userInfo:nil];
 }
 
 @end
