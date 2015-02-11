@@ -20,7 +20,6 @@
 @interface RBQFetchedResultsController ()
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
-@property (strong, nonatomic) RLMNotificationToken *cacheNotificationToken;
 @property (weak, nonatomic) RLMRealm *inMemoryRealmCache;
 
 @end
@@ -450,9 +449,8 @@
 
 - (void)dealloc
 {
-    // Remove the notifications
+    // Remove the notification
     [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
-    [[self cacheRealm] removeNotification:self.cacheNotificationToken];
 }
 
 // Register the change notification from RBQRealmNotificationManager
@@ -483,18 +481,6 @@
                                                   realm:realm];
          }
      }];
-    
-    // Notification block to update the state of the cache when the cache Realm updates
-    self.cacheNotificationToken =
-    [[self cacheRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
-        RBQControllerCacheObject *cache = [weakSelf cacheInRealm:realm];
-        
-        if (cache.state == RBQControllerCacheStateProcessing) {
-            [realm beginWriteTransaction];
-            cache.state = RBQControllerCacheStateReady;
-            [realm commitWriteTransaction];
-        }
-    }];
 }
 
 #pragma mark - Change Calculations
@@ -545,9 +531,6 @@
                                                                                  state:state];
     
     [state.cacheRealm beginWriteTransaction];
-    
-    // Update the state to make sure we rebuild cache if save fails
-    state.cache.state = RBQControllerCacheStateProcessing;
     
     // Create Object To Gather Up Derived Changes
     RBQDerivedChangesObject *derivedChanges = [self deriveChangesWithChangeSets:changeSets
@@ -667,7 +650,6 @@
      */
     if (controllerCache.fetchRequestHash != fetchRequest.hash ||
         controllerCache.objects.count != fetchResults.count ||
-        controllerCache.state == RBQControllerCacheStateProcessing ||
         ![controllerCache.sectionNameKeyPath isEqualToString:sectionNameKeyPath]) {
         
         [cacheRealm deleteAllObjects];

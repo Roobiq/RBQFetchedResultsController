@@ -9,20 +9,6 @@
 #import <Realm/Realm.h>
 #import "RBQSectionCacheObject.h"
 
-/**
- Represents the current state of the FRC cache
- */
-typedef NS_ENUM(NSUInteger, RBQControllerCacheState){
-    /**
-     Cache is ready
-     */
-    RBQControllerCacheStateReady,
-    /**
-     Cache is processing (if the app is forced closed in this state, the cache will be rebuilt)
-     */
-    RBQControllerCacheStateProcessing
-};
-
 RLM_ARRAY_TYPE(RBQSectionCacheObject)
 
 /**
@@ -41,13 +27,6 @@ RLM_ARRAY_TYPE(RBQSectionCacheObject)
  *  Hash for RBQFetchRequest to monitor if cache needs rebuilt
  */
 @property NSInteger fetchRequestHash;
-
-/**
- *  Used to track if the cache was processing while app is terminated
- *  
- *  @warning *Important:* If cache is not ready, when requested, it will be rebuilt (this can occur if the app is forced closed while the cache is processing.
- */
-@property NSInteger state;
 
 /**
  *  Used to track the current section name key path if any for the cache
