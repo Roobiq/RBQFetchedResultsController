@@ -99,7 +99,7 @@
 
 @property (strong, nonatomic) NSOrderedSet *cacheObjectsChangeSet;
 @property (strong, nonatomic) NSOrderedSet *cacheSectionsChangeSet;
-@property (strong, nonatomic) NSDictionary *cacheObjectToSafeObject;
+@property (strong, nonatomic) NSMapTable *cacheObjectToSafeObject;
 
 @end
 
@@ -789,7 +789,7 @@
     // Get Sections In Change Set
     NSMutableOrderedSet *cacheSectionsInChangeSet = [[NSMutableOrderedSet alloc] init];
     NSMutableOrderedSet *cacheObjectsChangeSet = [[NSMutableOrderedSet alloc] init];
-    NSMutableDictionary *cacheObjectToSafeObject = @{}.mutableCopy;
+    NSMapTable *cacheObjectToSafeObject = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory valueOptions:NSPointerFunctionsStrongMemory];
     
     for (NSSet *changedObjects in @[addedSafeObjects, deletedSafeObjects, changedSafeObjects]) {
         
@@ -856,7 +856,7 @@
         
         changeSets.cacheSectionsChangeSet = cacheSectionsInChangeSet.copy;
         changeSets.cacheObjectsChangeSet = cacheObjectsChangeSet.copy;
-        changeSets.cacheObjectToSafeObject = cacheObjectToSafeObject.copy;
+        changeSets.cacheObjectToSafeObject = cacheObjectToSafeObject;
         
         return changeSets;
     }

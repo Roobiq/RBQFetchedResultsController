@@ -153,11 +153,11 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     RBQObjectCacheObject *objectCache = [[RBQObjectCacheObject allocWithZone:zone] init];
-    objectCache.className = self.className;
-    objectCache.primaryKeyStringValue = self.primaryKeyStringValue;
-    objectCache.primaryKeyType = self.primaryKeyType;
-    objectCache.sectionKeyPathValue = self.sectionKeyPathValue;
-    objectCache.section = self.section;
+    objectCache.className = _className;
+    objectCache.primaryKeyStringValue = _primaryKeyStringValue;
+    objectCache.primaryKeyType = _primaryKeyType;
+    objectCache.sectionKeyPathValue = _sectionKeyPathValue;
+    objectCache.section = _section;
     
     return objectCache;
 }
