@@ -592,6 +592,9 @@
                 // Insert the object
                 [state.cacheRealm addObject:objectChange.updatedCacheObject];
                 
+                // Add the object to the objects array and not just to the Realm!
+                [state.cache.objects addObject:objectChange.updatedCacheObject];
+                
                 // Get the section and add it to it
                 RBQSectionCacheObject *section =
                 [RBQSectionCacheObject objectInRealm:state.cacheRealm
@@ -611,6 +614,9 @@
                 
                 // Add it back in
                 [state.cacheRealm addObject:objectChange.updatedCacheObject];
+                
+                // Add the object to the objects array and not just to the Realm!
+                [state.cache.objects addObject:objectChange.updatedCacheObject];
                 
                 // Get the section and add it to it
                 RBQSectionCacheObject *section =
@@ -1159,11 +1165,18 @@
     NSAssert(state, @"State can't be nil!");
 #endif
     
+    // We will first process to find inserts/deletes
     NSMutableOrderedSet *deletedObjectChanges = [[NSMutableOrderedSet alloc] init];
     NSMutableOrderedSet *insertedObjectChanges = [[NSMutableOrderedSet alloc] init];
-    NSMutableOrderedSet *movedObjectChanges = [[NSMutableOrderedSet alloc] init];
     
-    NSUInteger countChange = ABS(state.fetchResults.count - state.cache.objects.count);
+    NSMutableDictionary *deletedObjectChangesBySection = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *insertedObjectChangesBySection = [[NSMutableDictionary alloc] init];
+    
+    /**
+     *  We will collect any cache objects that aren't inserts/deletes to
+     *  process them in a second batch to find moves/updates
+     */
+    NSMutableSet *moveOrUpdateObjectChanges = [[NSMutableSet alloc] init];
     
     for (RBQObjectCacheObject *cacheObject in changeSets.cacheObjectsChangeSet) {
         
@@ -1171,7 +1184,7 @@
                                                                      changeSets:changeSets
                                                                  sectionChanges:sectionChanges
                                                                           state:state];
-        
+    
         // If we didn't get an object change then skip
         if (!objectChange) {
             continue;
@@ -1202,7 +1215,43 @@
             
             objectChange.changeType = NSFetchedResultsChangeDelete;
             
-            [deletedObjectChanges addObject:objectChange];
+            // Keep track of the sorted list of deleted object changes
+            NSRange sortRange = NSMakeRange(0, deletedObjectChanges.count);
+            NSUInteger indexToInsert =
+            [deletedObjectChanges indexOfObject:objectChange
+                                   inSortedRange:sortRange
+                                         options:NSBinarySearchingInsertionIndex
+                                 usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                     RBQObjectChangeObject *obj2) {
+                                     // Compare the indexPaths
+                                     return [obj1.previousIndexPath compare:obj2.previousIndexPath];
+                                 }];
+            
+            [deletedObjectChanges insertObject:objectChange atIndex:indexToInsert];
+            
+            NSMutableOrderedSet *deletedChangesInSection =
+            [deletedObjectChangesBySection objectForKey:@(objectChange.previousIndexPath.section)];
+            
+            if (!deletedChangesInSection) {
+                deletedChangesInSection = [[NSMutableOrderedSet alloc] init];
+                
+                [deletedObjectChangesBySection setObject:deletedChangesInSection
+                                                  forKey:@(objectChange.previousIndexPath.section)];
+            }
+            
+            // Keep track of the sorted list of deleted object changes for its section
+            NSRange sortRangeForSection = NSMakeRange(0, deletedChangesInSection.count);
+            NSUInteger indexToInsertForSection =
+            [deletedChangesInSection indexOfObject:objectChange
+                                     inSortedRange:sortRangeForSection
+                                           options:NSBinarySearchingInsertionIndex
+                                   usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                       RBQObjectChangeObject *obj2) {
+                                    // Compare the indexPaths
+                                    return [obj1.previousIndexPath compare:obj2.previousIndexPath];
+                                }];
+            
+            [deletedChangesInSection insertObject:objectChange atIndex:indexToInsertForSection];
         }
         // Inserted Objects
         else if (objectChange.updatedIndexpath &&
@@ -1228,7 +1277,7 @@
             }
             objectChange.changeType = NSFetchedResultsChangeInsert;
             
-            // Insert and sort items (fixes crashes when there are no objects yet!)
+            // Keep track of the sorted list of inserted object changes
             NSRange sortRange = NSMakeRange(0, insertedObjectChanges.count);
             NSUInteger indexToInsert =
             [insertedObjectChanges indexOfObject:objectChange
@@ -1241,12 +1290,218 @@
                                      }];
             
             [insertedObjectChanges insertObject:objectChange atIndex:indexToInsert];
+            
+            NSMutableOrderedSet *insertedChangesInSection =
+            [insertedObjectChangesBySection objectForKey:@(objectChange.updatedIndexpath.section)];
+            
+            if (!insertedChangesInSection) {
+                insertedChangesInSection = [[NSMutableOrderedSet alloc] init];
+                
+                [insertedObjectChangesBySection setObject:insertedChangesInSection
+                                                   forKey:@(objectChange.updatedIndexpath.section)];
+            }
+            
+            // Keep track of the sorted list of inserted object changes for its section
+            NSRange sortRangeForSection = NSMakeRange(0, insertedChangesInSection.count);
+            NSUInteger indexToInsertForSection =
+            [insertedChangesInSection indexOfObject:objectChange
+                                      inSortedRange:sortRangeForSection
+                                            options:NSBinarySearchingInsertionIndex
+                                    usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                        RBQObjectChangeObject *obj2) {
+                                       // Compare the indexPaths
+                                       return [obj1.previousIndexPath compare:obj2.previousIndexPath];
+                                   }];
+            
+            [insertedObjectChanges insertObject:objectChange atIndex:indexToInsertForSection];
         }
-        // Moved Objects
-        // Compare the row changes to the count change
-        // Fixes issue where we miss a move because indexes are now the same because of deletes/inserts
-        else if ((objectChange.previousIndexPath.section == objectChange.updatedIndexpath.section) &&
-                 (ABS(objectChange.previousIndexPath.row - objectChange.updatedIndexpath.row) != countChange)) {
+        // For all objectChanges that are not inserts/deletes, store them to process next
+        else {
+            [moveOrUpdateObjectChanges addObject:objectChange];
+        }
+    }
+    
+    NSMutableOrderedSet *movedObjectChanges = [[NSMutableOrderedSet alloc] init];
+    
+    /**
+     *  Now we will process the remaining items to identify moves/updates
+     *
+     *  To accurately find moves, we need to calculate the absolute change to the section and row
+     *  
+     *  To identify absolute changes, we need to figure out the relative changes to sections and rows
+     */
+    
+    
+    /**
+     *  First we will create two collections: the inserted section indexes and deleted section indexes
+     *  
+     *  Both of these will be used to calculate the relative section changes for a given objectChange
+     */
+    
+    NSMutableOrderedSet *insertedSectionIndexes =
+    [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.insertedCacheSections.count];
+    
+    for (RBQSectionCacheObject *sectionCache in sectionChanges.insertedCacheSections) {
+        NSNumber *index = @([sectionChanges.sortedNewCacheSections indexOfObject:sectionCache]);
+        
+        NSRange sortRangeSectionInserts = NSMakeRange(0, insertedSectionIndexes.count);
+        NSUInteger indexForInsert =
+        [insertedSectionIndexes indexOfObject:index
+                               inSortedRange:sortRangeSectionInserts
+                                     options:NSBinarySearchingInsertionIndex
+                             usingComparator:^NSComparisonResult(NSNumber *num1,
+                                                                 NSNumber *num2) {
+                                 // Compare the NSNumbers
+                                 return [num1 compare:num2];
+                             }];
+        
+        [insertedSectionIndexes insertObject:index atIndex:indexForInsert];
+    }
+    
+    NSMutableOrderedSet *deletedSectionIndexes =
+    [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.deletedCacheSections.count];
+    
+    for (RBQSectionCacheObject *sectionCache in sectionChanges.deletedCacheSections) {
+        NSNumber *index = @([sectionChanges.oldCacheSections indexOfObject:sectionCache]);
+        
+        NSRange sortRangeSectionInserts = NSMakeRange(0, deletedSectionIndexes.count);
+        NSUInteger indexForInsert =
+        [deletedSectionIndexes indexOfObject:index
+                               inSortedRange:sortRangeSectionInserts
+                                     options:NSBinarySearchingInsertionIndex
+                             usingComparator:^NSComparisonResult(NSNumber *num1,
+                                                                 NSNumber *num2) {
+                                  // Compare the NSNumbers
+                                  return [num1 compare:num2];
+                              }];
+        
+        [deletedSectionIndexes insertObject:index atIndex:indexForInsert];
+    }
+    
+    /**
+     *  Now that we have the inserted/deleted section index collections and 
+     *  the inserted/deleted objectChange collections, we can process the remaining
+     *  objectChanges to accurately identify moves
+     */
+    
+    for (RBQObjectChangeObject *objectChange in moveOrUpdateObjectChanges) {
+        
+        /**
+         *  Calculate the relative section changes
+         */
+        // Get the number of section inserts that occurred before the updated indexPath
+        // We calculate this by asking for the index if we were to insert into insertedSectionIndexes collection
+        NSRange sortRangeSectionInserts = NSMakeRange(0, insertedSectionIndexes.count);
+        NSUInteger sectionInserts =
+        [insertedSectionIndexes indexOfObject:@(objectChange.updatedIndexpath.section)
+                                inSortedRange:sortRangeSectionInserts
+                                      options:NSBinarySearchingInsertionIndex
+                              usingComparator:^NSComparisonResult(NSNumber *num1,
+                                                                  NSNumber *num2) {
+                                  // Compare the NSNumbers
+                                  return [num1 compare:num2];
+                              }];
+        
+        // Get the number of section deletes that occurred before the updated indexPath
+        // We calculate this by asking for the index if we were to insert into deletedSectionIndexes collection
+        NSRange sortRangeSectionDeletes = NSMakeRange(0, deletedSectionIndexes.count);
+        NSUInteger sectionDeletes =
+        [deletedSectionIndexes indexOfObject:@(objectChange.previousIndexPath.section)
+                               inSortedRange:sortRangeSectionDeletes
+                                     options:NSBinarySearchingInsertionIndex
+                             usingComparator:^NSComparisonResult(NSNumber *num1,
+                                                                  NSNumber *num2) {
+                                  // Compare the NSNumbers
+                                  return [num1 compare:num2];
+                              }];
+        
+        NSInteger relativeSectionChange = sectionInserts - sectionDeletes;
+        
+        /**
+         *  If we have an absolute section change for the object than process it here
+         */
+        if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
+            (objectChange.updatedIndexpath.section - objectChange.previousIndexPath.section) != relativeSectionChange) {
+            
+            RBQSafeRealmObject *safeObject =
+            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
+            
+#ifdef DEBUG
+            NSAssert(safeObject, @"Safe object can't be nil!");
+#endif
+            
+            if ([self.delegate respondsToSelector:
+                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.delegate controller:self
+                              didChangeObject:safeObject
+                                  atIndexPath:objectChange.previousIndexPath
+                                forChangeType:NSFetchedResultsChangeMove
+                                 newIndexPath:objectChange.updatedIndexpath];
+                });
+            }
+            
+            objectChange.changeType = NSFetchedResultsChangeMove;
+            
+            [movedObjectChanges addObject:objectChange];
+            
+            // We now need to move onto the next objectChange
+            continue;
+        }
+        
+        /**
+         *  Since we didn't find a section change, now we have to get
+         *  the relative row changes for the section
+         */
+        NSOrderedSet *insertedObjectChangesForSection =
+        [insertedObjectChangesBySection objectForKey:@(objectChange.updatedIndexpath.section)];
+        
+        NSUInteger rowInserts = 0;
+        
+        if (insertedObjectChangesForSection) {
+            // Get the number of row inserts that occurred before the updated indexPath
+            // We calculate this by asking for the index if we were to insert object into the insert collection
+            NSRange sortRangeRowInserts = NSMakeRange(0, insertedObjectChanges.count);
+            rowInserts =
+            [insertedObjectChanges indexOfObject:objectChange
+                                   inSortedRange:sortRangeRowInserts
+                                         options:NSBinarySearchingInsertionIndex
+                                 usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                     RBQObjectChangeObject *obj2) {
+                                     // Compare the indexPaths
+                                     return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
+                                 }];
+        }
+        
+        NSOrderedSet *deletedObjectChangesForSection =
+        [deletedObjectChangesBySection objectForKey:@(objectChange.previousIndexPath.section)];
+        
+        NSUInteger rowDeletes = 0;
+        
+        if (deletedObjectChangesForSection) {
+            // Get the number of row deletes that occurred before the updated indexPath
+            // We calculate this by asking for the index if we were to insert object into the delete collection
+            NSRange sortRangeRowDeletes = NSMakeRange(0, deletedObjectChanges.count);
+            rowDeletes =
+            [deletedObjectChanges indexOfObject:objectChange
+                                  inSortedRange:sortRangeRowDeletes
+                                        options:NSBinarySearchingInsertionIndex
+                                usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                    RBQObjectChangeObject *obj2) {
+                                    // Compare the indexPaths
+                                    return [obj1.previousIndexPath compare:obj2.previousIndexPath];
+                                }];
+        }
+        
+        NSInteger relativeRowChange = rowInserts - rowDeletes;
+        
+        /**
+         *  Now that we have the relative row change, we can identify if there 
+         *  was an absolute change and report the move
+         */
+        if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
+            (objectChange.updatedIndexpath.row - objectChange.previousIndexPath.row) != relativeRowChange) {
             
             RBQSafeRealmObject *safeObject =
             [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
@@ -1271,9 +1526,11 @@
             
             [movedObjectChanges addObject:objectChange];
         }
-        // Updated Objects
+        /**
+         *  Finally, if the objectChange wasn't an absolute section change or an
+         *  absolute row change, we just report it as an update
+         */
         else {
-            
             RBQSafeRealmObject *safeObject =
             [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
             
