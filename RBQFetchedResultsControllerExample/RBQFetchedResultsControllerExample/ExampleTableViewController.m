@@ -328,6 +328,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
                                                                    atIndexPath:indexPathFifthRow];
         TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
                                                                    atIndexPath:indexPathSixthRow];
+        RLMResults *ninthObject = [TestObject objectsInRealm:realm where:@"%K == %@",@"title",@"Cell 9"];
         
         [fifthObject changeWithNotification:^(RLMObject *object) {
             TestObject *testObject = (TestObject *)object;
@@ -352,6 +353,19 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             
             testObject.title = @"Testing Move And Update";
         }];
+        
+        if (ninthObject.firstObject) {
+            [ninthObject.firstObject changeWithNotification:^(RLMObject *object) {
+                TestObject *testObject = (TestObject *)object;
+                
+                if ([testObject.sectionName isEqualToString:@"First Section"]) {
+                    testObject.sectionName = @"Second Section";
+                }
+                else {
+                    testObject.sectionName = @"First Section";
+                }
+            }];
+        }
         
          //Test an inserted section that's not first
 //        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
