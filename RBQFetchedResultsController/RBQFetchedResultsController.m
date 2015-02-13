@@ -1310,7 +1310,7 @@
                                     usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
                                                                         RBQObjectChangeObject *obj2) {
                                        // Compare the indexPaths
-                                       return [obj1.previousIndexPath compare:obj2.previousIndexPath];
+                                       return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
                                    }];
             
             [insertedObjectChanges insertObject:objectChange atIndex:indexToInsertForSection];
