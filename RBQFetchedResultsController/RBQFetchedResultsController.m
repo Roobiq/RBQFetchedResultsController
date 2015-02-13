@@ -1544,9 +1544,9 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate controller:self
                               didChangeObject:safeObject
-                                  atIndexPath:objectChange.updatedIndexpath
+                                  atIndexPath:objectChange.previousIndexPath
                                 forChangeType:NSFetchedResultsChangeUpdate
-                                 newIndexPath:nil];
+                                 newIndexPath:objectChange.updatedIndexpath];
                 });
             }
         }
