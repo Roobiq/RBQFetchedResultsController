@@ -1497,11 +1497,31 @@
         NSInteger relativeRowChange = rowInserts - rowDeletes;
         
         /**
-         *  Now that we have the relative row change, we can identify if there 
-         *  was an absolute change and report the move
+         *  If an object is moving from one section to another, 
+         *  but that section index stays the same this needs to be 
+         *  reported as a move and not an update (the indexPath's are 
+         *  the same, but UITableView wants a move reported).
          */
-        if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
-            (objectChange.updatedIndexpath.row - objectChange.previousIndexPath.row) != relativeRowChange) {
+        BOOL objectSectionReplacedItself = NO;
+        
+        if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] == NSOrderedSame &&
+            [insertedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)] &&
+            [deletedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)]) {
+            
+            objectSectionReplacedItself = YES;
+        }
+        
+        /**
+         *  Now that we have the relative row change, we can identify if there 
+         *  was an absolute change and report the move. 
+         
+         *  Also report move if the section change replaced itself 
+         *  (i.e. indexPath is the same, but we deleted and inserted 
+         *  a section at the same index)
+         */
+        if (([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
+            (objectChange.updatedIndexpath.row - objectChange.previousIndexPath.row) != relativeRowChange) ||
+            objectSectionReplacedItself) {
             
             RBQSafeRealmObject *safeObject =
             [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
