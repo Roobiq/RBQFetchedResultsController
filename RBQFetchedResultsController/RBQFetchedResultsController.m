@@ -21,6 +21,8 @@
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
 @property (weak, nonatomic) RLMRealm *inMemoryRealmCache;
+@property (strong, nonatomic) RBQControllerCacheObject *cacheForMainThread;
+@property (strong, nonatomic) RLMRealm *realmForMainThread;
 
 @end
 
@@ -1584,14 +1586,43 @@
 {
     if (self.cacheName) {
         // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
-        return [RBQFetchedResultsController realmForCacheName:self.cacheName];
+        
+        if ([NSThread isMainThread] &&
+            self.realmForMainThread) {
+            
+            return self.realmForMainThread;
+        }
+        
+        RLMRealm *realm = [RBQFetchedResultsController realmForCacheName:self.cacheName];
+        
+        if ([NSThread isMainThread]) {
+            
+            self.realmForMainThread = realm;
+        }
+        
+        return realm;
     }
     else if (self.inMemoryRealmCache) {
         return self.inMemoryRealmCache;
     }
     else {
+        
         // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
-        return [RBQFetchedResultsController realmForCacheName:[self nameForFetchRequest:self.fetchRequest]];
+        
+        if ([NSThread isMainThread] &&
+            self.realmForMainThread) {
+            
+            return self.realmForMainThread;
+        }
+        
+        RLMRealm *realm = [RBQFetchedResultsController realmForCacheName:[self nameForFetchRequest:self.fetchRequest]];
+        
+        if ([NSThread isMainThread]) {
+            
+            self.realmForMainThread = realm;
+        }
+        
+        return realm;
     }
     
     return nil;
@@ -1631,12 +1662,24 @@
 // Retrieve internal cache
 - (RBQControllerCacheObject *)cache
 {
+    // Improve scroll performance
+    if ([NSThread isMainThread] &&
+        self.cacheForMainThread) {
+    
+        return self.cacheForMainThread;
+    }
+    
     RBQControllerCacheObject *cache = [self cacheInRealm:[self cacheRealm]];
     
     if (!cache) {
         [self performFetch];
         
         cache = [self cacheInRealm:[self cacheRealm]];
+    }
+    
+    // Save the cache if we are main thread
+    if ([NSThread isMainThread]) {
+        self.cacheForMainThread = cache;
     }
     
     return cache;
