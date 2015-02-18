@@ -21,8 +21,7 @@
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
 @property (weak, nonatomic) RLMRealm *inMemoryRealmCache;
-@property (strong, nonatomic) RBQControllerCacheObject *cacheForMainThread;
-@property (strong, nonatomic) RLMRealm *realmForMainThread;
+@property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
 @end
 
@@ -334,7 +333,9 @@
 {
     RLMRealm *cacheRealm = [self cacheRealm];
     
+    [cacheRealm beginWriteTransaction];
     [cacheRealm deleteAllObjects];
+    [cacheRealm commitWriteTransaction];
     
     [self performFetch];
 }
@@ -701,7 +702,7 @@
                     if (section.objects.count > 0) {
                         
                         // Add the section to Realm
-                        [cacheRealm addObject:section];
+                        [cacheRealm addOrUpdateObject:section];
                         
                         // Add the section to the controller cache
                         [controllerCache.sections addObject:section];
@@ -719,7 +720,7 @@
             if (count == fetchResults.count) {
                 
                 // Add the section to Realm
-                [cacheRealm addObject:section];
+                [cacheRealm addOrUpdateObject:section];
                 
                 [controllerCache.sections addObject:section];
             }
@@ -743,7 +744,7 @@
         }
         
         // Add cache to Realm
-        [cacheRealm addObject:controllerCache];
+        [cacheRealm addOrUpdateObject:controllerCache];
     }
     
     [cacheRealm commitWriteTransaction];
@@ -1662,24 +1663,12 @@
 // Retrieve internal cache
 - (RBQControllerCacheObject *)cache
 {
-    // Improve scroll performance
-    if ([NSThread isMainThread] &&
-        self.cacheForMainThread) {
-    
-        return self.cacheForMainThread;
-    }
-    
     RBQControllerCacheObject *cache = [self cacheInRealm:[self cacheRealm]];
     
     if (!cache) {
         [self performFetch];
         
         cache = [self cacheInRealm:[self cacheRealm]];
-    }
-    
-    // Save the cache if we are main thread
-    if ([NSThread isMainThread]) {
-        self.cacheForMainThread = cache;
     }
     
     return cache;

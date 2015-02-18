@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) NSString *realmPath;
 @property (weak, nonatomic) RLMRealm *inMemoryRealm;
+@property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
 @end
 
@@ -98,6 +99,17 @@
 {
     if (self.inMemoryRealm) {
         return self.inMemoryRealm;
+    }
+    
+    if ([NSThread isMainThread] &&
+        !self.realmForMainThread) {
+        
+        self.realmForMainThread = [RLMRealm realmWithPath:self.realmPath];
+    }
+    
+    if ([NSThread isMainThread]) {
+        
+        return self.realmForMainThread;
     }
     
     return [RLMRealm realmWithPath:self.realmPath];
