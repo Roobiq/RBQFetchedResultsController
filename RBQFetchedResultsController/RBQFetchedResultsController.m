@@ -20,6 +20,7 @@
 @interface RBQFetchedResultsController ()
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
+@property (strong, nonatomic) RLMNotificationToken *cacheNotificationToken;
 @property (weak, nonatomic) RLMRealm *inMemoryRealmCache;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
@@ -484,6 +485,27 @@
                                                   realm:realm];
          }
      }];
+    
+    // Notification block to update the state of the cache when the cache Realm updates
+    self.cacheNotificationToken =
+    [[self cacheRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+
+        /**
+         *  Must dispatch this change so that the previous write can finish
+         *  
+         *  Realm doesn't suggest performing a write based on a notification
+         */
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^() {
+            RLMRealm *cacheRealm = [weakSelf cacheRealm];
+            RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
+            
+            if (cache.state == RBQControllerCacheStateProcessing) {
+                [cacheRealm beginWriteTransaction];
+                cache.state = RBQControllerCacheStateReady;
+                [cacheRealm commitWriteTransaction];
+            }
+        });
+    }];
 }
 
 #pragma mark - Change Calculations
@@ -534,6 +556,9 @@
                                                                                  state:state];
     
     [state.cacheRealm beginWriteTransaction];
+    
+    // Update the state to make sure we rebuild cache if save fails
+    state.cache.state = RBQControllerCacheStateProcessing;
     
     // Create Object To Gather Up Derived Changes
     RBQDerivedChangesObject *derivedChanges = [self deriveChangesWithChangeSets:changeSets
@@ -659,6 +684,7 @@
      */
     if (controllerCache.fetchRequestHash != fetchRequest.hash ||
         controllerCache.objects.count != fetchResults.count ||
+        controllerCache.state == RBQControllerCacheStateProcessing ||
         ![controllerCache.sectionNameKeyPath isEqualToString:sectionNameKeyPath]) {
         
         [cacheRealm deleteAllObjects];
@@ -1508,8 +1534,8 @@
         BOOL objectSectionReplacedItself = NO;
         
         if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] == NSOrderedSame &&
-            [insertedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)] &&
-            [deletedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)]) {
+            ([insertedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)] ||
+            [deletedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)])) {
             
             objectSectionReplacedItself = YES;
         }

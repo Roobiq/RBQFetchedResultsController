@@ -16,6 +16,7 @@
     RBQControllerCacheObject *cache = [[RBQControllerCacheObject alloc] init];
     cache.name = name;
     cache.fetchRequestHash = hash;
+    cache.state = RBQControllerCacheStateReady;
     
     return cache;
 }
@@ -27,7 +28,8 @@
 
 + (NSDictionary *)defaultPropertyValues
 {
-    return @{@"sectionNameKeyPath" : @""};
+    return @{@"sectionNameKeyPath" : @"",
+             @"state" : @(RBQControllerCacheStateReady)};
 }
 
 @end
