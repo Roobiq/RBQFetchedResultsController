@@ -501,7 +501,8 @@
             RLMRealm *cacheRealm = [weakSelf cacheRealm];
             RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
             
-            if (cache.state == RBQControllerCacheStateProcessing) {
+            if (cache.state == RBQControllerCacheStateProcessing &&
+                !cache.isInvalidated) {
                 [cacheRealm beginWriteTransaction];
                 cache.state = RBQControllerCacheStateReady;
                 [cacheRealm commitWriteTransaction];
