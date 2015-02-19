@@ -453,8 +453,10 @@
 
 - (void)dealloc
 {
-    // Remove the notification
+    // Remove the notifications
     [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
+    
+    [[self cacheRealm] removeNotification:self.cacheNotificationToken];
 }
 
 // Register the change notification from RBQRealmNotificationManager
