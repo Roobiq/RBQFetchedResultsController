@@ -438,6 +438,17 @@
     return sectionInfo.name;
 }
 
+- (void)updateFetchRequest:(RBQFetchRequest *)fetchRequest
+            andPeformFetch:(BOOL)performFetch
+{
+    // Updating the fetch request will force rebuild of cache automatically
+    _fetchRequest = fetchRequest;
+    
+    if (performFetch) {
+        [self performFetch];
+    }
+}
+
 #pragma mark - Getters
 
 - (RLMResults *)fetchedObjects

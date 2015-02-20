@@ -261,4 +261,13 @@
  */
 - (NSIndexPath *)indexPathForObject:(RLMObject *)object;
 
+/**
+ *  Convenience method to safely update the fetch request for an existing RBQFetchResultsControlelr
+ *
+ *  @param fetchRequest a new instance of RBQFetchRequest
+ *  @param performFetch indicates whether you want to immediately performFetch using the new fetch request to rebuild the cache
+ */
+- (void)updateFetchRequest:(RBQFetchRequest *)fetchRequest
+            andPeformFetch:(BOOL)performFetch;
+
 @end
