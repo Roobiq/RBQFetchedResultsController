@@ -973,10 +973,15 @@
         }
     }
     
-    // Now sort the sections
-    NSSortDescriptor* sortByFirstIndex =
+    // Now sort the sections (sort inserts to be ascending)
+    NSSortDescriptor *sortByFirstIndex =
     [NSSortDescriptor sortDescriptorWithKey:@"firstObjectIndex" ascending:YES];
     [newSections sortUsingDescriptors:@[sortByFirstIndex]];
+    
+    // Sort the deleted sections
+    NSSortDescriptor *descendingDeleteSort =
+    [NSSortDescriptor sortDescriptorWithKey:@"firstObjectIndex" ascending:NO];
+    [deletedSections sortUsingDescriptors:@[descendingDeleteSort]];
     
     // Find inserted sections
     NSMutableOrderedSet *insertedSections = [NSMutableOrderedSet orderedSetWithOrderedSet:newSections];
