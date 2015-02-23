@@ -484,7 +484,8 @@
          RBQEntityChangesObject *entityChangesObject =
          [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
          
-         if (entityChangesObject) {
+         if (entityChangesObject &&
+             [realm.path isEqualToString:weakSelf.fetchRequest.realmPath]) {
              
 #ifdef DEBUG
              NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);

@@ -10,14 +10,14 @@
 
 @interface RBQFetchRequest ()
 
-@property (strong, nonatomic) NSString *realmPath;
 @property (weak, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
 @end
 
 @implementation RBQFetchRequest
-@synthesize entityName = _entityName;
+@synthesize entityName = _entityName,
+realmPath = _realmPath;
 
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
                                         inRealm:(RLMRealm *)realm
