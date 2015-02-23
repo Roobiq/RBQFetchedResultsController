@@ -1620,6 +1620,13 @@
         }
     }
     
+    // Sort the moved object changes by updated indexPath
+    [movedObjectChanges sortUsingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                RBQObjectChangeObject *obj2) {
+        // Compare the indexPaths
+        return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
+    }];
+    
     derivedChanges.deletedObjectChanges = deletedObjectChanges.copy;
     derivedChanges.insertedObjectChanges = insertedObjectChanges.copy;
     derivedChanges.movedObjectChanges = movedObjectChanges.copy;
