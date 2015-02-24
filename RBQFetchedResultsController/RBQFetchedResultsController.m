@@ -506,10 +506,11 @@
 
         /**
          *  Must dispatch this change so that the previous write can finish
-         *  
+         *
          *  Realm doesn't suggest performing a write based on a notification
          */
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^() {
+        
+        void (^updateRealmCacheState)() = ^void() {
             RLMRealm *cacheRealm = [weakSelf cacheRealm];
             RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
             
@@ -519,7 +520,19 @@
                 cache.state = RBQControllerCacheStateReady;
                 [cacheRealm commitWriteTransaction];
             }
-        });
+        };
+        
+        // If we are on the main thread, we should stay here (probably in-memory Realm)
+        if ([NSThread isMainThread]) {
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                updateRealmCacheState();
+            });
+        }
+        else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^() {
+                updateRealmCacheState();
+            });
+        }
     }];
 }
 

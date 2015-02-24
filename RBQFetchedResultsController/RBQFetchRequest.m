@@ -49,6 +49,7 @@ realmPath = _realmPath;
     if (self) {
         _entityName = entityName;
         _inMemoryRealm = inMemoryRealm;
+        _realmPath = inMemoryRealm.path;
     }
     
     return self;
