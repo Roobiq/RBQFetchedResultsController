@@ -27,6 +27,11 @@
 @property (nonatomic, readonly) RLMRealm *realm;
 
 /**
+ *  Path for the Realm associated with the fetch request
+ */
+@property (nonatomic, readonly) NSString *realmPath;
+
+/**
  *  Predicate supported by Realm
  *
  *  http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates

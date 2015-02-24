@@ -484,7 +484,8 @@
          RBQEntityChangesObject *entityChangesObject =
          [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
          
-         if (entityChangesObject) {
+         if (entityChangesObject &&
+             [realm.path isEqualToString:weakSelf.fetchRequest.realmPath]) {
              
 #ifdef DEBUG
              NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
@@ -505,10 +506,11 @@
 
         /**
          *  Must dispatch this change so that the previous write can finish
-         *  
+         *
          *  Realm doesn't suggest performing a write based on a notification
          */
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^() {
+        
+        void (^updateRealmCacheState)() = ^void() {
             RLMRealm *cacheRealm = [weakSelf cacheRealm];
             RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
             
@@ -518,7 +520,19 @@
                 cache.state = RBQControllerCacheStateReady;
                 [cacheRealm commitWriteTransaction];
             }
-        });
+        };
+        
+        // If we are on the main thread, we should stay here (probably in-memory Realm)
+        if ([NSThread isMainThread]) {
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                updateRealmCacheState();
+            });
+        }
+        else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^() {
+                updateRealmCacheState();
+            });
+        }
     }];
 }
 
@@ -1465,38 +1479,39 @@
         
         NSInteger relativeSectionChange = sectionInserts - sectionDeletes;
         
-        /**
-         *  If we have an absolute section change for the object than process it here
-         */
-        if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
-            (objectChange.updatedIndexpath.section - objectChange.previousIndexPath.section) != relativeSectionChange) {
-            
-            RBQSafeRealmObject *safeObject =
-            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
-            
-#ifdef DEBUG
-            NSAssert(safeObject, @"Safe object can't be nil!");
-#endif
-            
-            if ([self.delegate respondsToSelector:
-                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate controller:self
-                              didChangeObject:safeObject
-                                  atIndexPath:objectChange.previousIndexPath
-                                forChangeType:NSFetchedResultsChangeMove
-                                 newIndexPath:objectChange.updatedIndexpath];
-                });
-            }
-            
-            objectChange.changeType = NSFetchedResultsChangeMove;
-            
-            [movedObjectChanges addObject:objectChange];
-            
-            // We now need to move onto the next objectChange
-            continue;
-        }
+        // In testing, I found that even relative section changes need to be moves...
+//        /**
+//         *  If we have an absolute section change for the object than process it here
+//         */
+//        if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
+//            (objectChange.updatedIndexpath.section - objectChange.previousIndexPath.section) != relativeSectionChange) {
+//            
+//            RBQSafeRealmObject *safeObject =
+//            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
+//            
+//#ifdef DEBUG
+//            NSAssert(safeObject, @"Safe object can't be nil!");
+//#endif
+//            
+//            if ([self.delegate respondsToSelector:
+//                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+//            {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self.delegate controller:self
+//                              didChangeObject:safeObject
+//                                  atIndexPath:objectChange.previousIndexPath
+//                                forChangeType:NSFetchedResultsChangeMove
+//                                 newIndexPath:objectChange.updatedIndexpath];
+//                });
+//            }
+//            
+//            objectChange.changeType = NSFetchedResultsChangeMove;
+//            
+//            [movedObjectChanges addObject:objectChange];
+//            
+//            // We now need to move onto the next objectChange
+//            continue;
+//        }
         
         /**
          *  Since we didn't find a section change, now we have to get
@@ -1566,9 +1581,12 @@
          *  Also report move if the section change replaced itself 
          *  (i.e. indexPath is the same, but we deleted and inserted 
          *  a section at the same index)
+         *
+         *  Report a move if the object changes section (even if relative)
          */
         if (([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
             (objectChange.updatedIndexpath.row - objectChange.previousIndexPath.row) != relativeRowChange) ||
+            objectChange.updatedIndexpath.section != objectChange.previousIndexPath.section ||
             objectSectionReplacedItself) {
             
             RBQSafeRealmObject *safeObject =
