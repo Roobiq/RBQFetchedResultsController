@@ -185,7 +185,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 - (void)controller:(RBQFetchedResultsController *)controller
-  didChangeSection:(NSString *)sectionName
+  didChangeSection:(RBQFetchedResultsSectionInfo *)sectionInfo
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type
 {
