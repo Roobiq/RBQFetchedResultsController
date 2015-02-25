@@ -3,3 +3,4 @@ Podfile.lock
 Pods
 xcuserdata
 xcshareddata
+*.xcworkspace
