@@ -1391,13 +1391,21 @@
      *  To accurately find moves, we need to calculate the absolute change to the section and row
      *  
      *  To identify absolute changes, we need to figure out the relative changes to sections and rows
+     *
+     *  Initially, relative section changes were calculated, but in practice UITableview just wants
+     *  section changes reported as moves. However, there is a unique situation where the indexPath
+     *  doesn't change on an object, but the section was deleted and inserted on itself, so we use
+     *  the section changes to catch this scenario.
      */
     
     
     /**
      *  First we will create two collections: the inserted section indexes and deleted section indexes
      *  
-     *  Both of these will be used to calculate the relative section changes for a given objectChange
+     *  Both of these will be used for any relative section change checking
+     *
+     *  Note: this might not need to be sorted as a potential performance improvement (legacy
+     *  from calculating relative section changes, but leaving aside for now).
      */
     
     NSMutableOrderedSet *insertedSectionIndexes =
@@ -1449,71 +1457,6 @@
     for (RBQObjectChangeObject *objectChange in moveOrUpdateObjectChanges) {
         
         /**
-         *  Calculate the relative section changes
-         */
-        // Get the number of section inserts that occurred before the updated indexPath
-        // We calculate this by asking for the index if we were to insert into insertedSectionIndexes collection
-        NSRange sortRangeSectionInserts = NSMakeRange(0, insertedSectionIndexes.count);
-        NSUInteger sectionInserts =
-        [insertedSectionIndexes indexOfObject:@(objectChange.updatedIndexpath.section)
-                                inSortedRange:sortRangeSectionInserts
-                                      options:NSBinarySearchingInsertionIndex
-                              usingComparator:^NSComparisonResult(NSNumber *num1,
-                                                                  NSNumber *num2) {
-                                  // Compare the NSNumbers
-                                  return [num1 compare:num2];
-                              }];
-        
-        // Get the number of section deletes that occurred before the updated indexPath
-        // We calculate this by asking for the index if we were to insert into deletedSectionIndexes collection
-        NSRange sortRangeSectionDeletes = NSMakeRange(0, deletedSectionIndexes.count);
-        NSUInteger sectionDeletes =
-        [deletedSectionIndexes indexOfObject:@(objectChange.previousIndexPath.section)
-                               inSortedRange:sortRangeSectionDeletes
-                                     options:NSBinarySearchingInsertionIndex
-                             usingComparator:^NSComparisonResult(NSNumber *num1,
-                                                                  NSNumber *num2) {
-                                  // Compare the NSNumbers
-                                  return [num1 compare:num2];
-                              }];
-        
-        NSInteger relativeSectionChange = sectionInserts - sectionDeletes;
-        
-        // In testing, I found that even relative section changes need to be moves...
-//        /**
-//         *  If we have an absolute section change for the object than process it here
-//         */
-//        if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
-//            (objectChange.updatedIndexpath.section - objectChange.previousIndexPath.section) != relativeSectionChange) {
-//            
-//            RBQSafeRealmObject *safeObject =
-//            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
-//            
-//#ifdef DEBUG
-//            NSAssert(safeObject, @"Safe object can't be nil!");
-//#endif
-//            
-//            if ([self.delegate respondsToSelector:
-//                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
-//            {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [self.delegate controller:self
-//                              didChangeObject:safeObject
-//                                  atIndexPath:objectChange.previousIndexPath
-//                                forChangeType:NSFetchedResultsChangeMove
-//                                 newIndexPath:objectChange.updatedIndexpath];
-//                });
-//            }
-//            
-//            objectChange.changeType = NSFetchedResultsChangeMove;
-//            
-//            [movedObjectChanges addObject:objectChange];
-//            
-//            // We now need to move onto the next objectChange
-//            continue;
-//        }
-        
-        /**
          *  Since we didn't find a section change, now we have to get
          *  the relative row changes for the section
          */
@@ -1523,8 +1466,13 @@
         NSUInteger rowInserts = 0;
         
         if (insertedObjectChangesForSection) {
-            // Get the number of row inserts that occurred before the updated indexPath
-            // We calculate this by asking for the index if we were to insert object into the insert collection
+            /**
+             *  Get the number of row inserts that occurred
+             *  before the updated indexPath
+             *
+             *  We calculate this by asking for the index if
+             *  we were to insert object into the insert collection
+             */
             NSRange sortRangeRowInserts = NSMakeRange(0, insertedObjectChanges.count);
             rowInserts =
             [insertedObjectChanges indexOfObject:objectChange
@@ -1543,8 +1491,13 @@
         NSUInteger rowDeletes = 0;
         
         if (deletedObjectChangesForSection) {
-            // Get the number of row deletes that occurred before the updated indexPath
-            // We calculate this by asking for the index if we were to insert object into the delete collection
+            /**
+             *  Get the number of row deletes that occurred 
+             *  before the updated indexPath
+             *
+             *  We calculate this by asking for the index if 
+             *  we were to insert object into the delete collection
+             */
             NSRange sortRangeRowDeletes = NSMakeRange(0, deletedObjectChanges.count);
             rowDeletes =
             [deletedObjectChanges indexOfObject:objectChange
