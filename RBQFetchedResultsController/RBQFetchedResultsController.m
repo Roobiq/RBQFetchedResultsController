@@ -552,9 +552,9 @@
     
     if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)])
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [self runOnMainThread:^(){
             [self.delegate controllerWillChangeContent:self];
-        });
+        }];
     }
     
     RBQStateObject *state = [self createStateObjectWithFetchRequest:self.fetchRequest
@@ -604,11 +604,11 @@
     
     [state.cacheRealm commitWriteTransaction];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [self runOnMainThread:^(){
         if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
             [self.delegate controllerDidChangeContent:self];
         }
-    });
+    }];
 }
 
 - (void)applyDerivedChangesToCache:(RBQDerivedChangesObject *)derivedChanges
@@ -1166,12 +1166,12 @@
         if ([self.delegate
              respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            [self runOnMainThread:^(){
                 [self.delegate controller:self
                          didChangeSection:sectionInfo
                                   atIndex:oldSectionIndex
                             forChangeType:NSFetchedResultsChangeDelete];
-            });
+            }];
         }
         
         // Create the section change object
@@ -1195,12 +1195,12 @@
         if ([self.delegate
              respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            [self runOnMainThread:^(){
                 [self.delegate controller:self
                          didChangeSection:sectionInfo
                                   atIndex:newSectionIndex
                             forChangeType:NSFetchedResultsChangeInsert];
-            });
+            }];
         }
         
         // Create the section change object
@@ -1266,13 +1266,13 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [self runOnMainThread:^(){
                     [self.delegate controller:self
                               didChangeObject:safeObject
                                   atIndexPath:objectChange.previousIndexPath
                                 forChangeType:NSFetchedResultsChangeDelete
                                  newIndexPath:nil];
-                });
+                }];
             }
             
             objectChange.changeType = NSFetchedResultsChangeDelete;
@@ -1329,13 +1329,13 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [self runOnMainThread:^(){
                     [self.delegate controller:self
                               didChangeObject:safeObject
                                   atIndexPath:nil
                                 forChangeType:NSFetchedResultsChangeInsert
                                  newIndexPath:objectChange.updatedIndexpath];
-                });
+                }];
             }
             objectChange.changeType = NSFetchedResultsChangeInsert;
             
@@ -1552,13 +1552,13 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [self runOnMainThread:^(){
                     [self.delegate controller:self
                               didChangeObject:safeObject
                                   atIndexPath:objectChange.previousIndexPath
                                 forChangeType:NSFetchedResultsChangeMove
                                  newIndexPath:objectChange.updatedIndexpath];
-                });
+                }];
             }
             
             objectChange.changeType = NSFetchedResultsChangeMove;
@@ -1580,13 +1580,13 @@
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [self runOnMainThread:^(){
                     [self.delegate controller:self
                               didChangeObject:safeObject
                                   atIndexPath:objectChange.previousIndexPath
                                 forChangeType:NSFetchedResultsChangeUpdate
                                  newIndexPath:objectChange.updatedIndexpath];
-                });
+                }];
             }
         }
     }
@@ -1731,6 +1731,16 @@
         return indexPath;
     }
     return [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
+}
+
+- (void)runOnMainThread:(void (^)())mainThreadBlock
+{
+    if ([NSThread isMainThread]) {
+        mainThreadBlock();
+    }
+    else {
+        dispatch_async(dispatch_get_main_queue(), mainThreadBlock);
+    }
 }
 
 @end
