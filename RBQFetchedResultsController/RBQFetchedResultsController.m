@@ -160,7 +160,8 @@
 
 @interface RBQDerivedChangesObject : NSObject
 
-@property (nonatomic, strong) NSOrderedSet *sectionChanges;
+@property (nonatomic, strong) NSOrderedSet *deletedSectionChanges;
+@property (nonatomic, strong) NSOrderedSet *insertedSectionChanges;
 @property (nonatomic, strong) NSOrderedSet *deletedObjectChanges;
 @property (nonatomic, strong) NSOrderedSet *insertedObjectChanges;
 @property (nonatomic, strong) NSOrderedSet *movedObjectChanges;
@@ -334,11 +335,15 @@
 {
     RLMRealm *cacheRealm = [self cacheRealm];
     
+    [self unregisterChangeNotifications];
+    
     [cacheRealm beginWriteTransaction];
     [cacheRealm deleteAllObjects];
     [cacheRealm commitWriteTransaction];
     
     [self performFetch];
+    
+    [self registerChangeNotifications];
 }
 
 - (RBQSafeRealmObject *)safeObjectAtIndexPath:(NSIndexPath *)indexPath
@@ -465,9 +470,7 @@
 - (void)dealloc
 {
     // Remove the notifications
-    [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
-    
-    [[self cacheRealm] removeNotification:self.cacheNotificationToken];
+    [self unregisterChangeNotifications];
 }
 
 // Register the change notification from RBQRealmNotificationManager
@@ -534,6 +537,17 @@
             });
         }
     }];
+}
+
+- (void)unregisterChangeNotifications
+{
+    // Remove the notifications
+    [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
+    
+    [[self cacheRealm] removeNotification:self.cacheNotificationToken];
+    
+    self.notificationToken = nil;
+    self.cacheNotificationToken = nil;
 }
 
 #pragma mark - Change Calculations
@@ -619,17 +633,29 @@
     NSAssert(state, @"State can't be nil!");
 #endif
     
-    // Apply Section Changes To Cache
-    for (RBQSectionChangeObject *sectionChange in derivedChanges.sectionChanges) {
+    // Apply Section Changes To Cache (deletes in reverse order, then inserts)
+    for (NSOrderedSet *sectionChanges in @[derivedChanges.deletedSectionChanges,
+                                           derivedChanges.insertedSectionChanges]) {
         
-        if (sectionChange.changeType == NSFetchedResultsChangeDelete) {
-            // Remove the section from Realm cache
-            [state.cache.sections removeObjectAtIndex:sectionChange.previousIndex.unsignedIntegerValue];
-        }
-        else if (sectionChange.changeType == NSFetchedResultsChangeInsert) {
-            // Add the section to the cache
-            [state.cache.sections insertObject:sectionChange.section
-                                       atIndex:sectionChange.updatedIndex.unsignedIntegerValue];
+        for (RBQSectionChangeObject *sectionChange in sectionChanges) {
+            
+            if (sectionChange.changeType == NSFetchedResultsChangeDelete) {
+                
+#ifdef DEBUG
+                NSAssert(sectionChange.previousIndex.unsignedIntegerValue < state.cache.sections.count, @"Attemting to delete index that is already gone!");
+#endif
+                // Remove the section from Realm cache
+                [state.cache.sections removeObjectAtIndex:sectionChange.previousIndex.unsignedIntegerValue];
+            }
+            else if (sectionChange.changeType == NSFetchedResultsChangeInsert) {
+                
+#ifdef DEBUG
+                NSAssert(sectionChange.updatedIndex.unsignedIntegerValue <= state.cache.sections.count, @"Attemting to insert at index beyond bounds!");
+#endif
+                // Add the section to the cache
+                [state.cache.sections insertObject:sectionChange.section
+                                           atIndex:sectionChange.updatedIndex.unsignedIntegerValue];
+            }
         }
     }
     
@@ -657,7 +683,7 @@
                                        forPrimaryKey:objectChange.updatedCacheObject.sectionKeyPathValue];
                 
 #ifdef DEBUG
-                NSAssert(section.objects.count >= objectChange.updatedIndexpath.row, @"Attempting to insert object at index greater than count!");
+                NSAssert(objectChange.updatedIndexpath.row <= section.objects.count, @"Attemting to insert at index beyond bounds!");
 #endif
                 [section.objects insertObject:objectChange.updatedCacheObject
                                       atIndex:objectChange.updatedIndexpath.row];
@@ -678,6 +704,10 @@
                 RBQSectionCacheObject *section =
                 [RBQSectionCacheObject objectInRealm:state.cacheRealm
                                        forPrimaryKey:objectChange.updatedCacheObject.sectionKeyPathValue];
+                
+#ifdef DEBUG
+                NSAssert(objectChange.updatedIndexpath.row <= section.objects.count, @"Attemting to insert at index beyond bounds!");
+#endif
                 
                 [section.objects insertObject:objectChange.updatedCacheObject
                                       atIndex:objectChange.updatedIndexpath.row];
@@ -1120,7 +1150,8 @@
                                       changeSets:changeSets
                                   sectionChanges:sectionChanges];
 #ifdef DEBUG
-    NSAssert(derivedChanges.sectionChanges, @"Sections changes array can't be nil!");
+    NSAssert(derivedChanges.deletedSectionChanges, @"Deleted sections changes array can't be nil!");
+    NSAssert(derivedChanges.insertedSectionChanges, @"Inserted sections changes array can't be nil!");
 #endif
     
     // ---------------
@@ -1151,7 +1182,8 @@
     NSAssert(self.fetchRequest, @"Fetch request can't be nil!");
 #endif
     
-    NSMutableOrderedSet *derivedSectionChanges = [[NSMutableOrderedSet alloc] init];
+    NSMutableOrderedSet *deletedSectionChanges = [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.deletedCacheSections.count];
+    NSMutableOrderedSet *insertedSectionChanges = [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.insertedCacheSections.count];
     
     // Deleted Sections
     for (RBQSectionCacheObject *section in sectionChanges.deletedCacheSections) {
@@ -1180,7 +1212,19 @@
         sectionChange.section = section;
         sectionChange.changeType = NSFetchedResultsChangeDelete;
         
-        [derivedSectionChanges addObject:sectionChange];
+        // Keep track of the sorted list of deleted section changes (reverse sort)
+        NSRange sortRange = NSMakeRange(0, deletedSectionChanges.count);
+        NSUInteger indexToInsert =
+        [deletedSectionChanges indexOfObject:sectionChange
+                               inSortedRange:sortRange
+                                     options:NSBinarySearchingInsertionIndex
+                             usingComparator:^NSComparisonResult(RBQSectionChangeObject *sec1,
+                                                                 RBQSectionChangeObject *sec2) {
+                                // Compare the index (reverse sort)
+                                return [sec2.previousIndex compare:sec1.previousIndex];
+                            }];
+        
+        [deletedSectionChanges insertObject:sectionChange atIndex:indexToInsert];
     }
     // Inserted Sections
     for (RBQSectionCacheObject *section in sectionChanges.insertedCacheSections) {
@@ -1209,10 +1253,24 @@
         sectionChange.section = section;
         sectionChange.changeType = NSFetchedResultsChangeInsert;
         
-        [derivedSectionChanges addObject:sectionChange];
+        // Keep track of the sorted list of inserted section changes
+        NSRange sortRange = NSMakeRange(0, insertedSectionChanges.count);
+        NSUInteger indexToInsert =
+        [insertedSectionChanges indexOfObject:sectionChange
+                                inSortedRange:sortRange
+                                      options:NSBinarySearchingInsertionIndex
+                              usingComparator:^NSComparisonResult(RBQSectionChangeObject *sec1,
+                                                                  RBQSectionChangeObject *sec2) {
+                                  // Compare the index
+                                  return [sec1.updatedIndex compare:sec2.updatedIndex];
+                              }];
+         
+        
+        [insertedSectionChanges insertObject:sectionChange atIndex:indexToInsert];
     }
     
-    derivedChanges.sectionChanges = derivedSectionChanges.copy;
+    derivedChanges.deletedSectionChanges = deletedSectionChanges.copy;
+    derivedChanges.insertedSectionChanges = insertedSectionChanges.copy;
 }
 
 - (void)updateDerivedChangesWithObjectChanges:(RBQDerivedChangesObject *)derivedChanges
@@ -1285,8 +1343,8 @@
                                          options:NSBinarySearchingInsertionIndex
                                  usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
                                                                      RBQObjectChangeObject *obj2) {
-                                     // Compare the indexPaths
-                                     return [obj1.previousIndexPath compare:obj2.previousIndexPath];
+                                     // Compare the indexPaths (reverse sort)
+                                     return [obj2.previousIndexPath compare:obj1.previousIndexPath];
                                  }];
             
             [deletedObjectChanges insertObject:objectChange atIndex:indexToInsert];
@@ -1309,8 +1367,8 @@
                                            options:NSBinarySearchingInsertionIndex
                                    usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
                                                                        RBQObjectChangeObject *obj2) {
-                                    // Compare the indexPaths
-                                    return [obj1.previousIndexPath compare:obj2.previousIndexPath];
+                                    // Compare the indexPaths (reverse sort)
+                                    return [obj2.previousIndexPath compare:obj1.previousIndexPath];
                                 }];
             
             [deletedChangesInSection insertObject:objectChange atIndex:indexToInsertForSection];
