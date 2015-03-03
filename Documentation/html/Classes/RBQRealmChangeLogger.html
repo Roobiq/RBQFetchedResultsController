@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>RBQRealmChangeLogger Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">RBQFetchedResultsController </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">“Roobiq”</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/defaultLogger">+ defaultLogger</option>
+		
+		<option value="//api/name/loggerForRealm:">+ loggerForRealm:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/didAddObject:">- didAddObject:</option>
+		
+		<option value="//api/name/didAddObjects:">- didAddObjects:</option>
+		
+		<option value="//api/name/didAddObjects:willDeleteObjects:didChangeObjects:">- didAddObjects:willDeleteObjects:didChangeObjects:</option>
+		
+		<option value="//api/name/didChangeObject:">- didChangeObject:</option>
+		
+		<option value="//api/name/didChangeObjects:">- didChangeObjects:</option>
+		
+		<option value="//api/name/willDeleteObject:">- willDeleteObject:</option>
+		
+		<option value="//api/name/willDeleteObjects:">- willDeleteObjects:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">RBQRealmChangeLogger Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>RBQRealmNotificationManager.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>This class is used to track changes to a given RLMRealm. Since Realm doesn&rsquo;t support automatic change tracking, this class allows the developer to log object changes, which will be passed along to the <a href="../Classes/RBQRealmNotificationManager.html">RBQRealmNotificationManager</a> who in turn broadcasts it to any listeners</p>
+
+<p>Since RLMObjects are not thread-safe, when an object is logged to the manager, it is internally transformed into an <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> that is thread-safe and this will then be passed to any listeners once the Realm being monitored updates.</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Only RLMObjects with primary keys can be logged because the primary key is required to create a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a>.</p></div>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/defaultLogger" title="defaultLogger"></a>
+	<h3 class="method-title"><code><a href="#//api/name/defaultLogger">+&nbsp;defaultLogger</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates or retrieves the logger instance for the default Realm on the current thread</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)defaultLogger</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Instance of RBQRealmChangeLogger</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates or retrieves the logger instance for the default Realm on the current thread</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/loggerForRealm:" title="loggerForRealm:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/loggerForRealm:">+&nbsp;loggerForRealm:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates or retrieves the logger instance for a specific Realm on the current thread</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)loggerForRealm:(RLMRealm *)<em>realm</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>realm</code></th>
+						<td><p>A RLMRealm instance</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Instance of RBQRealmChangeLogger</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates or retrieves the logger instance for a specific Realm on the current thread</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didAddObject:" title="didAddObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didAddObject:">&ndash;&nbsp;didAddObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Register an addition for a given RLMObject</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didAddObject:(RLMObject *)<em>addedObject</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>addedObject</code></th>
+						<td><p>Added RLMObject</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Register an addition for a given RLMObject</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Can be called before or after the addition to Realm</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didAddObjects:" title="didAddObjects:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didAddObjects:">&ndash;&nbsp;didAddObjects:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Register a collection of RLMObject additions</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didAddObjects:(id&lt;NSFastEnumeration&gt;)<em>addedObjects</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>addedObjects</code></th>
+						<td><p>RLMArray, RLMResults, NSSet, or NSArray of added RLMObjects</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Register a collection of RLMObject additions</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Can be called before or after the additions to Realm</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/willDeleteObject:" title="willDeleteObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/willDeleteObject:">&ndash;&nbsp;willDeleteObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Register a delete for a given RLMObject</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)willDeleteObject:(RLMObject *)<em>deletedObject</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deletedObject</code></th>
+						<td><p>To be deleted RLMObject</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Register a delete for a given RLMObject</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Must be called before the delete in Realm (since the RLMObject will then be invalidated).</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/willDeleteObjects:" title="willDeleteObjects:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/willDeleteObjects:">&ndash;&nbsp;willDeleteObjects:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Register a collection of RLMObject deletes</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)willDeleteObjects:(id&lt;NSFastEnumeration&gt;)<em>deletedObjects</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deletedObjects</code></th>
+						<td><p>RLMArray, RLMResults, NSSet, or NSArray of deleted RLMObjects</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Register a collection of RLMObject deletes</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Must be called before the delete in Realm (since the RLMObject will then be invalidated).</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didChangeObject:" title="didChangeObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didChangeObject:">&ndash;&nbsp;didChangeObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Register a change for a given RLMObject</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didChangeObject:(RLMObject *)<em>changedObject</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>changedObject</code></th>
+						<td><p>Changed RLMObject</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Register a change for a given RLMObject</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Can be called before or after change to Realm</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didChangeObjects:" title="didChangeObjects:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didChangeObjects:">&ndash;&nbsp;didChangeObjects:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Register a collection of RLMObject changes</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didChangeObjects:(id&lt;NSFastEnumeration&gt;)<em>changedObjects</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>changedObjects</code></th>
+						<td><p>RLMArray, RLMResults, NSSet, or NSArray of changed RLMObjects</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Register a collection of RLMObject changes</p><div class="warning"><p><strong>Warning:</strong> <em>Important:</em> Can be called before or after change to Realm</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didAddObjects:willDeleteObjects:didChangeObjects:" title="didAddObjects:willDeleteObjects:didChangeObjects:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didAddObjects:willDeleteObjects:didChangeObjects:">&ndash;&nbsp;didAddObjects:willDeleteObjects:didChangeObjects:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Convenience method to pass array of objects changed. Will ignore nil values;</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didAddObjects:(id&lt;NSFastEnumeration&gt;)<em>addedObjects</em> willDeleteObjects:(id&lt;NSFastEnumeration&gt;)<em>deletedObjects</em> didChangeObjects:(id&lt;NSFastEnumeration&gt;)<em>changedObjects</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>addedObjects</code></th>
+						<td><p>RLMArray, RLMResults, NSSet, or NSArray of added RLMObjects</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deletedObjects</code></th>
+						<td><p>RLMArray, RLMResults, NSSet, or NSArray of deleted RLMObjects</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>changedObjects</code></th>
+						<td><p>RLMArray, RLMResults, NSSet, or NSArray of changed RLMObjects</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Convenience method to pass array of objects changed. Will ignore nil values;</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RBQRealmNotificationManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 “Roobiq”. All rights reserved. Updated: 2015-03-02</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

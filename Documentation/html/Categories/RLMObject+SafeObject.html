@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>RLMObject(SafeObject) Category Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">RBQFetchedResultsController </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">“Roobiq”</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/rbq_objectFromSafeObject:">+ rbq_objectFromSafeObject:</option>
+		
+		<option value="//api/name/rbq_objectInRealm:fromSafeObject:">+ rbq_objectInRealm:fromSafeObject:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/rbq_safeObject">- rbq_safeObject</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">RLMObject(SafeObject) Category Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Declared in</th>
+	<td>RLMObject+SafeObject.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Category methods for RLMObject to convert into a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> and vice versa</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/rbq_objectFromSafeObject:" title="rbq_objectFromSafeObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/rbq_objectFromSafeObject:">+&nbsp;rbq_objectFromSafeObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Create a RLMObject from a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a></p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)rbq_objectFromSafeObject:(RBQSafeRealmObject *)<em>safeObject</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>safeObject</code></th>
+						<td><p><a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> instance</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>RLMObject of appropriate subtype</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Create a RLMObject from a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a></p>
+
+<p>Returns nil if the safe object&rsquo;s className doesn&rsquo;t match ours.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RLMObject+SafeObject.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/rbq_objectInRealm:fromSafeObject:" title="rbq_objectInRealm:fromSafeObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/rbq_objectInRealm:fromSafeObject:">+&nbsp;rbq_objectInRealm:fromSafeObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Create a RLMObject in a specific Realm from a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a></p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)rbq_objectInRealm:(RLMRealm *)<em>realm</em> fromSafeObject:(RBQSafeRealmObject *)<em>safeObject</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>realm</code></th>
+						<td><p>Realm in which the returned RLMObject is persisted</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>safeObject</code></th>
+						<td><p><a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> to convert into RLMObject</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>RLMObject of appropriate subtype</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Create a RLMObject in a specific Realm from a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a></p>
+
+<p>Returns nil if the safe object&rsquo;s className doesn&rsquo;t match ours.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RLMObject+SafeObject.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/rbq_safeObject" title="rbq_safeObject"></a>
+	<h3 class="method-title"><code><a href="#//api/name/rbq_safeObject">&ndash;&nbsp;rbq_safeObject</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Create a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> from a RLMObject</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RBQSafeRealmObject *)rbq_safeObject</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p><a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> which is a thread-safe representation of the original RLMObject</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Create a <a href="../Classes/RBQSafeRealmObject.html">RBQSafeRealmObject</a> from a RLMObject</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RLMObject+SafeObject.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 “Roobiq”. All rights reserved. Updated: 2015-03-02</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>
