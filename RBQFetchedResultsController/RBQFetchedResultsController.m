@@ -696,7 +696,7 @@
 #endif
                 // Remove the object from the section
                 RBQSectionCacheObject *section = objectChange.previousCacheObject.section;
-                
+
                 [section.objects removeObjectAtIndex:objectChange.previousIndexPath.row];
                 
                 // Remove the object
@@ -727,13 +727,8 @@
                 
                 objectChange.updatedCacheObject.section = section;
             }
-            else if (objectChange.changeType == NSFetchedResultsChangeMove) {
+            else if (objectChange.changeType == NSFetchedResultsChangeMove) {                
                 // Delete to remove it from previous section
-                RBQSectionCacheObject *oldSection = objectChange.previousCacheObject.section;
-                
-                [oldSection.objects removeObjectAtIndex:objectChange.previousIndexPath.row];
-                
-                // Remove the object
                 [state.cacheRealm deleteObject:objectChange.previousCacheObject];
                 
                 // Add it back in
