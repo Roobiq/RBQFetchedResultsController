@@ -364,12 +364,18 @@
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    RBQSectionCacheObject *section = cache.sections[indexPath.section];
+    if (indexPath.section < cache.sections.count) {
+        RBQSectionCacheObject *section = cache.sections[indexPath.section];
+        
+        if (indexPath.row < section.objects.count) {
+            RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
+            
+            return [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
+                                        forCacheObject:cacheObject];
+        }
+    }
     
-    RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
-    
-    return [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
-                                forCacheObject:cacheObject];
+    return nil;
 }
 
 - (id)objectInRealm:(RLMRealm *)realm
@@ -377,12 +383,20 @@
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    RBQSectionCacheObject *section = cache.sections[indexPath.section];
+    if (indexPath.section < cache.sections.count) {
+        
+        RBQSectionCacheObject *section = cache.sections[indexPath.section];
+        
+        if (indexPath.row < section.objects.count) {
+            
+            RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
+            
+            return [RBQObjectCacheObject objectInRealm:realm
+                                        forCacheObject:cacheObject];
+        }
+    }
     
-    RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
-    
-    return [RBQObjectCacheObject objectInRealm:realm
-                                forCacheObject:cacheObject];
+    return nil;
 }
 
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject
@@ -422,9 +436,13 @@
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    RBQSectionCacheObject *section = cache.sections[index];
+    if (index < cache.sections.count) {
+        RBQSectionCacheObject *section = cache.sections[index];
+        
+        return section.objects.count;
+    }
     
-    return section.objects.count;
+    return 0;
 }
 
 - (NSInteger)numberOfSections
@@ -586,10 +604,14 @@
         }];
     }
     
+    RLMRealm *cacheRealm = [self cacheRealm];
+    
+    [cacheRealm refresh];
+    
     RBQStateObject *state = [self createStateObjectWithFetchRequest:self.fetchRequest
                                                               realm:realm
-                                                              cache:[self cache]
-                                                         cacheRealm:[self cacheRealm]];
+                                                              cache:[self cacheInRealm:cacheRealm]
+                                                         cacheRealm:cacheRealm];
     
     RBQChangeSetsObject *changeSets = [self createChangeSetsWithAddedSafeObjects:addedSafeObjects
                                                               deletedSafeObjects:deletedSafeObjects
@@ -691,9 +713,6 @@
             
             if (objectChange.changeType == NSFetchedResultsChangeDelete) {
                 
-#ifdef DEBUG
-                NSLog(@"Deleted Object: %@",objectChange.previousCacheObject.primaryKeyStringValue);
-#endif
                 // Remove the object from the section
                 RBQSectionCacheObject *section = objectChange.previousCacheObject.section;
 
@@ -701,11 +720,6 @@
                 
                 // Remove the object
                 [state.cacheRealm deleteObject:objectChange.previousCacheObject];
-                
-#ifdef DEBUG
-                NSLog(@"Section: %lu Rows: %lu",(long)objectChange.previousIndexPath.section,
-                      (long)section.objects.count);
-#endif
             }
             else if (objectChange.changeType == NSFetchedResultsChangeInsert) {
                 // Insert the object
@@ -1361,10 +1375,6 @@
             NSAssert(safeObject, @"Safe object can't be nil!");
 #endif
             
-            NSString *stringForObject = objectChange.previousCacheObject.primaryKeyStringValue;
-            NSInteger section = objectChange.previousIndexPath.section;
-            NSInteger rows = objectChange.previousCacheObject.section.objects.count;
-            
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
@@ -1374,11 +1384,6 @@
                                       atIndexPath:objectChange.previousIndexPath
                                     forChangeType:NSFetchedResultsChangeDelete
                                      newIndexPath:nil];
-                    
-#ifdef DEBUG
-                    NSLog(@"Passed Delete To Delegate: %@",stringForObject);
-                    NSLog(@"Section: %li Rows: %li",(long)section,(long)rows);
-#endif
                 }];
             }
             
