@@ -350,14 +350,22 @@
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    RBQSectionCacheObject *section = cache.sections[indexPath.section];
+    if (indexPath.section < cache.sections.count) {
+        
+        RBQSectionCacheObject *section = cache.sections[indexPath.section];
+        
+        if (indexPath.row < section.objects.count) {
+            
+            RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
+            
+            RLMObject *object = [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
+                                                     forCacheObject:cacheObject];
+            
+            return [RBQSafeRealmObject safeObjectFromObject:object];
+        }
+    }
     
-    RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
-    
-    RLMObject *object = [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
-                                             forCacheObject:cacheObject];
-    
-    return [RBQSafeRealmObject safeObjectFromObject:object];
+    return nil;
 }
 
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath
