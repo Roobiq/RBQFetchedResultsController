@@ -1020,9 +1020,8 @@
         }
         // Add to deleted only if this section was already in cache
         // Possible to add a section that has no data (so we don't want to insert or delete it)
-        else if ([state.cache.sections indexOfObject:section] != NSNotFound) {
-            // Save any that are not found in results (but not dupes)
-            if (![deletedSections containsObject:section]) {
+        else {
+            if ([state.cache.sections indexOfObject:section] != NSNotFound) {
                 [deletedSections addObject:section];
             }
         }
