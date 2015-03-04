@@ -564,10 +564,25 @@
     NSAssert(realm, @"Realm can't be nil");
 #endif
     
-    if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)])
-    {
+    /**
+     *  If we are not on the main thread then use a semaphore 
+     *  to prevent condition where subsequent processing runs 
+     *  before the async delegate calls complete on main thread
+     */
+    BOOL useSem = NO;
+    
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+    
+    if (![NSThread isMainThread]) {
+        useSem = YES;
+    }
+    
+    typeof(self) __weak weakSelf = self;
+    
+    if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
+        
         [self runOnMainThread:^(){
-            [self.delegate controllerWillChangeContent:self];
+            [weakSelf.delegate controllerWillChangeContent:weakSelf];
         }];
     }
     
@@ -619,10 +634,18 @@
     [state.cacheRealm commitWriteTransaction];
     
     [self runOnMainThread:^(){
-        if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-            [self.delegate controllerDidChangeContent:self];
+        if ([weakSelf.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
+            [weakSelf.delegate controllerDidChangeContent:weakSelf];
+        }
+        
+        if (useSem) {
+            dispatch_semaphore_signal(sem);
         }
     }];
+    
+    if (useSem) {
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    }
 }
 
 - (void)applyDerivedChangesToCache:(RBQDerivedChangesObject *)derivedChanges
@@ -667,8 +690,22 @@
         for (RBQObjectChangeObject *objectChange in objectChanges) {
             
             if (objectChange.changeType == NSFetchedResultsChangeDelete) {
+                
+#ifdef DEBUG
+                NSLog(@"Deleted Object: %@",objectChange.previousCacheObject.primaryKeyStringValue);
+#endif
+                // Remove the object from the section
+                RBQSectionCacheObject *section = objectChange.previousCacheObject.section;
+                
+                [section.objects removeObjectAtIndex:objectChange.previousIndexPath.row];
+                
                 // Remove the object
                 [state.cacheRealm deleteObject:objectChange.previousCacheObject];
+                
+#ifdef DEBUG
+                NSLog(@"Section: %lu Rows: %lu",(long)objectChange.previousIndexPath.section,
+                      (long)section.objects.count);
+#endif
             }
             else if (objectChange.changeType == NSFetchedResultsChangeInsert) {
                 // Insert the object
@@ -692,6 +729,11 @@
             }
             else if (objectChange.changeType == NSFetchedResultsChangeMove) {
                 // Delete to remove it from previous section
+                RBQSectionCacheObject *oldSection = objectChange.previousCacheObject.section;
+                
+                [oldSection.objects removeObjectAtIndex:objectChange.previousIndexPath.row];
+                
+                // Remove the object
                 [state.cacheRealm deleteObject:objectChange.previousCacheObject];
                 
                 // Add it back in
@@ -1184,6 +1226,8 @@
     NSMutableOrderedSet *deletedSectionChanges = [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.deletedCacheSections.count];
     NSMutableOrderedSet *insertedSectionChanges = [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.insertedCacheSections.count];
     
+    typeof(self) __weak weakSelf = self;
+    
     // Deleted Sections
     for (RBQSectionCacheObject *section in sectionChanges.deletedCacheSections) {
         
@@ -1198,10 +1242,10 @@
              respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
         {
             [self runOnMainThread:^(){
-                [self.delegate controller:self
-                         didChangeSection:sectionInfo
-                                  atIndex:oldSectionIndex
-                            forChangeType:NSFetchedResultsChangeDelete];
+                [weakSelf.delegate controller:weakSelf
+                             didChangeSection:sectionInfo
+                                      atIndex:oldSectionIndex
+                                forChangeType:NSFetchedResultsChangeDelete];
             }];
         }
         
@@ -1239,10 +1283,10 @@
              respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
         {
             [self runOnMainThread:^(){
-                [self.delegate controller:self
-                         didChangeSection:sectionInfo
-                                  atIndex:newSectionIndex
-                            forChangeType:NSFetchedResultsChangeInsert];
+                [weakSelf.delegate controller:weakSelf
+                             didChangeSection:sectionInfo
+                                      atIndex:newSectionIndex
+                                forChangeType:NSFetchedResultsChangeInsert];
             }];
         }
         
@@ -1284,6 +1328,8 @@
     NSAssert(state, @"State can't be nil!");
 #endif
     
+    typeof(self) __weak weakSelf = self;
+    
     // We will first process to find inserts/deletes
     NSMutableOrderedSet *deletedObjectChanges = [[NSMutableOrderedSet alloc] init];
     NSMutableOrderedSet *insertedObjectChanges = [[NSMutableOrderedSet alloc] init];
@@ -1320,15 +1366,24 @@
             NSAssert(safeObject, @"Safe object can't be nil!");
 #endif
             
+            NSString *stringForObject = objectChange.previousCacheObject.primaryKeyStringValue;
+            NSInteger section = objectChange.previousIndexPath.section;
+            NSInteger rows = objectChange.previousCacheObject.section.objects.count;
+            
             if ([self.delegate respondsToSelector:
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
                 [self runOnMainThread:^(){
-                    [self.delegate controller:self
-                              didChangeObject:safeObject
-                                  atIndexPath:objectChange.previousIndexPath
-                                forChangeType:NSFetchedResultsChangeDelete
-                                 newIndexPath:nil];
+                    [weakSelf.delegate controller:weakSelf
+                                  didChangeObject:safeObject
+                                      atIndexPath:objectChange.previousIndexPath
+                                    forChangeType:NSFetchedResultsChangeDelete
+                                     newIndexPath:nil];
+                    
+#ifdef DEBUG
+                    NSLog(@"Passed Delete To Delegate: %@",stringForObject);
+                    NSLog(@"Section: %li Rows: %li",(long)section,(long)rows);
+#endif
                 }];
             }
             
@@ -1387,11 +1442,11 @@
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
                 [self runOnMainThread:^(){
-                    [self.delegate controller:self
-                              didChangeObject:safeObject
-                                  atIndexPath:nil
-                                forChangeType:NSFetchedResultsChangeInsert
-                                 newIndexPath:objectChange.updatedIndexpath];
+                    [weakSelf.delegate controller:weakSelf
+                                  didChangeObject:safeObject
+                                      atIndexPath:nil
+                                    forChangeType:NSFetchedResultsChangeInsert
+                                     newIndexPath:objectChange.updatedIndexpath];
                 }];
             }
             objectChange.changeType = NSFetchedResultsChangeInsert;
@@ -1610,11 +1665,11 @@
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
                 [self runOnMainThread:^(){
-                    [self.delegate controller:self
-                              didChangeObject:safeObject
-                                  atIndexPath:objectChange.previousIndexPath
-                                forChangeType:NSFetchedResultsChangeMove
-                                 newIndexPath:objectChange.updatedIndexpath];
+                    [weakSelf.delegate controller:weakSelf
+                                  didChangeObject:safeObject
+                                      atIndexPath:objectChange.previousIndexPath
+                                    forChangeType:NSFetchedResultsChangeMove
+                                     newIndexPath:objectChange.updatedIndexpath];
                 }];
             }
             
@@ -1638,11 +1693,11 @@
                  @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
             {
                 [self runOnMainThread:^(){
-                    [self.delegate controller:self
-                              didChangeObject:safeObject
-                                  atIndexPath:objectChange.previousIndexPath
-                                forChangeType:NSFetchedResultsChangeUpdate
-                                 newIndexPath:objectChange.updatedIndexpath];
+                    [weakSelf.delegate controller:weakSelf
+                                  didChangeObject:safeObject
+                                      atIndexPath:objectChange.previousIndexPath
+                                    forChangeType:NSFetchedResultsChangeUpdate
+                                     newIndexPath:objectChange.updatedIndexpath];
                 }];
             }
         }
