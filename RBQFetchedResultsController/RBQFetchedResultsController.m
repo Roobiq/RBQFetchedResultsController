@@ -409,12 +409,12 @@
 
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject
 {
-    RLMRealm *realm = [self cacheRealm];
-    
     RBQControllerCacheObject *cache = [self cache];
     
+    RLMRealm *cacheRealm = cache.realm;
+    
     RBQObjectCacheObject *cacheObject =
-    [RBQObjectCacheObject objectInRealm:realm forPrimaryKey:safeObject.primaryKeyValue];
+    [RBQObjectCacheObject objectInRealm:cacheRealm forPrimaryKey:safeObject.primaryKeyValue];
     
     NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
     NSInteger rowIndex = [cacheObject.section.objects indexOfObject:cacheObject];
@@ -428,8 +428,10 @@
 {
     RBQControllerCacheObject *cache = [self cache];
     
+    RLMRealm *cacheRealm = cache.realm;
+    
     RBQObjectCacheObject *cacheObject =
-    [RBQObjectCacheObject cacheObjectInRealm:[self cacheRealm]
+    [RBQObjectCacheObject cacheObjectInRealm:cacheRealm
                                    forObject:object];
     
     NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
@@ -1806,12 +1808,16 @@
 // Retrieve internal cache
 - (RBQControllerCacheObject *)cache
 {
-    RBQControllerCacheObject *cache = [self cacheInRealm:[self cacheRealm]];
+    RLMRealm *cacheRealm = [self cacheRealm];
+    
+    [cacheRealm refresh];
+    
+    RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
     
     if (!cache) {
         [self performFetch];
         
-        cache = [self cacheInRealm:[self cacheRealm]];
+        cache = [self cacheInRealm:cacheRealm];
     }
     
     return cache;
