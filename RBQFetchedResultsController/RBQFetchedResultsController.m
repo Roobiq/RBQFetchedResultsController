@@ -472,9 +472,11 @@
 }
 
 - (void)updateFetchRequest:(RBQFetchRequest *)fetchRequest
+        sectionNameKeyPath:(NSString *)sectionNameKeyPath
             andPeformFetch:(BOOL)performFetch
 {
     // Updating the fetch request will force rebuild of cache automatically
+    _sectionNameKeyPath = sectionNameKeyPath;
     _fetchRequest = fetchRequest;
     
     if (performFetch) {

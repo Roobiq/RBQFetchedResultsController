@@ -122,7 +122,14 @@ realmPath = _realmPath;
 {
     if (self.predicate &&
         self.sortDescriptors) {
-        return self.predicate.hash ^ self.sortDescriptors.hash ^ self.entityName.hash;
+        
+        NSUInteger sortHash = 1;
+        
+        for (RLMSortDescriptor *sortDescriptor in self.sortDescriptors) {
+            sortHash = sortHash ^ sortDescriptor.hash;
+        }
+        
+        return self.predicate.hash ^ sortHash ^ self.entityName.hash;
     }
     else if (self.predicate &&
              self.entityName) {
