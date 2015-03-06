@@ -152,7 +152,7 @@
  *
  *  @param fetchRequest       the RBQFetchRequest for the controller
  *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)
- *  @param name               the cache name (if nil, caching will still be used but the name will be generated from the fetch request hash)
+ *  @param name               the cache name (if nil, cache will not be persisted and built using an in-memory Realm)
  *
  *  @return A new instance of RBQFetchedResultsController
  */
@@ -161,7 +161,9 @@
                  cacheName:(NSString *)name;
 
 /**
- *  Constructor method to initialize the controller using an in-memory Realm rather than the persisted cache
+ *  Constructor method to initialize the controller using an explicit in-memory Realm rather than the persisted cache. 
+ *
+ *  @warning This should only be used if access to the in-memory Realm for the cache instance is necessary. initWithFetchRequest:sectionNameKeyPath:cacheName will internally use an in-memory cache if cacheName is nil
  *
  *  @param fetchRequest       the RBQFetchRequest for the controller
  *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)

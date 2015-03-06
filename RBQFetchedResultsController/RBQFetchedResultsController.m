@@ -1763,7 +1763,7 @@
             return self.realmForMainThread;
         }
         
-        RLMRealm *realm = [RBQFetchedResultsController realmForCacheName:[self nameForFetchRequest:self.fetchRequest]];
+        RLMRealm *realm = [RLMRealm inMemoryRealmWithIdentifier:[self nameForFetchRequest:self.fetchRequest]];
         
         if ([NSThread isMainThread]) {
             
