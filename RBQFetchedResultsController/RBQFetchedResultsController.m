@@ -840,7 +840,7 @@
             if (sectionNameKeyPath) {
                 
                 // Check your sectionNameKeyPath if a crash occurs...
-                NSString *sectionTitle = object[sectionNameKeyPath];
+                NSString *sectionTitle = [object valueForKeyPath:sectionNameKeyPath];
                 
                 // New Section Found --> Process It
                 if (![sectionTitle isEqualToString:currentSectionTitle]) {
@@ -968,7 +968,7 @@
             
             if (object &&
                 self.sectionNameKeyPath) {
-                sectionTitle = [object valueForKey:self.sectionNameKeyPath];
+                sectionTitle = [object valueForKeyPath:self.sectionNameKeyPath];
             }
             else if (self.sectionNameKeyPath) {
                 RBQObjectCacheObject *oldCacheObject =
