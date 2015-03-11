@@ -636,6 +636,15 @@
     
     [cacheRealm refresh];
     
+    RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
+    
+    // We might not have a cache yet, so create it if necessary
+    if (!cache) {
+        [self performFetch];
+        
+        cache = [self cacheInRealm:cacheRealm];
+    }
+    
     RBQStateObject *state = [self createStateObjectWithFetchRequest:self.fetchRequest
                                                               realm:realm
                                                               cache:[self cacheInRealm:cacheRealm]
