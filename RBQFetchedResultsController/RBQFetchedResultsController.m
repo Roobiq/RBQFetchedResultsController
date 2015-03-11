@@ -411,35 +411,43 @@
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    RLMRealm *cacheRealm = cache.realm;
+    if (cache) {
+        RLMRealm *cacheRealm = cache.realm;
+        
+        RBQObjectCacheObject *cacheObject =
+        [RBQObjectCacheObject objectInRealm:cacheRealm forPrimaryKey:safeObject.primaryKeyValue];
+        
+        NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
+        NSInteger rowIndex = [cacheObject.section.objects indexOfObject:cacheObject];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+        
+        return indexPath;
+    }
     
-    RBQObjectCacheObject *cacheObject =
-    [RBQObjectCacheObject objectInRealm:cacheRealm forPrimaryKey:safeObject.primaryKeyValue];
-    
-    NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
-    NSInteger rowIndex = [cacheObject.section.objects indexOfObject:cacheObject];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-    
-    return indexPath;
+    return nil;
 }
 
 - (NSIndexPath *)indexPathForObject:(RLMObject *)object
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    RLMRealm *cacheRealm = cache.realm;
+    if (cache) {
+        RLMRealm *cacheRealm = cache.realm;
+        
+        RBQObjectCacheObject *cacheObject =
+        [RBQObjectCacheObject cacheObjectInRealm:cacheRealm
+                                       forObject:object];
+        
+        NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
+        NSInteger rowIndex = [cacheObject.section.objects indexOfObject:cacheObject];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+        
+        return indexPath;
+    }
     
-    RBQObjectCacheObject *cacheObject =
-    [RBQObjectCacheObject cacheObjectInRealm:cacheRealm
-                                   forObject:object];
-    
-    NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
-    NSInteger rowIndex = [cacheObject.section.objects indexOfObject:cacheObject];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-    
-    return indexPath;
+    return nil;
 }
 
 - (NSInteger)numberOfRowsForSectionIndex:(NSInteger)index
@@ -459,16 +467,24 @@
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    return cache.sections.count;
+    if (cache) {
+        return cache.sections.count;
+    }
+    
+    return 0;
 }
 
 - (NSString *)titleForHeaderInSection:(NSInteger)section
 {
     RBQControllerCacheObject *cache = [self cache];
     
-    RBQSectionCacheObject *sectionInfo = cache.sections[section];
+    if (cache) {
+        RBQSectionCacheObject *sectionInfo = cache.sections[section];
+        
+        return sectionInfo.name;
+    }
     
-    return sectionInfo.name;
+    return @"";
 }
 
 - (void)updateFetchRequest:(RBQFetchRequest *)fetchRequest
@@ -1815,12 +1831,6 @@
     [cacheRealm refresh];
     
     RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
-    
-    if (!cache) {
-        [self performFetch];
-        
-        cache = [self cacheInRealm:cacheRealm];
-    }
     
     return cache;
 }
