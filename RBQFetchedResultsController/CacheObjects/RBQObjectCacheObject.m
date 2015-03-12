@@ -9,6 +9,8 @@
 #import "RBQObjectCacheObject.h"
 #import "RLMObject+Utilities.h"
 
+#import <RLMObjectSchema.h>
+
 @implementation RBQObjectCacheObject
 
 #pragma mark - Public Class
