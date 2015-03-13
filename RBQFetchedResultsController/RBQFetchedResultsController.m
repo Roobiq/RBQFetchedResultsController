@@ -632,9 +632,16 @@
         }];
     }
     
+    /**
+     *  Refresh both the cache Realm and passed in Realm so
+     *  that cache and the fetch results are up-to-date for
+     *  proper identification of changes.
+     */
     RLMRealm *cacheRealm = [self cacheRealm];
     
     [cacheRealm refresh];
+    
+    [realm refresh];
     
     RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
     
