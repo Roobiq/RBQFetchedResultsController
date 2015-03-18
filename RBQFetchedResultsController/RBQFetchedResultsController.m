@@ -603,114 +603,116 @@
                           changedSafeObjects:(NSSet *)changedSafeObjects
                                        realm:(RLMRealm *)realm
 {
+    @synchronized(self) {
 #ifdef DEBUG
     NSAssert(addedSafeObjects, @"Added safe objects can't be nil");
     NSAssert(deletedSafeObjects, @"Deleted safe objects can't be nil");
     NSAssert(changedSafeObjects, @"Changed safe objects can't be nil");
     NSAssert(realm, @"Realm can't be nil");
 #endif
-    
-    /**
-     *  If we are not on the main thread then use a semaphore 
-     *  to prevent condition where subsequent processing runs 
-     *  before the async delegate calls complete on main thread
-     */
-    BOOL useSem = NO;
-    
-    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-    
-    if (![NSThread isMainThread]) {
-        useSem = YES;
-    }
-    
-    typeof(self) __weak weakSelf = self;
-    
-    if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
         
-        [self runOnMainThread:^(){
-            [weakSelf.delegate controllerWillChangeContent:weakSelf];
-        }];
-    }
-    
-    /**
-     *  Refresh both the cache Realm and passed in Realm so
-     *  that cache and the fetch results are up-to-date for
-     *  proper identification of changes.
-     */
-    RLMRealm *cacheRealm = [self cacheRealm];
-    
-    [cacheRealm refresh];
-    
-    [realm refresh];
-    
-    RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
-    
-    // We might not have a cache yet, so create it if necessary
-    if (!cache) {
-        [self performFetch];
+        /**
+         *  If we are not on the main thread then use a semaphore 
+         *  to prevent condition where subsequent processing runs 
+         *  before the async delegate calls complete on main thread
+         */
+        BOOL useSem = NO;
         
-        cache = [self cacheInRealm:cacheRealm];
-    }
-    
-    RBQStateObject *state = [self createStateObjectWithFetchRequest:self.fetchRequest
-                                                              realm:realm
-                                                              cache:[self cacheInRealm:cacheRealm]
-                                                         cacheRealm:cacheRealm];
-    
-    RBQChangeSetsObject *changeSets = [self createChangeSetsWithAddedSafeObjects:addedSafeObjects
-                                                              deletedSafeObjects:deletedSafeObjects
-                                                              changedSafeObjects:changedSafeObjects
-                                                                           state:state];
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+        
+        if (![NSThread isMainThread]) {
+            useSem = YES;
+        }
+        
+        typeof(self) __weak weakSelf = self;
+        
+        if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
+            
+            [self runOnMainThread:^(){
+                [weakSelf.delegate controllerWillChangeContent:weakSelf];
+            }];
+        }
+        
+        /**
+         *  Refresh both the cache Realm and passed in Realm so
+         *  that cache and the fetch results are up-to-date for
+         *  proper identification of changes.
+         */
+        RLMRealm *cacheRealm = [self cacheRealm];
+        
+        [cacheRealm refresh];
+        
+        [realm refresh];
+        
+        RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
+        
+        // We might not have a cache yet, so create it if necessary
+        if (!cache) {
+            [self performFetch];
+            
+            cache = [self cacheInRealm:cacheRealm];
+        }
+        
+        RBQStateObject *state = [self createStateObjectWithFetchRequest:self.fetchRequest
+                                                                  realm:realm
+                                                                  cache:[self cacheInRealm:cacheRealm]
+                                                             cacheRealm:cacheRealm];
+        
+        RBQChangeSetsObject *changeSets = [self createChangeSetsWithAddedSafeObjects:addedSafeObjects
+                                                                  deletedSafeObjects:deletedSafeObjects
+                                                                  changedSafeObjects:changedSafeObjects
+                                                                               state:state];
 #ifdef DEBUG
     NSLog(@"%lu Object Changes",(unsigned long)changeSets.cacheObjectsChangeSet.count);
     NSLog(@"%lu Section Changes",(unsigned long)changeSets.cacheSectionsChangeSet.count);
 #endif
-    
-    // Make sure we actually identified changes
-    // (changes might not match entity name)
-    if (!changeSets) {
+        
+        // Make sure we actually identified changes
+        // (changes might not match entity name)
+        if (!changeSets) {
 #ifdef DEBUG
         NSLog(@"No change objects or section changes found!");
 #endif
-        return;
-    }
-    
-    RBQSectionChangesObject *sectionChanges = [self createSectionChangesWithChangeSets:changeSets
-                                                                                 state:state];
-    
-    [state.cacheRealm beginWriteTransaction];
-    
-    // Update the state to make sure we rebuild cache if save fails
-    state.cache.state = RBQControllerCacheStateProcessing;
-    
-    // Create Object To Gather Up Derived Changes
-    RBQDerivedChangesObject *derivedChanges = [self deriveChangesWithChangeSets:changeSets
-                                                                 sectionChanges:sectionChanges
-                                                                          state:state];
+            return;
+        }
+        
+        RBQSectionChangesObject *sectionChanges = [self createSectionChangesWithChangeSets:changeSets
+                                                                                     state:state];
+        
+        [state.cacheRealm beginWriteTransaction];
+        
+        // Update the state to make sure we rebuild cache if save fails
+        state.cache.state = RBQControllerCacheStateProcessing;
+        
+        // Create Object To Gather Up Derived Changes
+        RBQDerivedChangesObject *derivedChanges = [self deriveChangesWithChangeSets:changeSets
+                                                                     sectionChanges:sectionChanges
+                                                                              state:state];
 #ifdef DEBUG
     NSLog(@"%lu Derived Added Objects",(unsigned long)derivedChanges.insertedObjectChanges.count);
     NSLog(@"%lu Derived Deleted Objects",(unsigned long)derivedChanges.deletedObjectChanges.count);
     NSLog(@"%lu Derived Moved Objects",(unsigned long)derivedChanges.movedObjectChanges.count);
 #endif
-    
-    // Apply Derived Changes To Cache
-    [self applyDerivedChangesToCache:derivedChanges
-                               state:state];
-    
-    [state.cacheRealm commitWriteTransaction];
-    
-    [self runOnMainThread:^(){
-        if ([weakSelf.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-            [weakSelf.delegate controllerDidChangeContent:weakSelf];
-        }
+        
+        // Apply Derived Changes To Cache
+        [self applyDerivedChangesToCache:derivedChanges
+                                   state:state];
+        
+        [state.cacheRealm commitWriteTransaction];
+        
+        [self runOnMainThread:^(){
+            if ([weakSelf.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
+                [weakSelf.delegate controllerDidChangeContent:weakSelf];
+            }
+            
+            if (useSem) {
+                dispatch_semaphore_signal(sem);
+            }
+        }];
         
         if (useSem) {
-            dispatch_semaphore_signal(sem);
+            dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
         }
-    }];
-    
-    if (useSem) {
-        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
     }
 }
 
