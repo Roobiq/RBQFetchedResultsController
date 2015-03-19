@@ -280,8 +280,6 @@
         _cacheName = name;
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
-        
-        [self registerChangeNotifications];
     }
     
     return self;
@@ -297,8 +295,6 @@
         _inMemoryRealmCache = inMemoryRealm;
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
-        
-        [self registerChangeNotifications];
     }
     
     return self;
@@ -320,6 +316,9 @@
                        forFetchRequest:self.fetchRequest
                     sectionNameKeyPath:self.sectionNameKeyPath];
         }
+        
+        // Only register for changes after the cache was created!
+        [self registerChangeNotifications];
         
         return YES;
     }
@@ -520,69 +519,76 @@
 }
 
 // Register the change notification from RBQRealmNotificationManager
+// Is no-op if the change notifications are already registered
 - (void)registerChangeNotifications
 {
     typeof(self) __weak weakSelf = self;
     
-    self.notificationToken =
-    [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
-     ^(NSDictionary *entityChanges,
-       RLMRealm *realm)
-     {
-         // Grab the entity changes object if it is available
-         RBQEntityChangesObject *entityChangesObject =
-         [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
-         
-         if (entityChangesObject &&
-             [realm.path isEqualToString:weakSelf.fetchRequest.realmPath]) {
+    if (!self.notificationToken) {
+        
+        self.notificationToken =
+        [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
+         ^(NSDictionary *entityChanges,
+           RLMRealm *realm)
+         {
+             // Grab the entity changes object if it is available
+             RBQEntityChangesObject *entityChangesObject =
+             [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
              
+             if (entityChangesObject &&
+                 [realm.path isEqualToString:weakSelf.fetchRequest.realmPath]) {
+                 
 #ifdef DEBUG
-             NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
-             NSLog(@"%lu Deleted Objects",(unsigned long)entityChangesObject.deletedSafeObjects.count);
-             NSLog(@"%lu Changed Objects",(unsigned long)entityChangesObject.changedSafeObjects.count);
+                 NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
+                 NSLog(@"%lu Deleted Objects",(unsigned long)entityChangesObject.deletedSafeObjects.count);
+                 NSLog(@"%lu Changed Objects",(unsigned long)entityChangesObject.changedSafeObjects.count);
 #endif
-             
-             [weakSelf calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
-                                         deletedSafeObjects:entityChangesObject.deletedSafeObjects
-                                         changedSafeObjects:entityChangesObject.changedSafeObjects
-                                                  realm:realm];
-         }
-     }];
+                 
+                 [weakSelf calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
+                                             deletedSafeObjects:entityChangesObject.deletedSafeObjects
+                                             changedSafeObjects:entityChangesObject.changedSafeObjects
+                                                          realm:realm];
+             }
+         }];
+    }
     
-    // Notification block to update the state of the cache when the cache Realm updates
-    self.cacheNotificationToken =
-    [[self cacheRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
-
-        /**
-         *  Must dispatch this change so that the previous write can finish
-         *
-         *  Realm doesn't suggest performing a write based on a notification
-         */
+    if (!self.cacheNotificationToken) {
         
-        void (^updateRealmCacheState)() = ^void() {
-            RLMRealm *cacheRealm = [weakSelf cacheRealm];
-            RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
+        // Notification block to update the state of the cache when the cache Realm updates
+        self.cacheNotificationToken =
+        [[self cacheRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
             
-            if (cache.state == RBQControllerCacheStateProcessing &&
-                !cache.isInvalidated) {
-                [cacheRealm beginWriteTransaction];
-                cache.state = RBQControllerCacheStateReady;
-                [cacheRealm commitWriteTransaction];
+            /**
+             *  Must dispatch this change so that the previous write can finish
+             *
+             *  Realm doesn't suggest performing a write based on a notification
+             */
+            
+            void (^updateRealmCacheState)() = ^void() {
+                RLMRealm *cacheRealm = [weakSelf cacheRealm];
+                RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
+                
+                if (cache.state == RBQControllerCacheStateProcessing &&
+                    !cache.isInvalidated) {
+                    [cacheRealm beginWriteTransaction];
+                    cache.state = RBQControllerCacheStateReady;
+                    [cacheRealm commitWriteTransaction];
+                }
+            };
+            
+            // If we are on the main thread, we should stay here (probably in-memory Realm)
+            if ([NSThread isMainThread]) {
+                dispatch_async(dispatch_get_main_queue(), ^() {
+                    updateRealmCacheState();
+                });
             }
-        };
-        
-        // If we are on the main thread, we should stay here (probably in-memory Realm)
-        if ([NSThread isMainThread]) {
-            dispatch_async(dispatch_get_main_queue(), ^() {
-                updateRealmCacheState();
-            });
-        }
-        else {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^() {
-                updateRealmCacheState();
-            });
-        }
-    }];
+            else {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^() {
+                    updateRealmCacheState();
+                });
+            }
+        }];
+    }
 }
 
 - (void)unregisterChangeNotifications
@@ -646,12 +652,9 @@
         
         RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
         
-        // We might not have a cache yet, so create it if necessary
-        if (!cache) {
-            [self performFetch];
-            
-            cache = [self cacheInRealm:cacheRealm];
-        }
+#ifdef DEBUG
+        NSAssert(cache, @"Cache can't be nil!");
+#endif
         
         RBQStateObject *state = [self createStateObjectWithFetchRequest:self.fetchRequest
                                                                   realm:realm
