@@ -658,7 +658,7 @@
         
         RBQStateObject *state = [self createStateObjectWithFetchRequest:self.fetchRequest
                                                                   realm:realm
-                                                                  cache:[self cacheInRealm:cacheRealm]
+                                                                  cache:cache
                                                              cacheRealm:cacheRealm];
         
         RBQChangeSetsObject *changeSets = [self createChangeSetsWithAddedSafeObjects:addedSafeObjects
