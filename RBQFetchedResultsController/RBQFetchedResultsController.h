@@ -226,7 +226,7 @@
 /**
  *  Retrieve the RLMObject for a given index path
  *  
- *  @warning *Important:* Returned object is not thread-safe.
+ *  @warning Returned object is not thread-safe.
  *
  *  @param indexPath the index path of the object
  *

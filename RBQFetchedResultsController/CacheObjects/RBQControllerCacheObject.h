@@ -45,7 +45,7 @@ RLM_ARRAY_TYPE(RBQSectionCacheObject)
 /**
  *  Used to track if the cache was processing while app is terminated
  *
- *  @warning *Important:* If cache is not ready, when requested, it will be rebuilt (this can occur if the app is forced closed while the cache is processing.
+ *  @warning If cache is not ready, when requested, it will be rebuilt (this can occur if the app is forced closed while the cache is processing.
  */
 @property NSInteger state;
 
