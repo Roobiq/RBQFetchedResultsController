@@ -44,9 +44,6 @@ realmPath = _realmPath;
                                         inRealm:(RLMRealm *)realm
                                       predicate:(NSPredicate *)predicate
 {
-    // Returns the appropriate class name for Obj-C or Swift
-    entityName = [RBQFetchRequest verifyEntityName:entityName];
-    
     RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
                                                                         inRealm:realm];
     fetchRequest.predicate = predicate;
@@ -58,9 +55,6 @@ realmPath = _realmPath;
                                   inMemoryRealm:(RLMRealm *)inMemoryRealm
                                       predicate:(NSPredicate *)predicate
 {
-    // Returns the appropriate class name for Obj-C or Swift
-    entityName = [RBQFetchRequest verifyEntityName:entityName];
-    
     RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
                                                         inMemoryRealm:inMemoryRealm];
     fetchRequest.predicate = predicate;
@@ -76,7 +70,8 @@ realmPath = _realmPath;
     self = [super init];
     
     if (self) {
-        _entityName = entityName;
+        // Returns the appropriate class name for Obj-C or Swift
+        _entityName = [RBQFetchRequest verifyEntityName:entityName];
         _inMemoryRealm = inMemoryRealm;
         _realmPath = inMemoryRealm.path;
     }
@@ -90,7 +85,8 @@ realmPath = _realmPath;
     self = [super init];
     
     if (self) {
-        _entityName = entityName;
+        // Returns the appropriate class name for Obj-C or Swift
+        _entityName = [RBQFetchRequest verifyEntityName:entityName];
         _realmPath = realm.path;
     }
     
