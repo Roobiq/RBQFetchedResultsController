@@ -7,6 +7,7 @@
 //
 
 #import "RBQFetchRequest.h"
+#import "RLMObject+Utilities.h"
 
 @interface RBQFetchRequest ()
 
@@ -19,10 +20,33 @@
 @synthesize entityName = _entityName,
 realmPath = _realmPath;
 
+#pragma mark - Private Class
+
+// Returns the appropriate class name for Obj-C or Swift
++ (NSString *)verifyEntityName:(NSString *)entityName
+{
+    Class objcClass = NSClassFromString(entityName);
+    
+    if (objcClass) {
+        return entityName;
+    }
+    
+    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    
+    NSString *swiftClassName = [NSString stringWithFormat:@"%@.%@",appName,entityName];
+    
+    return swiftClassName;
+}
+
+#pragma mark - Public Class
+
 + (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
                                         inRealm:(RLMRealm *)realm
                                       predicate:(NSPredicate *)predicate
 {
+    // Returns the appropriate class name for Obj-C or Swift
+    entityName = [RBQFetchRequest verifyEntityName:entityName];
+    
     RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
                                                                         inRealm:realm];
     fetchRequest.predicate = predicate;
@@ -34,12 +58,17 @@ realmPath = _realmPath;
                                   inMemoryRealm:(RLMRealm *)inMemoryRealm
                                       predicate:(NSPredicate *)predicate
 {
+    // Returns the appropriate class name for Obj-C or Swift
+    entityName = [RBQFetchRequest verifyEntityName:entityName];
+    
     RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
                                                         inMemoryRealm:inMemoryRealm];
     fetchRequest.predicate = predicate;
     
     return fetchRequest;
 }
+
+#pragma mark - Public Instance
 
 - (instancetype)initWithEntityName:(NSString *)entityName
                      inMemoryRealm:(RLMRealm *)inMemoryRealm
@@ -91,7 +120,17 @@ realmPath = _realmPath;
 
 - (BOOL)evaluateObject:(RLMObject *)object
 {
-    return [self.predicate evaluateWithObject:object];
+    // If we have a predicate, use it
+    if (self.predicate) {
+        return [self.predicate evaluateWithObject:object];
+    }
+    
+    // Verify the class name of object match the entity name of fetch request
+    NSString *className = [RLMObject classNameForObject:object];
+    
+    BOOL sameEntity = [className isEqualToString:self.entityName];
+    
+    return sameEntity;
 }
 
 #pragma mark - Getter
