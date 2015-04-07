@@ -74,7 +74,9 @@ open RBQFetchedResultsControllerExample.xcworkspace
 * Xcode 6
 
 ####Current State
-The components are partially tested, with a few functional tests provided in the example project. The goal with the project is to put this code into the [Roobiq](http://www.roobiq.com) production app.
+The example project includes a few functional tests. Further tests are planned. Currently, the project is being user tested in the [Roobiq](http://www.roobiq.com) app and is quite stable.
+
+Swift support was added in v1.7.4.
 
 ####Current Limitations:
 
