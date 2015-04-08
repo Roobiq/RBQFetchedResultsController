@@ -13,7 +13,12 @@
 #import "RBQControllerCacheObject.h"
 #import "RBQSectionCacheObject.h"
 
+#import <objc/runtime.h>
+
 @import UIKit;
+
+#pragma mark - Constants
+static char kRBQRefreshTriggeredKey;
 
 #pragma mark - RBQFetchedResultsController
 
@@ -535,6 +540,25 @@
          ^(NSDictionary *entityChanges,
            RLMRealm *realm)
          {
+             /**
+              *  First check if we have recursed due to calling refresh.
+              *
+              *  Realm triggers another notification on [RLMRealm refresh]
+              *  so we have to break this recursion to prevent
+              *  unexpected behavior or deadlocks.
+              *
+              *  When we call refresh while change processing, we associate
+              *  a NSNumber with the RLMRealm passed in through notification.
+              *  This way, when the refresh triggers a notification which fires
+              *  the change processing again, we can identify this and skip the
+              *  processing, thereby breaking the recursion.
+              */
+             
+             // If we got here through refresh notification, just return
+             if ([weakSelf notificationTriggeredFromRealmRefresh:realm]) {
+                 return;
+             }
+             
              // Grab the entity changes object if it is available
              RBQEntityChangesObject *entityChangesObject =
              [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
@@ -561,6 +585,11 @@
         // Notification block to update the state of the cache when the cache Realm updates
         self.cacheNotificationToken =
         [[self cacheRealm] addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+            
+            // If we got here through refresh notification, just return
+            if ([weakSelf notificationTriggeredFromRealmRefresh:realm]) {
+                return;
+            }
             
             /**
              *  Must dispatch this change so that the previous write can finish
@@ -644,16 +673,20 @@
         }
         
         /**
-         *  Refresh JUST the cache Realm but not the Realm
-         *  passed in since this will result in recursion.
+         *  Refresh both the cache and main Realm.
          *
-         *  Calling refresh triggers another RLMRealmDidChangeNotification,
-         *  which will then trigger the FRC to process changes from
-         *  within the current change processing.
+         *  NOTE: must use helper refresh method, so that
+         *  we prevent acting on the duplicate notification 
+         *  triggered by the refresh.
+         *
+         *  This is a requirement for any refresh called
+         *  synchronously from a RLMRealmDidChangeNotification.
          */
         RLMRealm *cacheRealm = [self cacheRealm];
         
-        [cacheRealm refresh];
+        [self refreshRealm:cacheRealm];
+        
+        [self refreshRealm:realm];
         
         RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
         
@@ -666,10 +699,12 @@
                                                                   cache:cache
                                                              cacheRealm:cacheRealm];
         
-        RBQChangeSetsObject *changeSets = [self createChangeSetsWithAddedSafeObjects:addedSafeObjects
-                                                                  deletedSafeObjects:deletedSafeObjects
-                                                                  changedSafeObjects:changedSafeObjects
-                                                                               state:state];
+        RBQChangeSetsObject *changeSets =
+        [self createChangeSetsWithAddedSafeObjects:addedSafeObjects
+                                deletedSafeObjects:deletedSafeObjects
+                                changedSafeObjects:changedSafeObjects
+                                             state:state];
+        
 #ifdef DEBUG
     NSLog(@"%lu Object Changes",(unsigned long)changeSets.cacheObjectsChangeSet.count);
     NSLog(@"%lu Section Changes",(unsigned long)changeSets.cacheSectionsChangeSet.count);
@@ -1908,6 +1943,37 @@
     else {
         dispatch_async(dispatch_get_main_queue(), mainThreadBlock);
     }
+}
+
+// Properly refresh the Realm and prevent recursive change processing
+- (void)refreshRealm:(RLMRealm *)realm
+{
+    // Associate an object before the refresh to catch the notifications triggered from it
+    objc_setAssociatedObject(realm,
+                             &kRBQRefreshTriggeredKey,
+                             @(1),
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    [realm refresh];
+    
+    // Now nil the associated objects to allow notifications to work normally
+    objc_setAssociatedObject(realm,
+                             &kRBQRefreshTriggeredKey,
+                             nil,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)notificationTriggeredFromRealmRefresh:(RLMRealm *)realm
+{
+    // Grab the associated object
+    id didCallRefresh = objc_getAssociatedObject(realm, &kRBQRefreshTriggeredKey);
+    
+    if (didCallRefresh) {
+        
+        return YES;
+    }
+    
+    return NO;
 }
 
 @end
