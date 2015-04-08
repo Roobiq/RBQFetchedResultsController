@@ -41,7 +41,6 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
     
     
     
-    
     // MARK: view
     
     override func viewDidLoad() {
@@ -55,12 +54,11 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
         
         for i in 0...1000 {
             let title = String("Cell \(i)")
-//            let object = TestObject(title: title, sortIndex: i, inTable: true)
             let object = TestObject()
             object.title = title
             object.sortIndex = i
             object.inTable = true
-
+            
             object.key = String(format: "\(object.title)\(object.sortIndex)")
             
             if i < 10 {
@@ -83,12 +81,11 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
         
         fetchRequest.sortDescriptors = [sortDescriptor, sortDescriptorSection]
         
-        
-        let fetchedResultsController = RBQFetchedResultsController(fetchRequest: fetchRequest, sectionNameKeyPath: "sectionName", cacheName: "testCache")
+        fetchedResultsController = RBQFetchedResultsController(fetchRequest: fetchRequest, sectionNameKeyPath: "sectionName", cacheName: "testCache")
         
         fetchedResultsController.delegate = self
         let success = fetchedResultsController.performFetch()
-
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -96,11 +93,12 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     // MARK: Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         let numberOfSections = fetchedResultsController.numberOfSections()
+        println("numberOfSections: \(numberOfSections)")
         return numberOfSections
     }
     
@@ -119,8 +117,9 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
         
         var cell = tableView.dequeueReusableCellWithIdentifier("customCell", forIndexPath: indexPath) as UITableViewCell
         
-        let objectForCell = fetchedResultsController.objectInRealm(realm, atIndexPath: indexPath) as TestObject
-        cell.textLabel?.text = objectForCell.title
+        if let objectForCell = fetchedResultsController.objectInRealm(realm, atIndexPath: indexPath) as? TestObject {
+            cell.textLabel?.text = objectForCell.title
+        }
         return cell
     }
     
@@ -128,9 +127,9 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
         return true
     }
     
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            
             // Delete the row from the data source
             self.deleteObjectAtIndexPath(indexPath)
         } else if (editingStyle == UITableViewCellEditingStyle.Insert) {
@@ -139,7 +138,125 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
         }
     }
     
-
+    
+    
+    // MARK: <RBQFetchedResultsControllerDelegate>
+    
+    func controllerWillChangeContent(controller: RBQFetchedResultsController!) {
+        NSLog("Beginning updates")
+        self.tableView.beginUpdates()
+    }
+    
+    func controller(controller: RBQFetchedResultsController!, didChangeObject anObject: RBQSafeRealmObject!, atIndexPath indexPath: NSIndexPath!, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath!) {
+        let tableView = self.tableView
+        
+        switch(type) {
+            
+        case .Insert :
+            if let newIndexPath = newIndexPath {
+                NSLog("Inserting at path %@", newIndexPath)
+                tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation:UITableViewRowAnimation.Fade)
+            }
+            
+        case .Delete :
+            if let indexPath = indexPath {
+                NSLog("Deleting at path %ld", indexPath.row)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+            }
+            
+        case .Update :
+            if let indexPath = indexPath {
+                NSLog("Updating at path %@", indexPath)
+                let visibleRows = tableView.indexPathsForVisibleRows() as [NSIndexPath]
+                if contains(visibleRows, indexPath) {
+                    tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                }
+            }
+            
+        case .Move :
+            if let indexPath = indexPath {
+                NSLog("Moving from path %@ to %@", indexPath, newIndexPath)
+                if let newIndexPath = newIndexPath {
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                    tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                }
+            }
+        }
+    }
+    
+    
+    func controller(controller: RBQFetchedResultsController!, didChangeSection section: RBQFetchedResultsSectionInfo!, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType) {
+        let tableView = self.tableView
+        
+        switch(type) {
+            
+        case .Insert :
+            NSLog("Inserting section at %lu", sectionIndex)
+            
+            let insertedSection = NSIndexSet(index: Int(sectionIndex))
+            tableView.insertSections(insertedSection, withRowAnimation: UITableViewRowAnimation.Fade)
+            
+        case .Delete :
+            NSLog("Deleting section at %lu", sectionIndex)
+            
+            let deletedSection = NSIndexSet(index: Int(sectionIndex))
+            tableView.deleteSections(deletedSection, withRowAnimation: UITableViewRowAnimation.Fade)
+            
+        default :
+            NSLog("Error, unhandled type in 'controller didChangeSection'")
+            
+        }
+    }
+    
+    func controllerDidChangeContent(controller: RBQFetchedResultsController!) {
+        NSLog("Ending updates")
+        NSLog("Fetched %ld Items After Change", self.fetchedResultsController.fetchedObjects.count)
+        
+        tableView.endUpdates()
+        //         try {
+        //            [self.tableView endUpdates];
+        //        }
+        //        catch (NSException *ex) {
+        //            NSLog(@"RBQFecthResultsTVC caught exception updating table view: %@. Falling back to reload.", ex);
+        //
+        //            [self.fetchedResultsController reset];
+        //
+        //            [self.tableView reloadData];
+        //        }
+        
+    }
+    
+    
+    @IBAction func didClickDeleteButton(sender: UIBarButtonItem) {
+        
+        // Delete the object in the first row
+        //    NSIndexPath *firstObjectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        //    [self deleteObjectAtIndexPath:firstObjectIndexPath];
+        
+        NSLog("DID BEGIN DELETE");
+        
+        NSLog("Fetched %ld Items Before Delete", self.fetchedResultsController.fetchedObjects.count);
+        
+        // Test deleting a section (comment out above to test)
+        let objectsInFirstSection = TestObject.objectsWhere("%K == %@","sectionName","First Section")
+        
+        realm.beginWriteTransaction()
+        realm.deleteObjectsWithNotification([objectsInFirstSection])
+        realm.commitWriteTransaction()
+        
+        NSLog("DID END DELETE");
+    }
+    
+    
+    @IBAction func didClickInsertButton(sender: AnyObject) {
+        
+        NSLog("DID BEGIN INSERT");
+        NSLog("Fetched %ld Items Before Insert", self.fetchedResultsController.fetchedObjects.count);
+        self.insertObject()
+        NSLog("DID END INSERT");
+    }
+    
+    
     // MARK: Private
     func deleteObjectAtIndexPath(indexPath : NSIndexPath) {
         if let object = fetchedResultsController.objectInRealm(realm, atIndexPath: indexPath) as? TestObject {
@@ -148,6 +265,7 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
             realm.commitWriteTransaction()
         }
     }
+    
     
     func insertObject() {
         let indexPathFirstRow =  NSIndexPath(forRow: 0, inSection: 0)
@@ -161,97 +279,97 @@ class ExampleTableViewController: UITableViewController, UITableViewDataSource, 
             
             let title = NSString(format: "Cell %lu", CLong(sortIndex))
             
-            if let newObject = RLMObject(inRealm: realm, forPrimaryKey: NSString(format: "%@%ld", title, CLong(sortIndex))) {
+            if let newObject = TestObject(inRealm: realm, forPrimaryKey: NSString(format: "%@%ld", title, CLong(sortIndex))) {
                 newObject.changeWithNotification{ object in
                     let testObject = object as TestObject
                     testObject.inTable = true
                 }
             } else {
-//                let newObject = TestObject(title: title, sortIndex: sortIndex, inTable: true)
+                //                let newObject = TestObject(title: title, sortIndex: sortIndex, inTable: true)
                 let newObject = TestObject()
                 newObject.title = title
                 newObject.sortIndex = sortIndex
-                newObject.inTable = true
                 newObject.sectionName = "First Section"
                 newObject.key = NSString(format: "%@%ld", title, CLong(sortIndex))
+                newObject.inTable = true
                 realm.addObjectWithNotification(newObject)
             }
             realm.commitWriteTransaction()
         }
+            
+            
+            // Test Moves
+        else {
+            
+            realm.beginWriteTransaction()
+            
+            let indexPathFifthRow = NSIndexPath(forRow: 5, inSection: 0)
+            let indexPathThirdRow = NSIndexPath(forRow: 3, inSection: 0)
+            let indexPathSixthRow = NSIndexPath(forRow: 6, inSection: 0)
+            let indexPathFirstRow = NSIndexPath(forRow: 0, inSection: 0)
+            
+            if let firstObject = self.fetchedResultsController.objectInRealm(realm, atIndexPath: indexPathFirstRow) as? TestObject {
+                firstObject.changeWithNotification{ object in
+                    let testObject = object as TestObject
+                    
+                    testObject.inTable = false;
+                }
+            }
+            
+            if let thirdObject = self.fetchedResultsController.objectInRealm(realm, atIndexPath: indexPathThirdRow) as? TestObject {
+                thirdObject.changeWithNotification{ object in
+                    let testObject = object as TestObject
+                    
+                    testObject.title = "Testing Move And Update";
+                }
+            }
+            if let fifthObject = self.fetchedResultsController.objectInRealm(realm, atIndexPath: indexPathFifthRow) as? TestObject {
+                fifthObject.changeWithNotification{ object in
+                    let testObject = object as TestObject
+                    
+                    testObject.sortIndex += 1;
+                }
+            }
+            
+            if let sixthObject = self.fetchedResultsController.objectInRealm(realm, atIndexPath: indexPathSixthRow) as? TestObject {
+                sixthObject.changeWithNotification{ object in
+                    let testObject = object as TestObject
+                    
+                    testObject.sortIndex -= 1;
+                }
+            }
+            
+            let ninthObject = TestObject.objectsInRealm(realm, "%K == %@", "title", "Cell 9")
+            if let ninthO = ninthObject.firstObject() as? TestObject {
+                ninthO.changeWithNotification{ object in
+                    let testObject = object as TestObject
+                    
+                    if testObject.sectionName.isEqualToString("First Section") {
+                        testObject.sectionName = "Second Section"
+                    } else {
+                        testObject.sectionName = "First Section"
+                    }
+                    
+                    testObject.title = "Testing Move And Update";
+                }
+            }
+            
+            realm.commitWriteTransaction()
+            //
+            //    //Test an inserted section that's not first
+            //    //        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
+            //    //        extraObjectInSection.sectionName = @"Middle Section";
+            //    //        [realm addObject:extraObjectInSection];
+            //    //
+            //    //        [[RBQRealmNotificationManager defaultManager] didAddObjects:@[extraObjectInSection]
+            //    //                                                  willDeleteObjects:nil
+            //    //                                                   didChangeObjects:@[NULL_IF_NIL(fifthObject),
+            //    //                                                                      NULL_IF_NIL(sixthObject),
+            //    //                                                                      NULL_IF_NIL(firstObject),
+            //    //                                                                      NULL_IF_NIL(thirdObject)]];
+            //    
+        }
         
-
-//    // Test Moves
-//    else {
-//    [realm beginWriteTransaction];
-//    
-//    NSIndexPath *indexPathFifthRow = [NSIndexPath indexPathForRow:5 inSection:0];
-//    NSIndexPath *indexPathThirdRow = [NSIndexPath indexPathForRow:3 inSection:0];
-//    NSIndexPath *indexPathSixthRow = [NSIndexPath indexPathForRow:6 inSection:0];
-//    NSIndexPath *indexPathFirstRow = [NSIndexPath indexPathForRow:0 inSection:0];
-//    
-//    TestObject *firstObject = [self.fetchedResultsController objectInRealm:realm
-//    atIndexPath:indexPathFirstRow];
-//    TestObject *thirdObject = [self.fetchedResultsController objectInRealm:realm
-//    atIndexPath:indexPathThirdRow];
-//    TestObject *fifthObject = [self.fetchedResultsController objectInRealm:realm
-//    atIndexPath:indexPathFifthRow];
-//    TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
-//    atIndexPath:indexPathSixthRow];
-//    RLMResults *ninthObject = [TestObject objectsInRealm:realm where:@"%K == %@",@"title",@"Cell 9"];
-//    
-//    [fifthObject changeWithNotification:^(RLMObject *object) {
-//    TestObject *testObject = (TestObject *)object;
-//    
-//    testObject.sortIndex += 1;
-//    }];
-//    
-//    [sixthObject changeWithNotification:^(RLMObject *object) {
-//    TestObject *testObject = (TestObject *)object;
-//    
-//    testObject.sortIndex -= 1;
-//    }];
-//    
-//    [firstObject changeWithNotification:^(RLMObject *object) {
-//    TestObject *testObject = (TestObject *)object;
-//    
-//    testObject.inTable = NO;
-//    }];
-//    
-//    [thirdObject changeWithNotification:^(RLMObject *object) {
-//    TestObject *testObject = (TestObject *)object;
-//    
-//    testObject.title = @"Testing Move And Update";
-//    }];
-//    
-//    if (ninthObject.firstObject) {
-//    [ninthObject.firstObject changeWithNotification:^(RLMObject *object) {
-//    TestObject *testObject = (TestObject *)object;
-//    
-//    if ([testObject.sectionName isEqualToString:@"First Section"]) {
-//    testObject.sectionName = @"Second Section";
-//    }
-//    else {
-//    testObject.sectionName = @"First Section";
-//    }
-//    }];
-//    }
-//    
-//    //Test an inserted section that's not first
-//    //        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
-//    //        extraObjectInSection.sectionName = @"Middle Section";
-//    //        [realm addObject:extraObjectInSection];
-//    //
-//    //        [[RBQRealmNotificationManager defaultManager] didAddObjects:@[extraObjectInSection]
-//    //                                                  willDeleteObjects:nil
-//    //                                                   didChangeObjects:@[NULL_IF_NIL(fifthObject),
-//    //                                                                      NULL_IF_NIL(sixthObject),
-//    //                                                                      NULL_IF_NIL(firstObject),
-//    //                                                                      NULL_IF_NIL(thirdObject)]];
-//    
-//    [realm commitWriteTransaction];
-//    }
-//    }
-    
-   }
+    }
     
 }

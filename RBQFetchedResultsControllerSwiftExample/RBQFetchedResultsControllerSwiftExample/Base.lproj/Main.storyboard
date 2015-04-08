@@ -25,7 +25,18 @@
                             <outlet property="delegate" destination="IBI-JV-e4G" id="B0P-35-1A0"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="OsI-f2-sbf"/>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="OsI-f2-sbf">
+                        <barButtonItem key="leftBarButtonItem" title="Delete" id="hNJ-ch-0eP">
+                            <connections>
+                                <action selector="didClickDeleteButton:" destination="IBI-JV-e4G" id="ATT-32-JJV"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Insert" id="Bh8-cL-f8b">
+                            <connections>
+                                <action selector="didClickInsertButton:" destination="IBI-JV-e4G" id="z3L-gz-Mbu"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fOI-oI-u9M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
