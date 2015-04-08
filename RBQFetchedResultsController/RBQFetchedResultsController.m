@@ -644,15 +644,16 @@
         }
         
         /**
-         *  Refresh both the cache Realm and passed in Realm so
-         *  that cache and the fetch results are up-to-date for
-         *  proper identification of changes.
+         *  Refresh JUST the cache Realm but not the Realm
+         *  passed in since this will result in recursion.
+         *
+         *  Calling refresh triggers another RLMRealmDidChangeNotification,
+         *  which will then trigger the FRC to process changes from
+         *  within the current change processing.
          */
         RLMRealm *cacheRealm = [self cacheRealm];
         
         [cacheRealm refresh];
-        
-        [realm refresh];
         
         RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
         
