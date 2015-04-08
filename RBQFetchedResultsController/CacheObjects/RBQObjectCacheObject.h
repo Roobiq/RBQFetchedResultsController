@@ -87,11 +87,13 @@
  *
  *  @param realm       The RLMRealm in which the cache object is persisted
  *  @param cacheObject The RBQObjectCacheObject representing the RLMObject
+ *  @param withRefresh Indicates if refresh should be called on the RLMRealm
  *
  *  @return A instance of RLMObject
  */
 + (RLMObject *)objectInRealm:(RLMRealm *)realm
-              forCacheObject:(RBQObjectCacheObject *)cacheObject;
+              forCacheObject:(RBQObjectCacheObject *)cacheObject
+                 withRefresh:(BOOL)withRefresh;
 
 @end
 

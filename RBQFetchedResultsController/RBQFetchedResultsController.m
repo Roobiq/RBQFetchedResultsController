@@ -357,8 +357,10 @@
             
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
-            RLMObject *object = [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
-                                                     forCacheObject:cacheObject];
+            RLMObject *object =
+            [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
+                                 forCacheObject:cacheObject
+                                    withRefresh:YES];
             
             return [RBQSafeRealmObject safeObjectFromObject:object];
         }
@@ -378,7 +380,8 @@
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
             return [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
-                                        forCacheObject:cacheObject];
+                                        forCacheObject:cacheObject
+                                           withRefresh:YES];
         }
     }
     
@@ -399,7 +402,8 @@
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
             return [RBQObjectCacheObject objectInRealm:realm
-                                        forCacheObject:cacheObject];
+                                        forCacheObject:cacheObject
+                                           withRefresh:YES];
         }
     }
     
@@ -1187,8 +1191,11 @@
     }
     
     // Get new indexPath if we can
+    // No need to refresh on the non-cache Realm, since this causes recursion
+    // (refresh sends RLMRealmDidChangeNotification causing FRC processing to start anew)
     RLMObject *updatedObject = [RBQObjectCacheObject objectInRealm:state.realm
-                                                    forCacheObject:cacheObject];
+                                                    forCacheObject:cacheObject
+                                                       withRefresh:NO];
     
     if (updatedObject) {
         NSInteger newAllObjectIndex = [state.fetchResults indexOfObject:updatedObject];
