@@ -227,7 +227,16 @@ static char kRBQRefreshTriggeredKey;
     NSString *cachePath = [basePath stringByAppendingPathComponent:uniqueDirectory];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath isDirectory:&isDir] && isDir == NO) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:&error];
+        [[NSFileManager defaultManager] createDirectoryAtPath:cachePath
+                                  withIntermediateDirectories:NO
+                                                   attributes:@{NSFileProtectionKey:NSFileProtectionNone}
+                                                        error:&error];
+        
+        if (error) {
+#ifdef DEBUG
+            NSLog(@"FRC Cache Directory Creation Error: %@",error.localizedDescription);
+#endif
+        }
     }
     
     NSString *fileName = [NSString stringWithFormat:@"%@.realm",name];
@@ -248,7 +257,16 @@ static char kRBQRefreshTriggeredKey;
     NSString *basePath = [documentPath stringByAppendingPathComponent:@"/RBQFetchedResultsControllerCache"];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:basePath isDirectory:&isDir] && isDir == NO) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:basePath withIntermediateDirectories:NO attributes:nil error:&error];
+        [[NSFileManager defaultManager] createDirectoryAtPath:basePath
+                                  withIntermediateDirectories:NO
+                                                   attributes:@{NSFileProtectionKey:NSFileProtectionNone}
+                                                        error:&error];
+        
+        if (error) {
+#ifdef DEBUG
+            NSLog(@"FRC Cache Directory Creation Error: %@",error.localizedDescription);
+#endif
+        }
     }
     
     return basePath;
@@ -267,7 +285,16 @@ static char kRBQRefreshTriggeredKey;
     NSString *cachePath = [documentPath stringByAppendingPathComponent:uniqueDirectory];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath isDirectory:&isDir] && isDir == NO) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:&error];
+        [[NSFileManager defaultManager] createDirectoryAtPath:cachePath
+                                  withIntermediateDirectories:NO
+                                                   attributes:@{NSFileProtectionKey:NSFileProtectionNone}
+                                                        error:&error];
+        
+        if (error) {
+#ifdef DEBUG
+            NSLog(@"FRC Cache Directory Creation Error: %@",error.localizedDescription);
+#endif
+        }
     }
     
     return cachePath;
