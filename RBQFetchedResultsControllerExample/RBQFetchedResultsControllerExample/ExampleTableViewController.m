@@ -303,8 +303,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             [realm addObjectWithNotification:newObject];
         }
         else {
-            [newObject changeWithNotification:^(RLMObject *object) {
-                TestObject *testObject = (TestObject *)object;
+            [newObject changeWithNotification:^(TestObject *testObject) {
                 testObject.inTable = YES;
             }];
         }
@@ -330,33 +329,28 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
                                                                    atIndexPath:indexPathSixthRow];
         RLMResults *ninthObject = [TestObject objectsInRealm:realm where:@"%K == %@",@"title",@"Cell 9"];
         
-        [fifthObject changeWithNotification:^(RLMObject *object) {
-            TestObject *testObject = (TestObject *)object;
+        [fifthObject changeWithNotification:^(TestObject *testObject) {
             
             testObject.sortIndex += 1;
         }];
         
-        [sixthObject changeWithNotification:^(RLMObject *object) {
-            TestObject *testObject = (TestObject *)object;
+        [sixthObject changeWithNotification:^(TestObject *testObject) {
             
             testObject.sortIndex -= 1;
         }];
         
-        [firstObject changeWithNotification:^(RLMObject *object) {
-            TestObject *testObject = (TestObject *)object;
+        [firstObject changeWithNotification:^(TestObject *testObject) {
             
             testObject.inTable = NO;
         }];
         
-        [thirdObject changeWithNotification:^(RLMObject *object) {
-            TestObject *testObject = (TestObject *)object;
+        [thirdObject changeWithNotification:^(TestObject *testObject) {
             
             testObject.title = @"Testing Move And Update";
         }];
         
         if (ninthObject.firstObject) {
-            [ninthObject.firstObject changeWithNotification:^(RLMObject *object) {
-                TestObject *testObject = (TestObject *)object;
+            [ninthObject.firstObject changeWithNotification:^(TestObject *testObject) {
                 
                 if ([testObject.sectionName isEqualToString:@"First Section"]) {
                     testObject.sectionName = @"Second Section";
