@@ -2,7 +2,7 @@
 //  RBQFetchRequest.h
 //  RBQFetchedResultsControllerTest
 //
-//  Created by Lauren Smith on 1/2/15.
+//  Created by Adam Fish on 1/2/15.
 //  Copyright (c) 2015 Roobiq. All rights reserved.
 //
 

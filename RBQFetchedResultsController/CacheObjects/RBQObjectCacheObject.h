@@ -58,7 +58,7 @@
  *  @return A new instance of RBQFetchedResultsCacheObject
  */
 + (instancetype)createCacheObjectWithObject:(RLMObject *)object
-                  sectionKeyPathValue:(NSString *)sectionValue;
+                        sectionKeyPathValue:(NSString *)sectionValue;
 
 /**
  *  Create RBQFetchedResultsCacheObject from RBQSafeObject
@@ -69,7 +69,7 @@
  *  @return A new instance of RBQFetchedResultsCacheObject
  */
 + (instancetype)createCacheObjectWithSafeObject:(RBQSafeRealmObject *)safeObject
-                      sectionKeyPathValue:(NSString *)sectionValue;
+                            sectionKeyPathValue:(NSString *)sectionValue;
 
 /**
  *  Retrieve RBQFetchedResultsCacheObject from a Realm instance from RLMObject
@@ -87,13 +87,11 @@
  *
  *  @param realm       The RLMRealm in which the cache object is persisted
  *  @param cacheObject The RBQObjectCacheObject representing the RLMObject
- *  @param withRefresh Indicates if refresh should be called on the RLMRealm
  *
  *  @return A instance of RLMObject
  */
 + (RLMObject *)objectInRealm:(RLMRealm *)realm
-              forCacheObject:(RBQObjectCacheObject *)cacheObject
-                 withRefresh:(BOOL)withRefresh;
+              forCacheObject:(RBQObjectCacheObject *)cacheObject;
 
 @end
 

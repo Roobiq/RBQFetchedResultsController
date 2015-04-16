@@ -87,14 +87,7 @@
 
 + (RLMObject *)objectInRealm:(RLMRealm *)realm
               forCacheObject:(RBQObjectCacheObject *)cacheObject
-                 withRefresh:(BOOL)withRefresh
 {
-    // Always call refresh on the Realm
-    // Prevents momentary issue where cache has object but Realm in FR doesn't
-    if (withRefresh) {
-       [realm refresh];
-    }
-    
     Class realClass = NSClassFromString(cacheObject.className);
     if (cacheObject.primaryKeyType == RLMPropertyTypeString) {
         

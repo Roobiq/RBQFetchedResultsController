@@ -2,7 +2,7 @@
 //  RBQFetchedResultsController.m
 //  RBQFetchedResultsControllerTest
 //
-//  Created by Lauren Smith on 1/2/15.
+//  Created by Adam Fish on 1/2/15.
 //  Copyright (c) 2015 Roobiq. All rights reserved.
 //
 
@@ -389,10 +389,13 @@ static char kRBQRefreshTriggeredKey;
             
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
+            RLMRealm *realm = self.fetchRequest.realm;
+            
+            [self refreshRealm:realm];
+            
             RLMObject *object =
-            [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
-                                 forCacheObject:cacheObject
-                                    withRefresh:YES];
+            [RBQObjectCacheObject objectInRealm:realm
+                                 forCacheObject:cacheObject];
             
             return [RBQSafeRealmObject safeObjectFromObject:object];
         }
@@ -411,9 +414,12 @@ static char kRBQRefreshTriggeredKey;
         if (indexPath.row < section.objects.count) {
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
-            return [RBQObjectCacheObject objectInRealm:self.fetchRequest.realm
-                                        forCacheObject:cacheObject
-                                           withRefresh:YES];
+            RLMRealm *realm = self.fetchRequest.realm;
+            
+            [self refreshRealm:realm];
+            
+            return [RBQObjectCacheObject objectInRealm:realm
+                                        forCacheObject:cacheObject];
         }
     }
     
@@ -433,9 +439,10 @@ static char kRBQRefreshTriggeredKey;
             
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
+            [self refreshRealm:realm];
+            
             return [RBQObjectCacheObject objectInRealm:realm
-                                        forCacheObject:cacheObject
-                                           withRefresh:YES];
+                                        forCacheObject:cacheObject];
         }
     }
     
@@ -598,7 +605,6 @@ static char kRBQRefreshTriggeredKey;
                  NSLog(@"%lu Deleted Objects",(unsigned long)entityChangesObject.deletedSafeObjects.count);
                  NSLog(@"%lu Changed Objects",(unsigned long)entityChangesObject.changedSafeObjects.count);
 #endif
-                 
                  [weakSelf calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
                                              deletedSafeObjects:entityChangesObject.deletedSafeObjects
                                              changedSafeObjects:entityChangesObject.changedSafeObjects
@@ -671,15 +677,14 @@ static char kRBQRefreshTriggeredKey;
 {
     @synchronized(self) {
 #ifdef DEBUG
-    NSAssert(addedSafeObjects, @"Added safe objects can't be nil");
-    NSAssert(deletedSafeObjects, @"Deleted safe objects can't be nil");
-    NSAssert(changedSafeObjects, @"Changed safe objects can't be nil");
-    NSAssert(realm, @"Realm can't be nil");
+        NSAssert(addedSafeObjects, @"Added safe objects can't be nil");
+        NSAssert(deletedSafeObjects, @"Deleted safe objects can't be nil");
+        NSAssert(changedSafeObjects, @"Changed safe objects can't be nil");
+        NSAssert(realm, @"Realm can't be nil");
 #endif
-        
         /**
-         *  If we are not on the main thread then use a semaphore 
-         *  to prevent condition where subsequent processing runs 
+         *  If we are not on the main thread then use a semaphore
+         *  to prevent condition where subsequent processing runs
          *  before the async delegate calls complete on main thread
          */
         BOOL useSem = NO;
@@ -703,7 +708,7 @@ static char kRBQRefreshTriggeredKey;
          *  Refresh both the cache and main Realm.
          *
          *  NOTE: must use helper refresh method, so that
-         *  we prevent acting on the duplicate notification 
+         *  we prevent acting on the duplicate notification
          *  triggered by the refresh.
          *
          *  This is a requirement for any refresh called
@@ -733,15 +738,15 @@ static char kRBQRefreshTriggeredKey;
                                              state:state];
         
 #ifdef DEBUG
-    NSLog(@"%lu Object Changes",(unsigned long)changeSets.cacheObjectsChangeSet.count);
-    NSLog(@"%lu Section Changes",(unsigned long)changeSets.cacheSectionsChangeSet.count);
+        NSLog(@"%lu Object Changes",(unsigned long)changeSets.cacheObjectsChangeSet.count);
+        NSLog(@"%lu Section Changes",(unsigned long)changeSets.cacheSectionsChangeSet.count);
 #endif
         
         // Make sure we actually identified changes
         // (changes might not match entity name)
         if (!changeSets) {
 #ifdef DEBUG
-        NSLog(@"No change objects or section changes found!");
+            NSLog(@"No change objects or section changes found!");
 #endif
             return;
         }
@@ -759,9 +764,9 @@ static char kRBQRefreshTriggeredKey;
                                                                      sectionChanges:sectionChanges
                                                                               state:state];
 #ifdef DEBUG
-    NSLog(@"%lu Derived Added Objects",(unsigned long)derivedChanges.insertedObjectChanges.count);
-    NSLog(@"%lu Derived Deleted Objects",(unsigned long)derivedChanges.deletedObjectChanges.count);
-    NSLog(@"%lu Derived Moved Objects",(unsigned long)derivedChanges.movedObjectChanges.count);
+        NSLog(@"%lu Derived Added Objects",(unsigned long)derivedChanges.insertedObjectChanges.count);
+        NSLog(@"%lu Derived Deleted Objects",(unsigned long)derivedChanges.deletedObjectChanges.count);
+        NSLog(@"%lu Derived Moved Objects",(unsigned long)derivedChanges.movedObjectChanges.count);
 #endif
         
         // Apply Derived Changes To Cache
@@ -822,8 +827,8 @@ static char kRBQRefreshTriggeredKey;
     
     // Apply Object Changes To Cache (Must apply in correct order!)
     for (NSOrderedSet *objectChanges in @[derivedChanges.deletedObjectChanges,
-                                     derivedChanges.insertedObjectChanges,
-                                     derivedChanges.movedObjectChanges]) {
+                                          derivedChanges.insertedObjectChanges,
+                                          derivedChanges.movedObjectChanges]) {
         
         for (RBQObjectChangeObject *objectChange in objectChanges) {
             
@@ -831,7 +836,7 @@ static char kRBQRefreshTriggeredKey;
                 
                 // Remove the object from the section
                 RBQSectionCacheObject *section = objectChange.previousCacheObject.section;
-
+                
                 [section.objects removeObjectAtIndex:objectChange.previousIndexPath.row];
                 
                 // Remove the object
@@ -857,7 +862,7 @@ static char kRBQRefreshTriggeredKey;
                 
                 objectChange.updatedCacheObject.section = section;
             }
-            else if (objectChange.changeType == NSFetchedResultsChangeMove) {                
+            else if (objectChange.changeType == NSFetchedResultsChangeMove) {
                 // Delete to remove it from previous section
                 [state.cacheRealm deleteObject:objectChange.previousCacheObject];
                 
@@ -1065,8 +1070,8 @@ static char kRBQRefreshTriggeredKey;
             if (![self.fetchRequest evaluateObject:object] &&
                 ![RBQObjectCacheObject objectInRealm:state.cacheRealm
                                        forPrimaryKey:safeObject.primaryKeyValue]) {
-                continue;
-            }
+                    continue;
+                }
             
             NSString *sectionTitle = nil;
             
@@ -1257,8 +1262,7 @@ static char kRBQRefreshTriggeredKey;
     // No need to refresh on the non-cache Realm, since this causes recursion
     // (refresh sends RLMRealmDidChangeNotification causing FRC processing to start anew)
     RLMObject *updatedObject = [RBQObjectCacheObject objectInRealm:state.realm
-                                                    forCacheObject:cacheObject
-                                                       withRefresh:NO];
+                                                    forCacheObject:cacheObject];
     
     if (updatedObject) {
         NSInteger newAllObjectIndex = [state.fetchResults indexOfObject:updatedObject];
@@ -1284,7 +1288,7 @@ static char kRBQRefreshTriggeredKey;
             
             objectChange.updatedCacheObject = cacheObject;
             objectChange.updatedIndexpath = [NSIndexPath indexPathForRow:newRowIndex
-                                                            inSection:newSectionIndex];
+                                                               inSection:newSectionIndex];
         }
     }
     
@@ -1391,9 +1395,9 @@ static char kRBQRefreshTriggeredKey;
                                      options:NSBinarySearchingInsertionIndex
                              usingComparator:^NSComparisonResult(RBQSectionChangeObject *sec1,
                                                                  RBQSectionChangeObject *sec2) {
-                                // Compare the index (reverse sort)
-                                return [sec2.previousIndex compare:sec1.previousIndex];
-                            }];
+                                 // Compare the index (reverse sort)
+                                 return [sec2.previousIndex compare:sec1.previousIndex];
+                             }];
         
         [deletedSectionChanges insertObject:sectionChange atIndex:indexToInsert];
     }
@@ -1435,7 +1439,7 @@ static char kRBQRefreshTriggeredKey;
                                   // Compare the index
                                   return [sec1.updatedIndex compare:sec2.updatedIndex];
                               }];
-         
+        
         
         [insertedSectionChanges insertObject:sectionChange atIndex:indexToInsert];
     }
@@ -1477,7 +1481,7 @@ static char kRBQRefreshTriggeredKey;
                                                                      changeSets:changeSets
                                                                  sectionChanges:sectionChanges
                                                                           state:state];
-    
+        
         // If we didn't get an object change then skip
         if (!objectChange) {
             continue;
@@ -1512,13 +1516,13 @@ static char kRBQRefreshTriggeredKey;
             NSRange sortRange = NSMakeRange(0, deletedObjectChanges.count);
             NSUInteger indexToInsert =
             [deletedObjectChanges indexOfObject:objectChange
-                                   inSortedRange:sortRange
-                                         options:NSBinarySearchingInsertionIndex
-                                 usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
-                                                                     RBQObjectChangeObject *obj2) {
-                                     // Compare the indexPaths (reverse sort)
-                                     return [obj2.previousIndexPath compare:obj1.previousIndexPath];
-                                 }];
+                                  inSortedRange:sortRange
+                                        options:NSBinarySearchingInsertionIndex
+                                usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                    RBQObjectChangeObject *obj2) {
+                                    // Compare the indexPaths (reverse sort)
+                                    return [obj2.previousIndexPath compare:obj1.previousIndexPath];
+                                }];
             
             [deletedObjectChanges insertObject:objectChange atIndex:indexToInsert];
             
@@ -1540,9 +1544,9 @@ static char kRBQRefreshTriggeredKey;
                                            options:NSBinarySearchingInsertionIndex
                                    usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
                                                                        RBQObjectChangeObject *obj2) {
-                                    // Compare the indexPaths (reverse sort)
-                                    return [obj2.previousIndexPath compare:obj1.previousIndexPath];
-                                }];
+                                       // Compare the indexPaths (reverse sort)
+                                       return [obj2.previousIndexPath compare:obj1.previousIndexPath];
+                                   }];
             
             [deletedChangesInSection insertObject:objectChange atIndex:indexToInsertForSection];
         }
@@ -1580,7 +1584,7 @@ static char kRBQRefreshTriggeredKey;
                                                                      RBQObjectChangeObject *obj2) {
                                      // Compare the indexPaths
                                      return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
-                                     }];
+                                 }];
             
             [insertedObjectChanges insertObject:objectChange atIndex:indexToInsert];
             
@@ -1602,9 +1606,9 @@ static char kRBQRefreshTriggeredKey;
                                             options:NSBinarySearchingInsertionIndex
                                     usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
                                                                         RBQObjectChangeObject *obj2) {
-                                       // Compare the indexPaths
-                                       return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
-                                   }];
+                                        // Compare the indexPaths
+                                        return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
+                                    }];
             
             [insertedObjectChanges insertObject:objectChange atIndex:indexToInsertForSection];
         }
@@ -1620,7 +1624,7 @@ static char kRBQRefreshTriggeredKey;
      *  Now we will process the remaining items to identify moves/updates
      *
      *  To accurately find moves, we need to calculate the absolute change to the section and row
-     *  
+     *
      *  To identify absolute changes, we need to figure out the relative changes to sections and rows
      *
      *  Initially, relative section changes were calculated, but in practice UITableview just wants
@@ -1632,7 +1636,7 @@ static char kRBQRefreshTriggeredKey;
     
     /**
      *  First we will create two collections: the inserted section indexes and deleted section indexes
-     *  
+     *
      *  Both of these will be used for any relative section change checking
      *
      *  Note: this might not need to be sorted as a potential performance improvement (legacy
@@ -1648,13 +1652,13 @@ static char kRBQRefreshTriggeredKey;
         NSRange sortRangeSectionInserts = NSMakeRange(0, insertedSectionIndexes.count);
         NSUInteger indexForInsert =
         [insertedSectionIndexes indexOfObject:index
-                               inSortedRange:sortRangeSectionInserts
-                                     options:NSBinarySearchingInsertionIndex
-                             usingComparator:^NSComparisonResult(NSNumber *num1,
-                                                                 NSNumber *num2) {
-                                 // Compare the NSNumbers
-                                 return [num1 compare:num2];
-                             }];
+                                inSortedRange:sortRangeSectionInserts
+                                      options:NSBinarySearchingInsertionIndex
+                              usingComparator:^NSComparisonResult(NSNumber *num1,
+                                                                  NSNumber *num2) {
+                                  // Compare the NSNumbers
+                                  return [num1 compare:num2];
+                              }];
         
         [insertedSectionIndexes insertObject:index atIndex:indexForInsert];
     }
@@ -1672,15 +1676,15 @@ static char kRBQRefreshTriggeredKey;
                                      options:NSBinarySearchingInsertionIndex
                              usingComparator:^NSComparisonResult(NSNumber *num1,
                                                                  NSNumber *num2) {
-                                  // Compare the NSNumbers
-                                  return [num1 compare:num2];
-                              }];
+                                 // Compare the NSNumbers
+                                 return [num1 compare:num2];
+                             }];
         
         [deletedSectionIndexes insertObject:index atIndex:indexForInsert];
     }
     
     /**
-     *  Now that we have the inserted/deleted section index collections and 
+     *  Now that we have the inserted/deleted section index collections and
      *  the inserted/deleted objectChange collections, we can process the remaining
      *  objectChanges to accurately identify moves
      */
@@ -1723,10 +1727,10 @@ static char kRBQRefreshTriggeredKey;
         
         if (deletedObjectChangesForSection) {
             /**
-             *  Get the number of row deletes that occurred 
+             *  Get the number of row deletes that occurred
              *  before the updated indexPath
              *
-             *  We calculate this by asking for the index if 
+             *  We calculate this by asking for the index if
              *  we were to insert object into the delete collection
              */
             NSRange sortRangeRowDeletes = NSMakeRange(0, deletedObjectChanges.count);
@@ -1744,32 +1748,32 @@ static char kRBQRefreshTriggeredKey;
         NSInteger relativeRowChange = rowInserts - rowDeletes;
         
         /**
-         *  If an object is moving from one section to another, 
-         *  but that section index stays the same this needs to be 
-         *  reported as a move and not an update (the indexPath's are 
+         *  If an object is moving from one section to another,
+         *  but that section index stays the same this needs to be
+         *  reported as a move and not an update (the indexPath's are
          *  the same, but UITableView wants a move reported).
          */
         BOOL objectSectionReplacedItself = NO;
         
         if ([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] == NSOrderedSame &&
             ([insertedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)] ||
-            [deletedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)])) {
-            
-            objectSectionReplacedItself = YES;
-        }
+             [deletedSectionIndexes containsObject:@(objectChange.updatedIndexpath.section)])) {
+                
+                objectSectionReplacedItself = YES;
+            }
         
         /**
-         *  Now that we have the relative row change, we can identify if there 
-         *  was an absolute change and report the move. 
+         *  Now that we have the relative row change, we can identify if there
+         *  was an absolute change and report the move.
          
-         *  Also report move if the section change replaced itself 
-         *  (i.e. indexPath is the same, but we deleted and inserted 
+         *  Also report move if the section change replaced itself
+         *  (i.e. indexPath is the same, but we deleted and inserted
          *  a section at the same index)
          *
          *  Report a move if the object changes section (even if relative)
          */
         if (([objectChange.updatedIndexpath compare:objectChange.previousIndexPath] != NSOrderedSame &&
-            (objectChange.updatedIndexpath.row - objectChange.previousIndexPath.row) != relativeRowChange) ||
+             (objectChange.updatedIndexpath.row - objectChange.previousIndexPath.row) != relativeRowChange) ||
             objectChange.updatedIndexpath.section != objectChange.previousIndexPath.section ||
             objectSectionReplacedItself) {
             
@@ -1902,16 +1906,16 @@ static char kRBQRefreshTriggeredKey;
 {
     [RLMRealm setSchemaVersion:1 forRealmAtPath:path
             withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {
-        
-        if (oldSchemaVersion < 1) {
-            [migration enumerateObjects:[RBQControllerCacheObject className]
-                                  block:^(RLMObject *oldObject, RLMObject *newObject) {
-                                    
-                                      // Insert an invalid section name key path to make sure cache is rebuilt
-                                      newObject[@"sectionNameKeyPath"] = @"invalidSectionNameKeyPath";
-                                  }];
-        }
-    }];
+                
+                if (oldSchemaVersion < 1) {
+                    [migration enumerateObjects:[RBQControllerCacheObject className]
+                                          block:^(RLMObject *oldObject, RLMObject *newObject) {
+                                              
+                                              // Insert an invalid section name key path to make sure cache is rebuilt
+                                              newObject[@"sectionNameKeyPath"] = @"invalidSectionNameKeyPath";
+                                          }];
+                }
+            }];
 }
 
 // Retrieve internal cache
