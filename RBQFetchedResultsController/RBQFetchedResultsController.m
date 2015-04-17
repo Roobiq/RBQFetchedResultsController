@@ -28,6 +28,7 @@ static char kRBQRefreshTriggeredKey;
 @property (strong, nonatomic) RLMNotificationToken *cacheNotificationToken;
 @property (weak, nonatomic) RLMRealm *inMemoryRealmCache;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
+@property (strong, nonatomic) dispatch_queue_t internalQueue;
 
 @end
 
@@ -135,7 +136,7 @@ static char kRBQRefreshTriggeredKey;
 
 @property (strong, nonatomic) NSNumber *previousIndex;
 @property (strong, nonatomic) NSNumber *updatedIndex;
-@property (strong, nonatomic) RBQSectionCacheObject *section;
+@property (strong, nonatomic) RBQSafeRealmObject *safeSection;
 @property (assign, nonatomic) NSFetchedResultsChangeType changeType;
 
 @end
@@ -151,8 +152,8 @@ static char kRBQRefreshTriggeredKey;
 @property (strong, nonatomic) NSIndexPath *previousIndexPath;
 @property (strong, nonatomic) NSIndexPath *updatedIndexpath;
 @property (assign, nonatomic) NSFetchedResultsChangeType changeType;
-@property (strong, nonatomic) RBQSafeRealmObject *object;
-@property (strong, nonatomic) RBQObjectCacheObject *previousCacheObject;
+@property (strong, nonatomic) RBQSafeRealmObject *safeObject;
+@property (strong, nonatomic) RBQSafeRealmObject *safePreviousCacheObject;
 @property (strong, nonatomic) RBQObjectCacheObject *updatedCacheObject;
 
 @end
@@ -306,7 +307,7 @@ static char kRBQRefreshTriggeredKey;
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
                  cacheName:(NSString *)name
 {
-    self = [super init];
+    self = [self init];
     
     if (self) {
         _cacheName = name;
@@ -321,12 +322,23 @@ static char kRBQRefreshTriggeredKey;
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
         inMemoryRealmCache:(RLMRealm *)inMemoryRealm
 {
-    self = [super init];
+    self = [self init];
     
     if (self) {
         _inMemoryRealmCache = inMemoryRealm;
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
+    }
+    
+    return self;
+}
+
+- (id)init
+{
+    self = [super init];
+    
+    if (self) {
+        _internalQueue=  dispatch_queue_create("com.RBQFetchedResultsController.internalQueue", DISPATCH_QUEUE_SERIAL);
     }
     
     return self;
@@ -687,22 +699,15 @@ static char kRBQRefreshTriggeredKey;
          *  to prevent condition where subsequent processing runs
          *  before the async delegate calls complete on main thread
          */
-        BOOL useSem = NO;
-        
-        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-        
-        if (![NSThread isMainThread]) {
-            useSem = YES;
-        }
+//        BOOL useSem = NO;
+//        
+//        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+//        
+//        if (![NSThread isMainThread]) {
+//            useSem = YES;
+//        }
         
         typeof(self) __weak weakSelf = self;
-        
-        if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
-            
-            [self runOnMainThread:^(){
-                [weakSelf.delegate controllerWillChangeContent:weakSelf];
-            }];
-        }
         
         /**
          *  Refresh both the cache and main Realm.
@@ -768,26 +773,43 @@ static char kRBQRefreshTriggeredKey;
         NSLog(@"%lu Derived Deleted Objects",(unsigned long)derivedChanges.deletedObjectChanges.count);
         NSLog(@"%lu Derived Moved Objects",(unsigned long)derivedChanges.movedObjectChanges.count);
 #endif
-        
-        // Apply Derived Changes To Cache
-        [self applyDerivedChangesToCache:derivedChanges
-                                   state:state];
-        
         [state.cacheRealm commitWriteTransaction];
         
-        [self runOnMainThread:^(){
-            if ([weakSelf.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-                [weakSelf.delegate controllerDidChangeContent:weakSelf];
+        // Dispatch the final changes
+        dispatch_async(weakSelf.internalQueue, ^() {
+            RLMRealm *cacheRealm = [weakSelf cacheRealm];
+            
+            [weakSelf refreshRealm:cacheRealm];
+            
+            RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
+            
+            state.cache = cache;
+            state.cacheRealm = cacheRealm;
+            
+            if ([weakSelf.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
+                
+                [weakSelf runOnMainThread:^(){
+                    [weakSelf.delegate controllerWillChangeContent:weakSelf];
+                }];
             }
             
-            if (useSem) {
-                dispatch_semaphore_signal(sem);
-            }
-        }];
+            [state.cacheRealm beginWriteTransaction];
+            
+            // Update the state to make sure we rebuild cache if save fails
+            state.cache.state = RBQControllerCacheStateProcessing;
         
-        if (useSem) {
-            dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-        }
+            // Apply Derived Changes To Cache
+            [weakSelf applyDerivedChangesToCache:derivedChanges
+                                           state:state];
+            
+            [state.cacheRealm commitWriteTransaction];
+            
+            [weakSelf runOnMainThread:^(){
+                if ([weakSelf.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
+                    [weakSelf.delegate controllerDidChangeContent:weakSelf];
+                }
+            }];
+        });
     }
 }
 
@@ -799,6 +821,8 @@ static char kRBQRefreshTriggeredKey;
     NSAssert(state, @"State can't be nil!");
 #endif
     
+    typeof(self) __weak weakSelf = self;
+    
     // Apply Section Changes To Cache (deletes in reverse order, then inserts)
     for (NSOrderedSet *sectionChanges in @[derivedChanges.deletedSectionChanges,
                                            derivedChanges.insertedSectionChanges]) {
@@ -807,19 +831,60 @@ static char kRBQRefreshTriggeredKey;
             
             if (sectionChange.changeType == NSFetchedResultsChangeDelete) {
                 
+                RBQSectionCacheObject *section = [RBQSafeRealmObject objectInRealm:state.cacheRealm fromSafeObject:sectionChange.safeSection];
+                
 #ifdef DEBUG
                 NSAssert(sectionChange.previousIndex.unsignedIntegerValue < state.cache.sections.count, @"Attemting to delete index that is already gone!");
+                NSAssert(section, @"Section cannot be nil!");
 #endif
+
+                RBQFetchedResultsSectionInfo *sectionInfo =
+                [RBQFetchedResultsSectionInfo createSectionWithName:section.name
+                                                 sectionNameKeyPath:self.sectionNameKeyPath
+                                                       fetchRequest:self.fetchRequest];
+                
+                if ([self.delegate
+                     respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
+                {
+                    [self runOnMainThread:^(){
+                        [weakSelf.delegate controller:weakSelf
+                                     didChangeSection:sectionInfo
+                                              atIndex:sectionChange.previousIndex.unsignedIntegerValue
+                                        forChangeType:NSFetchedResultsChangeDelete];
+                    }];
+                }
+                
                 // Remove the section from Realm cache
                 [state.cache.sections removeObjectAtIndex:sectionChange.previousIndex.unsignedIntegerValue];
             }
             else if (sectionChange.changeType == NSFetchedResultsChangeInsert) {
                 
+                RBQSectionCacheObject *section = [RBQSafeRealmObject objectInRealm:state.cacheRealm
+                                                                    fromSafeObject:sectionChange.safeSection];
+                
 #ifdef DEBUG
                 NSAssert(sectionChange.updatedIndex.unsignedIntegerValue <= state.cache.sections.count, @"Attemting to insert at index beyond bounds!");
+                NSAssert(section, @"Section cannot be nil!");
 #endif
+
+                RBQFetchedResultsSectionInfo *sectionInfo =
+                [RBQFetchedResultsSectionInfo createSectionWithName:section.name
+                                                 sectionNameKeyPath:self.sectionNameKeyPath
+                                                       fetchRequest:self.fetchRequest];
+                
+                if ([self.delegate
+                     respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
+                {
+                    [self runOnMainThread:^(){
+                        [weakSelf.delegate controller:weakSelf
+                                     didChangeSection:sectionInfo
+                                              atIndex:sectionChange.updatedIndex.unsignedIntegerValue
+                                        forChangeType:NSFetchedResultsChangeInsert];
+                    }];
+                }
+                
                 // Add the section to the cache
-                [state.cache.sections insertObject:sectionChange.section
+                [state.cache.sections insertObject:section
                                            atIndex:sectionChange.updatedIndex.unsignedIntegerValue];
             }
         }
@@ -834,57 +899,134 @@ static char kRBQRefreshTriggeredKey;
             
             if (objectChange.changeType == NSFetchedResultsChangeDelete) {
                 
+                if ([self.delegate respondsToSelector:
+                     @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+                {
+                    [self runOnMainThread:^(){
+                        [weakSelf.delegate controller:weakSelf
+                                      didChangeObject:objectChange.safeObject
+                                          atIndexPath:objectChange.previousIndexPath
+                                        forChangeType:NSFetchedResultsChangeDelete
+                                         newIndexPath:nil];
+                    }];
+                }
+                
+                RBQObjectCacheObject *previousCacheObject =
+                [RBQSafeRealmObject objectInRealm:state.cacheRealm
+                                   fromSafeObject:objectChange.safePreviousCacheObject];
+                
+#ifdef DEBUG
+                NSAssert(previousCacheObject, @"Previous cache object can't be nil!");
+#endif
+                
                 // Remove the object from the section
-                RBQSectionCacheObject *section = objectChange.previousCacheObject.section;
+                RBQSectionCacheObject *section = previousCacheObject.section;
                 
                 [section.objects removeObjectAtIndex:objectChange.previousIndexPath.row];
                 
                 // Remove the object
-                [state.cacheRealm deleteObject:objectChange.previousCacheObject];
+                [state.cacheRealm deleteObject:previousCacheObject];
             }
             else if (objectChange.changeType == NSFetchedResultsChangeInsert) {
+                
+                if ([self.delegate respondsToSelector:
+                     @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+                {
+                    [self runOnMainThread:^(){
+                        [weakSelf.delegate controller:weakSelf
+                                      didChangeObject:objectChange.safeObject
+                                          atIndexPath:nil
+                                        forChangeType:NSFetchedResultsChangeInsert
+                                         newIndexPath:objectChange.updatedIndexpath];
+                    }];
+                }
+                
+                RBQObjectCacheObject *updatedCacheObject = objectChange.updatedCacheObject;
+                
+#ifdef DEBUG
+                NSAssert(updatedCacheObject, @"Updated cache object can't be nil!");
+#endif
+                
                 // Insert the object
-                [state.cacheRealm addObject:objectChange.updatedCacheObject];
+                [state.cacheRealm addObject:updatedCacheObject];
                 
                 // Add the object to the objects array and not just to the Realm!
-                [state.cache.objects addObject:objectChange.updatedCacheObject];
+                [state.cache.objects addObject:updatedCacheObject];
                 
                 // Get the section and add it to it
                 RBQSectionCacheObject *section =
                 [RBQSectionCacheObject objectInRealm:state.cacheRealm
-                                       forPrimaryKey:objectChange.updatedCacheObject.sectionKeyPathValue];
+                                       forPrimaryKey:updatedCacheObject.sectionKeyPathValue];
                 
 #ifdef DEBUG
                 NSAssert(objectChange.updatedIndexpath.row <= section.objects.count, @"Attemting to insert at index beyond bounds!");
 #endif
-                [section.objects insertObject:objectChange.updatedCacheObject
+                [section.objects insertObject:updatedCacheObject
                                       atIndex:objectChange.updatedIndexpath.row];
                 
-                objectChange.updatedCacheObject.section = section;
+                updatedCacheObject.section = section;
             }
             else if (objectChange.changeType == NSFetchedResultsChangeMove) {
+                
+                if ([self.delegate respondsToSelector:
+                     @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+                {
+                    [self runOnMainThread:^(){
+                        [weakSelf.delegate controller:weakSelf
+                                      didChangeObject:objectChange.safeObject
+                                          atIndexPath:objectChange.previousIndexPath
+                                        forChangeType:NSFetchedResultsChangeMove
+                                         newIndexPath:objectChange.updatedIndexpath];
+                    }];
+                }
+                
+                RBQObjectCacheObject *previousCacheObject =
+                [RBQSafeRealmObject objectInRealm:state.cacheRealm
+                                   fromSafeObject:objectChange.safePreviousCacheObject];
+                
+                RBQObjectCacheObject *updatedCacheObject = objectChange.updatedCacheObject;
+                
+#ifdef DEBUG
+                NSAssert(previousCacheObject, @"Previous cache object can't be nil!");
+                NSAssert(updatedCacheObject, @"Updated cache object can't be nil!");
+#endif
+                
                 // Delete to remove it from previous section
-                [state.cacheRealm deleteObject:objectChange.previousCacheObject];
+                [state.cacheRealm deleteObject:previousCacheObject];
                 
                 // Add it back in
-                [state.cacheRealm addObject:objectChange.updatedCacheObject];
+                [state.cacheRealm addObject:updatedCacheObject];
                 
                 // Add the object to the objects array and not just to the Realm!
-                [state.cache.objects addObject:objectChange.updatedCacheObject];
+                [state.cache.objects addObject:updatedCacheObject];
                 
                 // Get the section and add it to it
                 RBQSectionCacheObject *section =
                 [RBQSectionCacheObject objectInRealm:state.cacheRealm
-                                       forPrimaryKey:objectChange.updatedCacheObject.sectionKeyPathValue];
+                                       forPrimaryKey:updatedCacheObject.sectionKeyPathValue];
                 
 #ifdef DEBUG
                 NSAssert(objectChange.updatedIndexpath.row <= section.objects.count, @"Attemting to insert at index beyond bounds!");
 #endif
                 
-                [section.objects insertObject:objectChange.updatedCacheObject
+                [section.objects insertObject:updatedCacheObject
                                       atIndex:objectChange.updatedIndexpath.row];
                 
-                objectChange.updatedCacheObject.section = section;
+                updatedCacheObject.section = section;
+            }
+            else if (objectChange.changeType == NSFetchedResultsChangeUpdate) {
+                
+                if ([self.delegate respondsToSelector:
+                     @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
+                {
+                    [self runOnMainThread:^(){
+                        [weakSelf.delegate controller:weakSelf
+                                      didChangeObject:objectChange.safeObject
+                                          atIndexPath:objectChange.previousIndexPath
+                                        forChangeType:NSFetchedResultsChangeUpdate
+                                         newIndexPath:objectChange.updatedIndexpath];
+                    }];
+                }
             }
         }
     }
@@ -1241,19 +1383,21 @@ static char kRBQRefreshTriggeredKey;
     
     RBQObjectChangeObject *objectChange = [[RBQObjectChangeObject alloc] init];
     
-    objectChange.previousCacheObject =
-    [RBQObjectCacheObject objectInRealm:state.cacheRealm
-                          forPrimaryKey:cacheObject.primaryKeyStringValue];
+    RBQObjectCacheObject *previousCacheObject = [RBQObjectCacheObject objectInRealm:state.cacheRealm
+                                                                      forPrimaryKey:cacheObject.primaryKeyStringValue];
     
-    RBQSectionCacheObject *oldSectionForObject = objectChange.previousCacheObject.section;
+    objectChange.safePreviousCacheObject = [RBQSafeRealmObject safeObjectFromObject:previousCacheObject];
+    
+    
+    RBQSectionCacheObject *oldSectionForObject = previousCacheObject.section;
     
     // Get old indexPath if we can
     if (oldSectionForObject &&
-        objectChange.previousCacheObject) {
+        previousCacheObject) {
         
         NSInteger oldSectionIndex = [sectionChanges.oldCacheSections indexOfObject:oldSectionForObject];
         
-        NSInteger oldRowIndex = [oldSectionForObject.objects indexOfObject:objectChange.previousCacheObject];
+        NSInteger oldRowIndex = [oldSectionForObject.objects indexOfObject:previousCacheObject];
         
         objectChange.previousIndexPath = [NSIndexPath indexPathForRow:oldRowIndex inSection:oldSectionIndex];
     }
@@ -1365,26 +1509,10 @@ static char kRBQRefreshTriggeredKey;
         
         NSInteger oldSectionIndex = [sectionChanges.oldCacheSections indexOfObject:section];
         
-        RBQFetchedResultsSectionInfo *sectionInfo =
-        [RBQFetchedResultsSectionInfo createSectionWithName:section.name
-                                         sectionNameKeyPath:self.sectionNameKeyPath
-                                               fetchRequest:self.fetchRequest];
-        
-        if ([self.delegate
-             respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
-        {
-            [self runOnMainThread:^(){
-                [weakSelf.delegate controller:weakSelf
-                             didChangeSection:sectionInfo
-                                      atIndex:oldSectionIndex
-                                forChangeType:NSFetchedResultsChangeDelete];
-            }];
-        }
-        
         // Create the section change object
         RBQSectionChangeObject *sectionChange = [[RBQSectionChangeObject alloc] init];
         sectionChange.previousIndex = @(oldSectionIndex);
-        sectionChange.section = section;
+        sectionChange.safeSection = [RBQSafeRealmObject safeObjectFromObject:section];
         sectionChange.changeType = NSFetchedResultsChangeDelete;
         
         // Keep track of the sorted list of deleted section changes (reverse sort)
@@ -1406,26 +1534,10 @@ static char kRBQRefreshTriggeredKey;
         
         NSInteger newSectionIndex = [sectionChanges.sortedNewCacheSections indexOfObject:section];
         
-        RBQFetchedResultsSectionInfo *sectionInfo =
-        [RBQFetchedResultsSectionInfo createSectionWithName:section.name
-                                         sectionNameKeyPath:self.sectionNameKeyPath
-                                               fetchRequest:self.fetchRequest];
-        
-        if ([self.delegate
-             respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)])
-        {
-            [self runOnMainThread:^(){
-                [weakSelf.delegate controller:weakSelf
-                             didChangeSection:sectionInfo
-                                      atIndex:newSectionIndex
-                                forChangeType:NSFetchedResultsChangeInsert];
-            }];
-        }
-        
         // Create the section change object
         RBQSectionChangeObject *sectionChange = [[RBQSectionChangeObject alloc] init];
         sectionChange.updatedIndex = @(newSectionIndex);
-        sectionChange.section = section;
+        sectionChange.safeSection = [RBQSafeRealmObject safeObjectFromObject:section];
         sectionChange.changeType = NSFetchedResultsChangeInsert;
         
         // Keep track of the sorted list of inserted section changes
@@ -1491,25 +1603,6 @@ static char kRBQRefreshTriggeredKey;
         if (!objectChange.updatedIndexpath &&
             objectChange.previousIndexPath) {
             
-            RBQSafeRealmObject *safeObject =
-            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
-            
-#ifdef DEBUG
-            NSAssert(safeObject, @"Safe object can't be nil!");
-#endif
-            
-            if ([self.delegate respondsToSelector:
-                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
-            {
-                [self runOnMainThread:^(){
-                    [weakSelf.delegate controller:weakSelf
-                                  didChangeObject:safeObject
-                                      atIndexPath:objectChange.previousIndexPath
-                                    forChangeType:NSFetchedResultsChangeDelete
-                                     newIndexPath:nil];
-                }];
-            }
-            
             objectChange.changeType = NSFetchedResultsChangeDelete;
             
             // Keep track of the sorted list of deleted object changes
@@ -1554,24 +1647,6 @@ static char kRBQRefreshTriggeredKey;
         else if (objectChange.updatedIndexpath &&
                  !objectChange.previousIndexPath) {
             
-            RBQSafeRealmObject *safeObject =
-            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.updatedCacheObject];
-            
-#ifdef DEBUG
-            NSAssert(safeObject, @"Safe object can't be nil!");
-#endif
-            
-            if ([self.delegate respondsToSelector:
-                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
-            {
-                [self runOnMainThread:^(){
-                    [weakSelf.delegate controller:weakSelf
-                                  didChangeObject:safeObject
-                                      atIndexPath:nil
-                                    forChangeType:NSFetchedResultsChangeInsert
-                                     newIndexPath:objectChange.updatedIndexpath];
-                }];
-            }
             objectChange.changeType = NSFetchedResultsChangeInsert;
             
             // Keep track of the sorted list of inserted object changes
@@ -1777,25 +1852,6 @@ static char kRBQRefreshTriggeredKey;
             objectChange.updatedIndexpath.section != objectChange.previousIndexPath.section ||
             objectSectionReplacedItself) {
             
-            RBQSafeRealmObject *safeObject =
-            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
-            
-#ifdef DEBUG
-            NSAssert(safeObject, @"Safe object can't be nil!");
-#endif
-            
-            if ([self.delegate respondsToSelector:
-                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
-            {
-                [self runOnMainThread:^(){
-                    [weakSelf.delegate controller:weakSelf
-                                  didChangeObject:safeObject
-                                      atIndexPath:objectChange.previousIndexPath
-                                    forChangeType:NSFetchedResultsChangeMove
-                                     newIndexPath:objectChange.updatedIndexpath];
-                }];
-            }
-            
             objectChange.changeType = NSFetchedResultsChangeMove;
             
             [movedObjectChanges addObject:objectChange];
@@ -1805,24 +1861,7 @@ static char kRBQRefreshTriggeredKey;
          *  absolute row change, we just report it as an update
          */
         else {
-            RBQSafeRealmObject *safeObject =
-            [changeSets.cacheObjectToSafeObject objectForKey:objectChange.previousCacheObject];
-            
-#ifdef DEBUG
-            NSAssert(safeObject, @"Safe object can't be nil!");
-#endif
-            
-            if ([self.delegate respondsToSelector:
-                 @selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)])
-            {
-                [self runOnMainThread:^(){
-                    [weakSelf.delegate controller:weakSelf
-                                  didChangeObject:safeObject
-                                      atIndexPath:objectChange.previousIndexPath
-                                    forChangeType:NSFetchedResultsChangeUpdate
-                                     newIndexPath:objectChange.updatedIndexpath];
-                }];
-            }
+            // Call to delegate moved to appleDerivedChanges
         }
     }
     
