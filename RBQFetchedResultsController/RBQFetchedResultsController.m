@@ -137,6 +137,7 @@ static char kRBQRefreshTriggeredKey;
 @property (strong, nonatomic) NSNumber *previousIndex;
 @property (strong, nonatomic) NSNumber *updatedIndex;
 @property (strong, nonatomic) RBQSafeRealmObject *safeSection;
+@property (strong, nonatomic) RBQSectionCacheObject *section;
 @property (assign, nonatomic) NSFetchedResultsChangeType changeType;
 
 @end
@@ -862,6 +863,10 @@ static char kRBQRefreshTriggeredKey;
                 RBQSectionCacheObject *section = [RBQSafeRealmObject objectInRealm:state.cacheRealm
                                                                     fromSafeObject:sectionChange.safeSection];
                 
+                if (!section) {
+                    section = sectionChange.section;
+                }
+                
 #ifdef DEBUG
                 NSAssert(sectionChange.updatedIndex.unsignedIntegerValue <= state.cache.sections.count, @"Attemting to insert at index beyond bounds!");
                 NSAssert(section, @"Section cannot be nil!");
@@ -1537,7 +1542,14 @@ static char kRBQRefreshTriggeredKey;
         // Create the section change object
         RBQSectionChangeObject *sectionChange = [[RBQSectionChangeObject alloc] init];
         sectionChange.updatedIndex = @(newSectionIndex);
-        sectionChange.safeSection = [RBQSafeRealmObject safeObjectFromObject:section];
+        
+        if (section.realm) {
+           sectionChange.safeSection = [RBQSafeRealmObject safeObjectFromObject:section];
+        }
+        else {
+            sectionChange.section = section;
+        }
+        
         sectionChange.changeType = NSFetchedResultsChangeInsert;
         
         // Keep track of the sorted list of inserted section changes
