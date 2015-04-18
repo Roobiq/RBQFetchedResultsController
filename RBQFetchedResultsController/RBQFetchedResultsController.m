@@ -779,13 +779,13 @@ static char kRBQRefreshTriggeredKey;
         
         // Dispatch the final changes
         dispatch_async(weakSelf.internalQueue, ^() {
-            RLMRealm *cacheRealm = [weakSelf cacheRealm];
+            RLMRealm *queueCacheRealm = [weakSelf cacheRealm];
             
-            RBQControllerCacheObject *cache = [weakSelf cacheInRealm:cacheRealm];
+            RBQControllerCacheObject *queueCache = [weakSelf cacheInRealm:queueCacheRealm];
             
             // Must update these since we use them in the new thread!
-            state.cache = cache;
-            state.cacheRealm = cacheRealm;
+            state.cache = queueCache;
+            state.cacheRealm = queueCacheRealm;
             
             if ([weakSelf.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
                 
