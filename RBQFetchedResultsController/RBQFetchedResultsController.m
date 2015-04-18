@@ -172,6 +172,7 @@ static char kRBQRefreshTriggeredKey;
 @property (nonatomic, strong) NSOrderedSet *deletedObjectChanges;
 @property (nonatomic, strong) NSOrderedSet *insertedObjectChanges;
 @property (nonatomic, strong) NSOrderedSet *movedObjectChanges;
+@property (nonatomic, strong) NSOrderedSet *updatedObjectChanges;
 
 @end
 
@@ -898,7 +899,8 @@ static char kRBQRefreshTriggeredKey;
     // Apply Object Changes To Cache (Must apply in correct order!)
     for (NSOrderedSet *objectChanges in @[derivedChanges.deletedObjectChanges,
                                           derivedChanges.insertedObjectChanges,
-                                          derivedChanges.movedObjectChanges]) {
+                                          derivedChanges.movedObjectChanges,
+                                          derivedChanges.updatedObjectChanges]) {
         
         for (RBQObjectChangeObject *objectChange in objectChanges) {
             
@@ -1706,6 +1708,7 @@ static char kRBQRefreshTriggeredKey;
     }
     
     NSMutableOrderedSet *movedObjectChanges = [[NSMutableOrderedSet alloc] init];
+    NSMutableOrderedSet *updatedObjectChanges = [[NSMutableOrderedSet alloc] init];
     
     /**
      *  Now we will process the remaining items to identify moves/updates
@@ -1873,7 +1876,9 @@ static char kRBQRefreshTriggeredKey;
          *  absolute row change, we just report it as an update
          */
         else {
-            // Call to delegate moved to appleDerivedChanges
+            objectChange.changeType = NSFetchedResultsChangeUpdate;
+            
+            [updatedObjectChanges addObject:objectChange];
         }
     }
     
@@ -1887,6 +1892,7 @@ static char kRBQRefreshTriggeredKey;
     derivedChanges.deletedObjectChanges = deletedObjectChanges.copy;
     derivedChanges.insertedObjectChanges = insertedObjectChanges.copy;
     derivedChanges.movedObjectChanges = movedObjectChanges.copy;
+    derivedChanges.updatedObjectChanges = updatedObjectChanges.copy;
 }
 
 #pragma mark - Helpers
