@@ -697,17 +697,11 @@ static char kRBQRefreshTriggeredKey;
         NSAssert(realm, @"Realm can't be nil");
 #endif
         /**
-         *  If we are not on the main thread then use a semaphore
-         *  to prevent condition where subsequent processing runs
-         *  before the async delegate calls complete on main thread
+         *  We need to wait until the dispatched 
+         *  processing has occurred. But importantly,
+         *  we don't wait on the main thread dispatch calls!
          */
-//        BOOL useSem = NO;
-//        
-//        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-//        
-//        if (![NSThread isMainThread]) {
-//            useSem = YES;
-//        }
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
         
         typeof(self) __weak weakSelf = self;
         
@@ -777,8 +771,7 @@ static char kRBQRefreshTriggeredKey;
 #endif
         [state.cacheRealm commitWriteTransaction];
         
-        // Dispatch the final changes
-        dispatch_async(weakSelf.internalQueue, ^() {
+        void (^applyChangesBlock)() = ^void() {
             RLMRealm *queueCacheRealm = [weakSelf cacheRealm];
             
             RBQControllerCacheObject *queueCache = [weakSelf cacheInRealm:queueCacheRealm];
@@ -798,7 +791,7 @@ static char kRBQRefreshTriggeredKey;
             
             // Update the state to make sure we rebuild cache if save fails
             state.cache.state = RBQControllerCacheStateProcessing;
-        
+            
             // Apply Derived Changes To Cache
             [weakSelf applyDerivedChangesToCache:derivedChanges
                                            state:state];
@@ -810,7 +803,18 @@ static char kRBQRefreshTriggeredKey;
                     [weakSelf.delegate controllerDidChangeContent:weakSelf];
                 }
             }];
-        });
+            
+            dispatch_semaphore_signal(sem);
+        };
+        
+        if ([NSThread isMainThread]) {
+            applyChangesBlock();
+        }
+        else {
+            dispatch_async(self.internalQueue, applyChangesBlock);
+            
+            dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+        }
     }
 }
 
