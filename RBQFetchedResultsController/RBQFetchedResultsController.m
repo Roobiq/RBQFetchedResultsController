@@ -696,18 +696,6 @@ static char kRBQRefreshTriggeredKey;
         NSAssert(changedSafeObjects, @"Changed safe objects can't be nil");
         NSAssert(realm, @"Realm can't be nil");
 #endif
-        /**
-         *  If we are not on the main thread then use a semaphore
-         *  to prevent condition where subsequent processing runs
-         *  before the async delegate calls complete on main thread
-         */
-        BOOL useSem = NO;
-        
-        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-        
-        if (![NSThread isMainThread]) {
-            useSem = YES;
-        }
         
         typeof(self) __weak weakSelf = self;
         
@@ -774,13 +762,16 @@ static char kRBQRefreshTriggeredKey;
         void (^applyChangesBlock)() = ^void() {
             RLMRealm *queueCacheRealm = [weakSelf cacheRealm];
             
+            [weakSelf refreshRealm:queueCacheRealm];
+            
             RBQControllerCacheObject *queueCache = [weakSelf cacheInRealm:queueCacheRealm];
             
             if ([weakSelf.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
                 
                 [weakSelf runOnMainThread:^(){
                     [weakSelf.delegate controllerWillChangeContent:weakSelf];
-                }];
+                }
+                                    async:YES];
             }
             
             [queueCacheRealm beginWriteTransaction];
@@ -799,21 +790,11 @@ static char kRBQRefreshTriggeredKey;
                 if ([weakSelf.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
                     [weakSelf.delegate controllerDidChangeContent:weakSelf];
                 }
-                
-                if (useSem) {
-                    dispatch_semaphore_signal(sem);
-                }
-            }];
+            }
+                                async:NO];
         };
         
-        if (useSem) {
-            dispatch_async(weakSelf.internalQueue, applyChangesBlock);
-
-            dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-        }
-        else {
-           applyChangesBlock();
-        }
+        dispatch_async(weakSelf.internalQueue, applyChangesBlock);
     }
 }
 
@@ -858,7 +839,8 @@ static char kRBQRefreshTriggeredKey;
                                      didChangeSection:sectionInfo
                                               atIndex:sectionChange.previousIndex.unsignedIntegerValue
                                         forChangeType:NSFetchedResultsChangeDelete];
-                    }];
+                    }
+                                    async:YES];
                 }
                 
                 // Remove the section from Realm cache
@@ -891,7 +873,8 @@ static char kRBQRefreshTriggeredKey;
                                      didChangeSection:sectionInfo
                                               atIndex:sectionChange.updatedIndex.unsignedIntegerValue
                                         forChangeType:NSFetchedResultsChangeInsert];
-                    }];
+                    }
+                                    async:YES];
                 }
                 
                 // Add the section to the cache
@@ -920,7 +903,8 @@ static char kRBQRefreshTriggeredKey;
                                           atIndexPath:objectChange.previousIndexPath
                                         forChangeType:NSFetchedResultsChangeDelete
                                          newIndexPath:nil];
-                    }];
+                    }
+                                    async:YES];
                 }
                 
                 RBQObjectCacheObject *previousCacheObject =
@@ -950,7 +934,8 @@ static char kRBQRefreshTriggeredKey;
                                           atIndexPath:nil
                                         forChangeType:NSFetchedResultsChangeInsert
                                          newIndexPath:objectChange.updatedIndexpath];
-                    }];
+                    }
+                                    async:YES];
                 }
                 
                 RBQObjectCacheObject *updatedCacheObject = objectChange.updatedCacheObject;
@@ -989,7 +974,8 @@ static char kRBQRefreshTriggeredKey;
                                           atIndexPath:objectChange.previousIndexPath
                                         forChangeType:NSFetchedResultsChangeMove
                                          newIndexPath:objectChange.updatedIndexpath];
-                    }];
+                    }
+                                    async:YES];
                 }
                 
                 RBQObjectCacheObject *previousCacheObject =
@@ -1037,7 +1023,8 @@ static char kRBQRefreshTriggeredKey;
                                           atIndexPath:objectChange.previousIndexPath
                                         forChangeType:NSFetchedResultsChangeUpdate
                                          newIndexPath:objectChange.updatedIndexpath];
-                    }];
+                    }
+                                    async:YES];
                 }
             }
         }
@@ -1514,8 +1501,6 @@ static char kRBQRefreshTriggeredKey;
     NSMutableOrderedSet *deletedSectionChanges = [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.deletedCacheSections.count];
     NSMutableOrderedSet *insertedSectionChanges = [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.insertedCacheSections.count];
     
-    typeof(self) __weak weakSelf = self;
-    
     // Deleted Sections
     for (RBQSectionCacheObject *section in sectionChanges.deletedCacheSections) {
         
@@ -1590,8 +1575,6 @@ static char kRBQRefreshTriggeredKey;
     NSAssert(sectionChanges, @"Section changes can't be nil!");
     NSAssert(state, @"State can't be nil!");
 #endif
-    
-    typeof(self) __weak weakSelf = self;
     
     // We will first process to find inserts/deletes
     NSMutableOrderedSet *deletedObjectChanges = [[NSMutableOrderedSet alloc] init];
@@ -2029,12 +2012,16 @@ static char kRBQRefreshTriggeredKey;
 }
 
 - (void)runOnMainThread:(void (^)())mainThreadBlock
+                  async:(BOOL)async
 {
     if ([NSThread isMainThread]) {
         mainThreadBlock();
     }
-    else {
+    else if (async) {
         dispatch_async(dispatch_get_main_queue(), mainThreadBlock);
+    }
+    else {
+        dispatch_sync(dispatch_get_main_queue(), mainThreadBlock);
     }
 }
 
