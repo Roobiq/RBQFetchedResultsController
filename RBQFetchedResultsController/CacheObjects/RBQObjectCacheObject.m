@@ -140,14 +140,7 @@
 
 - (BOOL)isEqual:(id)object
 {
-    NSString *className = NSStringFromClass(self.class);
-    
-    if ([className hasPrefix:@"RLMStandalone_"]) {
-        return [self isEqualToObject:object];
-    }
-    else {
-        return [super isEqual:object];
-    }
+    return [self isEqualToObject:object];
 }
 
 #pragma mark - <NSCopying>
