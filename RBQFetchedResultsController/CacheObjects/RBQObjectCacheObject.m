@@ -9,7 +9,7 @@
 #import "RBQObjectCacheObject.h"
 #import "RLMObject+Utilities.h"
 
-#import <RLMObjectSchema.h>
+#import <Realm/RLMObjectSchema.h>
 
 @implementation RBQObjectCacheObject
 
