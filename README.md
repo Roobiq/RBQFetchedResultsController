@@ -88,14 +88,14 @@ Swift support was added in v1.7.4.
 
 - (void)addOrUpdateObjectWithNotification:(RLMObject *)object;
 
-- (void)addOrUpdateObjectsFromArrayWithNotification:(id)array;
+- (void)addOrUpdateObjectsFromArrayWithNotification:(id<NSFastEnumeration>)array;
 
 - (void)deleteObjectWithNotification:(RLMObject *)object;
 
-- (void)deleteObjectsWithNotification:(id)array;
+- (void)deleteObjectsWithNotification:(id<NSFastEnumeration>)array;
 
 // RLMObject
-typedef void(^RBQChangeNotificationBlock)(RLMObject *object);
+typedef void(^RBQChangeNotificationBlock)(id object);
 
 - (void)changeWithNotification:(RBQChangeNotificationBlock)block;
 
@@ -105,9 +105,9 @@ typedef void(^RBQChangeNotificationBlock)(RLMObject *object);
 
 1. **The FRC is not currently able to handle RLMObject edits that switch between threads with one thread occurring on a serial queue.**
   
-  For example, if an edit to an RLMObject occurs on a background queue (serial or concurrent), and is followed directly after with an edit on the main thread, the FRC can be deadlocked. This limitation is due to the FRC processing edits serially and synchronously on the caller thread and needing to wait on the delegate call backs (which are on the main thread).
+  For example, if an edit to an RLMObject occurs on a background queue (serial or concurrent), and is followed directly after with an edit on the main thread, the FRC can be deadlocked. This limitation is due to the FRC processing all edits serially, with each edit occurring synchronously on the caller thread, and needing to wait on the delegate call backs (which are on the main thread).
 
-  Thus if a main thread edit occurs direclty after a background thread edit, the main thread will be waiting on the processing of the background thread to finish in the FRC, while the background thread is waiting on the main thread to perform the dispatched delegate call. 
+  Thus if a main thread edit occurs directly after a background thread edit, the main thread will be waiting on the processing of the background thread to finish in the FRC, while the background thread is waiting on the main thread to perform the dispatched delegate call. 
 
   **As a result, we recommend to perform all RLMObject edits that are being tracked by an FRC on a background queue (a general best practice anyway).**
 
