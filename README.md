@@ -78,11 +78,7 @@ The example project includes a few functional tests. Further tests are planned. 
 
 Swift support was added in v1.7.4.
 
-####Current Limitations:
-
-~~1. The `RBQRealmNotificationManager` requires manually logging of changes. A better solution would be to abstract this away by creating a `RLMRealm` and `RLMObject` subclass that performs the log whenever the key path value is changed on the object or an object is added or deleted from Realm.~~
-
-**Note: `RLMRealm` and `RLMObject` categories are included that contain methods to simplify calling RBQRealmChangeLogger:**
+**`RLMRealm` and `RLMObject` categories are included that contain methods to simplify calling RBQRealmChangeLogger:**
 
 ```Objective-C
 // RLMRealm
@@ -92,19 +88,29 @@ Swift support was added in v1.7.4.
 
 - (void)addOrUpdateObjectWithNotification:(RLMObject *)object;
 
-- (void)addOrUpdateObjectsFromArrayWithNotification:(id)array;
+- (void)addOrUpdateObjectsFromArrayWithNotification:(id<NSFastEnumeration>)array;
 
 - (void)deleteObjectWithNotification:(RLMObject *)object;
 
-- (void)deleteObjectsWithNotification:(id)array;
+- (void)deleteObjectsWithNotification:(id<NSFastEnumeration>)array;
 
 // RLMObject
-typedef void(^RBQChangeNotificationBlock)(RLMObject *object);
+typedef void(^RBQChangeNotificationBlock)(id object);
 
 - (void)changeWithNotification:(RBQChangeNotificationBlock)block;
 
 - (void)changeWithNotificationInTransaction:(RBQChangeNotificationBlock)block;
 ```
+####Current Limitations:
 
+1. **The FRC is not currently able to handle RLMObject edits that switch between threads with one thread occurring on a serial queue.**
+  
+  For example, if an edit to an RLMObject occurs on a background queue (serial or concurrent), and is followed directly after with an edit on the main thread, the FRC can be deadlocked. This limitation is due to the FRC processing all edits serially, with each edit occurring synchronously on the caller thread, and needing to wait on the delegate call backs (which are on the main thread).
+
+  Thus if a main thread edit occurs directly after a background thread edit, the main thread will be waiting on the processing of the background thread to finish in the FRC, while the background thread is waiting on the main thread to perform the dispatched delegate call. 
+
+  **As a result, we recommend to perform all RLMObject edits that are being tracked by an FRC on a background queue (a general best practice anyway).**
+
+  The branch [internalQueue](https://github.com/Roobiq/RBQFetchedResultsController/tree/internalQueue) is our current progress to remove this limitation, but as of yet is not fully functional. 
 2. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC.
  
