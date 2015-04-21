@@ -764,6 +764,8 @@ static char kRBQRefreshTriggeredKey;
                                                                      sectionChanges:sectionChanges
                                                                               state:state];
 #ifdef DEBUG
+        NSLog(@"%lu Derived Inserted Sections",(unsigned long)derivedChanges.insertedSectionChanges.count);
+        NSLog(@"%lu Derived Deleted Sections",(unsigned long)derivedChanges.deletedSectionChanges.count);
         NSLog(@"%lu Derived Added Objects",(unsigned long)derivedChanges.insertedObjectChanges.count);
         NSLog(@"%lu Derived Deleted Objects",(unsigned long)derivedChanges.deletedObjectChanges.count);
         NSLog(@"%lu Derived Moved Objects",(unsigned long)derivedChanges.movedObjectChanges.count);
