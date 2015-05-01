@@ -146,6 +146,15 @@
 + (void)deleteCacheWithName:(NSString *)name;
 
 /**
+ *  Retrieves all the paths for the Realm files being used as FRC caches on disk.
+ *
+ *  The typical use case for this method is to use the paths to perform migrations in AppDelegate. The FRC cache files need to be migrated along with your other Realm files because by default Realm includes all of the properties defined in your model in all Realm files. Thus the FRC cache files will throw an exception if they are not migrated. Call setSchemaVersion:forRealmAtPath:withMigrationBlock: for each path returned in the array.
+ *
+ *  @return NSArray of NSStrings representing the paths on disk for all FRC cache Realm files
+ */
++ (NSArray *)allCacheRealmPaths;
+
+/**
  *  Constructor method to initialize the controller
  *
  *  @warning Specify a cache name if deletion of the cache later on is necessary

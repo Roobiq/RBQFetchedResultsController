@@ -205,6 +205,58 @@ static char kRBQRefreshTriggeredKey;
     }
 }
 
++ (NSArray *)allCacheRealmPaths
+{
+    NSString *basePath = [RBQFetchedResultsController basePathForCaches];
+    
+    NSURL *baseURL = [[NSURL alloc] initFileURLWithPath:basePath isDirectory:YES];
+    
+    NSError *error = nil;
+    NSArray *urlsInSyncCache =
+    [[NSFileManager defaultManager] contentsOfDirectoryAtURL:baseURL
+                                  includingPropertiesForKeys:@[NSURLIsDirectoryKey, NSURLNameKey]
+                                                     options:0
+                                                       error:&error];
+    
+    if (error) {
+        NSLog(@"Error retrieving sync cache directories: %@", error.localizedDescription);
+        
+    }
+    
+    NSMutableArray *cachePaths = [NSMutableArray array];
+    
+    for (NSURL *url in urlsInSyncCache) {
+        NSNumber *isDirectory = nil;
+        NSError *error = nil;
+        
+        if (![url getResourceValue:&isDirectory
+                            forKey:NSURLIsDirectoryKey
+                             error:&error]) {
+            
+            NSLog(@"Error retrieving resource value: %@", error.localizedDescription);
+        }
+        
+        if (isDirectory.boolValue) {
+            NSString *name = nil;
+            
+            if (![url getResourceValue:&name
+                                forKey:NSURLNameKey
+                                 error:&error]) {
+                
+                NSLog(@"Error retrieving resource value: %@", error.localizedDescription);
+            }
+            else {
+                // Directory name is filename with extension stripped
+                NSString *cachePath = [RBQFetchedResultsController cachePathWithName:name];
+                
+                [cachePaths addObject:cachePath];
+            }
+        }
+    }
+    
+    return cachePaths.copy;
+}
+
 #pragma mark - Private Class
 
 // Create Realm instance for cache name
