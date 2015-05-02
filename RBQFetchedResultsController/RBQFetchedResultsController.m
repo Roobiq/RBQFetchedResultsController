@@ -749,13 +749,6 @@ static char kRBQRefreshTriggeredKey;
         
         typeof(self) __weak weakSelf = self;
         
-        if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
-            
-            [self runOnMainThread:^(){
-                [weakSelf.delegate controllerWillChangeContent:weakSelf];
-            }];
-        }
-        
         /**
          *  Refresh both the cache and main Realm.
          *
@@ -805,7 +798,14 @@ static char kRBQRefreshTriggeredKey;
         
         RBQSectionChangesObject *sectionChanges = [self createSectionChangesWithChangeSets:changeSets
                                                                                      state:state];
-        
+
+        if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
+
+            [self runOnMainThread:^(){
+                [weakSelf.delegate controllerWillChangeContent:weakSelf];
+            }];
+        }
+
         [state.cacheRealm beginWriteTransaction];
         
         // Update the state to make sure we rebuild cache if save fails
