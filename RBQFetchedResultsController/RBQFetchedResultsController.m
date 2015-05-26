@@ -573,9 +573,12 @@ static char kRBQRefreshTriggeredKey;
     RBQControllerCacheObject *cache = [self cache];
     
     if (cache) {
-        RBQSectionCacheObject *sectionInfo = cache.sections[section];
         
-        return sectionInfo.name;
+        if (section < cache.sections.count) {
+            RBQSectionCacheObject *sectionInfo = cache.sections[section];
+            
+            return sectionInfo.name;
+        }
     }
     
     return @"";
