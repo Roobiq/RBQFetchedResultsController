@@ -1920,8 +1920,7 @@ static char kRBQRefreshTriggeredKey;
 - (RLMRealm *)cacheRealm
 {
     if (self.cacheName) {
-        // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
-        
+
         if ([NSThread isMainThread] &&
             self.realmForMainThread) {
             
@@ -1942,8 +1941,6 @@ static char kRBQRefreshTriggeredKey;
     }
     else {
         
-        // Insert migration if needed! --> [self performMigrationForRealmAtPath:]
-        
         if ([NSThread isMainThread] &&
             self.realmForMainThread) {
             
@@ -1961,37 +1958,6 @@ static char kRBQRefreshTriggeredKey;
     }
     
     return nil;
-}
-
-/**
- *  If you need to perform a migration, use this method and call the Realm that contains the cache
- *
- *  For example:
- *
- *  NSString *path = [RBQFetchedResultsController cachePathWithName:[self nameForFetchRequest:self.fetchRequest]];
- *
- *  or
- *
- *  NSString *path = [RBQFetchedResultsController cachePathWithName:self.cacheName];
- *
- *  IMPORTANT: YOU MUST ALSO RUN A MIGRATION ON ANY OTHER REALMS!
- *
- *  @param path path for the Realm that contains the controller cache
- */
-- (void)performMigrationForRealmAtPath:(NSString *)path
-{
-    [RLMRealm setSchemaVersion:1 forRealmAtPath:path
-            withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {
-                
-                if (oldSchemaVersion < 1) {
-                    [migration enumerateObjects:[RBQControllerCacheObject className]
-                                          block:^(RLMObject *oldObject, RLMObject *newObject) {
-                                              
-                                              // Insert an invalid section name key path to make sure cache is rebuilt
-                                              newObject[@"sectionNameKeyPath"] = @"invalidSectionNameKeyPath";
-                                          }];
-                }
-            }];
 }
 
 // Retrieve internal cache
