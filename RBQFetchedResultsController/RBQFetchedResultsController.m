@@ -584,6 +584,25 @@ static char kRBQRefreshTriggeredKey;
     return @"";
 }
 
+- (NSUInteger)sectionIndexForSectionName:(NSString *)sectionName
+{
+    RBQControllerCacheObject *cache = [self cache];
+    
+    if (cache) {
+        
+        RLMResults *sectionWithName = [cache.sections objectsWhere:@"name == %@",sectionName];
+        
+        RBQSectionCacheObject *section = sectionWithName.firstObject;
+        
+        if (section) {
+            
+            return [cache.sections indexOfObject:section];
+        }
+    }
+    
+    return NSNotFound;
+}
+
 - (void)updateFetchRequest:(RBQFetchRequest *)fetchRequest
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
             andPeformFetch:(BOOL)performFetch

@@ -224,6 +224,17 @@
 - (NSString *)titleForHeaderInSection:(NSInteger)section;
 
 /**
+ *  Method to retrieve the section index given a section name
+ *
+ *  @warning Returns NSNotFound if there is not a section with the given name
+ *
+ *  @param sectionName the name of the section
+ *
+ *  @return the index of the section (returns NSNotFound if no section with the given name)
+ */
+- (NSUInteger)sectionIndexForSectionName:(NSString *)sectionName;
+
+/**
  *  Retrieve the RBQSafeRealmObject for a given index path
  *
  *  @param indexPath the index path of the object
