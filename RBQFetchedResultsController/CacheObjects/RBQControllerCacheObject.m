@@ -16,7 +16,6 @@
     RBQControllerCacheObject *cache = [[RBQControllerCacheObject alloc] init];
     cache.name = name;
     cache.fetchRequestHash = hash;
-    cache.state = RBQControllerCacheStateReady;
     
     return cache;
 }
