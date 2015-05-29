@@ -616,7 +616,10 @@ static char kRBQRefreshTriggeredKey;
     _fetchRequest = fetchRequest;
     
     if (performFetch) {
-        [self performFetch];
+        // Only performFetch if the change processing is finished
+        @synchronized(self) {
+            [self performFetch];
+        }
     }
 }
 
