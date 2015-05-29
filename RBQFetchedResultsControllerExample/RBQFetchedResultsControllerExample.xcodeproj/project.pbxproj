@@ -10,6 +10,7 @@
 		17FA8445467D84155B36A094 /* libPods-RBQFetchedResultsControllerExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */; };
 		49527C091B17F47500C115A3 /* RBQSafeRealmObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49527C081B17F47500C115A3 /* RBQSafeRealmObjectTests.m */; };
 		49527C0F1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49527C0E1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m */; };
+		49527C111B1818CF00C115A3 /* RBQEntityChangesObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49527C101B1818CF00C115A3 /* RBQEntityChangesObjectTests.m */; };
 		49DF57321B17B09900BA8DDC /* RBQFetchRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DF57301B17B09900BA8DDC /* RBQFetchRequestTests.m */; };
 		49DF57331B17B09900BA8DDC /* RBQRealmChangeLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DF57311B17B09900BA8DDC /* RBQRealmChangeLoggerTests.m */; };
 		662C46951A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46941A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m */; };
@@ -40,6 +41,7 @@
 		24302DAE5BB92578C9C97C31 /* Pods-RBQFetchedResultsControllerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; sourceTree = "<group>"; };
 		49527C081B17F47500C115A3 /* RBQSafeRealmObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObjectTests.m; sourceTree = "<group>"; };
 		49527C0E1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsSectionInfoTests.m; sourceTree = "<group>"; };
+		49527C101B1818CF00C115A3 /* RBQEntityChangesObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQEntityChangesObjectTests.m; sourceTree = "<group>"; };
 		49DF57301B17B09900BA8DDC /* RBQFetchRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchRequestTests.m; sourceTree = "<group>"; };
 		49DF57311B17B09900BA8DDC /* RBQRealmChangeLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmChangeLoggerTests.m; sourceTree = "<group>"; };
 		55AAFFD7A898D4859B81F711 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				49DF57311B17B09900BA8DDC /* RBQRealmChangeLoggerTests.m */,
 				49527C081B17F47500C115A3 /* RBQSafeRealmObjectTests.m */,
 				49527C0E1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m */,
+				49527C101B1818CF00C115A3 /* RBQEntityChangesObjectTests.m */,
 				667F38221A5B2682008E3052 /* Supporting Files */,
 			);
 			path = RBQFetchedResultsControllerExampleTests;
@@ -359,6 +362,7 @@
 				662C46971A6243A900A8D145 /* TestObject.m in Sources */,
 				49527C091B17F47500C115A3 /* RBQSafeRealmObjectTests.m in Sources */,
 				662C46951A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m in Sources */,
+				49527C111B1818CF00C115A3 /* RBQEntityChangesObjectTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
