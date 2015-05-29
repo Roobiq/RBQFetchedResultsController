@@ -1,7 +1,7 @@
 RBQFetchedResultsController
 ===========================
 
-#####Drop-in replacement for `NSFetchedResultsController` backed by RealmDB.
+#####Drop-in replacement for `NSFetchedResultsController` backed by Realm.
 
 The `RBQFetchedResultsController` (FRC) is a replacement for `NSFetchedResultsController` when used in conjunction with `RBQRealmNotificationManager` and `RBQRealmChangeLogger`. The controller and delegate follow the same paradigm as `NSFetchedResultsController`, and allow the developer to monitor changes of a `RLMObject` subclass.
 
