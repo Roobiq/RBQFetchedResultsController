@@ -607,17 +607,17 @@ static char kRBQRefreshTriggeredKey;
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
             andPeformFetch:(BOOL)performFetch
 {
-    // Turn off change notifications since we are replacing fetch request
-    // Change notifications will be re-registered if performFetch is called
-    [self unregisterChangeNotifications];
-    
-    // Updating the fetch request will force rebuild of cache automatically
-    _sectionNameKeyPath = sectionNameKeyPath;
-    _fetchRequest = fetchRequest;
-    
-    if (performFetch) {
-        // Only performFetch if the change processing is finished
-        @synchronized(self) {
+    @synchronized(self) {
+        // Turn off change notifications since we are replacing fetch request
+        // Change notifications will be re-registered if performFetch is called
+        [self unregisterChangeNotifications];
+        
+        // Updating the fetch request will force rebuild of cache automatically
+        _sectionNameKeyPath = sectionNameKeyPath;
+        _fetchRequest = fetchRequest;
+        
+        if (performFetch) {
+            // Only performFetch if the change processing is finished
             [self performFetch];
         }
     }
