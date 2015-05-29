@@ -12,6 +12,7 @@
 #import "RBQRealmNotificationManager.h"
 #import "RBQControllerCacheObject.h"
 #import "RBQSectionCacheObject.h"
+#import "RLMArray+Utilities.h"
 
 #import <objc/runtime.h>
 
@@ -1037,7 +1038,9 @@ static char kRBQRefreshTriggeredKey;
                         [cacheRealm addOrUpdateObject:section];
                         
                         // Add the section to the controller cache
-                        [controllerCache.sections addObject:section];
+                        if (![controllerCache.sections containsObject:section]) {
+                            [controllerCache.sections addObject:section];
+                        }
                     }
                     
                     // Keep track of the section title so we create one section cache per value
@@ -1054,7 +1057,9 @@ static char kRBQRefreshTriggeredKey;
                 // Add the section to Realm
                 [cacheRealm addOrUpdateObject:section];
                 
-                [controllerCache.sections addObject:section];
+                if (![controllerCache.sections containsObject:section]) {
+                    [controllerCache.sections addObject:section];
+                }
             }
             
             // Create the cache object
