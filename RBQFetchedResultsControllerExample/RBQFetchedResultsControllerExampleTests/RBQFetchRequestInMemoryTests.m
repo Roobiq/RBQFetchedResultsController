@@ -1,39 +1,39 @@
 //
-//  RBQFetchRequestTests.m
+//  RBQFetchRequestInMemoryTests.m
 //  RBQFetchedResultsControllerExample
 //
-//  Created by AsanoYuki on 2015/05/27.
-//  Copyright (c) 2015年 Roobiq. All rights reserved.
+//  Created by Adam Fish on 5/29/15.
+//  Copyright (c) 2015 Roobiq. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+
 #import "RBQFetchRequest.h"
 #import "RLMRealm.h"
 #import "TestObject.h"
 
-@interface RBQFetchRequestTests : XCTestCase
+@interface RBQFetchRequestInMemoryTests : XCTestCase
+
+@property (strong, nonatomic) RLMRealm *inMemoryRealm;
 
 @end
 
-@implementation RBQFetchRequestTests
+@implementation RBQFetchRequestInMemoryTests
 
 - (void)setUp
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    NSArray *writablePaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
-    NSString *documentsPath = [writablePaths lastObject];
+    // Setup the DB (use random strings to create new versions each time)
+    NSString *identifier = [[NSProcessInfo processInfo] globallyUniqueString];
     
-    NSString *testRealmFile = [documentsPath stringByAppendingPathComponent:@"test.realm"];
+    self.inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:identifier];
     
-    [RLMRealm setDefaultRealmPath:testRealmFile];
-    
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    
-    [realm transactionWithBlock:^{
+    [self.inMemoryRealm transactionWithBlock:^{
         
-        [realm deleteAllObjects];
+        [self.inMemoryRealm deleteAllObjects];
         
         for (int i=0; i < 10; i++) {
             
@@ -53,7 +53,7 @@
                 testObject.inTable = NO;
             }
             
-            [realm addObject:testObject];
+            [self.inMemoryRealm addObject:testObject];
         }
     }];
 }
@@ -63,7 +63,7 @@
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
     
-    RLMRealm *realm = [RLMRealm defaultRealm];
+    RLMRealm *realm = self.inMemoryRealm;
     
     [realm transactionWithBlock:^{
         
@@ -76,7 +76,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                        inRealm:[RLMRealm defaultRealm]
+                                                                  inMemoryRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     XCTAssert([fetchRequest.entityName isEqualToString:@"TestObject"]);
@@ -89,11 +89,12 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                        inRealm:[RLMRealm defaultRealm]
+                                                                  inMemoryRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     RLMSortDescriptor *sortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sortIndex"
                                                                             ascending:YES];
+    
     fetchRequest.sortDescriptors = @[sortDescriptor];
     
     RLMResults *results = [fetchRequest fetchObjects];
@@ -109,7 +110,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                        inRealm:[RLMRealm defaultRealm]
+                                                                  inMemoryRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     TestObject *testObject = [[TestObject alloc] init];
@@ -125,7 +126,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                        inRealm:[RLMRealm defaultRealm]
+                                                                  inMemoryRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     TestObject *testObject = [[TestObject alloc] init];

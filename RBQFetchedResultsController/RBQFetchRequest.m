@@ -11,14 +11,14 @@
 
 @interface RBQFetchRequest ()
 
-@property (weak, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
 @end
 
 @implementation RBQFetchRequest
 @synthesize entityName = _entityName,
-realmPath = _realmPath;
+realmPath = _realmPath,
+inMemoryRealmId = _inMemoryRealmId;
 
 #pragma mark - Private Class
 
@@ -72,7 +72,7 @@ realmPath = _realmPath;
     if (self) {
         // Returns the appropriate class name for Obj-C or Swift
         _entityName = [RBQFetchRequest verifyEntityName:entityName];
-        _inMemoryRealm = inMemoryRealm;
+        _inMemoryRealmId = inMemoryRealm.path.lastPathComponent;
         _realmPath = inMemoryRealm.path;
     }
     
@@ -133,8 +133,8 @@ realmPath = _realmPath;
 
 - (RLMRealm *)realm
 {
-    if (self.inMemoryRealm) {
-        return self.inMemoryRealm;
+    if (self.inMemoryRealmId) {
+        return [RLMRealm inMemoryRealmWithIdentifier:self.inMemoryRealmId];
     }
     
     if ([NSThread isMainThread] &&

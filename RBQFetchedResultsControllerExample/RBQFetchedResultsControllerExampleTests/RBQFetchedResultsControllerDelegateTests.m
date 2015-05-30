@@ -22,7 +22,6 @@
 @property (strong, nonatomic) XCTestExpectation *controllerDidChangeContentExpectation;
 
 @property (strong, nonatomic) RLMRealm *inMemoryRealm;
-@property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
 @property (strong, nonatomic) RBQFetchedResultsController *fetchedResultsController;
 @property (assign, nonatomic) NSUInteger count;
 
@@ -37,9 +36,6 @@
     // Setup the DB (use random strings to create new versions each time)
     NSString *identifier = [[NSProcessInfo processInfo] globallyUniqueString];
     self.inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:identifier];
-    
-    identifier = [[NSProcessInfo processInfo] globallyUniqueString];
-    self.inMemoryRealmCache = [RLMRealm inMemoryRealmWithIdentifier:identifier];
     
     // Load the DB with data
     [self.inMemoryRealm beginWriteTransaction];
@@ -82,7 +78,7 @@
     self.fetchedResultsController =
     [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                            sectionNameKeyPath:@"sectionName"
-                                           inMemoryRealmCache:self.inMemoryRealmCache];
+                                                    cacheName:nil];
     
     self.fetchedResultsController.delegate = self;
     
@@ -112,6 +108,7 @@
     [self deleteObjectAtIndexPath:indexPath];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        
         XCTAssertNil(error, @"%@", error.localizedDescription);
     }];
 }
@@ -125,6 +122,7 @@
     [self deleteObjectAtIndexPath:indexPath];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        
         XCTAssertNil(error, @"%@", error.localizedDescription);
     }];
 }
@@ -166,8 +164,8 @@
 
 - (void)deleteObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-    TestObject *object = [self.fetchedResultsController objectInRealm:self.inMemoryRealm
-                                                          atIndexPath:indexPath];
+    TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
     [self.inMemoryRealm beginWriteTransaction];
     
     [[RBQRealmChangeLogger loggerForRealm:self.inMemoryRealm] willDeleteObject:object];
@@ -182,6 +180,7 @@
 - (void)controllerWillChangeContent:(RBQFetchedResultsController *)controller
 {
     if (self.controllerWillChangeContentExpectation) {
+        
         [self.controllerWillChangeContentExpectation fulfill];
     }
 }
@@ -226,6 +225,7 @@
         self.count ++;
         
         if (self.count == 10) {
+            
             [self.controllerDidChangeObjectExpectation fulfill];
         }
     }
@@ -237,13 +237,16 @@
      forChangeType:(NSFetchedResultsChangeType)type
 {
     if (type == NSFetchedResultsChangeInsert) {
+        
         NSLog(@"Inserting section at %lu", (unsigned long)sectionIndex);
     }
     else if (type == NSFetchedResultsChangeDelete) {
+        
         NSLog(@"Deleting section at %lu", (unsigned long)sectionIndex);
     }
 
     if (self.controllerDidChangeSectionExpectation) {
+        
         [self.controllerDidChangeSectionExpectation fulfill];
     }
 }
@@ -251,6 +254,7 @@
 - (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller
 {
     if (self.controllerDidChangeContentExpectation) {
+        
         [self.controllerDidChangeContentExpectation fulfill];
     }
 }

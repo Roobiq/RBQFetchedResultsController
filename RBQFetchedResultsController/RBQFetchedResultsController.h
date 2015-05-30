@@ -182,7 +182,7 @@
  */
 - (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
-        inMemoryRealmCache:(RLMRealm *)inMemoryRealm;
+        inMemoryRealmCache:(RLMRealm *)inMemoryRealm DEPRECATED_MSG_ATTRIBUTE("Please use initWithFetchRequest:sectionNameKeyPath:cacheName passing nil as the cacheName to use an in-memory Realm cache");
 
 /**
  *  Method to tell the controller to perform the fetch
@@ -263,7 +263,7 @@
  *  @return RLMObject
  */
 - (id)objectInRealm:(RLMRealm *)realm
-        atIndexPath:(NSIndexPath *)indexPath;
+        atIndexPath:(NSIndexPath *)indexPath DEPRECATED_MSG_ATTRIBUTE("Use objectAtIndexPath:");
 
 /**
  *  Retrieve the index path for a safe object in the fetch request

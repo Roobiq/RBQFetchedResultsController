@@ -104,8 +104,7 @@ id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customCell" forIndexPath:indexPath];
     
     // Configure the cell...
-    TestObject *objectForCell = [self.fetchedResultsController objectInRealm:[RLMRealm defaultRealm]
-                                                                 atIndexPath:indexPath];
+    TestObject *objectForCell = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     cell.textLabel.text = objectForCell.title;
     
@@ -257,13 +256,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)deleteObjectAtIndexPath:(NSIndexPath *)indexPath
 {
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    
-    TestObject *object = [self.fetchedResultsController objectInRealm:realm
-                                                          atIndexPath:indexPath];
+    TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (!object) {
         return;
     }
+    
+    RLMRealm *realm = [RLMRealm defaultRealm];
     
     [realm beginWriteTransaction];
     
@@ -278,8 +276,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     NSIndexPath *indexPathFirstRow = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    TestObject *object = [self.fetchedResultsController objectInRealm:realm
-                                                          atIndexPath:indexPathFirstRow];
+    TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPathFirstRow];
     
     if (object.sortIndex > 0) {
         [realm beginWriteTransaction];
@@ -319,14 +316,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         NSIndexPath *indexPathSixthRow = [NSIndexPath indexPathForRow:6 inSection:0];
         NSIndexPath *indexPathFirstRow = [NSIndexPath indexPathForRow:0 inSection:0];
         
-        TestObject *firstObject = [self.fetchedResultsController objectInRealm:realm
-                                                                   atIndexPath:indexPathFirstRow];
-        TestObject *thirdObject = [self.fetchedResultsController objectInRealm:realm
-                                                                   atIndexPath:indexPathThirdRow];
-        TestObject *fifthObject = [self.fetchedResultsController objectInRealm:realm
-                                                                   atIndexPath:indexPathFifthRow];
-        TestObject *sixthObject = [self.fetchedResultsController objectInRealm:realm
-                                                                   atIndexPath:indexPathSixthRow];
+        TestObject *firstObject = [self.fetchedResultsController objectAtIndexPath:indexPathFirstRow];
+        TestObject *thirdObject = [self.fetchedResultsController objectAtIndexPath:indexPathThirdRow];
+        TestObject *fifthObject = [self.fetchedResultsController objectAtIndexPath:indexPathFifthRow];
+        TestObject *sixthObject = [self.fetchedResultsController objectAtIndexPath:indexPathSixthRow];
         RLMResults *ninthObject = [TestObject objectsInRealm:realm where:@"%K == %@",@"title",@"Cell 9"];
         
         [fifthObject changeWithNotification:^(TestObject *testObject) {
