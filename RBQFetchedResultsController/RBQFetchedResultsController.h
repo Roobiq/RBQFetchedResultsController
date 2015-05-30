@@ -160,7 +160,7 @@
  *  @warning Specify a cache name if deletion of the cache later on is necessary
  *
  *  @param fetchRequest       the RBQFetchRequest for the controller
- *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)
+ *  @param sectionNameKeyPath A key path on result objects that returns the section name. Pass nil to indicate that the controller should generate a single section. If this key path is not the same as that specified by the first sort descriptor in fetchRequest, they must generate the same relative orderings.
  *  @param name               the cache name (if nil, cache will not be persisted and built using an in-memory Realm)
  *
  *  @return A new instance of RBQFetchedResultsController
