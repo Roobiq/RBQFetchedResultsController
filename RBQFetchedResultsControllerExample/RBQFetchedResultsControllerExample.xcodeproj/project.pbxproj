@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		17FA8445467D84155B36A094 /* libPods-RBQFetchedResultsControllerExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */; };
+		4921A5F91B1A643500CA32B7 /* RBQFetchedResultsControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4921A5F81B1A643500CA32B7 /* RBQFetchedResultsControllerTests.m */; };
 		49527C091B17F47500C115A3 /* RBQSafeRealmObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49527C081B17F47500C115A3 /* RBQSafeRealmObjectTests.m */; };
 		49527C0F1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49527C0E1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m */; };
 		49527C111B1818CF00C115A3 /* RBQEntityChangesObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49527C101B1818CF00C115A3 /* RBQEntityChangesObjectTests.m */; };
@@ -40,6 +41,7 @@
 		046CBCDEC612CA02850EB2FF /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		23DF3779C69223EEBB05695E /* Pods-RBQFetchedResultsControllerExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample.release.xcconfig"; sourceTree = "<group>"; };
 		24302DAE5BB92578C9C97C31 /* Pods-RBQFetchedResultsControllerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample.debug.xcconfig"; sourceTree = "<group>"; };
+		4921A5F81B1A643500CA32B7 /* RBQFetchedResultsControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsControllerTests.m; sourceTree = "<group>"; };
 		49527C081B17F47500C115A3 /* RBQSafeRealmObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObjectTests.m; sourceTree = "<group>"; };
 		49527C0E1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsSectionInfoTests.m; sourceTree = "<group>"; };
 		49527C101B1818CF00C115A3 /* RBQEntityChangesObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQEntityChangesObjectTests.m; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		667F38211A5B2682008E3052 /* RBQFetchedResultsControllerExampleTests */ = {
 			isa = PBXGroup;
 			children = (
+				4921A5F81B1A643500CA32B7 /* RBQFetchedResultsControllerTests.m */,
 				662C46941A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m */,
 				49DF57301B17B09900BA8DDC /* RBQFetchRequestTests.m */,
 				660F4C091B19413B00492DAE /* RBQFetchRequestInMemoryTests.m */,
@@ -365,6 +368,7 @@
 				49DF57331B17B09900BA8DDC /* RBQRealmChangeLoggerTests.m in Sources */,
 				662C46971A6243A900A8D145 /* TestObject.m in Sources */,
 				49527C091B17F47500C115A3 /* RBQSafeRealmObjectTests.m in Sources */,
+				4921A5F91B1A643500CA32B7 /* RBQFetchedResultsControllerTests.m in Sources */,
 				662C46951A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m in Sources */,
 				49527C111B1818CF00C115A3 /* RBQEntityChangesObjectTests.m in Sources */,
 			);
