@@ -32,6 +32,13 @@
 @property (nonatomic, readonly) NSString *realmPath;
 
 /**
+ *  The identifier of the in-memory Realm.
+ *
+ *  @warning return nil if fetch request initialized without in-memory Realm
+ */
+@property (nonatomic, readonly) NSString *inMemoryRealmId;
+
+/**
  *  Predicate supported by Realm
  *
  *  http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates
@@ -50,7 +57,7 @@
  *  Constructor method to create a fetch request for a given entity name in a specific Realm.
  *
  *  @param entityName Class name for the RLMObject
- *  @param realm      RLMRealm in which the RLMObject is persisted
+ *  @param realm      RLMRealm in which the RLMObject is persisted (if passing in-memory Realm, make sure to keep a strong reference elsewhere since fetch request only stores the path)
  *  @param predicate  NSPredicate that represents the search query
  *
  *  @return A new instance of RBQFetchRequest
@@ -63,7 +70,7 @@
  *  Constructor method to create a fetch request for a given entity name in an in-memory Realm.
  *
  *  @param entityName Class name for the RLMObject
- *  @param inMemoryRealm In-memory RLMRealm in which the RLMObject is persisted
+ *  @param inMemoryRealm In-memory RLMRealm in which the RLMObject is persisted (caller must retain strong reference as fetch request does not)
  *  @param predicate  NSPredicate that represents the search query
  *
  *  @return A new instance of RBQFetchRequest
