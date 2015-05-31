@@ -9,32 +9,13 @@
 #import <XCTest/XCTest.h>
 #import "RBQRealmNotificationManager.h"
 #import "TestObject.h"
+#import "RBQTestCase.h"
 
-@interface RBQRealmChangeLoggerTests : XCTestCase
+@interface RBQRealmChangeLoggerTests : RBQTestCase
 
 @end
 
 @implementation RBQRealmChangeLoggerTests
-
-- (void)setUp
-{
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-    
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    
-    // Reset Logger status with receive notification from realm
-    [realm transactionWithBlock:^{
-        
-        [realm deleteAllObjects];
-    }];
-}
 
 - (void)testDidAddObject
 {

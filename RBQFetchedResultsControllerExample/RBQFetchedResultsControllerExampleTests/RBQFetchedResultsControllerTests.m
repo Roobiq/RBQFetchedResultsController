@@ -10,54 +10,17 @@
 #import <UIKit/UIKit.h>
 #import "RBQFetchedResultsController.h"
 #import "TestObject.h"
+#import "RBQTestCase.h"
 
-@interface RBQFetchedResultsControllerTests : XCTestCase
+@interface RBQFetchedResultsControllerTests : RBQTestCase
 
 @end
 
 @implementation RBQFetchedResultsControllerTests
 
-- (void)setUp
-{
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-    NSArray *writablePaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [writablePaths lastObject];
-    NSString *testRealmFile = [documentsPath stringByAppendingPathComponent:@"test.realm"];
-    [RLMRealm setDefaultRealmPath:testRealmFile];
-    
-    [[RLMRealm defaultRealm] transactionWithBlock:^{
-        [[RLMRealm defaultRealm] deleteAllObjects];
-        
-        for (int i=0; i < 10; i++) {
-            TestObject *testObject = [[TestObject alloc] init];
-            testObject.key = [NSString stringWithFormat:@"key%d", i];
-            testObject.inTable = YES;
-            testObject.title = @"title";
-            testObject.sortIndex = i;
-            if (i % 2 == 0) {
-                testObject.sectionName = @"section 1";
-            } else {
-                testObject.sectionName = @"section 2";
-            }
-            [[RLMRealm defaultRealm] addObject:testObject];
-        }
-    }];
-    
-    [RBQFetchedResultsController deleteCacheWithName:@"cache"];
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-    [[RLMRealm defaultRealm] transactionWithBlock:^{
-        [[RLMRealm defaultRealm] deleteAllObjects];
-    }];
-}
-
 - (void)testPerformFetch
 {
+    [self insertDifferentSectionNameTestObject];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject" inRealm:[RLMRealm defaultRealm] predicate:predicate];
     RLMSortDescriptor *sectionNameSortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sectionName" ascending:YES];
@@ -73,6 +36,7 @@
 
 - (void)testPeformFetchWithoutSortDescriptor
 {
+    [self insertDifferentSectionNameTestObject];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject" inRealm:[RLMRealm defaultRealm] predicate:predicate];
     RBQFetchedResultsController *fetchedResultsController = [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest sectionNameKeyPath:@"sectionName" cacheName:@"cache"];
@@ -86,6 +50,7 @@
 
 - (void)testDeleteWithCacheName
 {
+    [self insertDifferentSectionNameTestObject];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject" inRealm:[RLMRealm defaultRealm] predicate:predicate];
     RLMSortDescriptor *sectionNameSortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sectionName" ascending:YES];
@@ -112,6 +77,7 @@
 
 - (void)testUpdateFetchRequestSectionNameKeyPathAndPeformFetch
 {
+    [self insertDifferentSectionNameTestObject];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject" inRealm:[RLMRealm defaultRealm] predicate:predicate];
     RLMSortDescriptor *sectionNameSortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sectionName" ascending:YES];
