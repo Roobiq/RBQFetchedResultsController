@@ -26,6 +26,7 @@ static char kRBQRefreshTriggeredKey;
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
 @property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
+@property (strong, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
 @end
@@ -1900,9 +1901,10 @@ static char kRBQRefreshTriggeredKey;
         RLMRealm *realm = [RLMRealm inMemoryRealmWithIdentifier:[self nameForFetchRequest:self.fetchRequest]];
         
         // Hold onto a strong reference so inMemory realm cache doesn't get deallocated
-        if (!self.inMemoryRealmCache) {
+        // We don't use the cache since this is deprecated
+        if (!self.inMemoryRealm) {
             
-            self.inMemoryRealmCache = realm;
+            self.inMemoryRealm = realm;
         }
         
         return realm;
