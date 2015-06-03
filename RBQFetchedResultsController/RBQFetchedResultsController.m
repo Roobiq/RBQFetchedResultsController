@@ -1902,7 +1902,9 @@ static char kRBQRefreshTriggeredKey;
         
         // Hold onto a strong reference so inMemory realm cache doesn't get deallocated
         // We don't use the cache since this is deprecated
-        if (!self.inMemoryRealm) {
+        // If the realm path changed (new fetch request then hold onto the new one)
+        if (!self.inMemoryRealm ||
+            ![realm.path.lastPathComponent isEqualToString:self.inMemoryRealm.path.lastPathComponent]) {
             
             self.inMemoryRealm = realm;
         }
