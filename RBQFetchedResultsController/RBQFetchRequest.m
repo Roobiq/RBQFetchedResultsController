@@ -26,6 +26,16 @@ NSString * RBQClassNameForRealmEntityName(NSString *entityName)
     return swiftClassName;
 }
 
+BOOL RBQIsSwiftRealmClassName(NSString *className)
+{
+    return [className rangeOfString:@"."].location != NSNotFound;
+}
+
+NSString * RBQRealmClassNameFromSwiftClassName(NSString *className)
+{
+    return [className substringFromIndex:[className rangeOfString:@"."].location + 1];
+}
+
 @interface RBQFetchRequest ()
 
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
