@@ -12,12 +12,25 @@
 @class RBQFetchRequest;
 
 /**
+ *  Returns the actual class name for a Realm entity name
+ *
+ *  For Swift this will be in the form of BundleName.ClassName since this is the actual class name
+ *
+ *  @param entityName the Realm object name
+ *
+ *  @return the class name for use with NSClassFromString()
+ */
+extern NSString * RBQClassNameForRealmEntityName(NSString *entityName);
+
+/**
  *  This class is used by the RBQFetchedResultsController to represent the properties of the fetch. The RBQFetchRequest is specific to one RLMObject and uses an NSPredicate and array of RLMSortDescriptors to define the query.
  */
 @interface RBQFetchRequest : NSObject
 
 /**
  *  RLMObject class name for the fetch request
+ *
+ *  For Swift this will be in the form of BundleName.ClassName since this is the actual class name
  */
 @property (nonatomic, readonly) NSString *entityName;
 

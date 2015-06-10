@@ -9,21 +9,9 @@
 #import "RBQFetchRequest.h"
 #import "RLMObject+Utilities.h"
 
-@interface RBQFetchRequest ()
+#pragma mark - Public Functions
 
-@property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
-
-@end
-
-@implementation RBQFetchRequest
-@synthesize entityName = _entityName,
-realmPath = _realmPath,
-inMemoryRealmId = _inMemoryRealmId;
-
-#pragma mark - Private Class
-
-// Returns the appropriate class name for Obj-C or Swift
-+ (NSString *)verifyEntityName:(NSString *)entityName
+NSString * RBQClassNameForRealmEntityName(NSString *entityName)
 {
     Class objcClass = NSClassFromString(entityName);
     
@@ -37,6 +25,17 @@ inMemoryRealmId = _inMemoryRealmId;
     
     return swiftClassName;
 }
+
+@interface RBQFetchRequest ()
+
+@property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
+
+@end
+
+@implementation RBQFetchRequest
+@synthesize entityName = _entityName,
+realmPath = _realmPath,
+inMemoryRealmId = _inMemoryRealmId;
 
 #pragma mark - Public Class
 
@@ -71,7 +70,7 @@ inMemoryRealmId = _inMemoryRealmId;
     
     if (self) {
         // Returns the appropriate class name for Obj-C or Swift
-        _entityName = [RBQFetchRequest verifyEntityName:entityName];
+        _entityName = RBQClassNameForRealmEntityName(entityName);
         _inMemoryRealmId = inMemoryRealm.path.lastPathComponent;
         _realmPath = inMemoryRealm.path;
     }
@@ -86,7 +85,7 @@ inMemoryRealmId = _inMemoryRealmId;
     
     if (self) {
         // Returns the appropriate class name for Obj-C or Swift
-        _entityName = [RBQFetchRequest verifyEntityName:entityName];
+        _entityName = RBQClassNameForRealmEntityName(entityName);
         _realmPath = realm.path;
     }
     
