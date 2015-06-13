@@ -9,61 +9,13 @@
 #import <XCTest/XCTest.h>
 #import "RBQFetchedResultsController.h"
 #import "TestObject.h"
+#import "RBQTestCase.h"
 
-@interface RBQFetchedResultsSectionInfoTests : XCTestCase
+@interface RBQFetchedResultsSectionInfoTests : RBQTestCase
 
 @end
 
 @implementation RBQFetchedResultsSectionInfoTests
-
-#pragma mark - Setup
-
-- (void)setUp
-{
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-    NSArray *writablePaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [writablePaths lastObject];
-    NSString *testRealmFile = [documentsPath stringByAppendingPathComponent:@"test.realm"];
-    
-    [RLMRealm setDefaultRealmPath:testRealmFile];
-
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    
-    [realm transactionWithBlock:^{
-        [realm deleteAllObjects];
-        
-        for (int i=0; i < 10; i++) {
-            
-            TestObject *testObject = [[TestObject alloc] init];
-            testObject.key = [NSString stringWithFormat:@"key%d", i];
-            testObject.title = @"title";
-            testObject.inTable = YES;
-            testObject.sortIndex = i;
-            
-            if (i % 2 == 0) {
-                testObject.sectionName = @"section 1";
-            } else {
-                testObject.sectionName = @"section 2";
-            }
-            
-            [realm addObject:testObject];
-        }
-    }];
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-    
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    
-    [realm transactionWithBlock:^{
-        
-        [realm deleteAllObjects];
-    }];
-}
 
 #pragma mark - Utility 
 
@@ -113,6 +65,7 @@
 
 - (void)testObjectsProperty
 {
+    [self insertDifferentSectionNameTestObject];
     RBQFetchedResultsSectionInfo *sectionInfo = [self createFetchedResultsSectionInfo];
     
     RLMResults *results = sectionInfo.objects;
