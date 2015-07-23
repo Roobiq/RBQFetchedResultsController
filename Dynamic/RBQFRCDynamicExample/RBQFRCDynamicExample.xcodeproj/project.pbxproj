@@ -1,0 +1,618 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A05FA4511B615EA40000C9B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4501B615EA40000C9B2 /* main.m */; };
+		A05FA4541B615EA40000C9B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4531B615EA40000C9B2 /* AppDelegate.m */; };
+		A05FA45A1B615EA40000C9B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4581B615EA40000C9B2 /* Main.storyboard */; };
+		A05FA45C1B615EA40000C9B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A05FA45B1B615EA40000C9B2 /* Images.xcassets */; };
+		A05FA45F1B615EA40000C9B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05FA45D1B615EA40000C9B2 /* LaunchScreen.xib */; };
+		A05FA4951B615EB60000C9B2 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4771B615EB60000C9B2 /* RBQControllerCacheObject.m */; };
+		A05FA4961B615EB60000C9B2 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4791B615EB60000C9B2 /* RBQObjectCacheObject.m */; };
+		A05FA4971B615EB60000C9B2 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA47B1B615EB60000C9B2 /* RBQSectionCacheObject.m */; };
+		A05FA4981B615EB60000C9B2 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA47D1B615EB60000C9B2 /* RBQFetchedResultsController.m */; };
+		A05FA4991B615EB60000C9B2 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA47F1B615EB60000C9B2 /* RBQFetchRequest.m */; };
+		A05FA49A1B615EB60000C9B2 /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4831B615EB60000C9B2 /* RLMObject+Notifications.m */; };
+		A05FA49B1B615EB60000C9B2 /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4851B615EB60000C9B2 /* RLMRealm+Notifications.m */; };
+		A05FA49D1B615EB60000C9B2 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4881B615EB60000C9B2 /* RBQRealmNotificationManager.m */; };
+		A05FA4A01B615EB60000C9B2 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA48D1B615EB60000C9B2 /* RBQSafeRealmObject.m */; };
+		A05FA4A21B615EB60000C9B2 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4901B615EB60000C9B2 /* RLMArray+Utilities.m */; };
+		A05FA4A31B615EB60000C9B2 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4921B615EB60000C9B2 /* RLMObject+SafeObject.m */; };
+		A05FA4A41B615EB60000C9B2 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4941B615EB60000C9B2 /* RLMObject+Utilities.m */; };
+		A05FA4BB1B6169460000C9B2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05FA4BA1B6169460000C9B2 /* Realm.framework */; };
+		A05FA4BC1B6169460000C9B2 /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A05FA4BA1B6169460000C9B2 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A05FA4CA1B616A310000C9B2 /* RBQEntityChangesObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C01B616A310000C9B2 /* RBQEntityChangesObjectTests.m */; };
+		A05FA4CB1B616A310000C9B2 /* RBQFetchedResultsControllerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C11B616A310000C9B2 /* RBQFetchedResultsControllerDelegateTests.m */; };
+		A05FA4CC1B616A310000C9B2 /* RBQFetchedResultsControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C21B616A310000C9B2 /* RBQFetchedResultsControllerTests.m */; };
+		A05FA4CD1B616A310000C9B2 /* RBQFetchedResultsSectionInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C31B616A310000C9B2 /* RBQFetchedResultsSectionInfoTests.m */; };
+		A05FA4CE1B616A310000C9B2 /* RBQFetchRequestInMemoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C41B616A310000C9B2 /* RBQFetchRequestInMemoryTests.m */; };
+		A05FA4CF1B616A310000C9B2 /* RBQFetchRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C51B616A310000C9B2 /* RBQFetchRequestTests.m */; };
+		A05FA4D01B616A310000C9B2 /* RBQRealmChangeLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C61B616A310000C9B2 /* RBQRealmChangeLoggerTests.m */; };
+		A05FA4D11B616A310000C9B2 /* RBQSafeRealmObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C71B616A310000C9B2 /* RBQSafeRealmObjectTests.m */; };
+		A05FA4D21B616A310000C9B2 /* RBQTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C91B616A310000C9B2 /* RBQTestCase.m */; };
+		A05FA4D31B616A470000C9B2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05FA4BA1B6169460000C9B2 /* Realm.framework */; };
+		A05FA4D41B616AA40000C9B2 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4BE1B616A160000C9B2 /* TestObject.m */; };
+		A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A05FA4651B615EA40000C9B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A05FA4431B615EA40000C9B2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A05FA44A1B615EA40000C9B2;
+			remoteInfo = RBQFRCDynamicExample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A05FA4A81B615ECB0000C9B2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A05FA4BC1B6169460000C9B2 /* Realm.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A05FA44B1B615EA40000C9B2 /* RBQFRCDynamicExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RBQFRCDynamicExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A05FA44F1B615EA40000C9B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A05FA4501B615EA40000C9B2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A05FA4521B615EA40000C9B2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A05FA4531B615EA40000C9B2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A05FA4591B615EA40000C9B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A05FA45B1B615EA40000C9B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A05FA45E1B615EA40000C9B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		A05FA4641B615EA40000C9B2 /* RBQFRCDynamicExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RBQFRCDynamicExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A05FA4691B615EA40000C9B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A05FA4761B615EB60000C9B2 /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
+		A05FA4771B615EB60000C9B2 /* RBQControllerCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQControllerCacheObject.m; sourceTree = "<group>"; };
+		A05FA4781B615EB60000C9B2 /* RBQObjectCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQObjectCacheObject.h; sourceTree = "<group>"; };
+		A05FA4791B615EB60000C9B2 /* RBQObjectCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQObjectCacheObject.m; sourceTree = "<group>"; };
+		A05FA47A1B615EB60000C9B2 /* RBQSectionCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSectionCacheObject.h; sourceTree = "<group>"; };
+		A05FA47B1B615EB60000C9B2 /* RBQSectionCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSectionCacheObject.m; sourceTree = "<group>"; };
+		A05FA47C1B615EB60000C9B2 /* RBQFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsController.h; sourceTree = "<group>"; };
+		A05FA47D1B615EB60000C9B2 /* RBQFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsController.m; sourceTree = "<group>"; };
+		A05FA47E1B615EB60000C9B2 /* RBQFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchRequest.h; sourceTree = "<group>"; };
+		A05FA47F1B615EB60000C9B2 /* RBQFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchRequest.m; sourceTree = "<group>"; };
+		A05FA4821B615EB60000C9B2 /* RLMObject+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Notifications.h"; sourceTree = "<group>"; };
+		A05FA4831B615EB60000C9B2 /* RLMObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Notifications.m"; sourceTree = "<group>"; };
+		A05FA4841B615EB60000C9B2 /* RLMRealm+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMRealm+Notifications.h"; sourceTree = "<group>"; };
+		A05FA4851B615EB60000C9B2 /* RLMRealm+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMRealm+Notifications.m"; sourceTree = "<group>"; };
+		A05FA4871B615EB60000C9B2 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
+		A05FA4881B615EB60000C9B2 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
+		A05FA48C1B615EB60000C9B2 /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
+		A05FA48D1B615EB60000C9B2 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
+		A05FA48F1B615EB60000C9B2 /* RLMArray+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Utilities.h"; sourceTree = "<group>"; };
+		A05FA4901B615EB60000C9B2 /* RLMArray+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Utilities.m"; sourceTree = "<group>"; };
+		A05FA4911B615EB60000C9B2 /* RLMObject+SafeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+SafeObject.h"; sourceTree = "<group>"; };
+		A05FA4921B615EB60000C9B2 /* RLMObject+SafeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+SafeObject.m"; sourceTree = "<group>"; };
+		A05FA4931B615EB60000C9B2 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
+		A05FA4941B615EB60000C9B2 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
+		A05FA4BA1B6169460000C9B2 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
+		A05FA4BD1B616A160000C9B2 /* TestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestObject.h; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/TestObject.h; sourceTree = "<group>"; };
+		A05FA4BE1B616A160000C9B2 /* TestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestObject.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/TestObject.m; sourceTree = "<group>"; };
+		A05FA4C01B616A310000C9B2 /* RBQEntityChangesObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQEntityChangesObjectTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQEntityChangesObjectTests.m; sourceTree = "<group>"; };
+		A05FA4C11B616A310000C9B2 /* RBQFetchedResultsControllerDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchedResultsControllerDelegateTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQFetchedResultsControllerDelegateTests.m; sourceTree = "<group>"; };
+		A05FA4C21B616A310000C9B2 /* RBQFetchedResultsControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchedResultsControllerTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQFetchedResultsControllerTests.m; sourceTree = "<group>"; };
+		A05FA4C31B616A310000C9B2 /* RBQFetchedResultsSectionInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchedResultsSectionInfoTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQFetchedResultsSectionInfoTests.m; sourceTree = "<group>"; };
+		A05FA4C41B616A310000C9B2 /* RBQFetchRequestInMemoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchRequestInMemoryTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQFetchRequestInMemoryTests.m; sourceTree = "<group>"; };
+		A05FA4C51B616A310000C9B2 /* RBQFetchRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchRequestTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQFetchRequestTests.m; sourceTree = "<group>"; };
+		A05FA4C61B616A310000C9B2 /* RBQRealmChangeLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQRealmChangeLoggerTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQRealmChangeLoggerTests.m; sourceTree = "<group>"; };
+		A05FA4C71B616A310000C9B2 /* RBQSafeRealmObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQSafeRealmObjectTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQSafeRealmObjectTests.m; sourceTree = "<group>"; };
+		A05FA4C81B616A310000C9B2 /* RBQTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQTestCase.h; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQTestCase.h; sourceTree = "<group>"; };
+		A05FA4C91B616A310000C9B2 /* RBQTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQTestCase.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQTestCase.m; sourceTree = "<group>"; };
+		A05FA4D61B616AD10000C9B2 /* ExampleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExampleTableViewController.h; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/ExampleTableViewController.h; sourceTree = "<group>"; };
+		A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExampleTableViewController.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/ExampleTableViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A05FA4481B615EA40000C9B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A05FA4BB1B6169460000C9B2 /* Realm.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A05FA4611B615EA40000C9B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A05FA4D31B616A470000C9B2 /* Realm.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A05FA4421B615EA40000C9B2 = {
+			isa = PBXGroup;
+			children = (
+				A05FA4BA1B6169460000C9B2 /* Realm.framework */,
+				A05FA44D1B615EA40000C9B2 /* RBQFRCDynamicExample */,
+				A05FA4671B615EA40000C9B2 /* RBQFRCDynamicExampleTests */,
+				A05FA44C1B615EA40000C9B2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A05FA44C1B615EA40000C9B2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA44B1B615EA40000C9B2 /* RBQFRCDynamicExample.app */,
+				A05FA4641B615EA40000C9B2 /* RBQFRCDynamicExampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A05FA44D1B615EA40000C9B2 /* RBQFRCDynamicExample */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA4741B615EB60000C9B2 /* RBQFetchedResultsController */,
+				A05FA4521B615EA40000C9B2 /* AppDelegate.h */,
+				A05FA4531B615EA40000C9B2 /* AppDelegate.m */,
+				A05FA4D61B616AD10000C9B2 /* ExampleTableViewController.h */,
+				A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */,
+				A05FA4BD1B616A160000C9B2 /* TestObject.h */,
+				A05FA4BE1B616A160000C9B2 /* TestObject.m */,
+				A05FA4581B615EA40000C9B2 /* Main.storyboard */,
+				A05FA45B1B615EA40000C9B2 /* Images.xcassets */,
+				A05FA45D1B615EA40000C9B2 /* LaunchScreen.xib */,
+				A05FA44E1B615EA40000C9B2 /* Supporting Files */,
+			);
+			path = RBQFRCDynamicExample;
+			sourceTree = "<group>";
+		};
+		A05FA44E1B615EA40000C9B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA44F1B615EA40000C9B2 /* Info.plist */,
+				A05FA4501B615EA40000C9B2 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A05FA4671B615EA40000C9B2 /* RBQFRCDynamicExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA4C01B616A310000C9B2 /* RBQEntityChangesObjectTests.m */,
+				A05FA4C11B616A310000C9B2 /* RBQFetchedResultsControllerDelegateTests.m */,
+				A05FA4C21B616A310000C9B2 /* RBQFetchedResultsControllerTests.m */,
+				A05FA4C31B616A310000C9B2 /* RBQFetchedResultsSectionInfoTests.m */,
+				A05FA4C41B616A310000C9B2 /* RBQFetchRequestInMemoryTests.m */,
+				A05FA4C51B616A310000C9B2 /* RBQFetchRequestTests.m */,
+				A05FA4C61B616A310000C9B2 /* RBQRealmChangeLoggerTests.m */,
+				A05FA4C71B616A310000C9B2 /* RBQSafeRealmObjectTests.m */,
+				A05FA4C81B616A310000C9B2 /* RBQTestCase.h */,
+				A05FA4C91B616A310000C9B2 /* RBQTestCase.m */,
+				A05FA4681B615EA40000C9B2 /* Supporting Files */,
+			);
+			path = RBQFRCDynamicExampleTests;
+			sourceTree = "<group>";
+		};
+		A05FA4681B615EA40000C9B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA4691B615EA40000C9B2 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A05FA4741B615EB60000C9B2 /* RBQFetchedResultsController */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA4751B615EB60000C9B2 /* CacheObjects */,
+				A05FA47C1B615EB60000C9B2 /* RBQFetchedResultsController.h */,
+				A05FA47D1B615EB60000C9B2 /* RBQFetchedResultsController.m */,
+				A05FA47E1B615EB60000C9B2 /* RBQFetchRequest.h */,
+				A05FA47F1B615EB60000C9B2 /* RBQFetchRequest.m */,
+				A05FA4801B615EB60000C9B2 /* RBQRealmNotificationManager */,
+				A05FA48A1B615EB60000C9B2 /* RealmUtilities */,
+			);
+			name = RBQFetchedResultsController;
+			path = ../../RBQFetchedResultsController;
+			sourceTree = "<group>";
+		};
+		A05FA4751B615EB60000C9B2 /* CacheObjects */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA4761B615EB60000C9B2 /* RBQControllerCacheObject.h */,
+				A05FA4771B615EB60000C9B2 /* RBQControllerCacheObject.m */,
+				A05FA4781B615EB60000C9B2 /* RBQObjectCacheObject.h */,
+				A05FA4791B615EB60000C9B2 /* RBQObjectCacheObject.m */,
+				A05FA47A1B615EB60000C9B2 /* RBQSectionCacheObject.h */,
+				A05FA47B1B615EB60000C9B2 /* RBQSectionCacheObject.m */,
+			);
+			path = CacheObjects;
+			sourceTree = "<group>";
+		};
+		A05FA4801B615EB60000C9B2 /* RBQRealmNotificationManager */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA4811B615EB60000C9B2 /* Helpers */,
+				A05FA4871B615EB60000C9B2 /* RBQRealmNotificationManager.h */,
+				A05FA4881B615EB60000C9B2 /* RBQRealmNotificationManager.m */,
+			);
+			path = RBQRealmNotificationManager;
+			sourceTree = "<group>";
+		};
+		A05FA4811B615EB60000C9B2 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA4821B615EB60000C9B2 /* RLMObject+Notifications.h */,
+				A05FA4831B615EB60000C9B2 /* RLMObject+Notifications.m */,
+				A05FA4841B615EB60000C9B2 /* RLMRealm+Notifications.h */,
+				A05FA4851B615EB60000C9B2 /* RLMRealm+Notifications.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A05FA48A1B615EB60000C9B2 /* RealmUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				A05FA48C1B615EB60000C9B2 /* RBQSafeRealmObject.h */,
+				A05FA48D1B615EB60000C9B2 /* RBQSafeRealmObject.m */,
+				A05FA48F1B615EB60000C9B2 /* RLMArray+Utilities.h */,
+				A05FA4901B615EB60000C9B2 /* RLMArray+Utilities.m */,
+				A05FA4911B615EB60000C9B2 /* RLMObject+SafeObject.h */,
+				A05FA4921B615EB60000C9B2 /* RLMObject+SafeObject.m */,
+				A05FA4931B615EB60000C9B2 /* RLMObject+Utilities.h */,
+				A05FA4941B615EB60000C9B2 /* RLMObject+Utilities.m */,
+			);
+			path = RealmUtilities;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A05FA44A1B615EA40000C9B2 /* RBQFRCDynamicExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A05FA46E1B615EA40000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCDynamicExample" */;
+			buildPhases = (
+				A05FA4471B615EA40000C9B2 /* Sources */,
+				A05FA4481B615EA40000C9B2 /* Frameworks */,
+				A05FA4491B615EA40000C9B2 /* Resources */,
+				A05FA4A81B615ECB0000C9B2 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RBQFRCDynamicExample;
+			productName = RBQFRCDynamicExample;
+			productReference = A05FA44B1B615EA40000C9B2 /* RBQFRCDynamicExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A05FA4631B615EA40000C9B2 /* RBQFRCDynamicExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A05FA4711B615EA40000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCDynamicExampleTests" */;
+			buildPhases = (
+				A05FA4601B615EA40000C9B2 /* Sources */,
+				A05FA4611B615EA40000C9B2 /* Frameworks */,
+				A05FA4621B615EA40000C9B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A05FA4661B615EA40000C9B2 /* PBXTargetDependency */,
+			);
+			name = RBQFRCDynamicExampleTests;
+			productName = RBQFRCDynamicExampleTests;
+			productReference = A05FA4641B615EA40000C9B2 /* RBQFRCDynamicExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A05FA4431B615EA40000C9B2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Adam Fish";
+				TargetAttributes = {
+					A05FA44A1B615EA40000C9B2 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					A05FA4631B615EA40000C9B2 = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = A05FA44A1B615EA40000C9B2;
+					};
+				};
+			};
+			buildConfigurationList = A05FA4461B615EA40000C9B2 /* Build configuration list for PBXProject "RBQFRCDynamicExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A05FA4421B615EA40000C9B2;
+			productRefGroup = A05FA44C1B615EA40000C9B2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A05FA44A1B615EA40000C9B2 /* RBQFRCDynamicExample */,
+				A05FA4631B615EA40000C9B2 /* RBQFRCDynamicExampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A05FA4491B615EA40000C9B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A05FA45A1B615EA40000C9B2 /* Main.storyboard in Resources */,
+				A05FA45F1B615EA40000C9B2 /* LaunchScreen.xib in Resources */,
+				A05FA45C1B615EA40000C9B2 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A05FA4621B615EA40000C9B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A05FA4471B615EA40000C9B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */,
+				A05FA4961B615EB60000C9B2 /* RBQObjectCacheObject.m in Sources */,
+				A05FA49D1B615EB60000C9B2 /* RBQRealmNotificationManager.m in Sources */,
+				A05FA4951B615EB60000C9B2 /* RBQControllerCacheObject.m in Sources */,
+				A05FA4A31B615EB60000C9B2 /* RLMObject+SafeObject.m in Sources */,
+				A05FA4971B615EB60000C9B2 /* RBQSectionCacheObject.m in Sources */,
+				A05FA4991B615EB60000C9B2 /* RBQFetchRequest.m in Sources */,
+				A05FA4A41B615EB60000C9B2 /* RLMObject+Utilities.m in Sources */,
+				A05FA4D41B616AA40000C9B2 /* TestObject.m in Sources */,
+				A05FA4541B615EA40000C9B2 /* AppDelegate.m in Sources */,
+				A05FA4A01B615EB60000C9B2 /* RBQSafeRealmObject.m in Sources */,
+				A05FA4A21B615EB60000C9B2 /* RLMArray+Utilities.m in Sources */,
+				A05FA4981B615EB60000C9B2 /* RBQFetchedResultsController.m in Sources */,
+				A05FA49A1B615EB60000C9B2 /* RLMObject+Notifications.m in Sources */,
+				A05FA49B1B615EB60000C9B2 /* RLMRealm+Notifications.m in Sources */,
+				A05FA4511B615EA40000C9B2 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A05FA4601B615EA40000C9B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A05FA4CE1B616A310000C9B2 /* RBQFetchRequestInMemoryTests.m in Sources */,
+				A05FA4D21B616A310000C9B2 /* RBQTestCase.m in Sources */,
+				A05FA4CD1B616A310000C9B2 /* RBQFetchedResultsSectionInfoTests.m in Sources */,
+				A05FA4CB1B616A310000C9B2 /* RBQFetchedResultsControllerDelegateTests.m in Sources */,
+				A05FA4CF1B616A310000C9B2 /* RBQFetchRequestTests.m in Sources */,
+				A05FA4D01B616A310000C9B2 /* RBQRealmChangeLoggerTests.m in Sources */,
+				A05FA4CC1B616A310000C9B2 /* RBQFetchedResultsControllerTests.m in Sources */,
+				A05FA4CA1B616A310000C9B2 /* RBQEntityChangesObjectTests.m in Sources */,
+				A05FA4D11B616A310000C9B2 /* RBQSafeRealmObjectTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A05FA4661B615EA40000C9B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A05FA44A1B615EA40000C9B2 /* RBQFRCDynamicExample */;
+			targetProxy = A05FA4651B615EA40000C9B2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A05FA4581B615EA40000C9B2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A05FA4591B615EA40000C9B2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A05FA45D1B615EA40000C9B2 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A05FA45E1B615EA40000C9B2 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A05FA46C1B615EA40000C9B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A05FA46D1B615EA40000C9B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A05FA46F1B615EA40000C9B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = RBQFRCDynamicExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A05FA4701B615EA40000C9B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = RBQFRCDynamicExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A05FA4721B615EA40000C9B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = RBQFRCDynamicExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RBQFRCDynamicExample.app/RBQFRCDynamicExample";
+			};
+			name = Debug;
+		};
+		A05FA4731B615EA40000C9B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = RBQFRCDynamicExampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RBQFRCDynamicExample.app/RBQFRCDynamicExample";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A05FA4461B615EA40000C9B2 /* Build configuration list for PBXProject "RBQFRCDynamicExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A05FA46C1B615EA40000C9B2 /* Debug */,
+				A05FA46D1B615EA40000C9B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A05FA46E1B615EA40000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCDynamicExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A05FA46F1B615EA40000C9B2 /* Debug */,
+				A05FA4701B615EA40000C9B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A05FA4711B615EA40000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCDynamicExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A05FA4721B615EA40000C9B2 /* Debug */,
+				A05FA4731B615EA40000C9B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A05FA4431B615EA40000C9B2 /* Project object */;
+}
