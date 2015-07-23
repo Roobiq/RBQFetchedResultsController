@@ -38,6 +38,7 @@
 		A05FA4D31B616A470000C9B2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05FA4BA1B6169460000C9B2 /* Realm.framework */; };
 		A05FA4D41B616AA40000C9B2 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4BE1B616A160000C9B2 /* TestObject.m */; };
 		A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */; };
+		A05FA4DE1B6170280000C9B2 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,8 @@
 		A05FA4C91B616A310000C9B2 /* RBQTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQTestCase.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQTestCase.m; sourceTree = "<group>"; };
 		A05FA4D61B616AD10000C9B2 /* ExampleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExampleTableViewController.h; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/ExampleTableViewController.h; sourceTree = "<group>"; };
 		A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExampleTableViewController.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/ExampleTableViewController.m; sourceTree = "<group>"; };
+		A05FA4DC1B6170280000C9B2 /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
+		A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +256,8 @@
 				A05FA4831B615EB60000C9B2 /* RLMObject+Notifications.m */,
 				A05FA4841B615EB60000C9B2 /* RLMRealm+Notifications.h */,
 				A05FA4851B615EB60000C9B2 /* RLMRealm+Notifications.m */,
+				A05FA4DC1B6170280000C9B2 /* RLMResults+Notifications.h */,
+				A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -387,6 +392,7 @@
 				A05FA4A21B615EB60000C9B2 /* RLMArray+Utilities.m in Sources */,
 				A05FA4981B615EB60000C9B2 /* RBQFetchedResultsController.m in Sources */,
 				A05FA49A1B615EB60000C9B2 /* RLMObject+Notifications.m in Sources */,
+				A05FA4DE1B6170280000C9B2 /* RLMResults+Notifications.m in Sources */,
 				A05FA49B1B615EB60000C9B2 /* RLMRealm+Notifications.m in Sources */,
 				A05FA4511B615EA40000C9B2 /* main.m in Sources */,
 			);
@@ -603,6 +609,7 @@
 				A05FA4701B615EA40000C9B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A05FA4711B615EA40000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCDynamicExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -611,6 +618,7 @@
 				A05FA4731B615EA40000C9B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
