@@ -11,6 +11,35 @@
 
 #import <Realm/RLMObjectSchema.h>
 #import <Realm/RLMRealm_Dynamic.h>
+#import <Realm/RLMObjectBase_Dynamic.h>
+
+static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
+    if (!object) {
+        return nil;
+    }
+    
+    RLMObjectSchema *objectSchema = RLMObjectBaseObjectSchema(object);
+    
+    RLMProperty *primaryKeyProperty = objectSchema.primaryKeyProperty;
+    
+    if (primaryKeyProperty) {
+        id value = nil;
+        
+        value = [object valueForKey:primaryKeyProperty.name];
+        
+        if (!value) {
+            @throw [NSException exceptionWithName:@"RBQException"
+                                           reason:@"Primary key is nil"
+                                         userInfo:nil];
+        }
+        
+        return value;
+    }
+    
+    @throw [NSException exceptionWithName:@"RBQException"
+                                   reason:@"Object does not have a primary key"
+                                 userInfo:nil];
+}
 
 @interface RBQSafeRealmObject ()
 
@@ -23,7 +52,7 @@
             primaryKeyType = _primaryKeyType,
             primaryKeyValue = _primaryKeyValue;
 
-+ (instancetype)safeObjectFromObject:(RLMObject *)object
++ (instancetype)safeObjectFromObject:(RLMObjectBase *)object
 {
     if (!object || ![[object class] primaryKey]) {
         return nil;
@@ -31,14 +60,18 @@
     
     NSString *className = [[object class] className];
     
-    id value = [RLMObject primaryKeyValueForObject:object];
+    id value = RLMObjectBasePrimaryKeyValue(object);
     
-    RLMProperty *primaryKeyProperty = object.objectSchema.primaryKeyProperty;
+    RLMObjectSchema *objectSchema = RLMObjectBaseObjectSchema(object);
+    
+    RLMProperty *primaryKeyProperty = objectSchema.primaryKeyProperty;
+    
+    RLMRealm *realm = RLMObjectBaseRealm(object);
     
     return [[self alloc] initWithClassName:className
                            primaryKeyValue:value
                             primaryKeyType:primaryKeyProperty.type
-                                     realm:object.realm];
+                                     realm:realm];
 }
 
 + (id)objectfromSafeObject:(RBQSafeRealmObject *)safeObject

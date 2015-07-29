@@ -59,7 +59,7 @@
  *
  *  @return RBQSafeObject which is a thread-safe
  */
-+ (instancetype)safeObjectFromObject:(RLMObject *)object;
++ (instancetype)safeObjectFromObject:(RLMObjectBase *)object;
 
 /**
  *  Create a RLMObject from a RBQSafeObject
