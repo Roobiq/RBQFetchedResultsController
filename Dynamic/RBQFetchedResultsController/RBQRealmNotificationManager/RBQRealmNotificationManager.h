@@ -87,7 +87,7 @@ typedef void(^RBQNotificationBlock)(NSDictionary *entityChanges,
  *
  *  @param addedObject Added RLMObject
  */
-- (void)didAddObject:(RLMObject *)addedObject;
+- (void)didAddObject:(RLMObjectBase *)addedObject;
 
 /**
  *  Register a collection of RLMObject additions
@@ -105,7 +105,7 @@ typedef void(^RBQNotificationBlock)(NSDictionary *entityChanges,
  *
  *  @param deletedObject To be deleted RLMObject
  */
-- (void)willDeleteObject:(RLMObject *)deletedObject;
+- (void)willDeleteObject:(RLMObjectBase *)deletedObject;
 
 /**
  *  Register a collection of RLMObject deletes
@@ -123,7 +123,7 @@ typedef void(^RBQNotificationBlock)(NSDictionary *entityChanges,
  *
  *  @param changedObject Changed RLMObject
  */
-- (void)didChangeObject:(RLMObject *)changedObject;
+- (void)didChangeObject:(RLMObjectBase *)changedObject;
 
 /**
  *  Register a collection of RLMObject changes

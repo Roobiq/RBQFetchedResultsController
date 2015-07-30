@@ -24,8 +24,6 @@
 		A05FA4A21B615EB60000C9B2 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4901B615EB60000C9B2 /* RLMArray+Utilities.m */; };
 		A05FA4A31B615EB60000C9B2 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4921B615EB60000C9B2 /* RLMObject+SafeObject.m */; };
 		A05FA4A41B615EB60000C9B2 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4941B615EB60000C9B2 /* RLMObject+Utilities.m */; };
-		A05FA4BB1B6169460000C9B2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05FA4BA1B6169460000C9B2 /* Realm.framework */; };
-		A05FA4BC1B6169460000C9B2 /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A05FA4BA1B6169460000C9B2 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A05FA4CA1B616A310000C9B2 /* RBQEntityChangesObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C01B616A310000C9B2 /* RBQEntityChangesObjectTests.m */; };
 		A05FA4CB1B616A310000C9B2 /* RBQFetchedResultsControllerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C11B616A310000C9B2 /* RBQFetchedResultsControllerDelegateTests.m */; };
 		A05FA4CC1B616A310000C9B2 /* RBQFetchedResultsControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C21B616A310000C9B2 /* RBQFetchedResultsControllerTests.m */; };
@@ -35,10 +33,11 @@
 		A05FA4D01B616A310000C9B2 /* RBQRealmChangeLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C61B616A310000C9B2 /* RBQRealmChangeLoggerTests.m */; };
 		A05FA4D11B616A310000C9B2 /* RBQSafeRealmObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C71B616A310000C9B2 /* RBQSafeRealmObjectTests.m */; };
 		A05FA4D21B616A310000C9B2 /* RBQTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4C91B616A310000C9B2 /* RBQTestCase.m */; };
-		A05FA4D31B616A470000C9B2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05FA4BA1B6169460000C9B2 /* Realm.framework */; };
 		A05FA4D41B616AA40000C9B2 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4BE1B616A160000C9B2 /* TestObject.m */; };
 		A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */; };
 		A05FA4DE1B6170280000C9B2 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */; };
+		A0FDED0A1B69B12600694AFE /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FDED091B69B12600694AFE /* Realm.framework */; };
+		A0FDED0C1B69B13F00694AFE /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FDED0B1B69B13F00694AFE /* libc++.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,20 +49,6 @@
 			remoteInfo = RBQFRCDynamicExample;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		A05FA4A81B615ECB0000C9B2 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				A05FA4BC1B6169460000C9B2 /* Realm.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A05FA44B1B615EA40000C9B2 /* RBQFRCDynamicExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RBQFRCDynamicExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,7 +85,6 @@
 		A05FA4921B615EB60000C9B2 /* RLMObject+SafeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+SafeObject.m"; sourceTree = "<group>"; };
 		A05FA4931B615EB60000C9B2 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
 		A05FA4941B615EB60000C9B2 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
-		A05FA4BA1B6169460000C9B2 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
 		A05FA4BD1B616A160000C9B2 /* TestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestObject.h; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/TestObject.h; sourceTree = "<group>"; };
 		A05FA4BE1B616A160000C9B2 /* TestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestObject.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/TestObject.m; sourceTree = "<group>"; };
 		A05FA4C01B616A310000C9B2 /* RBQEntityChangesObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQEntityChangesObjectTests.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExampleTests/RBQEntityChangesObjectTests.m; sourceTree = "<group>"; };
@@ -117,6 +101,8 @@
 		A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExampleTableViewController.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/ExampleTableViewController.m; sourceTree = "<group>"; };
 		A05FA4DC1B6170280000C9B2 /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
 		A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
+		A0FDED091B69B12600694AFE /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
+		A0FDED0B1B69B13F00694AFE /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +110,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A05FA4BB1B6169460000C9B2 /* Realm.framework in Frameworks */,
+				A0FDED0C1B69B13F00694AFE /* libc++.dylib in Frameworks */,
+				A0FDED0A1B69B12600694AFE /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +119,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A05FA4D31B616A470000C9B2 /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +128,8 @@
 		A05FA4421B615EA40000C9B2 = {
 			isa = PBXGroup;
 			children = (
-				A05FA4BA1B6169460000C9B2 /* Realm.framework */,
+				A0FDED0B1B69B13F00694AFE /* libc++.dylib */,
+				A0FDED091B69B12600694AFE /* Realm.framework */,
 				A05FA44D1B615EA40000C9B2 /* RBQFRCDynamicExample */,
 				A05FA4671B615EA40000C9B2 /* RBQFRCDynamicExampleTests */,
 				A05FA44C1B615EA40000C9B2 /* Products */,
@@ -287,7 +274,6 @@
 				A05FA4471B615EA40000C9B2 /* Sources */,
 				A05FA4481B615EA40000C9B2 /* Frameworks */,
 				A05FA4491B615EA40000C9B2 /* Resources */,
-				A05FA4A81B615ECB0000C9B2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

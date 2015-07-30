@@ -296,7 +296,7 @@ static char kAssociatedObjectKey;
 
 #pragma mark - Public Instance
 
-- (void)didAddObject:(RLMObject *)addedObject
+- (void)didAddObject:(RLMObjectBase *)addedObject
 {
     if (addedObject &&
         !addedObject.invalidated) {
@@ -318,7 +318,7 @@ static char kAssociatedObjectKey;
         
         [self tokenCheck];
         
-        for (RLMObject *addedObject in addedObjects) {
+        for (RLMObjectBase *addedObject in addedObjects) {
             
             if (addedObject &&
                 !addedObject.invalidated) {
@@ -334,7 +334,7 @@ static char kAssociatedObjectKey;
     }
 }
 
-- (void)willDeleteObject:(RLMObject *)deletedObject
+- (void)willDeleteObject:(RLMObjectBase *)deletedObject
 {
     if (deletedObject &&
         !deletedObject.invalidated) {
@@ -356,7 +356,7 @@ static char kAssociatedObjectKey;
         
         [self tokenCheck];
         
-        for (RLMObject *deletedObject in deletedObjects) {
+        for (RLMObjectBase *deletedObject in deletedObjects) {
             
             if (deletedObject &&
                 !deletedObject.invalidated) {
@@ -372,7 +372,7 @@ static char kAssociatedObjectKey;
     }
 }
 
-- (void)didChangeObject:(RLMObject *)changedObject
+- (void)didChangeObject:(RLMObjectBase *)changedObject
 {
     if (changedObject &&
         !changedObject.invalidated) {
@@ -394,7 +394,7 @@ static char kAssociatedObjectKey;
         
         [self tokenCheck];
         
-        for (RLMObject *changedObject in changedObjects) {
+        for (RLMObjectBase *changedObject in changedObjects) {
             
             if (changedObject &&
                 !changedObject.invalidated) {
@@ -418,7 +418,7 @@ static char kAssociatedObjectKey;
     
     if (addedObjects) {
         
-        for (RLMObject *addedObject in addedObjects) {
+        for (RLMObjectBase *addedObject in addedObjects) {
             
             if (addedObject &&
                 !addedObject.invalidated) {
@@ -435,7 +435,7 @@ static char kAssociatedObjectKey;
     
     if (deletedObjects) {
         
-        for (RLMObject *deletedObject in deletedObjects) {
+        for (RLMObjectBase *deletedObject in deletedObjects) {
             
             if (deletedObject &&
                 !deletedObject.invalidated) {
@@ -452,7 +452,7 @@ static char kAssociatedObjectKey;
     
     if (changedObjects) {
         
-        for (RLMObject *changedObject in changedObjects) {
+        for (RLMObjectBase *changedObject in changedObjects) {
             
             if (changedObject &&
                 !changedObject.invalidated) {
