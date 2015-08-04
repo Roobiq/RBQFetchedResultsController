@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A01EF7021B6AE30C001FC93F /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A01EF7011B6AE30C001FC93F /* RLMObjectBase+Utilities.m */; };
+		A01EF7041B6BF196001FC93F /* ChangeLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01EF7031B6BF196001FC93F /* ChangeLogger.swift */; };
 		A02B10BF1B6A9EF90026B81B /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A02B10BD1B6A9EF90026B81B /* Realm.framework */; };
 		A02B10C01B6A9EF90026B81B /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A02B10BD1B6A9EF90026B81B /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A02B10C11B6A9EF90026B81B /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A02B10BE1B6A9EF90026B81B /* RealmSwift.framework */; };
 		A02B10C21B6A9EF90026B81B /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A02B10BE1B6A9EF90026B81B /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A05FA4EE1B6185AE0000C9B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4ED1B6185AE0000C9B2 /* AppDelegate.swift */; };
-		A05FA4F01B6185AE0000C9B2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4EF1B6185AE0000C9B2 /* ViewController.swift */; };
 		A05FA4F31B6185AE0000C9B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F11B6185AE0000C9B2 /* Main.storyboard */; };
 		A05FA4F51B6185AE0000C9B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F41B6185AE0000C9B2 /* Images.xcassets */; };
 		A05FA4F81B6185AE0000C9B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F61B6185AE0000C9B2 /* LaunchScreen.xib */; };
@@ -34,6 +35,7 @@
 		A05FA54C1B6186910000C9B2 /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA54B1B6186910000C9B2 /* FetchedResultsController.swift */; };
 		A05FA54E1B6186C00000C9B2 /* SafeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA54D1B6186C00000C9B2 /* SafeObject.swift */; };
 		A05FA6191B61AB110000C9B2 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA6181B61AB110000C9B2 /* Utilities.swift */; };
+		A0AB74621B6C389700923940 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AB74611B6C389700923940 /* MainTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,12 +64,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A01EF7001B6AE30C001FC93F /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
+		A01EF7011B6AE30C001FC93F /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
+		A01EF7031B6BF196001FC93F /* ChangeLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeLogger.swift; sourceTree = "<group>"; };
 		A02B10BD1B6A9EF90026B81B /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
 		A02B10BE1B6A9EF90026B81B /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
 		A05FA4E81B6185AE0000C9B2 /* RBQFRCSwiftExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RBQFRCSwiftExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A05FA4EC1B6185AE0000C9B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A05FA4ED1B6185AE0000C9B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A05FA4EF1B6185AE0000C9B2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A05FA4F21B6185AE0000C9B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A05FA4F41B6185AE0000C9B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A05FA4F71B6185AE0000C9B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -105,6 +109,7 @@
 		A05FA54D1B6186C00000C9B2 /* SafeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeObject.swift; sourceTree = "<group>"; };
 		A05FA54F1B61882D0000C9B2 /* RBQFRCSwift-BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RBQFRCSwift-BridgingHeader.h"; sourceTree = "<group>"; };
 		A05FA6181B61AB110000C9B2 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		A0AB74611B6C389700923940 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,7 +158,7 @@
 				A05FA5481B61864E0000C9B2 /* Swift */,
 				A05FA5141B6186090000C9B2 /* RBQFetchedResultsController */,
 				A05FA4ED1B6185AE0000C9B2 /* AppDelegate.swift */,
-				A05FA4EF1B6185AE0000C9B2 /* ViewController.swift */,
+				A0AB74611B6C389700923940 /* MainTableViewController.swift */,
 				A05FA4F11B6185AE0000C9B2 /* Main.storyboard */,
 				A05FA4F41B6185AE0000C9B2 /* Images.xcassets */,
 				A05FA4F61B6185AE0000C9B2 /* LaunchScreen.xib */,
@@ -249,6 +254,8 @@
 				A05FA5341B6186090000C9B2 /* RLMObject+SafeObject.m */,
 				A05FA5351B6186090000C9B2 /* RLMObject+Utilities.h */,
 				A05FA5361B6186090000C9B2 /* RLMObject+Utilities.m */,
+				A01EF7001B6AE30C001FC93F /* RLMObjectBase+Utilities.h */,
+				A01EF7011B6AE30C001FC93F /* RLMObjectBase+Utilities.m */,
 			);
 			path = RealmUtilities;
 			sourceTree = "<group>";
@@ -261,6 +268,7 @@
 				A05FA54D1B6186C00000C9B2 /* SafeObject.swift */,
 				A05FA6181B61AB110000C9B2 /* Utilities.swift */,
 				A05FA54F1B61882D0000C9B2 /* RBQFRCSwift-BridgingHeader.h */,
+				A01EF7031B6BF196001FC93F /* ChangeLogger.swift */,
 			);
 			name = Swift;
 			path = ../../Swift;
@@ -311,6 +319,7 @@
 		A05FA4E01B6185AE0000C9B2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Adam Fish";
 				TargetAttributes = {
@@ -367,19 +376,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0AB74621B6C389700923940 /* MainTableViewController.swift in Sources */,
 				A05FA54A1B6186850000C9B2 /* FetchRequest.swift in Sources */,
 				A05FA54E1B6186C00000C9B2 /* SafeObject.swift in Sources */,
 				A05FA53D1B6186090000C9B2 /* RLMRealm+Notifications.m in Sources */,
 				A05FA53A1B6186090000C9B2 /* RBQFetchedResultsController.m in Sources */,
 				A05FA5401B6186090000C9B2 /* RBQRealmNotificationManager.m in Sources */,
 				A05FA5381B6186090000C9B2 /* RBQObjectCacheObject.m in Sources */,
+				A01EF7041B6BF196001FC93F /* ChangeLogger.swift in Sources */,
 				A05FA5461B6186090000C9B2 /* RLMObject+SafeObject.m in Sources */,
 				A05FA5371B6186090000C9B2 /* RBQControllerCacheObject.m in Sources */,
 				A05FA54C1B6186910000C9B2 /* FetchedResultsController.swift in Sources */,
 				A05FA53C1B6186090000C9B2 /* RLMObject+Notifications.m in Sources */,
 				A05FA5471B6186090000C9B2 /* RLMObject+Utilities.m in Sources */,
-				A05FA4F01B6185AE0000C9B2 /* ViewController.swift in Sources */,
 				A05FA5431B6186090000C9B2 /* RBQSafeRealmObject.m in Sources */,
+				A01EF7021B6AE30C001FC93F /* RLMObjectBase+Utilities.m in Sources */,
 				A05FA6191B61AB110000C9B2 /* Utilities.swift in Sources */,
 				A05FA5451B6186090000C9B2 /* RLMArray+Utilities.m in Sources */,
 				A05FA4EE1B6185AE0000C9B2 /* AppDelegate.swift in Sources */,

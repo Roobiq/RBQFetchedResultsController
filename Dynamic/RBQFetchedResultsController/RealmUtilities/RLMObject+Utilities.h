@@ -20,6 +20,6 @@
  *
  *  @return Primary key value (NSInteger or NSString only)
  */
-+ (id)primaryKeyValueForObject:(RLMObjectBase *)object;
++ (id)primaryKeyValueForObject:(RLMObject *)object;
 
 @end

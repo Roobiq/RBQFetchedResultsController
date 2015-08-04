@@ -71,17 +71,6 @@
 + (id)objectfromSafeObject:(RBQSafeRealmObject *)safeObject;
 
 /**
- *  Create a RLMObject in a specific Realm from a RBQSafeObject
- *
- *  @param realm      Realm in which the returned RLMObject is persisted
- *  @param safeObject RBQSafeRealm object to convert into RLMObject
- *
- *  @return Converted RLMObject
- */
-+ (id)objectInRealm:(RLMRealm *)realm
-     fromSafeObject:(RBQSafeRealmObject *)safeObject;
-
-/**
  *  Quickly convert a RBQSafeRealm object into its RLMObject
  *
  *  @return RLMObject

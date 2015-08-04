@@ -88,15 +88,6 @@
 - (RLMResults *)fetchObjects;
 
 /**
- *  Retrieve all the RLMObjects for this fetch request in the specified realm.
- *
- *  @param realm RLMRealm in which the RLMObjects are persisted
- *
- *  @return RLMResults for all the objects in the fetch request (not thread-safe).
- */
-- (RLMResults *)fetchObjectsInRealm:(RLMRealm *)realm;
-
-/**
  *  Should this object be in our fetch results?
  *
  *  Intended to be used by the RBQFetchedResultsController to evaluate incremental changes. For

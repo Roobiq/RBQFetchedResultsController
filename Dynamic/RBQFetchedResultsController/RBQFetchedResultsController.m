@@ -522,7 +522,7 @@ static char kRBQRefreshTriggeredKey;
     return nil;
 }
 
-- (NSIndexPath *)indexPathForObject:(RLMObject *)object
+- (NSIndexPath *)indexPathForObject:(RLMObjectBase *)object
 {
     RBQControllerCacheObject *cache = [self cache];
     
@@ -1060,7 +1060,7 @@ static char kRBQRefreshTriggeredKey;
     stateObject.realm = realm;
     
     // Get the new list of safe fetch objects
-    stateObject.fetchResults = [fetchRequest fetchObjectsInRealm:realm];
+    stateObject.fetchResults = [fetchRequest fetchObjects];
     
     stateObject.cache = cache;
     
@@ -1095,8 +1095,7 @@ static char kRBQRefreshTriggeredKey;
             
             // Get the section titles in change set
             // Attempt to get the object from non-cache Realm
-            RLMObject *object = [RBQSafeRealmObject objectInRealm:state.realm
-                                                   fromSafeObject:safeObject];
+            RLMObject *object = [RBQSafeRealmObject objectfromSafeObject:safeObject];
             
             // If the changed object doesn't match the predicate and
             // was not already in the cache, then skip it

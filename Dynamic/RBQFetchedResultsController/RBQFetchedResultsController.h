@@ -45,7 +45,6 @@
  */
 @protocol RBQFetchedResultsControllerDelegate <NSObject>
 
-@optional
 
 /**
  *  Indicates that the controller has started identifying changes.
@@ -281,7 +280,7 @@
  *
  *  @return index path of the object
  */
-- (NSIndexPath *)indexPathForObject:(RLMObject *)object;
+- (NSIndexPath *)indexPathForObject:(RLMObjectBase *)object;
 
 /**
  *  Convenience method to safely update the fetch request for an existing RBQFetchResultsController

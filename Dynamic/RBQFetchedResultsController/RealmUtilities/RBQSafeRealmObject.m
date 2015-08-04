@@ -76,14 +76,8 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
 
 + (id)objectfromSafeObject:(RBQSafeRealmObject *)safeObject
 {
-    return [RBQSafeRealmObject objectInRealm:[RLMRealm defaultRealm] fromSafeObject:safeObject];
-}
-
-+ (id)objectInRealm:(RLMRealm *)realm
-     fromSafeObject:(RBQSafeRealmObject *)safeObject
-{
-    return [realm objectWithClassName:safeObject.className
-                        forPrimaryKey:safeObject.primaryKeyValue];
+    return [safeObject.realm objectWithClassName:safeObject.className
+                                   forPrimaryKey:safeObject.primaryKeyValue];
 }
 
 - (id)initWithClassName:(NSString *)className
@@ -112,7 +106,7 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
 
 - (id)RLMObject
 {
-    return [RBQSafeRealmObject objectInRealm:self.realm fromSafeObject:self];
+    return [RBQSafeRealmObject objectfromSafeObject:self];
 }
 
 #pragma mark - Equality
@@ -123,8 +117,20 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
     if (self == object) {
         return YES;
     }
+    else if (self.primaryKeyType != object.primaryKeyType) {
+        return NO;
+    }
+    else if (self.primaryKeyType == RLMPropertyTypeInt) {
+        return [self.primaryKeyValue isEqual:object.primaryKeyValue];
+    }
+    else if (self.primaryKeyType == RLMPropertyTypeString) {
+        NSString *lhsPrimaryKeyValue = (NSString *)self.primaryKeyValue;
+        NSString *rhsPrimaryKeyValue = (NSString *)object.primaryKeyValue;
+        
+        return [lhsPrimaryKeyValue isEqualToString:rhsPrimaryKeyValue];
+    }
     
-    return [self.primaryKeyValue isEqual:object.primaryKeyValue];
+    return NO;
 }
 
 - (BOOL)isEqual:(id)object

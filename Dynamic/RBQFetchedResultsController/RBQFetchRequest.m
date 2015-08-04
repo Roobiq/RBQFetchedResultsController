@@ -78,13 +78,9 @@ inMemoryRealmId = _inMemoryRealmId;
     return self;
 }
 
-- (RLMResults *)fetchObjects {
-    return [self fetchObjectsInRealm:self.realm];
-}
-
-- (RLMResults *)fetchObjectsInRealm:(RLMRealm *)realm
+- (RLMResults *)fetchObjects
 {
-    RLMResults *fetchResults = [realm allObjects:self.entityName];
+    RLMResults *fetchResults = [self.realm allObjects:self.entityName];
     
     // If we have a predicate use it
     if (self.predicate) {

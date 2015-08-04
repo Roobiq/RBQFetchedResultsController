@@ -153,11 +153,6 @@ typedef void(^RBQNotificationBlock)(NSDictionary *entityChanges,
 @interface RBQRealmNotificationManager : NSObject
 
 /**
- *  Current representation of changes logged to the RBQRealmNotificationManager instance.
- */
-@property (readonly, nonatomic) NSDictionary *entityChanges;
-
-/**
  *  Retrieve the singleton RBQRealmNotificationManager that passes changes from all Realm loggers
  *
  *  @return Singleton RBQRealmNotificationManager
