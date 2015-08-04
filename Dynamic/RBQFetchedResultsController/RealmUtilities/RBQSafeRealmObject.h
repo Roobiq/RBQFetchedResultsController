@@ -33,9 +33,19 @@
 @property (nonatomic, readonly) RLMPropertyType primaryKeyType;
 
 /**
- *  The Realm in which this object is persisted
+ *  The Realm in which this object is persisted. Generated on demand.
  */
 @property (nonatomic, readonly) RLMRealm *realm;
+
+/**
+ *  The Realm path in which this object is persisted. Can be nil for inMemory Realm
+ */
+@property (nonatomic, readonly) NSString *realmPath;
+
+/**
+ *  The Realm in-memory Id in which this object is persisted. Is nil for non in-memory Realms
+ */
+@property (nonatomic, readonly) NSString *inMemoryId;
 
 /**
  *  Constructor method to create an instance of RBQSafeRealmObject

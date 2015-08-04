@@ -41,12 +41,6 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
                                  userInfo:nil];
 }
 
-@interface RBQSafeRealmObject ()
-
-@property (strong, nonatomic) NSString *realmPath;
-
-@end
-
 @implementation RBQSafeRealmObject
 @synthesize className = _className,
             primaryKeyType = _primaryKeyType,
@@ -91,7 +85,15 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
         _className = className;
         _primaryKeyValue = primaryKeyValue;
         _primaryKeyType = primaryKeyType;
-        _realmPath = realm.path;
+        
+        NSNumber *inMemory = [realm valueForKey:@"inMemory"];
+        
+        if (inMemory.boolValue) {
+            _inMemoryId = realm.path.lastPathComponent;
+        }
+        else {
+            _realmPath = realm.path;
+        }
     }
     
     return self;
@@ -101,6 +103,10 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
 
 - (RLMRealm *)realm
 {
+    if (self.inMemoryId) {
+        return [RLMRealm inMemoryRealmWithIdentifier:self.inMemoryId];
+    }
+    
     return [RLMRealm realmWithPath:self.realmPath];
 }
 

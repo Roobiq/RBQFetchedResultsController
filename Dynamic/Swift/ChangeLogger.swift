@@ -28,6 +28,10 @@ public class ChangeLogger {
         return ChangeLogger(rbqChangeLogger: RBQRealmChangeLogger(forRealm: RLMRealm(path: realm.path)))
     }
     
+    public class func loggerForInMemoryRealm(realm: Realm) -> ChangeLogger {
+        return ChangeLogger(rbqChangeLogger: RBQRealmChangeLogger(forRealm: RLMRealm.inMemoryRealmWithIdentifier(realm.path.lastPathComponent)))
+    }
+    
     public func didAddObject(object: Object) {
         self.rbqChangeLogger.didAddObject(object)
     }

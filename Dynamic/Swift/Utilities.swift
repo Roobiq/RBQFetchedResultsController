@@ -14,6 +14,8 @@ import Realm.Dynamic
 /**
 *  This utility category provides convenience methods to retrieve the primary key and original
 *  class name for an RLMObject.
+*
+*   DOESN'T SUPPORT IN-MEMORY REALMS!!!
 */
 extension Object {
     
@@ -99,6 +101,7 @@ extension Object {
     }
 }
 
+// DOESN'T SUPPORT IN-MEMORY REALMS!!!
 extension Realm {
     
     public func addWithNotification(object: Object, update: Bool) {

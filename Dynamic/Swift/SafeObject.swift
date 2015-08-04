@@ -26,7 +26,12 @@ public class SafeObject<T: Object>: Equatable {
     }
     
     public var realm: Realm {
-        return Realm(path: self.rbqSafeRealmObject.realm.path)
+        
+        if let inMemoryId = self.rbqSafeRealmObject.inMemoryId {
+            return Realm(inMemoryIdentifier: inMemoryId)
+        }
+        
+        return Realm(path: self.rbqSafeRealmObject.realmPath)
     }
     
     public class func objectFromSafeObject(safeObject: SafeObject) -> T {
