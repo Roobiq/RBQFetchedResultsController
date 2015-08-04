@@ -104,9 +104,11 @@ open RBQFetchedResultsControllerExample.xcworkspace
 * Xcode 6
 
 ####Current State
-The example project includes a few functional tests. Further tests are planned. Currently, the project is being user tested in the [Roobiq](http://www.roobiq.com) app and is quite stable.
+The example project includes various functional and unit tests. In addition, the project is used in our [Roobiq](http://www.roobiq.com) app and is quite stable.
 
 Swift support was added in v1.7.4.
+
+RealmSwift support is being added via this [PR](https://github.com/Roobiq/RBQFetchedResultsController/pull/34).
 
 **`RLMRealm` and `RLMObject` categories are included that contain methods to simplify calling RBQRealmChangeLogger:**
 
@@ -141,6 +143,5 @@ typedef void(^RBQChangeNotificationBlock)(id object);
 
   **As a result, we recommend to perform all RLMObject edits that are being tracked by an FRC on a background queue (a general best practice anyway).**
 
-  The branch [internalQueue](https://github.com/Roobiq/RBQFetchedResultsController/tree/internalQueue) is our current progress to remove this limitation, but as of yet is not fully functional. 
 2. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC.
  
