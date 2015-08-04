@@ -13,9 +13,9 @@
 
 - (void)addObjectWithNotification:(RLMObject *)object
 {
-    [[RBQRealmChangeLogger loggerForRealm:self] didAddObject:object];
-    
     [self addObject:object];
+    
+    [[RBQRealmChangeLogger loggerForRealm:self] didAddObject:object];
 }
 
 - (void)addObjectsWithNotification:(id<NSFastEnumeration>)array
@@ -32,14 +32,14 @@
 
 - (void)addOrUpdateObjectWithNotification:(RLMObject *)object
 {
+    [self addOrUpdateObject:object];
+    
     if (object.realm != self) {
         [[RBQRealmChangeLogger loggerForRealm:self] didAddObject:object];
     }
     else {
         [[RBQRealmChangeLogger loggerForRealm:self] didChangeObject:object];
     }
-    
-    [self addOrUpdateObject:object];
 }
 
 - (void)addOrUpdateObjectsFromArrayWithNotification:(id<NSFastEnumeration>)array

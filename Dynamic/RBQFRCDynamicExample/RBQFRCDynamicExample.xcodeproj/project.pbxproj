@@ -36,6 +36,7 @@
 		A05FA4D41B616AA40000C9B2 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4BE1B616A160000C9B2 /* TestObject.m */; };
 		A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */; };
 		A05FA4DE1B6170280000C9B2 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */; };
+		A0810C621B7161BA00CA4D98 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0810C611B7161BA00CA4D98 /* RLMObjectBase+Utilities.m */; };
 		A0FDED0A1B69B12600694AFE /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FDED091B69B12600694AFE /* Realm.framework */; };
 		A0FDED0C1B69B13F00694AFE /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FDED0B1B69B13F00694AFE /* libc++.dylib */; };
 /* End PBXBuildFile section */
@@ -101,6 +102,8 @@
 		A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExampleTableViewController.m; path = ../../../RBQFetchedResultsControllerExample/RBQFetchedResultsControllerExample/ExampleTableViewController.m; sourceTree = "<group>"; };
 		A05FA4DC1B6170280000C9B2 /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
 		A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
+		A0810C601B7161BA00CA4D98 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RLMObjectBase+Utilities.h"; path = "../../../../rbqfetchedresultscontroller/Dynamic/RBQFetchedResultsController/RealmUtilities/RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
+		A0810C611B7161BA00CA4D98 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RLMObjectBase+Utilities.m"; path = "../../../../rbqfetchedresultscontroller/Dynamic/RBQFetchedResultsController/RealmUtilities/RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
 		A0FDED091B69B12600694AFE /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
 		A0FDED0B1B69B13F00694AFE /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -260,6 +263,8 @@
 				A05FA4921B615EB60000C9B2 /* RLMObject+SafeObject.m */,
 				A05FA4931B615EB60000C9B2 /* RLMObject+Utilities.h */,
 				A05FA4941B615EB60000C9B2 /* RLMObject+Utilities.m */,
+				A0810C601B7161BA00CA4D98 /* RLMObjectBase+Utilities.h */,
+				A0810C611B7161BA00CA4D98 /* RLMObjectBase+Utilities.m */,
 			);
 			path = RealmUtilities;
 			sourceTree = "<group>";
@@ -366,6 +371,7 @@
 			files = (
 				A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */,
 				A05FA4961B615EB60000C9B2 /* RBQObjectCacheObject.m in Sources */,
+				A0810C621B7161BA00CA4D98 /* RLMObjectBase+Utilities.m in Sources */,
 				A05FA49D1B615EB60000C9B2 /* RBQRealmNotificationManager.m in Sources */,
 				A05FA4951B615EB60000C9B2 /* RBQControllerCacheObject.m in Sources */,
 				A05FA4A31B615EB60000C9B2 /* RLMObject+SafeObject.m in Sources */,
