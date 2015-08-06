@@ -508,8 +508,11 @@ static char kRBQRefreshTriggeredKey;
     if (cache) {
         RLMRealm *cacheRealm = cache.realm;
         
+        // Get the string value of the primaryKeyValue
+        NSString *primaryKeyStringValue = [NSString stringWithFormat:@"%@",safeObject.primaryKeyValue];
+        
         RBQObjectCacheObject *cacheObject =
-        [RBQObjectCacheObject objectInRealm:cacheRealm forPrimaryKey:safeObject.primaryKeyValue];
+        [RBQObjectCacheObject objectInRealm:cacheRealm forPrimaryKey:primaryKeyStringValue];
         
         NSInteger sectionIndex = [cache.sections indexOfObject:cacheObject.section];
         NSInteger rowIndex = [cacheObject.section.objects indexOfObject:cacheObject];
@@ -1098,11 +1101,14 @@ static char kRBQRefreshTriggeredKey;
             RLMObject *object = [RBQSafeRealmObject objectInRealm:state.realm
                                                    fromSafeObject:safeObject];
             
+            // Get the string value of the primaryKeyValue
+            NSString *primaryKeyStringValue = [NSString stringWithFormat:@"%@",safeObject.primaryKeyValue];
+            
             // If the changed object doesn't match the predicate and
             // was not already in the cache, then skip it
             if (![self.fetchRequest evaluateObject:object] &&
                 ![RBQObjectCacheObject objectInRealm:state.cacheRealm
-                                       forPrimaryKey:safeObject.primaryKeyValue]) {
+                                       forPrimaryKey:primaryKeyStringValue]) {
                     continue;
                 }
             
@@ -1115,7 +1121,7 @@ static char kRBQRefreshTriggeredKey;
             else if (self.sectionNameKeyPath) {
                 RBQObjectCacheObject *oldCacheObject =
                 [RBQObjectCacheObject objectInRealm:state.cacheRealm
-                                      forPrimaryKey:safeObject.primaryKeyValue];
+                                      forPrimaryKey:primaryKeyStringValue];
                 
                 sectionTitle = oldCacheObject.section.name;
             }
