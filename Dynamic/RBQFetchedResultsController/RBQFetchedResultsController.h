@@ -29,7 +29,7 @@
 /**
  *  The objects in the section (generated on-demand and not thread-safe).
  */
-@property (nonatomic, readonly) RLMResults *objects;
+@property (nonatomic, readonly) id<RLMCollection> objects;
 
 /**
  *  The name of the section.
@@ -129,7 +129,7 @@
 /**
  *  All the objects that match the fetch request.
  */
-@property (nonatomic, readonly) RLMResults *fetchedObjects;
+@property (nonatomic, readonly) id<RLMCollection> fetchedObjects;
 
 /**
  *  Deletes the cached section information with the given name

@@ -45,7 +45,7 @@
                                                                             ascending:YES];
     fetchRequest.sortDescriptors = @[sortDescriptor];
     
-    RLMResults *results = [fetchRequest fetchObjects];
+    id<RLMCollection> results = [fetchRequest fetchObjects];
     
     TestObject *firstObject = results.firstObject;
     

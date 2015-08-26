@@ -38,14 +38,9 @@
 @property (nonatomic, readonly) RLMRealm *realm;
 
 /**
- *  The Realm path in which this object is persisted. Can be nil for inMemory Realm
+ *  The configuration object used to create an instance of RLMRealm for the fetch request
  */
-@property (nonatomic, readonly) NSString *realmPath;
-
-/**
- *  The Realm in-memory Id in which this object is persisted. Is nil for non in-memory Realms
- */
-@property (nonatomic, readonly) NSString *inMemoryId;
+@property (nonatomic, readonly) RLMRealmConfiguration *realmConfiguration;
 
 /**
  *  Constructor method to create an instance of RBQSafeRealmObject
@@ -81,14 +76,14 @@
 + (id)objectfromSafeObject:(RBQSafeRealmObject *)safeObject;
 
 /**
- *  Quickly convert a RBQSafeRealm object into its RLMObject
+ *  Quickly convert a RBQSafeRealmObject into its RLMObject
  *
  *  @return RLMObject
  */
 - (id)RLMObject;
 
 /**
- *  Equality test for RBQSafeObject
+ *  Equality test for RBQSafeRealmObject
  *
  *  @param object RBQSafeRealmObject to compare
  *

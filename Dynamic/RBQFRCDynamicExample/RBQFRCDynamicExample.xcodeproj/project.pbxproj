@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		766E25B95BA58B233A68F4C1 /* libPods-RBQFRCDynamicExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B50B450A63C22C08AB898E /* libPods-RBQFRCDynamicExampleTests.a */; };
 		A05FA4511B615EA40000C9B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4501B615EA40000C9B2 /* main.m */; };
 		A05FA4541B615EA40000C9B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4531B615EA40000C9B2 /* AppDelegate.m */; };
 		A05FA45A1B615EA40000C9B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4581B615EA40000C9B2 /* Main.storyboard */; };
@@ -37,8 +38,9 @@
 		A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */; };
 		A05FA4DE1B6170280000C9B2 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */; };
 		A0810C621B7161BA00CA4D98 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0810C611B7161BA00CA4D98 /* RLMObjectBase+Utilities.m */; };
-		A0FDED0A1B69B12600694AFE /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FDED091B69B12600694AFE /* Realm.framework */; };
-		A0FDED0C1B69B13F00694AFE /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FDED0B1B69B13F00694AFE /* libc++.dylib */; };
+		A093868B1B8E59E2009B782A /* ParentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A093868A1B8E59E2009B782A /* ParentObject.m */; };
+		A093868E1B8E5A8C009B782A /* ArrayTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A093868D1B8E5A8C009B782A /* ArrayTableViewController.m */; };
+		BBBC40E546C0BD802BEC4F86 /* libPods-RBQFRCDynamicExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C172DB85797A66DD1125AD /* libPods-RBQFRCDynamicExample.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1B0884A2E89CED9A2CF2729D /* Pods-RBQFRCDynamicExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCDynamicExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCDynamicExampleTests/Pods-RBQFRCDynamicExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		6656949E2C4E32CB9D69461D /* Pods-RBQFRCDynamicExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCDynamicExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCDynamicExample/Pods-RBQFRCDynamicExample.release.xcconfig"; sourceTree = "<group>"; };
 		A05FA44B1B615EA40000C9B2 /* RBQFRCDynamicExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RBQFRCDynamicExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A05FA44F1B615EA40000C9B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A05FA4501B615EA40000C9B2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -104,8 +108,14 @@
 		A05FA4DD1B6170280000C9B2 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
 		A0810C601B7161BA00CA4D98 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RLMObjectBase+Utilities.h"; path = "../../../../rbqfetchedresultscontroller/Dynamic/RBQFetchedResultsController/RealmUtilities/RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
 		A0810C611B7161BA00CA4D98 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RLMObjectBase+Utilities.m"; path = "../../../../rbqfetchedresultscontroller/Dynamic/RBQFetchedResultsController/RealmUtilities/RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
-		A0FDED091B69B12600694AFE /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
-		A0FDED0B1B69B13F00694AFE /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		A09386891B8E59E2009B782A /* ParentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParentObject.h; sourceTree = "<group>"; };
+		A093868A1B8E59E2009B782A /* ParentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParentObject.m; sourceTree = "<group>"; };
+		A093868C1B8E5A8C009B782A /* ArrayTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayTableViewController.h; sourceTree = "<group>"; };
+		A093868D1B8E5A8C009B782A /* ArrayTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrayTableViewController.m; sourceTree = "<group>"; };
+		B5C172DB85797A66DD1125AD /* libPods-RBQFRCDynamicExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RBQFRCDynamicExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA7E2FFD0958E70F6B843A9C /* Pods-RBQFRCDynamicExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCDynamicExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCDynamicExample/Pods-RBQFRCDynamicExample.debug.xcconfig"; sourceTree = "<group>"; };
+		D1B50B450A63C22C08AB898E /* libPods-RBQFRCDynamicExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RBQFRCDynamicExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4E45F1D29A01A1E10A5B47B /* Pods-RBQFRCDynamicExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCDynamicExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCDynamicExampleTests/Pods-RBQFRCDynamicExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0FDED0C1B69B13F00694AFE /* libc++.dylib in Frameworks */,
-				A0FDED0A1B69B12600694AFE /* Realm.framework in Frameworks */,
+				BBBC40E546C0BD802BEC4F86 /* libPods-RBQFRCDynamicExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,20 +131,41 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				766E25B95BA58B233A68F4C1 /* libPods-RBQFRCDynamicExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		168FFA01E0941EE7811A1C04 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CA7E2FFD0958E70F6B843A9C /* Pods-RBQFRCDynamicExample.debug.xcconfig */,
+				6656949E2C4E32CB9D69461D /* Pods-RBQFRCDynamicExample.release.xcconfig */,
+				E4E45F1D29A01A1E10A5B47B /* Pods-RBQFRCDynamicExampleTests.debug.xcconfig */,
+				1B0884A2E89CED9A2CF2729D /* Pods-RBQFRCDynamicExampleTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		4F2DAE4A4C6402A75657C0A9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B5C172DB85797A66DD1125AD /* libPods-RBQFRCDynamicExample.a */,
+				D1B50B450A63C22C08AB898E /* libPods-RBQFRCDynamicExampleTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A05FA4421B615EA40000C9B2 = {
 			isa = PBXGroup;
 			children = (
-				A0FDED0B1B69B13F00694AFE /* libc++.dylib */,
-				A0FDED091B69B12600694AFE /* Realm.framework */,
 				A05FA44D1B615EA40000C9B2 /* RBQFRCDynamicExample */,
 				A05FA4671B615EA40000C9B2 /* RBQFRCDynamicExampleTests */,
 				A05FA44C1B615EA40000C9B2 /* Products */,
+				168FFA01E0941EE7811A1C04 /* Pods */,
+				4F2DAE4A4C6402A75657C0A9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -156,8 +186,12 @@
 				A05FA4531B615EA40000C9B2 /* AppDelegate.m */,
 				A05FA4D61B616AD10000C9B2 /* ExampleTableViewController.h */,
 				A05FA4D71B616AD10000C9B2 /* ExampleTableViewController.m */,
+				A093868C1B8E5A8C009B782A /* ArrayTableViewController.h */,
+				A093868D1B8E5A8C009B782A /* ArrayTableViewController.m */,
 				A05FA4BD1B616A160000C9B2 /* TestObject.h */,
 				A05FA4BE1B616A160000C9B2 /* TestObject.m */,
+				A09386891B8E59E2009B782A /* ParentObject.h */,
+				A093868A1B8E59E2009B782A /* ParentObject.m */,
 				A05FA4581B615EA40000C9B2 /* Main.storyboard */,
 				A05FA45B1B615EA40000C9B2 /* Images.xcassets */,
 				A05FA45D1B615EA40000C9B2 /* LaunchScreen.xib */,
@@ -276,9 +310,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A05FA46E1B615EA40000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCDynamicExample" */;
 			buildPhases = (
+				5D732D87C3D48CFD5D048574 /* Check Pods Manifest.lock */,
 				A05FA4471B615EA40000C9B2 /* Sources */,
 				A05FA4481B615EA40000C9B2 /* Frameworks */,
 				A05FA4491B615EA40000C9B2 /* Resources */,
+				2848D20DF4E4361582DA7624 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -293,9 +329,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A05FA4711B615EA40000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCDynamicExampleTests" */;
 			buildPhases = (
+				6D52F786AE29A4A0FE9AD520 /* Check Pods Manifest.lock */,
 				A05FA4601B615EA40000C9B2 /* Sources */,
 				A05FA4611B615EA40000C9B2 /* Frameworks */,
 				A05FA4621B615EA40000C9B2 /* Resources */,
+				67C895569837F9BF7ABE97EA /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -364,6 +402,69 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2848D20DF4E4361582DA7624 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFRCDynamicExample/Pods-RBQFRCDynamicExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5D732D87C3D48CFD5D048574 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		67C895569837F9BF7ABE97EA /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFRCDynamicExampleTests/Pods-RBQFRCDynamicExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6D52F786AE29A4A0FE9AD520 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A05FA4471B615EA40000C9B2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -372,6 +473,7 @@
 				A05FA4D81B616AD10000C9B2 /* ExampleTableViewController.m in Sources */,
 				A05FA4961B615EB60000C9B2 /* RBQObjectCacheObject.m in Sources */,
 				A0810C621B7161BA00CA4D98 /* RLMObjectBase+Utilities.m in Sources */,
+				A093868E1B8E5A8C009B782A /* ArrayTableViewController.m in Sources */,
 				A05FA49D1B615EB60000C9B2 /* RBQRealmNotificationManager.m in Sources */,
 				A05FA4951B615EB60000C9B2 /* RBQControllerCacheObject.m in Sources */,
 				A05FA4A31B615EB60000C9B2 /* RLMObject+SafeObject.m in Sources */,
@@ -386,6 +488,7 @@
 				A05FA49A1B615EB60000C9B2 /* RLMObject+Notifications.m in Sources */,
 				A05FA4DE1B6170280000C9B2 /* RLMResults+Notifications.m in Sources */,
 				A05FA49B1B615EB60000C9B2 /* RLMRealm+Notifications.m in Sources */,
+				A093868B1B8E59E2009B782A /* ParentObject.m in Sources */,
 				A05FA4511B615EA40000C9B2 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -520,6 +623,7 @@
 		};
 		A05FA46F1B615EA40000C9B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA7E2FFD0958E70F6B843A9C /* Pods-RBQFRCDynamicExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -534,6 +638,7 @@
 		};
 		A05FA4701B615EA40000C9B2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6656949E2C4E32CB9D69461D /* Pods-RBQFRCDynamicExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -548,6 +653,7 @@
 		};
 		A05FA4721B615EA40000C9B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4E45F1D29A01A1E10A5B47B /* Pods-RBQFRCDynamicExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -568,6 +674,7 @@
 		};
 		A05FA4731B615EA40000C9B2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B0884A2E89CED9A2CF2729D /* Pods-RBQFRCDynamicExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

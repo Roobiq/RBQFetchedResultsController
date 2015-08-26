@@ -44,7 +44,8 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
 @implementation RBQSafeRealmObject
 @synthesize className = _className,
             primaryKeyType = _primaryKeyType,
-            primaryKeyValue = _primaryKeyValue;
+            primaryKeyValue = _primaryKeyValue,
+            realmConfiguration = _realmConfiguration;
 
 + (instancetype)safeObjectFromObject:(RLMObjectBase *)object
 {
@@ -85,15 +86,7 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
         _className = className;
         _primaryKeyValue = primaryKeyValue;
         _primaryKeyType = primaryKeyType;
-        
-        NSNumber *inMemory = [realm valueForKey:@"inMemory"];
-        
-        if (inMemory.boolValue) {
-            _inMemoryId = realm.path.lastPathComponent;
-        }
-        else {
-            _realmPath = realm.path;
-        }
+        _realmConfiguration = realm.configuration;
     }
     
     return self;
@@ -103,11 +96,8 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
 
 - (RLMRealm *)realm
 {
-    if (self.inMemoryId) {
-        return [RLMRealm inMemoryRealmWithIdentifier:self.inMemoryId];
-    }
-    
-    return [RLMRealm realmWithPath:self.realmPath];
+    return [RLMRealm realmWithConfiguration:self.realmConfiguration
+                                      error:nil];
 }
 
 - (id)RLMObject
@@ -163,7 +153,7 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
     safeObject->_className = _className;
     safeObject->_primaryKeyValue = _primaryKeyValue;
     safeObject->_primaryKeyType = _primaryKeyType;
-    safeObject->_realmPath = _realmPath;
+    safeObject->_realmConfiguration = _realmConfiguration;
     
     return safeObject;
 }

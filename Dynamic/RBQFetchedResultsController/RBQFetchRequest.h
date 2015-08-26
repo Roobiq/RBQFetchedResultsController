@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/RLMCollection.h>
 
-@class RBQFetchRequest, RLMRealm, RLMResults, RLMObject;
+@class RBQFetchRequest, RLMRealm, RLMObject, RLMRealmConfiguration, RLMArray;
+
+#pragma mark - RBQFetchRequest
 
 /**
  *  This class is used by the RBQFetchedResultsController to represent the properties of the fetch. The RBQFetchRequest is specific to one RLMObject and uses an NSPredicate and array of RLMSortDescriptors to define the query.
@@ -28,16 +31,9 @@
 @property (nonatomic, readonly) RLMRealm *realm;
 
 /**
- *  Path for the Realm associated with the fetch request
+ *  The configuration object used to create an instance of RLMRealm for the fetch request
  */
-@property (nonatomic, readonly) NSString *realmPath;
-
-/**
- *  The identifier of the in-memory Realm.
- *
- *  @warning return nil if fetch request initialized without in-memory Realm
- */
-@property (nonatomic, readonly) NSString *inMemoryRealmId;
+@property (nonatomic, readonly) RLMRealmConfiguration *realmConfiguration;
 
 /**
  *  Predicate supported by Realm
@@ -63,29 +59,16 @@
  *
  *  @return A new instance of RBQFetchRequest
  */
-+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
-                                        inRealm:(RLMRealm *)realm
-                                      predicate:(NSPredicate *)predicate;
-
-/**
- *  Constructor method to create a fetch request for a given entity name in an in-memory Realm.
- *
- *  @param entityName Class name for the RLMObject
- *  @param inMemoryRealm In-memory RLMRealm in which the RLMObject is persisted (caller must retain strong reference as fetch request does not)
- *  @param predicate  NSPredicate that represents the search query
- *
- *  @return A new instance of RBQFetchRequest
- */
-+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
-                                  inMemoryRealm:(RLMRealm *)inMemoryRealm
-                                      predicate:(NSPredicate *)predicate;
++ (instancetype)fetchRequestWithEntityName:(NSString *)entityName
+                                   inRealm:(RLMRealm *)realm
+                                 predicate:(NSPredicate *)predicate;
 
 /**
  *  Retrieve all the RLMObjects for this fetch request in its realm.
  *
- *  @return RLMResults for all the objects in the fetch request (not thread-safe).
+ *  @return RLMResults or RLMArray for all the objects in the fetch request (not thread-safe).
  */
-- (RLMResults *)fetchObjects;
+- (id<RLMCollection>)fetchObjects;
 
 /**
  *  Should this object be in our fetch results?
@@ -110,5 +93,33 @@
  */
 - (instancetype)initWithEntityName:(NSString *)entityName
                            inRealm:(RLMRealm *)realm;
+
+@end
+
+#pragma mark - RBQArrayFetchRequest
+
+@interface RBQArrayFetchRequest : RBQFetchRequest
+
+@property (nonatomic, readonly) NSString *arrayProperty;
+
+@property (nonatomic, readonly) RLMObject *object;
+
+/**
+ *  Constructor method to create a fetch request from a given RLMArray.
+ *
+ *  @param object           The RLMObject that contains the RLMArray that the fetch request will represent
+ *  @param arrayProperty    The property name of the RLMArray contained on the RLMObject that will represent the fetch request
+ *
+ *  @return A new instance of RBQFetchRequest
+ */
++ (instancetype)arrayFetchRequestForObject:(RLMObject *)object
+                         withArrayProperty:(NSString *)arrayProperty;
+
+/**
+ *  Retrieve all the RLMArray for this fetch request
+ *
+ *  @return RLMArray for all the objects in the fetch request (not thread-safe).
+ */
+- (RLMArray *)array;
 
 @end

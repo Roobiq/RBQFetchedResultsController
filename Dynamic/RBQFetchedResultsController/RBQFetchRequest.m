@@ -8,6 +8,7 @@
 
 #import "RBQFetchRequest.h"
 #import "RLMObject+Utilities.h"
+#import "RBQSafeRealmObject.h"
 
 #import <Realm/Realm.h>
 #import <Realm/RLMRealm_Dynamic.h>
@@ -20,49 +21,22 @@
 
 @implementation RBQFetchRequest
 @synthesize entityName = _entityName,
-realmPath = _realmPath,
-inMemoryRealmId = _inMemoryRealmId;
+realmConfiguration = _realmConfiguration;
 
 #pragma mark - Public Class
 
-+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
-                                        inRealm:(RLMRealm *)realm
-                                      predicate:(NSPredicate *)predicate
++ (instancetype)fetchRequestWithEntityName:(NSString *)entityName
+                                   inRealm:(RLMRealm *)realm
+                                 predicate:(NSPredicate *)predicate
 {
-    RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
-                                                                        inRealm:realm];
-    fetchRequest.predicate = predicate;
-    
-    return fetchRequest;
-}
-
-+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
-                                  inMemoryRealm:(RLMRealm *)inMemoryRealm
-                                      predicate:(NSPredicate *)predicate
-{
-    RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
-                                                        inMemoryRealm:inMemoryRealm];
+    RBQFetchRequest *fetchRequest = [[self alloc] initWithEntityName:entityName
+                                                             inRealm:realm];
     fetchRequest.predicate = predicate;
     
     return fetchRequest;
 }
 
 #pragma mark - Public Instance
-
-- (instancetype)initWithEntityName:(NSString *)entityName
-                     inMemoryRealm:(RLMRealm *)inMemoryRealm
-{
-    self = [super init];
-    
-    if (self) {
-        // Returns the appropriate class name for Obj-C or Swift
-        _entityName = entityName;
-        _inMemoryRealmId = inMemoryRealm.path.lastPathComponent;
-        _realmPath = inMemoryRealm.path;
-    }
-    
-    return self;
-}
 
 - (instancetype)initWithEntityName:(NSString *)entityName
                            inRealm:(RLMRealm *)realm
@@ -72,13 +46,13 @@ inMemoryRealmId = _inMemoryRealmId;
     if (self) {
         // Returns the appropriate class name for Obj-C or Swift
         _entityName = entityName;
-        _realmPath = realm.path;
+        _realmConfiguration = realm.configuration;
     }
     
     return self;
 }
 
-- (RLMResults *)fetchObjects
+- (id<RLMCollection>)fetchObjects
 {
     RLMResults *fetchResults = [self.realm allObjects:self.entityName];
     
@@ -114,14 +88,11 @@ inMemoryRealmId = _inMemoryRealmId;
 
 - (RLMRealm *)realm
 {
-    if (self.inMemoryRealmId) {
-        return [RLMRealm inMemoryRealmWithIdentifier:self.inMemoryRealmId];
-    }
-    
     if ([NSThread isMainThread] &&
         !self.realmForMainThread) {
         
-        self.realmForMainThread = [RLMRealm realmWithPath:self.realmPath];
+        self.realmForMainThread = [RLMRealm realmWithConfiguration:self.realmConfiguration
+                                                             error:nil];
     }
     
     if ([NSThread isMainThread]) {
@@ -129,7 +100,8 @@ inMemoryRealmId = _inMemoryRealmId;
         return self.realmForMainThread;
     }
     
-    return [RLMRealm realmWithPath:self.realmPath];
+    return [RLMRealm realmWithConfiguration:self.realmConfiguration
+                                      error:nil];
 }
 
 #pragma mark - Hash
@@ -155,5 +127,66 @@ inMemoryRealmId = _inMemoryRealmId;
         return [super hash];
     }
 }
+
+@end
+
+#pragma mark - RBQArrayFetchRequest
+
+@interface RBQArrayFetchRequest ()
+
+@property (nonatomic, strong) RBQSafeRealmObject *safeObject;
+
+@end
+
+@implementation RBQArrayFetchRequest
+@synthesize arrayProperty = _arrayProperty,
+object = _object;
+
++ (instancetype)arrayFetchRequestForObject:(RLMObject *)object
+                         withArrayProperty:(NSString *)arrayProperty
+{
+#ifdef DEBUG
+    // Attempt to get the value for the key... throws if property name is wrong
+    [object valueForKey:arrayProperty];
+#endif
+    
+    RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
+    
+    RBQArrayFetchRequest *arrayFetchRequest = [[self alloc] initWithEntityName:safeObject.className
+                                                                       inRealm:object.realm];
+    
+    arrayFetchRequest.safeObject = safeObject;
+    arrayFetchRequest->_arrayProperty = arrayProperty;
+    arrayFetchRequest->_object = object;
+    
+    return arrayFetchRequest;
+}
+
+#pragma mark - Getters
+
+- (RLMArray *)array
+{
+    RLMObject *object = [self.safeObject RLMObject];
+    
+    RLMArray *array = [object valueForKey:self.arrayProperty];
+    
+    return array;
+}
+
+#pragma mark - RBQFetchRequest
+
+- (id<RLMCollection>)fetchObjects
+{
+    return [self array];
+}
+
+#pragma mark - Hash
+
+- (NSUInteger)hash
+{
+    return [super hash] ^ self.arrayProperty.hash;
+}
+
+
 
 @end

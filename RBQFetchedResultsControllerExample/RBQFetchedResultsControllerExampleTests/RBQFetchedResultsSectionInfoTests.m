@@ -68,7 +68,7 @@
     [self insertDifferentSectionNameTestObject];
     RBQFetchedResultsSectionInfo *sectionInfo = [self createFetchedResultsSectionInfo];
     
-    RLMResults *results = sectionInfo.objects;
+    id<RLMCollection> results = sectionInfo.objects;
     
     XCTAssert(sectionInfo.numberOfObjects == 5);
     XCTAssert(results.count == 5);

@@ -19,6 +19,7 @@
 
 #pragma mark - Constants
 static char kRBQRefreshTriggeredKey;
+static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 #pragma mark - RBQFetchedResultsController
 
@@ -28,6 +29,10 @@ static char kRBQRefreshTriggeredKey;
 @property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
 @property (strong, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
+
+// Handle Changes From KVO
+@property (strong, nonatomic) RBQEntityChangesObject *entityChanges;
+@property (strong, nonatomic) RLMNotificationToken *realmNotificationToken;
 
 @end
 
@@ -63,11 +68,11 @@ static char kRBQRefreshTriggeredKey;
     return sectionInfo;
 }
 
-- (RLMResults *)objects
+- (id<RLMCollection>)objects
 {
     if (self.fetchRequest && self.sectionNameKeyPath) {
         
-        RLMResults *fetchResults = [self.fetchRequest fetchObjects];
+        id<RLMCollection> fetchResults = [self.fetchRequest fetchObjects];
         
         return [fetchResults objectsWhere:@"%K == %@", self.sectionNameKeyPath, self.name];
     }
@@ -91,7 +96,7 @@ static char kRBQRefreshTriggeredKey;
 
 @property (strong, nonatomic) RLMRealm *realm;
 @property (strong, nonatomic) RLMRealm *cacheRealm;
-@property (strong, nonatomic) RLMResults *fetchResults;
+@property (strong, nonatomic) id<RLMCollection> fetchResults;
 @property (strong, nonatomic) RBQControllerCacheObject *cache;
 
 @end
@@ -625,7 +630,7 @@ static char kRBQRefreshTriggeredKey;
 
 #pragma mark - Getters
 
-- (RLMResults *)fetchedObjects
+- (id<RLMCollection>)fetchedObjects
 {
     if (self.fetchRequest) {
         return [self.fetchRequest fetchObjects];
@@ -648,7 +653,9 @@ static char kRBQRefreshTriggeredKey;
 {
     typeof(self) __weak weakSelf = self;
     
-    if (!self.notificationToken) {
+    // Register for RBQRealmNotificationManager changes
+    if (!self.notificationToken &&
+        ![self.fetchRequest isKindOfClass:[RBQArrayFetchRequest class]]) {
         
         self.notificationToken =
         [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
@@ -679,7 +686,8 @@ static char kRBQRefreshTriggeredKey;
              [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
              
              if (entityChangesObject &&
-                 [realm.path isEqualToString:weakSelf.fetchRequest.realmPath]) {
+                 ([realm.path isEqualToString:weakSelf.fetchRequest.realmConfiguration.path] ||
+                  [realm.configuration.inMemoryIdentifier isEqualToString:weakSelf.fetchRequest.realmConfiguration.inMemoryIdentifier])) {
                  
 #ifdef DEBUG
                  NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
@@ -693,14 +701,120 @@ static char kRBQRefreshTriggeredKey;
              }
          }];
     }
+    else if (!self.realmNotificationToken &&
+             [self.fetchRequest isKindOfClass:[RBQArrayFetchRequest class]]) {
+        RBQArrayFetchRequest *arrayFR = (RBQArrayFetchRequest *)self.fetchRequest;
+        
+        RLMObject *object = arrayFR.object;
+        
+        // Add observer to array
+        [object addObserver:self
+                 forKeyPath:arrayFR.arrayProperty
+                    options:NSKeyValueObservingOptionPrior
+                    context:RBQArrayFetchRequestContext];
+        
+        self.realmNotificationToken =
+        [arrayFR.realm addNotificationBlock:^(NSString *notification, RLMRealm *realm) {
+            
+            if ([weakSelf notificationTriggeredFromRealmRefresh:realm]) {
+                return;
+            }
+            
+            if (weakSelf.entityChanges &&
+                ([realm.path isEqualToString:weakSelf.fetchRequest.realmConfiguration.path] ||
+                 [realm.configuration.inMemoryIdentifier isEqualToString:weakSelf.fetchRequest.realmConfiguration.inMemoryIdentifier])) {
+                    
+                [weakSelf calculateChangesWithAddedSafeObjects:weakSelf.entityChanges.addedSafeObjects.copy
+                                            deletedSafeObjects:weakSelf.entityChanges.deletedSafeObjects.copy
+                                            changedSafeObjects:weakSelf.entityChanges.changedSafeObjects.copy
+                                                         realm:realm];
+            }
+        }];
+    }
 }
 
 - (void)unregisterChangeNotifications
 {
     // Remove the notifications
-    [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
-    
-    self.notificationToken = nil;
+    if (self.notificationToken) {
+        [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
+        
+        self.notificationToken = nil;
+    }
+    else if ([self.fetchRequest isKindOfClass:[RBQArrayFetchRequest class]]) {
+        RBQArrayFetchRequest *arrayFR = (RBQArrayFetchRequest *)self.fetchRequest;
+        
+        RLMObject *object = arrayFR.object;
+        
+        @try {
+            [object removeObserver:self
+                        forKeyPath:arrayFR.arrayProperty];
+        }
+        @catch (NSException *exception) {
+#ifdef DEBUG
+            NSLog(@"Remove KVO Observer Error: %@", exception);
+#endif
+        }
+        
+        [self.fetchRequest.realm removeNotification:self.realmNotificationToken];
+        
+        self.realmNotificationToken = nil;
+    }
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if ([self.fetchRequest isKindOfClass:[RBQArrayFetchRequest class]]) {
+        RBQArrayFetchRequest *arrayFR = (RBQArrayFetchRequest *)self.fetchRequest;
+        RLMArray *array = arrayFR.array;
+     
+        if (context == RBQArrayFetchRequestContext) {
+            if ([keyPath isEqualToString:arrayFR.arrayProperty]) {
+                
+                NSNumber *isPrior = change[NSKeyValueChangeNotificationIsPriorKey];
+                NSNumber *kind = change[NSKeyValueChangeKindKey];
+                
+                if ([isPrior boolValue]) {
+                    self.entityChanges = [RBQEntityChangesObject createEntityChangeObjectWithClassName:arrayFR.entityName];
+                    
+                    if ([kind  intValue] == NSKeyValueChangeRemoval) {
+                        NSIndexSet *indexes = change[NSKeyValueChangeIndexesKey];
+                        
+                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                            RLMObject *object = [array objectAtIndex:idx];
+                            
+                            [self.entityChanges willDeleteSafeObject:[RBQSafeRealmObject safeObjectFromObject:object]];
+                        }];
+                    }
+                }
+                else {
+                    if ([kind  intValue] == NSKeyValueChangeInsertion) {
+                        NSIndexSet *indexes = change[NSKeyValueChangeIndexesKey];
+                        
+                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                            RLMObject *object = [array objectAtIndex:idx];
+                            
+                            [self.entityChanges didAddSafeObject:[RBQSafeRealmObject safeObjectFromObject:object]];
+                        }];
+                    }
+                    else if ([kind  intValue] == NSKeyValueChangeReplacement) {
+                        NSIndexSet *indexes = change[NSKeyValueChangeIndexesKey];
+                        
+                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                            RLMObject *object = [array objectAtIndex:idx];
+                            
+                            [self.entityChanges didChangeSafeObject:[RBQSafeRealmObject safeObjectFromObject:object]];
+                        }];
+                    }
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - Change Calculations
@@ -932,7 +1046,7 @@ static char kRBQRefreshTriggeredKey;
              forFetchRequest:(RBQFetchRequest *)fetchRequest
           sectionNameKeyPath:(NSString *)sectionNameKeyPath
 {
-    RLMResults *fetchResults = [fetchRequest fetchObjects];
+    id<RLMCollection> fetchResults = [fetchRequest fetchObjects];
     
     // Check if we have a cache already
     RBQControllerCacheObject *controllerCache = [RBQControllerCacheObject objectInRealm:cacheRealm
@@ -1193,7 +1307,7 @@ static char kRBQRefreshTriggeredKey;
     // Loop through to identify the new sections in fetchResults
     for (RBQSectionCacheObject *section in oldAndChange) {
         
-        RLMResults * sectionResults = nil;
+        id<RLMCollection> sectionResults = nil;
         
         if (self.sectionNameKeyPath) {
             sectionResults = [state.fetchResults objectsWhere:@"%K == %@",
@@ -1896,8 +2010,11 @@ static char kRBQRefreshTriggeredKey;
         return self.inMemoryRealmCache;
     }
     else {
+        RLMRealmConfiguration *inMemoryConfiguration = [RLMRealmConfiguration defaultConfiguration];
+        inMemoryConfiguration.inMemoryIdentifier = [self nameForFetchRequest:self.fetchRequest];
         
-        RLMRealm *realm = [RLMRealm inMemoryRealmWithIdentifier:[self nameForFetchRequest:self.fetchRequest]];
+        RLMRealm *realm = [RLMRealm realmWithConfiguration:inMemoryConfiguration
+                                                     error:nil];
         
         // Hold onto a strong reference so inMemory realm cache doesn't get deallocated
         // We don't use the cache since this is deprecated

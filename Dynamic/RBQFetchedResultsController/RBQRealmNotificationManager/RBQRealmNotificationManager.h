@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
+@class RBQSafeRealmObject;
+
 #pragma mark - RBQClassChangesObject
 
 /**
@@ -35,6 +37,14 @@
  *  Collection of RBQSafeRealmObjects representing the changed objects
  */
 @property (readonly, nonatomic) NSSet *changedSafeObjects;
+
++ (instancetype)createEntityChangeObjectWithClassName:(NSString *)className;
+
+- (void)didAddSafeObject:(RBQSafeRealmObject *)safeObject;
+
+- (void)willDeleteSafeObject:(RBQSafeRealmObject *)safeObject;
+
+- (void)didChangeSafeObject:(RBQSafeRealmObject *)safeObject;
 
 @end
 
