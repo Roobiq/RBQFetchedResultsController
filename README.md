@@ -3,6 +3,8 @@ RBQFetchedResultsController
 
 #####Drop-in replacement for `NSFetchedResultsController` backed by Realm.
 
+##### _Now Supports Realm Swift With A Complete Swift API!_
+
 The `RBQFetchedResultsController` (FRC) is a replacement for `NSFetchedResultsController` when used in conjunction with `RBQRealmNotificationManager` and `RBQRealmChangeLogger`. The controller and delegate follow the same paradigm as `NSFetchedResultsController`, and allow the developer to monitor changes of a `RLMObject` subclass.
 
 `RBQFetchedResultsController` supports tableview sections and implements a drop-in replacement delegate to pass the changes to the tableview for section and row animations.
@@ -84,8 +86,15 @@ for (NSString *path in paths) {
 ####Installation
 RBQFetchedResultsController is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
+```
+pod "RBQFetchedResultsController"
+```
+_**To install the Swift version, add the following to your Podfile:**_
+```
+use_frameworks!
 
-    pod "RBQFetchedResultsController"
+pod 'SwiftFetchedResultsController'
+```
 
 ####Demo
 
@@ -106,9 +115,14 @@ open RBQFetchedResultsControllerExample.xcworkspace
 ####Current State
 The example project includes various functional and unit tests. In addition, the project is used in our [Roobiq](http://www.roobiq.com) app and is quite stable.
 
-Swift support was added in v1.7.4.
+_**Realm Swift is now fully supported through a new Swift API via these classes:**_
 
-RealmSwift support is being added via this [PR](https://github.com/Roobiq/RBQFetchedResultsController/pull/34).
+* FetchedResultsController
+* FetchRequest
+* ChangeLogger
+* SafeObject
+
+Instructions and documentation for the Swift API is forthcoming. Check out the example project in `/SwiftExample` for more details.
 
 **`RLMRealm` and `RLMObject` categories are included that contain methods to simplify calling RBQRealmChangeLogger:**
 
