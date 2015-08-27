@@ -27,9 +27,11 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
     // Setup the DB (use random strings to create new versions each time)
-    NSString *identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+    RLMRealmConfiguration *inMemoryConfig = [RLMRealmConfiguration defaultConfiguration];
     
-    self.inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:identifier];
+    inMemoryConfig.inMemoryIdentifier = [[NSProcessInfo processInfo] globallyUniqueString];
+    
+    self.inMemoryRealm = [RLMRealm realmWithConfiguration:inMemoryConfig error:nil];
     
     [self.inMemoryRealm transactionWithBlock:^{
         
@@ -76,7 +78,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                  inMemoryRealm:self.inMemoryRealm
+                                                                        inRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     XCTAssert([fetchRequest.entityName isEqualToString:@"TestObject"]);
@@ -89,7 +91,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                  inMemoryRealm:self.inMemoryRealm
+                                                                        inRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     RLMSortDescriptor *sortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sortIndex"
@@ -97,7 +99,7 @@
     
     fetchRequest.sortDescriptors = @[sortDescriptor];
     
-    RLMResults *results = [fetchRequest fetchObjects];
+    id<RLMCollection> results = [fetchRequest fetchObjects];
     
     TestObject *firstObject = results.firstObject;
     
@@ -110,7 +112,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                  inMemoryRealm:self.inMemoryRealm
+                                                                        inRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     TestObject *testObject = [[TestObject alloc] init];
@@ -126,7 +128,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                  inMemoryRealm:self.inMemoryRealm
+                                                                        inRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     TestObject *testObject = [[TestObject alloc] init];

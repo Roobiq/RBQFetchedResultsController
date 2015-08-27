@@ -65,7 +65,7 @@
     XCTAssert([safeObject.primaryKeyValue isEqualToString:@"key"]);
     XCTAssert(safeObject.primaryKeyType == RLMPropertyTypeString);
     
-    XCTAssertNil([safeObject valueForKeyPath:@"realmPath"]);
+    XCTAssertNil(safeObject.realmConfiguration);
 }
 
 - (void)testThreadSafe

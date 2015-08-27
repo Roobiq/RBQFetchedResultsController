@@ -41,16 +41,11 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
                                  userInfo:nil];
 }
 
-@interface RBQSafeRealmObject ()
-
-@property (strong, nonatomic) NSString *realmPath;
-
-@end
-
 @implementation RBQSafeRealmObject
 @synthesize className = _className,
             primaryKeyType = _primaryKeyType,
-            primaryKeyValue = _primaryKeyValue;
+            primaryKeyValue = _primaryKeyValue,
+            realmConfiguration = _realmConfiguration;
 
 + (instancetype)safeObjectFromObject:(RLMObjectBase *)object
 {
@@ -76,14 +71,8 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
 
 + (id)objectfromSafeObject:(RBQSafeRealmObject *)safeObject
 {
-    return [RBQSafeRealmObject objectInRealm:[RLMRealm defaultRealm] fromSafeObject:safeObject];
-}
-
-+ (id)objectInRealm:(RLMRealm *)realm
-     fromSafeObject:(RBQSafeRealmObject *)safeObject
-{
-    return [realm objectWithClassName:safeObject.className
-                        forPrimaryKey:safeObject.primaryKeyValue];
+    return [safeObject.realm objectWithClassName:safeObject.className
+                                   forPrimaryKey:safeObject.primaryKeyValue];
 }
 
 - (id)initWithClassName:(NSString *)className
@@ -97,7 +86,7 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
         _className = className;
         _primaryKeyValue = primaryKeyValue;
         _primaryKeyType = primaryKeyType;
-        _realmPath = realm.path;
+        _realmConfiguration = realm.configuration;
     }
     
     return self;
@@ -107,12 +96,13 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
 
 - (RLMRealm *)realm
 {
-    return [RLMRealm realmWithPath:self.realmPath];
+    return [RLMRealm realmWithConfiguration:self.realmConfiguration
+                                      error:nil];
 }
 
 - (id)RLMObject
 {
-    return [RBQSafeRealmObject objectInRealm:self.realm fromSafeObject:self];
+    return [RBQSafeRealmObject objectfromSafeObject:self];
 }
 
 #pragma mark - Equality
@@ -123,8 +113,20 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
     if (self == object) {
         return YES;
     }
+    else if (self.primaryKeyType != object.primaryKeyType) {
+        return NO;
+    }
+    else if (self.primaryKeyType == RLMPropertyTypeInt) {
+        return [self.primaryKeyValue isEqual:object.primaryKeyValue];
+    }
+    else if (self.primaryKeyType == RLMPropertyTypeString) {
+        NSString *lhsPrimaryKeyValue = (NSString *)self.primaryKeyValue;
+        NSString *rhsPrimaryKeyValue = (NSString *)object.primaryKeyValue;
+        
+        return [lhsPrimaryKeyValue isEqualToString:rhsPrimaryKeyValue];
+    }
     
-    return [self.primaryKeyValue isEqual:object.primaryKeyValue];
+    return NO;
 }
 
 - (BOOL)isEqual:(id)object
@@ -151,7 +153,7 @@ static id RLMObjectBasePrimaryKeyValue(RLMObjectBase *object) {
     safeObject->_className = _className;
     safeObject->_primaryKeyValue = _primaryKeyValue;
     safeObject->_primaryKeyType = _primaryKeyType;
-    safeObject->_realmPath = _realmPath;
+    safeObject->_realmConfiguration = _realmConfiguration;
     
     return safeObject;
 }

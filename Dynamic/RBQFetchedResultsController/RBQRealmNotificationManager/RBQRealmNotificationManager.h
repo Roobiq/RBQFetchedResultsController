@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
+@class RBQSafeRealmObject;
+
 #pragma mark - RBQClassChangesObject
 
 /**
@@ -35,6 +37,14 @@
  *  Collection of RBQSafeRealmObjects representing the changed objects
  */
 @property (readonly, nonatomic) NSSet *changedSafeObjects;
+
++ (instancetype)createEntityChangeObjectWithClassName:(NSString *)className;
+
+- (void)didAddSafeObject:(RBQSafeRealmObject *)safeObject;
+
+- (void)willDeleteSafeObject:(RBQSafeRealmObject *)safeObject;
+
+- (void)didChangeSafeObject:(RBQSafeRealmObject *)safeObject;
 
 @end
 
@@ -151,11 +161,6 @@ typedef void(^RBQNotificationBlock)(NSDictionary *entityChanges,
  *  This class works in conjunction with any instances of RBQRealmChangeLogger to broadcast any changes to the registered listeners
  */
 @interface RBQRealmNotificationManager : NSObject
-
-/**
- *  Current representation of changes logged to the RBQRealmNotificationManager instance.
- */
-@property (readonly, nonatomic) NSDictionary *entityChanges;
 
 /**
  *  Retrieve the singleton RBQRealmNotificationManager that passes changes from all Realm loggers

@@ -1,0 +1,10 @@
+use_frameworks!
+
+target 'RBQFRCSwiftExample' do
+  pod 'RealmSwift'
+end
+
+target 'RBQFRCSwiftExampleTests' do
+  pod 'RealmSwift'
+end
+

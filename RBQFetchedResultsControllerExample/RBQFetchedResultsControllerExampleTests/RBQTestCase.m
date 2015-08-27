@@ -27,11 +27,16 @@ static NSString *testRealmFileName = @"test.realm";
     NSArray *writablePaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [writablePaths lastObject];
     NSString *testRealmFile = [documentsPath stringByAppendingPathComponent:testRealmFileName];
-    [RLMRealm setDefaultRealmPath:testRealmFile];
+    
+    RLMRealmConfiguration *defaultConfig = [RLMRealmConfiguration defaultConfiguration];
+    defaultConfig.path = testRealmFile;
+    
+    [RLMRealmConfiguration setDefaultConfiguration:defaultConfig];
     
     if (self.inMemory) {
-        NSString *identifier = [[NSProcessInfo processInfo] globallyUniqueString];
-        self.realm = [RLMRealm inMemoryRealmWithIdentifier:identifier];
+        RLMRealmConfiguration *inMemoryConfig = [RLMRealmConfiguration defaultConfiguration];
+        inMemoryConfig.inMemoryIdentifier = [[NSProcessInfo processInfo] globallyUniqueString];
+        self.realm = [RLMRealm realmWithConfiguration:inMemoryConfig error:nil];
     }
     else {
         self.realm = [RLMRealm defaultRealm];

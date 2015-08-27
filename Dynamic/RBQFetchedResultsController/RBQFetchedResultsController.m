@@ -19,13 +19,13 @@
 
 #pragma mark - Constants
 static char kRBQRefreshTriggeredKey;
+static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 #pragma mark - RBQFetchedResultsController
 
 @interface RBQFetchedResultsController ()
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
-@property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
 @property (strong, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
@@ -63,11 +63,11 @@ static char kRBQRefreshTriggeredKey;
     return sectionInfo;
 }
 
-- (RLMResults *)objects
+- (id<RLMCollection>)objects
 {
     if (self.fetchRequest && self.sectionNameKeyPath) {
         
-        RLMResults *fetchResults = [self.fetchRequest fetchObjects];
+        id<RLMCollection> fetchResults = [self.fetchRequest fetchObjects];
         
         return [fetchResults objectsWhere:@"%K == %@", self.sectionNameKeyPath, self.name];
     }
@@ -91,7 +91,7 @@ static char kRBQRefreshTriggeredKey;
 
 @property (strong, nonatomic) RLMRealm *realm;
 @property (strong, nonatomic) RLMRealm *cacheRealm;
-@property (strong, nonatomic) RLMResults *fetchResults;
+@property (strong, nonatomic) id<RLMCollection> fetchResults;
 @property (strong, nonatomic) RBQControllerCacheObject *cache;
 
 @end
@@ -369,21 +369,6 @@ static char kRBQRefreshTriggeredKey;
     return self;
 }
 
-- (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
-        sectionNameKeyPath:(NSString *)sectionNameKeyPath
-        inMemoryRealmCache:(RLMRealm *)inMemoryRealm
-{
-    self = [super init];
-    
-    if (self) {
-        _inMemoryRealmCache = inMemoryRealm;
-        _fetchRequest = fetchRequest;
-        _sectionNameKeyPath = sectionNameKeyPath;
-    }
-    
-    return self;
-}
-
 - (BOOL)performFetch
 {
     if (self.fetchRequest) {
@@ -478,29 +463,6 @@ static char kRBQRefreshTriggeredKey;
     return nil;
 }
 
-- (id)objectInRealm:(RLMRealm *)realm
-        atIndexPath:(NSIndexPath *)indexPath
-{
-    RBQControllerCacheObject *cache = [self cache];
-    
-    if (indexPath.section < cache.sections.count) {
-        
-        RBQSectionCacheObject *section = cache.sections[indexPath.section];
-        
-        if (indexPath.row < section.objects.count) {
-            
-            RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
-            
-            [self refreshRealm:realm];
-            
-            return [RBQObjectCacheObject objectInRealm:realm
-                                        forCacheObject:cacheObject];
-        }
-    }
-    
-    return nil;
-}
-
 - (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject
 {
     RBQControllerCacheObject *cache = [self cache];
@@ -522,7 +484,7 @@ static char kRBQRefreshTriggeredKey;
     return nil;
 }
 
-- (NSIndexPath *)indexPathForObject:(RLMObject *)object
+- (NSIndexPath *)indexPathForObject:(RLMObjectBase *)object
 {
     RBQControllerCacheObject *cache = [self cache];
     
@@ -625,7 +587,7 @@ static char kRBQRefreshTriggeredKey;
 
 #pragma mark - Getters
 
-- (RLMResults *)fetchedObjects
+- (id<RLMCollection>)fetchedObjects
 {
     if (self.fetchRequest) {
         return [self.fetchRequest fetchObjects];
@@ -648,6 +610,7 @@ static char kRBQRefreshTriggeredKey;
 {
     typeof(self) __weak weakSelf = self;
     
+    // Register for RBQRealmNotificationManager changes
     if (!self.notificationToken) {
         
         self.notificationToken =
@@ -679,7 +642,8 @@ static char kRBQRefreshTriggeredKey;
              [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
              
              if (entityChangesObject &&
-                 [realm.path isEqualToString:weakSelf.fetchRequest.realmPath]) {
+                 ([realm.path isEqualToString:weakSelf.fetchRequest.realmConfiguration.path] ||
+                  [realm.configuration.inMemoryIdentifier isEqualToString:weakSelf.fetchRequest.realmConfiguration.inMemoryIdentifier])) {
                  
 #ifdef DEBUG
                  NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
@@ -698,9 +662,11 @@ static char kRBQRefreshTriggeredKey;
 - (void)unregisterChangeNotifications
 {
     // Remove the notifications
-    [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
-    
-    self.notificationToken = nil;
+    if (self.notificationToken) {
+        [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
+        
+        self.notificationToken = nil;
+    }
 }
 
 #pragma mark - Change Calculations
@@ -932,7 +898,7 @@ static char kRBQRefreshTriggeredKey;
              forFetchRequest:(RBQFetchRequest *)fetchRequest
           sectionNameKeyPath:(NSString *)sectionNameKeyPath
 {
-    RLMResults *fetchResults = [fetchRequest fetchObjects];
+    id<RLMCollection> fetchResults = [fetchRequest fetchObjects];
     
     // Check if we have a cache already
     RBQControllerCacheObject *controllerCache = [RBQControllerCacheObject objectInRealm:cacheRealm
@@ -1060,7 +1026,7 @@ static char kRBQRefreshTriggeredKey;
     stateObject.realm = realm;
     
     // Get the new list of safe fetch objects
-    stateObject.fetchResults = [fetchRequest fetchObjectsInRealm:realm];
+    stateObject.fetchResults = [fetchRequest fetchObjects];
     
     stateObject.cache = cache;
     
@@ -1095,8 +1061,7 @@ static char kRBQRefreshTriggeredKey;
             
             // Get the section titles in change set
             // Attempt to get the object from non-cache Realm
-            RLMObject *object = [RBQSafeRealmObject objectInRealm:state.realm
-                                                   fromSafeObject:safeObject];
+            RLMObject *object = [RBQSafeRealmObject objectfromSafeObject:safeObject];
             
             // If the changed object doesn't match the predicate and
             // was not already in the cache, then skip it
@@ -1194,7 +1159,7 @@ static char kRBQRefreshTriggeredKey;
     // Loop through to identify the new sections in fetchResults
     for (RBQSectionCacheObject *section in oldAndChange) {
         
-        RLMResults * sectionResults = nil;
+        id<RLMCollection> sectionResults = nil;
         
         if (self.sectionNameKeyPath) {
             sectionResults = [state.fetchResults objectsWhere:@"%K == %@",
@@ -1893,12 +1858,12 @@ static char kRBQRefreshTriggeredKey;
         
         return realm;
     }
-    else if (self.inMemoryRealmCache) {
-        return self.inMemoryRealmCache;
-    }
     else {
+        RLMRealmConfiguration *inMemoryConfiguration = [RLMRealmConfiguration defaultConfiguration];
+        inMemoryConfiguration.inMemoryIdentifier = [self nameForFetchRequest:self.fetchRequest];
         
-        RLMRealm *realm = [RLMRealm inMemoryRealmWithIdentifier:[self nameForFetchRequest:self.fetchRequest]];
+        RLMRealm *realm = [RLMRealm realmWithConfiguration:inMemoryConfiguration
+                                                     error:nil];
         
         // Hold onto a strong reference so inMemory realm cache doesn't get deallocated
         // We don't use the cache since this is deprecated

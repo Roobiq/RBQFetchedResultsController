@@ -34,8 +34,11 @@
     [super setUp];
     
     // Setup the DB (use random strings to create new versions each time)
-    NSString *identifier = [[NSProcessInfo processInfo] globallyUniqueString];
-    self.inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:identifier];
+    RLMRealmConfiguration *inMemoryConfig = [RLMRealmConfiguration defaultConfiguration];
+    
+    inMemoryConfig.inMemoryIdentifier = [[NSProcessInfo processInfo] globallyUniqueString];
+    
+    self.inMemoryRealm = [RLMRealm realmWithConfiguration:inMemoryConfig error:nil];
     
     // Load the DB with data
     [self.inMemoryRealm beginWriteTransaction];
@@ -64,7 +67,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
     
     RBQFetchRequest *fetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject"
-                                                                  inMemoryRealm:self.inMemoryRealm
+                                                                        inRealm:self.inMemoryRealm
                                                                       predicate:predicate];
     
     RLMSortDescriptor *sortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sortIndex"

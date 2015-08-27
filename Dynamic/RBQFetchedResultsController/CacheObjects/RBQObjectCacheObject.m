@@ -7,24 +7,28 @@
 //
 
 #import "RBQObjectCacheObject.h"
-#import "RLMObject+Utilities.h"
+#import "RLMObjectBase+Utilities.h"
 
 #import <Realm/RLMRealm_Dynamic.h>
+#import <Realm/RLMObjectBase_Dynamic.h>
 #import <Realm/RLMObjectSchema.h>
 
 @implementation RBQObjectCacheObject
 
 #pragma mark - Public Class
 
-+ (instancetype)createCacheObjectWithObject:(RLMObject *)object
++ (instancetype)createCacheObjectWithObject:(RLMObjectBase *)object
                         sectionKeyPathValue:(NSString *)sectionValue
 {
     RBQObjectCacheObject *cacheObject = [[RBQObjectCacheObject alloc] init];
-    cacheObject.primaryKeyType = object.objectSchema.primaryKeyProperty.type;
+    
+    RLMObjectSchema *objectSchema = RLMObjectBaseObjectSchema(object);
+    
+    cacheObject.primaryKeyType = objectSchema.primaryKeyProperty.type;
     cacheObject.sectionKeyPathValue = sectionValue;
     cacheObject.className = [[object class] className];
     
-    id primaryKeyValue = [RLMObject primaryKeyValueForObject:object];
+    id primaryKeyValue = [RLMObjectBase primaryKeyValueForObject:object];
     
     if (cacheObject.primaryKeyType == RLMPropertyTypeString) {
         cacheObject.primaryKeyStringValue = (NSString *)primaryKeyValue;
@@ -61,11 +65,14 @@
 }
 
 + (instancetype)cacheObjectInRealm:(RLMRealm *)realm
-                         forObject:(RLMObject *)object
+                         forObject:(RLMObjectBase *)object
 {
     if (object) {
         id primaryKeyValue = [RLMObject primaryKeyValueForObject:object];
-        RLMPropertyType primaryKeyType = object.objectSchema.primaryKeyProperty.type;
+        
+        RLMObjectSchema *objectSchema = RLMObjectBaseObjectSchema(object);
+        
+        RLMPropertyType primaryKeyType = objectSchema.primaryKeyProperty.type;
         
         if (primaryKeyType == RLMPropertyTypeString) {
             
