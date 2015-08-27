@@ -75,7 +75,6 @@
 		A08909341B8F970A002E87DD /* ChangeLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeLogger.swift; sourceTree = "<group>"; };
 		A08909351B8F970A002E87DD /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
 		A08909361B8F970A002E87DD /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchRequest.swift; sourceTree = "<group>"; };
-		A08909371B8F970A002E87DD /* RBQFRCSwift-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RBQFRCSwift-BridgingHeader.h"; sourceTree = "<group>"; };
 		A08909391B8F970A002E87DD /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		A08909411B8F9715002E87DD /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
 		A08909421B8F9715002E87DD /* RBQControllerCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQControllerCacheObject.m; sourceTree = "<group>"; };
@@ -106,6 +105,7 @@
 		A08909691B8F9715002E87DD /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
 		A089096A1B8F9715002E87DD /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
 		A089096B1B8F9715002E87DD /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
+		A08909851B8FB1C1002E87DD /* RBQFRCSwift-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RBQFRCSwift-BridgingHeader.h"; sourceTree = "<group>"; };
 		A0AB74611B6C389700923940 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		C77E796F0D8802AD9AB18EAF /* Pods-RBQFRCSwiftExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCSwiftExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCSwiftExample/Pods-RBQFRCSwiftExample.release.xcconfig"; sourceTree = "<group>"; };
 		D84860765F870D8A25A082FF /* Pods-RBQFRCSwiftExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCSwiftExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCSwiftExampleTests/Pods-RBQFRCSwiftExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -178,6 +178,7 @@
 				A089093F1B8F9715002E87DD /* RBQFetchedResultsController */,
 				A08909331B8F970A002E87DD /* Swift */,
 				A05FA4ED1B6185AE0000C9B2 /* AppDelegate.swift */,
+				A08909851B8FB1C1002E87DD /* RBQFRCSwift-BridgingHeader.h */,
 				A0AB74611B6C389700923940 /* MainTableViewController.swift */,
 				A05FA4F11B6185AE0000C9B2 /* Main.storyboard */,
 				A05FA4F41B6185AE0000C9B2 /* Images.xcassets */,
@@ -218,7 +219,6 @@
 				A08909341B8F970A002E87DD /* ChangeLogger.swift */,
 				A08909351B8F970A002E87DD /* FetchedResultsController.swift */,
 				A08909361B8F970A002E87DD /* FetchRequest.swift */,
-				A08909371B8F970A002E87DD /* RBQFRCSwift-BridgingHeader.h */,
 				A08909391B8F970A002E87DD /* Utilities.swift */,
 			);
 			name = Swift;
@@ -661,7 +661,7 @@
 				INFOPLIST_FILE = RBQFRCSwiftExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "../Swift/RBQFRCSwift-BridgingHeader.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/RBQFRCSwiftExample/RBQFRCSwift-BridgingHeader.h";
 			};
 			name = Debug;
 		};
@@ -678,7 +678,7 @@
 				INFOPLIST_FILE = RBQFRCSwiftExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "../Swift/RBQFRCSwift-BridgingHeader.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/RBQFRCSwiftExample/RBQFRCSwift-BridgingHeader.h";
 			};
 			name = Release;
 		};
