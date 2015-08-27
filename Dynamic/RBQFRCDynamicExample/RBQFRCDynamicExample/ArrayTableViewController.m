@@ -11,6 +11,9 @@
 #import "ParentObject.h"
 
 #import "RBQFetchedResultsController.h"
+#import "RBQRealmNotificationManager.h"
+#import "RLMRealm+Notifications.h"
+#import "RLMObject+Notifications.h"
 
 #pragma mark - Constants
 
@@ -27,7 +30,13 @@ static NSString * const kRBQParentKey = @"RBQParentKey";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:self.editButtonItem,self.navigationItem.rightBarButtonItem, nil];
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:self.navigationItem.leftBarButtonItem, self.navigationItem.rightBarButtonItem, nil];
+    
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    self.tableView.backgroundColor = [UIColor colorWithWhite:0.93 alpha:1.0];
+    
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     RLMRealm *realm = [RLMRealm defaultRealm];
     
@@ -40,18 +49,13 @@ static NSString * const kRBQParentKey = @"RBQParentKey";
     
     [realm addObject:parent];
     
-    for (NSUInteger i = 0; i < 1000; i++) {
+    for (NSUInteger i = 0; i < 10; i++) {
         
         NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)i];
         
         TestObject *object = [TestObject testObjectWithTitle:title sortIndex:i inTable:YES];
         
-        if (i < 10) {
-            object.sectionName = @"First Section";
-        }
-        else {
-            object.sectionName = @"Second Section";
-        }
+        object.sectionName = @"First Section";
         
         [realm addObject:object];
         
@@ -60,22 +64,11 @@ static NSString * const kRBQParentKey = @"RBQParentKey";
     
     [realm commitWriteTransaction];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inTable = YES"];
-    
     RBQFetchRequest *fetchRequest = [RBQArrayFetchRequest arrayFetchRequestForObject:parent
                                                                    withArrayProperty:@"testObjects"];
-    fetchRequest.predicate = predicate;
-    
-    RLMSortDescriptor *sortDescriptor = [RLMSortDescriptor sortDescriptorWithProperty:@"sortIndex"
-                                                                            ascending:YES];
-    
-    RLMSortDescriptor *sortDescriptorSection = [RLMSortDescriptor sortDescriptorWithProperty:@"sectionName"
-                                                                                   ascending:YES];
-    
-    fetchRequest.sortDescriptors = @[sortDescriptorSection,sortDescriptor];
     
     self.fetchedResultsController = [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                           sectionNameKeyPath:@"sectionName"
+                                                                           sectionNameKeyPath:nil
                                                                                     cacheName:@"testCache"];
     
     self.fetchedResultsController.delegate = self;
@@ -192,10 +185,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPathFirstRow];
     
-    if (object.sortIndex > 0) {
+    if (object.sortIndex > 0 ||
+        !object) {
         [realm beginWriteTransaction];
         
-        NSInteger sortIndex = object.sortIndex - 1;
+        NSInteger sortIndex = object ? object.sortIndex - 1 : 10;
         
         NSString *title = [NSString stringWithFormat:@"Cell %lu", (unsigned long)sortIndex];
         
@@ -213,63 +207,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             newObject.key = [NSString stringWithFormat:@"%@%ld",title, (long)sortIndex];
             newObject.inTable = YES;
             
-            [realm addObject:newObject];
-            
             [parent.testObjects insertObject:newObject atIndex:0];
         }
         else {
             newObject.inTable = YES;
         }
-        
-        [realm commitWriteTransaction];
-    }
-    // Test Moves
-    else {
-        [realm beginWriteTransaction];
-        
-        NSIndexPath *indexPathFifthRow = [NSIndexPath indexPathForRow:5 inSection:0];
-        NSIndexPath *indexPathThirdRow = [NSIndexPath indexPathForRow:3 inSection:0];
-        NSIndexPath *indexPathSixthRow = [NSIndexPath indexPathForRow:6 inSection:0];
-        NSIndexPath *indexPathFirstRow = [NSIndexPath indexPathForRow:0 inSection:0];
-        
-        TestObject *firstObject = [self.fetchedResultsController objectAtIndexPath:indexPathFirstRow];
-        TestObject *thirdObject = [self.fetchedResultsController objectAtIndexPath:indexPathThirdRow];
-        TestObject *fifthObject = [self.fetchedResultsController objectAtIndexPath:indexPathFifthRow];
-        TestObject *sixthObject = [self.fetchedResultsController objectAtIndexPath:indexPathSixthRow];
-        RLMResults *ninthObject = [TestObject objectsInRealm:realm where:@"%K == %@",@"title",@"Cell 9"];
-        
-        ParentObject *parent = [ParentObject objectInRealm:realm forPrimaryKey:kRBQParentKey];
-        
-        // Move is currently unsupported (so manually moving)
-        [parent.testObjects removeObjectAtIndex:5];
-        [parent.testObjects insertObject:fifthObject atIndex:6];
-        
-//        firstObject.inTable = NO;
-//
-//        thirdObject.title = @"Testing Move And Update";
-//        
-        if (ninthObject.firstObject) {
-            TestObject *ninth = ninthObject.firstObject;
-            
-            if ([ninth.sectionName isEqualToString:@"First Section"]) {
-                ninth.sectionName = @"Second Section";
-            }
-            else {
-                ninth.sectionName = @"First Section";
-            }
-        }
-        
-        //Test an inserted section that's not first
-        //        TestObject *extraObjectInSection = [TestObject testObjectWithTitle:@"Test Section" sortIndex:3 inTable:YES];
-        //        extraObjectInSection.sectionName = @"Middle Section";
-        //        [realm addObject:extraObjectInSection];
-        //
-        //        [[RBQRealmNotificationManager defaultManager] didAddObjects:@[extraObjectInSection]
-        //                                                  willDeleteObjects:nil
-        //                                                   didChangeObjects:@[NULL_IF_NIL(fifthObject),
-        //                                                                      NULL_IF_NIL(sixthObject),
-        //                                                                      NULL_IF_NIL(firstObject),
-        //                                                                      NULL_IF_NIL(thirdObject)]];
         
         [realm commitWriteTransaction];
     }
@@ -279,14 +221,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (IBAction)didClickDeleteButton:(UIBarButtonItem *)sender
 {
-    // Delete the object in the first row
-    //    NSIndexPath *firstObjectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    //    [self deleteObjectAtIndexPath:firstObjectIndexPath];
-    
-    NSLog(@"DID BEGIN DELETE");
-    
-    NSLog(@"Fetched %ld Items Before Delete", (unsigned long)self.fetchedResultsController.fetchedObjects.count);
-    
     // Test deleting a section (comment out above to test)
     RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
     
@@ -295,23 +229,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [realm beginWriteTransaction];
     [realm deleteObjects:objectInFirstSection];
     [realm commitWriteTransaction];
-    
-    NSLog(@"DID END DELETE");
 }
 
 - (IBAction)didClickInsertButton:(UIBarButtonItem *)sender
 {
-    NSLog(@"DID BEGIN INSERT");
-    NSLog(@"Fetched %ld Items Before Insert", (unsigned long)self.fetchedResultsController.fetchedObjects.count);
     [self insertObject];
-    NSLog(@"DID END INSERT");
 }
 
 #pragma mark - <RBQFetchedResultsControllerDelegate>
 
 - (void)controllerWillChangeContent:(RBQFetchedResultsController *)controller
 {
-    NSLog(@"Beginning updates");
     [self.tableView beginUpdates];
 }
 
@@ -327,20 +255,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             
         case NSFetchedResultsChangeInsert:
         {
-            NSLog(@"Inserting at path %@", newIndexPath);
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             break;
         }
         case NSFetchedResultsChangeDelete:
         {
-            NSLog(@"Deleting at path %ld", (long)indexPath.row);
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             break;
         }
         case NSFetchedResultsChangeUpdate:
-            NSLog(@"Updating at path %@", indexPath);
             if ([[tableView indexPathsForVisibleRows] containsObject:indexPath]) {
                 [tableView reloadRowsAtIndexPaths:@[indexPath]
                                  withRowAnimation:UITableViewRowAnimationFade];
@@ -348,7 +273,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             break;
             
         case NSFetchedResultsChangeMove:
-            NSLog(@"Moving from path %@ to %@", indexPath, newIndexPath);
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                              withRowAnimation:UITableViewRowAnimationFade];
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
@@ -365,13 +289,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     UITableView *tableView = self.tableView;
     
     if (type == NSFetchedResultsChangeInsert) {
-        NSLog(@"Inserting section at %lu", (unsigned long)sectionIndex);
         NSIndexSet *insertedSection = [NSIndexSet indexSetWithIndex:sectionIndex];
         
         [tableView insertSections:insertedSection withRowAnimation:UITableViewRowAnimationFade];
     }
     else if (type == NSFetchedResultsChangeDelete) {
-        NSLog(@"Deleting section at %lu", (unsigned long)sectionIndex);
         NSIndexSet *deletedSection = [NSIndexSet indexSetWithIndex:sectionIndex];
         
         [tableView deleteSections:deletedSection withRowAnimation:UITableViewRowAnimationFade];
@@ -380,8 +302,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller
 {
-    NSLog(@"Ending updates");
-    NSLog(@"Fetched %ld Items After Change", (unsigned long)self.fetchedResultsController.fetchedObjects.count);
     [self.tableView endUpdates];
 }
 

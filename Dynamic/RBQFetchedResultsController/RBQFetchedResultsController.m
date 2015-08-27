@@ -26,7 +26,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 @interface RBQFetchedResultsController ()
 
 @property (strong, nonatomic) RBQNotificationToken *notificationToken;
-@property (strong, nonatomic) RLMRealm *inMemoryRealmCache;
 @property (strong, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
@@ -366,22 +365,16 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     self = [super init];
     
     if (self) {
+        
+        if ([fetchRequest isKindOfClass:[RBQArrayFetchRequest class]] &&
+            sectionNameKeyPath) {
+            
+            @throw [NSException exceptionWithName:@"RBQException"
+                                           reason:@"Sections are not currently supported with RBQArrayFetchRequest."
+                                         userInfo:nil];
+        }
+        
         _cacheName = name;
-        _fetchRequest = fetchRequest;
-        _sectionNameKeyPath = sectionNameKeyPath;
-    }
-    
-    return self;
-}
-
-- (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
-        sectionNameKeyPath:(NSString *)sectionNameKeyPath
-        inMemoryRealmCache:(RLMRealm *)inMemoryRealm
-{
-    self = [super init];
-    
-    if (self) {
-        _inMemoryRealmCache = inMemoryRealm;
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
     }
@@ -472,29 +465,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
             RLMRealm *realm = self.fetchRequest.realm;
-            
-            [self refreshRealm:realm];
-            
-            return [RBQObjectCacheObject objectInRealm:realm
-                                        forCacheObject:cacheObject];
-        }
-    }
-    
-    return nil;
-}
-
-- (id)objectInRealm:(RLMRealm *)realm
-        atIndexPath:(NSIndexPath *)indexPath
-{
-    RBQControllerCacheObject *cache = [self cache];
-    
-    if (indexPath.section < cache.sections.count) {
-        
-        RBQSectionCacheObject *section = cache.sections[indexPath.section];
-        
-        if (indexPath.row < section.objects.count) {
-            
-            RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
             [self refreshRealm:realm];
             
@@ -654,8 +624,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     typeof(self) __weak weakSelf = self;
     
     // Register for RBQRealmNotificationManager changes
-    if (!self.notificationToken &&
-        ![self.fetchRequest isKindOfClass:[RBQArrayFetchRequest class]]) {
+    if (!self.notificationToken) {
         
         self.notificationToken =
         [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
@@ -701,8 +670,9 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
              }
          }];
     }
-    else if (!self.realmNotificationToken &&
-             [self.fetchRequest isKindOfClass:[RBQArrayFetchRequest class]]) {
+    
+    if (!self.realmNotificationToken &&
+        [self.fetchRequest isKindOfClass:[RBQArrayFetchRequest class]]) {
         RBQArrayFetchRequest *arrayFR = (RBQArrayFetchRequest *)self.fetchRequest;
         
         RLMObject *object = arrayFR.object;
@@ -2005,9 +1975,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         }
         
         return realm;
-    }
-    else if (self.inMemoryRealmCache) {
-        return self.inMemoryRealmCache;
     }
     else {
         RLMRealmConfiguration *inMemoryConfiguration = [RLMRealmConfiguration defaultConfiguration];

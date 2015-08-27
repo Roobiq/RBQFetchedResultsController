@@ -169,21 +169,6 @@
                  cacheName:(NSString *)name;
 
 /**
- *  Constructor method to initialize the controller using an explicit in-memory Realm rather than the persisted cache. 
- *
- *  @warning This should only be used if access to the in-memory Realm for the cache instance is necessary. initWithFetchRequest:sectionNameKeyPath:cacheName will internally use an in-memory cache if cacheName is nil
- *
- *  @param fetchRequest       the RBQFetchRequest for the controller
- *  @param sectionNameKeyPath the section name key path used to create sections (can be nil)
- *  @param inMemoryRealm      the in-memory Realm to be used for the internal cache
- *
- *  @return A new instance of RBQFetchedResultsController
- */
-- (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
-        sectionNameKeyPath:(NSString *)sectionNameKeyPath
-        inMemoryRealmCache:(RLMRealm *)inMemoryRealm DEPRECATED_MSG_ATTRIBUTE("Please use initWithFetchRequest:sectionNameKeyPath:cacheName passing nil as the cacheName to use an in-memory Realm cache");
-
-/**
  *  Method to tell the controller to perform the fetch
  *
  *  @return Indicates if the fetch was successful
@@ -252,17 +237,6 @@
  *  @return RLMObject
  */
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
-
-/**
- *  Retrieve the RLMObject in a specific Realm for a given index path
- *
- *  @param realm     the Realm in which the RLMObject is persisted
- *  @param indexPath the index path of the object
- *
- *  @return RLMObject
- */
-- (id)objectInRealm:(RLMRealm *)realm
-        atIndexPath:(NSIndexPath *)indexPath DEPRECATED_MSG_ATTRIBUTE("Use objectAtIndexPath:");
 
 /**
  *  Retrieve the index path for a safe object in the fetch request

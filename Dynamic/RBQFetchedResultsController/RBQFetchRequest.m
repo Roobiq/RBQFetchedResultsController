@@ -145,17 +145,12 @@ object = _object;
 + (instancetype)arrayFetchRequestForObject:(RLMObject *)object
                          withArrayProperty:(NSString *)arrayProperty
 {
-#ifdef DEBUG
-    // Attempt to get the value for the key... throws if property name is wrong
-    [object valueForKey:arrayProperty];
-#endif
+    RLMArray *array = [object valueForKey:arrayProperty];
     
-    RBQSafeRealmObject *safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
-    
-    RBQArrayFetchRequest *arrayFetchRequest = [[self alloc] initWithEntityName:safeObject.className
+    RBQArrayFetchRequest *arrayFetchRequest = [[self alloc] initWithEntityName:array.objectClassName
                                                                        inRealm:object.realm];
     
-    arrayFetchRequest.safeObject = safeObject;
+    arrayFetchRequest.safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
     arrayFetchRequest->_arrayProperty = arrayProperty;
     arrayFetchRequest->_object = object;
     
