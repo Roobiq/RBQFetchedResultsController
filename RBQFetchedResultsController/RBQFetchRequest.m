@@ -8,33 +8,10 @@
 
 #import "RBQFetchRequest.h"
 #import "RLMObject+Utilities.h"
+#import "RBQSafeRealmObject.h"
 
-#pragma mark - Public Functions
-
-NSString * RBQClassNameForRealmEntityName(NSString *entityName)
-{
-    Class objcClass = NSClassFromString(entityName);
-    
-    if (objcClass) {
-        return entityName;
-    }
-    
-    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
-    
-    NSString *swiftClassName = [NSString stringWithFormat:@"%@.%@",appName,entityName];
-    
-    return swiftClassName;
-}
-
-BOOL RBQIsSwiftRealmClassName(NSString *className)
-{
-    return [className rangeOfString:@"."].location != NSNotFound;
-}
-
-NSString * RBQRealmClassNameFromSwiftClassName(NSString *className)
-{
-    return [className substringFromIndex:[className rangeOfString:@"."].location + 1];
-}
+#import <Realm/Realm.h>
+#import <Realm/RLMRealm_Dynamic.h>
 
 @interface RBQFetchRequest ()
 
@@ -44,28 +21,16 @@ NSString * RBQRealmClassNameFromSwiftClassName(NSString *className)
 
 @implementation RBQFetchRequest
 @synthesize entityName = _entityName,
-realmPath = _realmPath,
-inMemoryRealmId = _inMemoryRealmId;
+realmConfiguration = _realmConfiguration;
 
 #pragma mark - Public Class
 
-+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
-                                        inRealm:(RLMRealm *)realm
-                                      predicate:(NSPredicate *)predicate
++ (instancetype)fetchRequestWithEntityName:(NSString *)entityName
+                                   inRealm:(RLMRealm *)realm
+                                 predicate:(NSPredicate *)predicate
 {
-    RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
-                                                                        inRealm:realm];
-    fetchRequest.predicate = predicate;
-    
-    return fetchRequest;
-}
-
-+ (RBQFetchRequest *)fetchRequestWithEntityName:(NSString *)entityName
-                                  inMemoryRealm:(RLMRealm *)inMemoryRealm
-                                      predicate:(NSPredicate *)predicate
-{
-    RBQFetchRequest *fetchRequest = [[RBQFetchRequest alloc] initWithEntityName:entityName
-                                                        inMemoryRealm:inMemoryRealm];
+    RBQFetchRequest *fetchRequest = [[self alloc] initWithEntityName:entityName
+                                                             inRealm:realm];
     fetchRequest.predicate = predicate;
     
     return fetchRequest;
@@ -74,41 +39,22 @@ inMemoryRealmId = _inMemoryRealmId;
 #pragma mark - Public Instance
 
 - (instancetype)initWithEntityName:(NSString *)entityName
-                     inMemoryRealm:(RLMRealm *)inMemoryRealm
-{
-    self = [super init];
-    
-    if (self) {
-        // Returns the appropriate class name for Obj-C or Swift
-        _entityName = RBQClassNameForRealmEntityName(entityName);
-        _inMemoryRealmId = inMemoryRealm.path.lastPathComponent;
-        _realmPath = inMemoryRealm.path;
-    }
-    
-    return self;
-}
-
-- (instancetype)initWithEntityName:(NSString *)entityName
                            inRealm:(RLMRealm *)realm
 {
     self = [super init];
     
     if (self) {
         // Returns the appropriate class name for Obj-C or Swift
-        _entityName = RBQClassNameForRealmEntityName(entityName);
-        _realmPath = realm.path;
+        _entityName = entityName;
+        _realmConfiguration = realm.configuration;
     }
     
     return self;
 }
 
-- (RLMResults *)fetchObjects {
-    return [self fetchObjectsInRealm:self.realm];
-}
-
-- (RLMResults *)fetchObjectsInRealm:(RLMRealm *)realm
+- (id<RLMCollection>)fetchObjects
 {
-    RLMResults *fetchResults = [NSClassFromString(self.entityName) allObjectsInRealm:realm];
+    RLMResults *fetchResults = [self.realm allObjects:self.entityName];
     
     // If we have a predicate use it
     if (self.predicate) {
@@ -131,7 +77,7 @@ inMemoryRealmId = _inMemoryRealmId;
     }
     
     // Verify the class name of object match the entity name of fetch request
-    NSString *className = [RLMObject classNameForObject:object];
+    NSString *className = [[object class] className];
     
     BOOL sameEntity = [className isEqualToString:self.entityName];
     
@@ -142,14 +88,11 @@ inMemoryRealmId = _inMemoryRealmId;
 
 - (RLMRealm *)realm
 {
-    if (self.inMemoryRealmId) {
-        return [RLMRealm inMemoryRealmWithIdentifier:self.inMemoryRealmId];
-    }
-    
     if ([NSThread isMainThread] &&
         !self.realmForMainThread) {
         
-        self.realmForMainThread = [RLMRealm realmWithPath:self.realmPath];
+        self.realmForMainThread = [RLMRealm realmWithConfiguration:self.realmConfiguration
+                                                             error:nil];
     }
     
     if ([NSThread isMainThread]) {
@@ -157,7 +100,8 @@ inMemoryRealmId = _inMemoryRealmId;
         return self.realmForMainThread;
     }
     
-    return [RLMRealm realmWithPath:self.realmPath];
+    return [RLMRealm realmWithConfiguration:self.realmConfiguration
+                                      error:nil];
 }
 
 #pragma mark - Hash

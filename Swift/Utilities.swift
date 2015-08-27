@@ -150,8 +150,8 @@ extension Realm {
     }
     
     /**
-    *  Convenience method to delete a Object from the Realm and notify ChangeLogger
-    *
+    Convenience method to delete a Object from the Realm and notify ChangeLogger
+    
     :param: object Object to delete from the Realm
     */
     public func deleteWithNotification(object: Object) {
@@ -175,7 +175,7 @@ extension Realm {
     }
     
     /**
-    *  Convenience method to delete a collection of Objects from the Realm and notify ChangeLogger
+    Convenience method to delete a collection of Objects from the Realm and notify ChangeLogger
     
     :param: objects The objects to be deleted. Must be `List<Object>`.
     
@@ -190,7 +190,7 @@ extension Realm {
     }
     
     /**
-    *  Convenience method to delete a collection of Objects from the Realm and notify ChangeLogger
+    Convenience method to delete a collection of Objects from the Realm and notify ChangeLogger
     
     :param: objects The objects to be deleted. Must be `Results<Object>`.
     
@@ -204,8 +204,13 @@ extension Realm {
         self.delete(objects)
     }
     
-    // MARK: Private Functions/Properties
+    // MARK: Helper Functions To Bridge Objective-C
     
+    /**
+    Convenience method to convert Configuration into RLMRealmConfiguration
+    
+    :nodoc:
+    */
     internal class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
         let rlmConfiguration = RLMRealmConfiguration()
         rlmConfiguration.path = configuration.path
@@ -214,11 +219,5 @@ extension Realm {
         rlmConfiguration.readOnly = configuration.readOnly
         rlmConfiguration.schemaVersion = configuration.schemaVersion
         return rlmConfiguration
-    }
-    
-    internal class func toConfiguration(configuration: RLMRealmConfiguration) -> Configuration {
-        let swiftConfiguration = Configuration(path: configuration.path, inMemoryIdentifier: configuration.inMemoryIdentifier, encryptionKey: configuration.encryptionKey, readOnly: configuration.readOnly, schemaVersion: configuration.schemaVersion, migrationBlock: nil, objectTypes: nil)
-        
-        return swiftConfiguration
     }
 }

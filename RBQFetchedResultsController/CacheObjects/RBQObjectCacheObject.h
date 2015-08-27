@@ -57,7 +57,7 @@
  *
  *  @return A new instance of RBQFetchedResultsCacheObject
  */
-+ (instancetype)createCacheObjectWithObject:(RLMObject *)object
++ (instancetype)createCacheObjectWithObject:(RLMObjectBase *)object
                         sectionKeyPathValue:(NSString *)sectionValue;
 
 /**
@@ -80,7 +80,7 @@
  *  @return A instance of RBQFetchedResultsCacheObject
  */
 + (instancetype)cacheObjectInRealm:(RLMRealm *)realm
-                         forObject:(RLMObject *)object;
+                         forObject:(RLMObjectBase *)object;
 
 /**
  *  Retrieve RLMObject in given Realm instance for RBQFetchedResultsCacheObject
