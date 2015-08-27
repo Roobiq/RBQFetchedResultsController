@@ -12,17 +12,19 @@ import Realm
 import Realm.Dynamic
 
 /**
-*  This utility category provides convenience methods to retrieve the primary key and original
-*  class name for an RLMObject.
+This utility category provides convenience methods to retrieve the 
+primary key and original class name for an Object.
 */
 extension Object {
     
+    // MARK: Functions
+    
     /**
-    *  Retrieve the primary key for a given RLMObject
-    *
-    *  @param object RLMObject with a primary key
-    *
-    *  @return Primary key value (NSInteger or NSString only)
+    Retrieve the primary key for a given Object
+    
+    :param: object Object with a primary key
+    
+    :returns: Primary key value (Int or String only)
     */
     public class func primaryKeyValueForObject(object: Object) -> AnyObject? {
         
@@ -40,6 +42,13 @@ extension Object {
         return nil
     }
     
+    /**
+    Checks if an object is contained in a specific Realm
+    
+    :param: object Object with a primary key
+    
+    :returns: Bool indicating if the object is in a given Realm
+    */
     public func isContainedIn(realm: Realm) -> Bool {
         
         if self.objectSchema.primaryKeyProperty == nil {
@@ -61,11 +70,11 @@ extension Object {
     }
     
     /**
-    *  Convenience method that accepts a RBQChangeNotificationBlock, which contains the current RLMObject as a parameter.
-    *
-    *  Edit the parameter object in the block and an automatic notification will be generated for RBQRealmChangeLogger
-    *
-    *  @param block Block contains the RLMObject used to call this method. Edit the RLMObject within the block.
+    Convenience method that accepts a block, which contains the current Object as a parameter.
+    
+    Edit the parameter object in the block and an automatic notification will be generated for ChangeLogger
+    
+    :param: block Block contains the Object used to call this method. Edit the Object within the block.
     */
     public func changeWithNotification(changeBlock: (object: Object) -> Void) {
         
@@ -78,11 +87,11 @@ extension Object {
     }
     
     /**
-    *  Convenience method that accepts a RBQChangeNotificationBlock, which contains the current RLMObject as a parameter.
-    *
-    *  The block will be run within the required beginWriteTransaction and commitWriteTransaction calls automatically. Edit the parameter object in the block and an automatic notification will be generated for RBQRealmChangeLogger.
-    *
-    *  @param block Block contains the RLMObject used to call this method. Edit the RLMObject within the block.
+    Convenience method that accepts a block, which contains the current Object as a parameter.
+    
+    The block will be run within the required beginWriteTransaction and commitWriteTransaction calls automatically. Edit the parameter object in the block and an automatic notification will be generated for ChangeLogger.
+    
+    :param: block Block contains the Object used to call this method. Edit the Object within the block.
     */
     public func changeWithNotificationInTransaction(changeBlock: (object: Object) -> Void) {
         
@@ -99,8 +108,18 @@ extension Object {
     }
 }
 
+/**
+Category on Realm that provides convenience methods similar to Realm class methods but include notifying RBQRealmNotificationManager
+*/
 extension Realm {
     
+    // MARK: Functions
+    
+    /**
+    Convenience method to add an object to the Realm and notify ChangeLogger
+    
+    :param: object Standalone Object to be persisted
+    */
     public func addWithNotification(object: Object, update: Bool) {
         
         self.add(object, update: update)
@@ -119,18 +138,34 @@ extension Realm {
         }
     }
     
+    /**
+    Convenience method to add a collection of Object to the Realm and notify ChangeLogger
+    
+    :param: objects A sequence which contains objects to be added to this Realm. This can be a `List<Object>`, `Results<Object>`, or any other enumerable `SequenceType` which generates `Object`.
+    */
     public func addWithNotification<S: SequenceType where S.Generator.Element: Object>(objects: S, update: Bool) {
         for obj in objects {
             self.addWithNotification(obj, update: update)
         }
     }
     
+    /**
+    *  Convenience method to delete a Object from the Realm and notify ChangeLogger
+    *
+    :param: object Object to delete from the Realm
+    */
     public func deleteWithNotification(object: Object) {
         ChangeLogger.loggerForRealm(self).willDeleteObject(object)
         
         self.delete(object)
     }
     
+    /**
+    Convenience method to delete a collection of Objects from the Realm and notify ChangeLogger
+    
+    :param: objects The objects to be deleted. This can be a `List<Object>`, `Results<Object>`,
+    or any other enumerable `SequenceType` which generates `Object`.
+    */
     public func deleteWithNotification<S: SequenceType where S.Generator.Element: Object>(objects: S) {
         for obj in objects {
             ChangeLogger.loggerForRealm(self).willDeleteObject(obj)
@@ -139,6 +174,13 @@ extension Realm {
         self.delete(objects)
     }
     
+    /**
+    *  Convenience method to delete a collection of Objects from the Realm and notify ChangeLogger
+    
+    :param: objects The objects to be deleted. Must be `List<Object>`.
+    
+    :nodoc:
+    */
     public func deleteWithNotification<T: Object>(objects: List<T>) {
         for obj in objects {
             ChangeLogger.loggerForRealm(self).willDeleteObject(obj)
@@ -147,6 +189,13 @@ extension Realm {
         self.delete(objects)
     }
     
+    /**
+    *  Convenience method to delete a collection of Objects from the Realm and notify ChangeLogger
+    
+    :param: objects The objects to be deleted. Must be `Results<Object>`.
+    
+    :nodoc:
+    */
     public func deleteWithNotification<T: Object>(objects: Results<T>) {
         for obj in objects {
             ChangeLogger.loggerForRealm(self).willDeleteObject(obj)
@@ -155,7 +204,9 @@ extension Realm {
         self.delete(objects)
     }
     
-    public class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
+    // MARK: Private Functions/Properties
+    
+    internal class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
         let rlmConfiguration = RLMRealmConfiguration()
         rlmConfiguration.path = configuration.path
         rlmConfiguration.inMemoryIdentifier = configuration.inMemoryIdentifier
@@ -165,7 +216,7 @@ extension Realm {
         return rlmConfiguration
     }
     
-    public class func toConfiguration(configuration: RLMRealmConfiguration) -> Configuration {
+    internal class func toConfiguration(configuration: RLMRealmConfiguration) -> Configuration {
         let swiftConfiguration = Configuration(path: configuration.path, inMemoryIdentifier: configuration.inMemoryIdentifier, encryptionKey: configuration.encryptionKey, readOnly: configuration.readOnly, schemaVersion: configuration.schemaVersion, migrationBlock: nil, objectTypes: nil)
         
         return swiftConfiguration
