@@ -95,31 +95,3 @@
                            inRealm:(RLMRealm *)realm;
 
 @end
-
-#pragma mark - RBQArrayFetchRequest
-
-@interface RBQArrayFetchRequest : RBQFetchRequest
-
-@property (nonatomic, readonly) NSString *arrayProperty;
-
-@property (nonatomic, readonly) RLMObject *object;
-
-/**
- *  Constructor method to create a fetch request from a given RLMArray.
- *
- *  @param object           The RLMObject that contains the RLMArray that the fetch request will represent
- *  @param arrayProperty    The property name of the RLMArray contained on the RLMObject that will represent the fetch request
- *
- *  @return A new instance of RBQFetchRequest
- */
-+ (instancetype)arrayFetchRequestForObject:(RLMObject *)object
-                         withArrayProperty:(NSString *)arrayProperty;
-
-/**
- *  Retrieve all the RLMArray for this fetch request
- *
- *  @return RLMArray for all the objects in the fetch request (not thread-safe).
- */
-- (RLMArray *)array;
-
-@end
