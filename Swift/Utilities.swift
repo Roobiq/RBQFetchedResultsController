@@ -20,29 +20,6 @@ extension Object {
     // MARK: Functions
     
     /**
-    Retrieve the primary key for a given Object
-    
-    :param: object Object with a primary key
-    
-    :returns: Primary key value (Int or String only)
-    */
-    public class func primaryKeyValueForObject(object: Object) -> AnyObject? {
-        
-        let primaryKeyProperty = object.objectSchema.primaryKeyProperty
-        
-        if (primaryKeyProperty != nil) {
-            
-            let value: AnyObject? = object.valueForKey(primaryKeyProperty!.name)
-            
-            return value
-        }
-        
-        NSException(name: "RBQException", reason: "Object does not have a primary key", userInfo: nil).raise()
-        
-        return nil
-    }
-    
-    /**
     Checks if an object is contained in a specific Realm
     
     :param: object Object with a primary key
