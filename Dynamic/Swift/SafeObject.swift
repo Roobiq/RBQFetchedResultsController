@@ -13,6 +13,13 @@ public class SafeObject<T: Object>: Equatable {
     
     internal let rbqSafeRealmObject: RBQSafeRealmObject
     
+    internal let realmConfiguration: Realm.Configuration
+    
+    internal init(rbqSafeRealmObject: RBQSafeRealmObject) {
+        self.rbqSafeRealmObject = rbqSafeRealmObject
+        self.realmConfiguration = Realm.toConfiguration(rbqSafeRealmObject.realmConfiguration)
+    }
+    
     public var className: String {
         return self.rbqSafeRealmObject.className
     }
@@ -26,30 +33,21 @@ public class SafeObject<T: Object>: Equatable {
     }
     
     public var realm: Realm {
-        
-        if let inMemoryId = self.rbqSafeRealmObject.inMemoryId {
-            return Realm(inMemoryIdentifier: inMemoryId)
-        }
-        
-        return Realm(path: self.rbqSafeRealmObject.realmPath)
+        return Realm(configuration: self.realmConfiguration, error: nil)!
     }
     
     public class func objectFromSafeObject(safeObject: SafeObject) -> T {
         return unsafeBitCast(safeObject.rbqSafeRealmObject.RLMObject(), T.self)
     }
     
-    internal init(rbqSafeRealmObject: RBQSafeRealmObject) {
-        self.rbqSafeRealmObject = rbqSafeRealmObject
-    }
-    
     public init(object: T) {
         self.rbqSafeRealmObject = RBQSafeRealmObject.safeObjectFromObject(object)
+        self.realmConfiguration = object.realm!.configuration
     }
     
     public func object() -> T {
         return unsafeBitCast(self.rbqSafeRealmObject.RLMObject(), T.self)
     }
-    
 }
 
 // MARK: Equatable

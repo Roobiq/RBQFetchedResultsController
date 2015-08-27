@@ -18,16 +18,10 @@ public class FetchRequest<T: Object> {
     
     public var realm: Realm {
         
-        if let inMemoryRealmId = self.inMemoryRealmId {
-            return Realm(inMemoryIdentifier: inMemoryRealmId)
-        }
-        
-        return Realm(path: self.rbqFetchRequest.realmPath)
+        return Realm(configuration: self.realmConfiguration, error: nil)!
     }
     
-    public var inMemoryRealmId: String? {
-        return self.rbqFetchRequest.inMemoryRealmId
-    }
+    internal let realmConfiguration: Realm.Configuration
     
     public var predicate: NSPredicate? {
         get {
@@ -71,16 +65,13 @@ public class FetchRequest<T: Object> {
     public init(realm: Realm, predicate: NSPredicate) {
         let entityName = T.className()
         
-        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, inRealm: RLMRealm(path: realm.path), predicate: predicate)
-    }
-    
-    public init(inMemoryRealm: Realm, predicate: NSPredicate) {
+        self.realmConfiguration = realm.configuration
         
-        let entityName = T.className()
+        let rlmConfiguration: RLMRealmConfiguration = Realm.toRLMConfiguration(realm.configuration)
         
-        let id = inMemoryRealm.path.lastPathComponent
+        let rlmRealm = RLMRealm(configuration: rlmConfiguration, error: nil)
         
-        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, inMemoryRealm: RLMRealm.inMemoryRealmWithIdentifier(id), predicate: predicate)
+        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, inRealm: rlmRealm, predicate: predicate)
     }
     
     public func fetchObjects() -> Results<T> {

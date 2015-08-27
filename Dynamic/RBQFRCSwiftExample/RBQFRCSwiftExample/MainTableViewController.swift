@@ -45,11 +45,15 @@ class TestObject: Object {
 class MainTableViewController: UITableViewController {
     
     var fetchedResultsController: FetchedResultsController<TestObject>?
+    
+    var realm: Realm?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let realm = Realm()
+        let realm = Realm(configuration: Realm.Configuration(inMemoryIdentifier: "Test"))!
+        
+        self.realm = realm
         
         realm.beginWrite()
         
@@ -146,10 +150,10 @@ class MainTableViewController: UITableViewController {
     }
     @IBAction func didPressDeleteButton(sender: UIBarButtonItem) {
         
-        let objectsInFirstSection = Realm().objects(TestObject).filter("%K == %@", "sectionName","First Section")
+        let objectsInFirstSection = self.realm!.objects(TestObject).filter("%K == %@", "sectionName","First Section")
         
-        Realm().write { () -> Void in
-            Realm().deleteWithNotification(objectsInFirstSection)
+        self.realm!.write { () -> Void in
+            self.realm!.deleteWithNotification(objectsInFirstSection)
         }
     }
     
@@ -158,7 +162,7 @@ class MainTableViewController: UITableViewController {
     private func deleteObjectAtIndexPath(indexPath: NSIndexPath) {
         if let object = self.fetchedResultsController?.objectAtIndexPath(indexPath) {
             
-            let realm = Realm()
+            let realm = self.realm!
             
             realm.write({ () -> Void in
                 realm.deleteWithNotification(object)
@@ -168,7 +172,7 @@ class MainTableViewController: UITableViewController {
     
     private func insertObject() {
         
-        let realm = Realm()
+        let realm = self.realm!
             
         let indexPathFirstRow = NSIndexPath(forRow: 0, inSection: 0)
             

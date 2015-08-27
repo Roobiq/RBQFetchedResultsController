@@ -14,8 +14,6 @@ import Realm.Dynamic
 /**
 *  This utility category provides convenience methods to retrieve the primary key and original
 *  class name for an RLMObject.
-*
-*   DOESN'T SUPPORT IN-MEMORY REALMS!!!
 */
 extension Object {
     
@@ -101,7 +99,6 @@ extension Object {
     }
 }
 
-// DOESN'T SUPPORT IN-MEMORY REALMS!!!
 extension Realm {
     
     public func addWithNotification(object: Object, update: Bool) {
@@ -156,5 +153,21 @@ extension Realm {
         }
         
         self.delete(objects)
+    }
+    
+    public class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
+        let rlmConfiguration = RLMRealmConfiguration()
+        rlmConfiguration.path = configuration.path
+        rlmConfiguration.inMemoryIdentifier = configuration.inMemoryIdentifier
+        rlmConfiguration.encryptionKey = configuration.encryptionKey
+        rlmConfiguration.readOnly = configuration.readOnly
+        rlmConfiguration.schemaVersion = configuration.schemaVersion
+        return rlmConfiguration
+    }
+    
+    public class func toConfiguration(configuration: RLMRealmConfiguration) -> Configuration {
+        let swiftConfiguration = Configuration(path: configuration.path, inMemoryIdentifier: configuration.inMemoryIdentifier, encryptionKey: configuration.encryptionKey, readOnly: configuration.readOnly, schemaVersion: configuration.schemaVersion, migrationBlock: nil, objectTypes: nil)
+        
+        return swiftConfiguration
     }
 }

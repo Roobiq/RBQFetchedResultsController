@@ -23,13 +23,13 @@ public class ChangeLogger {
         return _defaultManager
     }
     
-    // DOESN'T SUPPORT IN-MEMORY REALMS!!!
     public class func loggerForRealm(realm: Realm) -> ChangeLogger {
-        return ChangeLogger(rbqChangeLogger: RBQRealmChangeLogger(forRealm: RLMRealm(path: realm.path)))
-    }
-    
-    public class func loggerForInMemoryRealm(realm: Realm) -> ChangeLogger {
-        return ChangeLogger(rbqChangeLogger: RBQRealmChangeLogger(forRealm: RLMRealm.inMemoryRealmWithIdentifier(realm.path.lastPathComponent)))
+        
+        let rlmConfiguration: RLMRealmConfiguration = Realm.toRLMConfiguration(realm.configuration)
+        
+        let rlmRealm = RLMRealm(configuration: rlmConfiguration, error: nil)
+        
+        return ChangeLogger(rbqChangeLogger: RBQRealmChangeLogger(forRealm: rlmRealm))
     }
     
     public func didAddObject(object: Object) {
