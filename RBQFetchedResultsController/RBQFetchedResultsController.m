@@ -1391,19 +1391,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         sectionChange.section = section;
         sectionChange.changeType = NSFetchedResultsChangeDelete;
         
-        // Keep track of the sorted list of deleted section changes (reverse sort)
-        NSRange sortRange = NSMakeRange(0, deletedSectionChanges.count);
-        NSUInteger indexToInsert =
-        [deletedSectionChanges indexOfObject:sectionChange
-                               inSortedRange:sortRange
-                                     options:NSBinarySearchingInsertionIndex
-                             usingComparator:^NSComparisonResult(RBQSectionChangeObject *sec1,
-                                                                 RBQSectionChangeObject *sec2) {
-                                 // Compare the index (reverse sort)
-                                 return [sec2.previousIndex compare:sec1.previousIndex];
-                             }];
-        
-        [deletedSectionChanges insertObject:sectionChange atIndex:indexToInsert];
+        [deletedSectionChanges addObject:sectionChange];
     }
     // Inserted Sections
     for (RBQSectionCacheObject *section in sectionChanges.insertedCacheSections) {
@@ -1432,21 +1420,21 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         sectionChange.section = section;
         sectionChange.changeType = NSFetchedResultsChangeInsert;
         
-        // Keep track of the sorted list of inserted section changes
-        NSRange sortRange = NSMakeRange(0, insertedSectionChanges.count);
-        NSUInteger indexToInsert =
-        [insertedSectionChanges indexOfObject:sectionChange
-                                inSortedRange:sortRange
-                                      options:NSBinarySearchingInsertionIndex
-                              usingComparator:^NSComparisonResult(RBQSectionChangeObject *sec1,
-                                                                  RBQSectionChangeObject *sec2) {
-                                  // Compare the index
-                                  return [sec1.updatedIndex compare:sec2.updatedIndex];
-                              }];
-        
-        
-        [insertedSectionChanges insertObject:sectionChange atIndex:indexToInsert];
+        [insertedSectionChanges addObject:sectionChange];
     }
+    
+    // Sort the changes (Deleted is reverse sort)
+    [deletedSectionChanges sortUsingComparator:^NSComparisonResult(RBQSectionChangeObject *sec1,
+                                                                   RBQSectionChangeObject *sec2) {
+        // Compare the index (reverse sort)
+        return [sec2.previousIndex compare:sec1.previousIndex];
+    }];
+    
+    [insertedSectionChanges sortUsingComparator:^NSComparisonResult(RBQSectionChangeObject *sec1,
+                                                                    RBQSectionChangeObject *sec2) {
+        // Compare the index
+        return [sec1.updatedIndex compare:sec2.updatedIndex];
+    }];
     
     derivedChanges.deletedSectionChanges = deletedSectionChanges.copy;
     derivedChanges.insertedSectionChanges = insertedSectionChanges.copy;
@@ -1516,19 +1504,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             
             objectChange.changeType = NSFetchedResultsChangeDelete;
             
-            // Keep track of the sorted list of deleted object changes
-            NSRange sortRange = NSMakeRange(0, deletedObjectChanges.count);
-            NSUInteger indexToInsert =
-            [deletedObjectChanges indexOfObject:objectChange
-                                  inSortedRange:sortRange
-                                        options:NSBinarySearchingInsertionIndex
-                                usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
-                                                                    RBQObjectChangeObject *obj2) {
-                                    // Compare the indexPaths (reverse sort)
-                                    return [obj2.previousIndexPath compare:obj1.previousIndexPath];
-                                }];
-            
-            [deletedObjectChanges insertObject:objectChange atIndex:indexToInsert];
+            [deletedObjectChanges addObject:objectChange];
             
             NSMutableOrderedSet *deletedChangesInSection =
             [deletedObjectChangesBySection objectForKey:@(objectChange.previousIndexPath.section)];
@@ -1540,19 +1516,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                                                   forKey:@(objectChange.previousIndexPath.section)];
             }
             
-            // Keep track of the sorted list of deleted object changes for its section
-            NSRange sortRangeForSection = NSMakeRange(0, deletedChangesInSection.count);
-            NSUInteger indexToInsertForSection =
-            [deletedChangesInSection indexOfObject:objectChange
-                                     inSortedRange:sortRangeForSection
-                                           options:NSBinarySearchingInsertionIndex
-                                   usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
-                                                                       RBQObjectChangeObject *obj2) {
-                                       // Compare the indexPaths (reverse sort)
-                                       return [obj2.previousIndexPath compare:obj1.previousIndexPath];
-                                   }];
-            
-            [deletedChangesInSection insertObject:objectChange atIndex:indexToInsertForSection];
+            [deletedChangesInSection addObject:objectChange];
         }
         // Inserted Objects
         else if (objectChange.updatedIndexpath &&
@@ -1578,19 +1542,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             }
             objectChange.changeType = NSFetchedResultsChangeInsert;
             
-            // Keep track of the sorted list of inserted object changes
-            NSRange sortRange = NSMakeRange(0, insertedObjectChanges.count);
-            NSUInteger indexToInsert =
-            [insertedObjectChanges indexOfObject:objectChange
-                                   inSortedRange:sortRange
-                                         options:NSBinarySearchingInsertionIndex
-                                 usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
-                                                                     RBQObjectChangeObject *obj2) {
-                                     // Compare the indexPaths
-                                     return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
-                                 }];
-            
-            [insertedObjectChanges insertObject:objectChange atIndex:indexToInsert];
+            [insertedObjectChanges addObject:objectChange];
             
             NSMutableOrderedSet *insertedChangesInSection =
             [insertedObjectChangesBySection objectForKey:@(objectChange.updatedIndexpath.section)];
@@ -1601,25 +1553,46 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                 [insertedObjectChangesBySection setObject:insertedChangesInSection
                                                    forKey:@(objectChange.updatedIndexpath.section)];
             }
-            
-            // Keep track of the sorted list of inserted object changes for its section
-            NSRange sortRangeForSection = NSMakeRange(0, insertedChangesInSection.count);
-            NSUInteger indexToInsertForSection =
-            [insertedChangesInSection indexOfObject:objectChange
-                                      inSortedRange:sortRangeForSection
-                                            options:NSBinarySearchingInsertionIndex
-                                    usingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
-                                                                        RBQObjectChangeObject *obj2) {
-                                        // Compare the indexPaths
-                                        return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
-                                    }];
-            
-            [insertedObjectChanges insertObject:objectChange atIndex:indexToInsertForSection];
+
+            [insertedChangesInSection addObject:objectChange];
         }
         // For all objectChanges that are not inserts/deletes, store them to process next
         else {
             [moveOrUpdateObjectChanges addObject:objectChange];
         }
+    }
+    
+    // Sort the collections (deleted reverse sort)
+    [deletedObjectChanges sortUsingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                  RBQObjectChangeObject *obj2) {
+        // Compare the indexPaths (reverse sort)
+        return [obj2.previousIndexPath compare:obj1.previousIndexPath];
+    }];
+    
+    for (NSNumber *key in deletedObjectChangesBySection) {
+        NSMutableOrderedSet *deletedChangesInSection = deletedObjectChangesBySection[key];
+        
+        [deletedChangesInSection sortUsingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                         RBQObjectChangeObject *obj2) {
+            // Compare the indexPaths (reverse sort)
+            return [obj2.previousIndexPath compare:obj1.previousIndexPath];
+        }];
+    }
+    
+    [insertedObjectChanges sortUsingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                   RBQObjectChangeObject *obj2) {
+        // Compare the indexPaths
+        return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
+    }];
+    
+    for (NSNumber *key in insertedObjectChangesBySection) {
+        NSMutableOrderedSet *insertedChangesInSection = insertedObjectChangesBySection[key];
+        
+        [insertedChangesInSection sortUsingComparator:^NSComparisonResult(RBQObjectChangeObject *obj1,
+                                                                          RBQObjectChangeObject *obj2) {
+            // Compare the indexPaths
+            return [obj1.updatedIndexpath compare:obj2.updatedIndexpath];
+        }];
     }
     
     NSMutableOrderedSet *movedObjectChanges = [[NSMutableOrderedSet alloc] init];
@@ -1653,19 +1626,15 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     for (RBQSectionCacheObject *sectionCache in sectionChanges.insertedCacheSections) {
         NSNumber *index = @([sectionChanges.sortedNewCacheSections indexOfObject:sectionCache]);
         
-        NSRange sortRangeSectionInserts = NSMakeRange(0, insertedSectionIndexes.count);
-        NSUInteger indexForInsert =
-        [insertedSectionIndexes indexOfObject:index
-                                inSortedRange:sortRangeSectionInserts
-                                      options:NSBinarySearchingInsertionIndex
-                              usingComparator:^NSComparisonResult(NSNumber *num1,
-                                                                  NSNumber *num2) {
-                                  // Compare the NSNumbers
-                                  return [num1 compare:num2];
-                              }];
-        
-        [insertedSectionIndexes insertObject:index atIndex:indexForInsert];
+        [insertedSectionIndexes addObject:index];
     }
+    
+    // Sort the indexes
+    [insertedSectionIndexes sortUsingComparator:^NSComparisonResult(NSNumber *num1,
+                                                                    NSNumber *num2) {
+        // Compare the NSNumbers
+        return [num1 compare:num2];
+    }];
     
     NSMutableOrderedSet *deletedSectionIndexes =
     [[NSMutableOrderedSet alloc] initWithCapacity:sectionChanges.deletedCacheSections.count];
@@ -1673,19 +1642,15 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     for (RBQSectionCacheObject *sectionCache in sectionChanges.deletedCacheSections) {
         NSNumber *index = @([sectionChanges.oldCacheSections indexOfObject:sectionCache]);
         
-        NSRange sortRangeSectionInserts = NSMakeRange(0, deletedSectionIndexes.count);
-        NSUInteger indexForInsert =
-        [deletedSectionIndexes indexOfObject:index
-                               inSortedRange:sortRangeSectionInserts
-                                     options:NSBinarySearchingInsertionIndex
-                             usingComparator:^NSComparisonResult(NSNumber *num1,
-                                                                 NSNumber *num2) {
-                                 // Compare the NSNumbers
-                                 return [num1 compare:num2];
-                             }];
-        
-        [deletedSectionIndexes insertObject:index atIndex:indexForInsert];
+        [deletedSectionIndexes addObject:index];
     }
+    
+    // Sort the indexes
+    [deletedSectionIndexes sortUsingComparator:^NSComparisonResult(NSNumber *num1,
+                                                                   NSNumber *num2) {
+        // Compare the NSNumbers
+        return [num1 compare:num2];
+    }];
     
     /**
      *  Now that we have the inserted/deleted section index collections and
