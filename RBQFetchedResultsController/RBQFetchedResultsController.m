@@ -647,12 +647,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
              if (entityChangesObject &&
                  ([realm.path isEqualToString:weakSelf.fetchRequest.realmConfiguration.path] ||
                   [realm.configuration.inMemoryIdentifier isEqualToString:weakSelf.fetchRequest.realmConfiguration.inMemoryIdentifier])) {
-                 
-#ifdef DEBUG
-                 NSLog(@"%lu Added Objects",(unsigned long)entityChangesObject.addedSafeObjects.count);
-                 NSLog(@"%lu Deleted Objects",(unsigned long)entityChangesObject.deletedSafeObjects.count);
-                 NSLog(@"%lu Changed Objects",(unsigned long)entityChangesObject.changedSafeObjects.count);
-#endif
+
                  [weakSelf calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
                                              deletedSafeObjects:entityChangesObject.deletedSafeObjects
                                              changedSafeObjects:entityChangesObject.changedSafeObjects
@@ -734,10 +729,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                                 changedSafeObjects:changedSafeObjects
                                              state:state];
         
-#ifdef DEBUG
-        NSLog(@"%lu Object Changes",(unsigned long)changeSets.cacheObjectsChangeSet.count);
-        NSLog(@"%lu Section Changes",(unsigned long)changeSets.cacheSectionsChangeSet.count);
-#endif
         
         // Make sure we actually identified changes
         // (changes might not match entity name)
