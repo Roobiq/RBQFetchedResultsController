@@ -111,7 +111,7 @@ public protocol FetchedResultsControllerDelegate {
 /**
 The class is used to monitor changes from a RBQRealmNotificationManager to convert these changes into specific index path or section index changes. Typically this is used to back a UITableView and support animations when items are inserted, deleted, or changed.
 */
-public class FetchedResultsController<T: Object>: DelegateProxyProtocol {
+public class FetchedResultsController<T: Object> {
     
     // MARK: Class Functions
     

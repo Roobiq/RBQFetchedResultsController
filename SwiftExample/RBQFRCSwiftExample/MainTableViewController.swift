@@ -28,7 +28,7 @@ class TestObject: Object {
     }
     
     class func testObject(title: String, sortIndex: Int, inTable: Bool) -> TestObject {
-        var object = TestObject()
+        let object = TestObject()
         
         object.title = title
         object.sortIndex = sortIndex
@@ -51,7 +51,7 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let realm = Realm(configuration: Realm.Configuration(inMemoryIdentifier: "Test"))!
+        let realm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "Test"))
         
         self.realm = realm
         
@@ -116,7 +116,7 @@ class MainTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("customCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("customCell", forIndexPath: indexPath) 
 
         // Configure the cell...
         

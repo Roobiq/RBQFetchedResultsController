@@ -31,7 +31,7 @@ public class FetchRequest<T: Object> {
         
         let rlmConfiguration: RLMRealmConfiguration = Realm.toRLMConfiguration(realm.configuration)
         
-        let rlmRealm = RLMRealm(configuration: rlmConfiguration, error: nil)
+        let rlmRealm = try! RLMRealm(configuration: rlmConfiguration)
         
         self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, inRealm: rlmRealm, predicate: predicate)
     }
@@ -45,7 +45,7 @@ public class FetchRequest<T: Object> {
     
     /// The Realm in which the entity for the fetch request is persisted.
     public var realm: Realm {
-        return Realm(configuration: self.realmConfiguration, error: nil)!
+        return try! Realm(configuration: self.realmConfiguration)
     }
     
     /// The configuration object used to create an instance of Realm for the fetch request

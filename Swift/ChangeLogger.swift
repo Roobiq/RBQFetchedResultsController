@@ -43,7 +43,7 @@ public class ChangeLogger {
         
         let rlmConfiguration: RLMRealmConfiguration = Realm.toRLMConfiguration(realm.configuration)
         
-        let rlmRealm = RLMRealm(configuration: rlmConfiguration, error: nil)
+        let rlmRealm = try! RLMRealm(configuration: rlmConfiguration)
         
         return ChangeLogger(rbqChangeLogger: RBQRealmChangeLogger(forRealm: rlmRealm))
     }
