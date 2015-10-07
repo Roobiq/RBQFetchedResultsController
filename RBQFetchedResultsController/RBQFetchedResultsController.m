@@ -18,7 +18,6 @@
 @import UIKit;
 
 #pragma mark - Constants
-static char kRBQRefreshTriggeredKey;
 static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 #pragma mark - RBQFetchedResultsController
@@ -428,8 +427,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             
             RLMRealm *realm = self.fetchRequest.realm;
             
-            [self refreshRealm:realm];
-            
             RLMObject *object =
             [RBQObjectCacheObject objectInRealm:realm
                                  forCacheObject:cacheObject];
@@ -452,8 +449,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
             RLMRealm *realm = self.fetchRequest.realm;
-            
-            [self refreshRealm:realm];
             
             return [RBQObjectCacheObject objectInRealm:realm
                                         forCacheObject:cacheObject];
@@ -621,24 +616,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
          ^(NSDictionary *entityChanges,
            RLMRealm *realm)
          {
-             /**
-              *  First check if we have recursed due to calling refresh.
-              *
-              *  Realm triggers another notification on [RLMRealm refresh]
-              *  so we have to break this recursion to prevent
-              *  unexpected behavior or deadlocks.
-              *
-              *  When we call refresh while change processing, we associate
-              *  a NSNumber with the RLMRealm passed in through notification.
-              *  This way, when the refresh triggers a notification which fires
-              *  the change processing again, we can identify this and skip the
-              *  processing, thereby breaking the recursion.
-              */
-             
-             // If we got here through refresh notification, just return
-             if ([weakSelf notificationTriggeredFromRealmRefresh:realm]) {
-                 return;
-             }
              
              // Grab the entity changes object if it is available
              RBQEntityChangesObject *entityChangesObject =
@@ -707,10 +684,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
          *  synchronously from a RLMRealmDidChangeNotification.
          */
         RLMRealm *cacheRealm = [self cacheRealm];
-        
-        [self refreshRealm:cacheRealm];
-        
-        [self refreshRealm:realm];
         
         RBQControllerCacheObject *cache = [self cacheInRealm:cacheRealm];
         
@@ -1898,37 +1871,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     else {
         dispatch_async(dispatch_get_main_queue(), mainThreadBlock);
     }
-}
-
-// Properly refresh the Realm and prevent recursive change processing
-- (void)refreshRealm:(RLMRealm *)realm
-{
-    // Associate an object before the refresh to catch the notifications triggered from it
-    objc_setAssociatedObject(realm,
-                             &kRBQRefreshTriggeredKey,
-                             @(1),
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-    [realm refresh];
-    
-    // Now nil the associated objects to allow notifications to work normally
-    objc_setAssociatedObject(realm,
-                             &kRBQRefreshTriggeredKey,
-                             nil,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)notificationTriggeredFromRealmRefresh:(RLMRealm *)realm
-{
-    // Grab the associated object
-    id didCallRefresh = objc_getAssociatedObject(realm, &kRBQRefreshTriggeredKey);
-    
-    if (didCallRefresh) {
-        
-        return YES;
-    }
-    
-    return NO;
 }
 
 @end

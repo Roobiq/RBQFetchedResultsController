@@ -29,12 +29,12 @@
 /**
  *  The objects in the section (generated on-demand and not thread-safe).
  */
-@property (nonatomic, readonly) id<RLMCollection> objects;
+@property (nonatomic, readonly, nonnull) id<RLMCollection> objects;
 
 /**
  *  The name of the section.
  */
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly, nonnull) NSString *name;
 
 @end
 
@@ -51,7 +51,7 @@
  *
  *  @param controller controller instance that noticed the change on its fetched objects
  */
-- (void)controllerWillChangeContent:(RBQFetchedResultsController *)controller;
+- (void)controllerWillChangeContent:(nonnull RBQFetchedResultsController *)controller;
 
 /**
  *  Notifies the delegate that a fetched object has been changed due to an add, remove, move, or update. Enables RBQFetchedResultsController change tracking.
@@ -71,11 +71,11 @@
  *  @param newIndexPath the destination path for inserted or moved objects, nil otherwise
  */
 
-- (void)controller:(RBQFetchedResultsController *)controller
-   didChangeObject:(RBQSafeRealmObject *)anObject
-       atIndexPath:(NSIndexPath *)indexPath
+- (void)controller:(nonnull RBQFetchedResultsController *)controller
+   didChangeObject:(nonnull RBQSafeRealmObject *)anObject
+       atIndexPath:(nullable NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath;
+      newIndexPath:(nullable NSIndexPath *)newIndexPath;
 
 /**
  *  The fetched results controller reports changes to its section before changes to the fetched result objects.
@@ -85,8 +85,8 @@
  *  @param sectionIndex the section index of the changed section
  *  @param type         indicates if the change was an insert or delete
  */
-- (void)controller:(RBQFetchedResultsController *)controller
-  didChangeSection:(RBQFetchedResultsSectionInfo *)section
+- (void)controller:(nonnull RBQFetchedResultsController *)controller
+  didChangeSection:(nonnull RBQFetchedResultsSectionInfo *)section
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type;
 
@@ -95,7 +95,7 @@
  *
  *  @param controller controller instance that noticed the change on its fetched objects
  */
-- (void)controllerDidChangeContent:(RBQFetchedResultsController *)controller;
+- (void)controllerDidChangeContent:(nonnull RBQFetchedResultsController *)controller;
 
 @end
 
@@ -109,27 +109,27 @@
 /**
  *  The fetch request for the controller
  */
-@property (nonatomic, readonly) RBQFetchRequest *fetchRequest;
+@property (nonatomic, readonly, nonnull) RBQFetchRequest *fetchRequest;
 
 /**
  *  The section name key path used to create the sections. Can be nil if no sections.
  */
-@property (nonatomic, readonly) NSString *sectionNameKeyPath;
+@property (nonatomic, readonly, nullable) NSString *sectionNameKeyPath;
 
 /**
  *  The delegate to pass the index path and section changes to.
  */
-@property (nonatomic, weak) id <RBQFetchedResultsControllerDelegate> delegate;
+@property (nonatomic, weak, nullable) id <RBQFetchedResultsControllerDelegate> delegate;
 
 /**
  *  The name of the cache used internally to represent the tableview structure.
  */
-@property (nonatomic, readonly) NSString *cacheName;
+@property (nonatomic, readonly, nullable) NSString *cacheName;
 
 /**
  *  All the objects that match the fetch request.
  */
-@property (nonatomic, readonly) id<RLMCollection> fetchedObjects;
+@property (nonatomic, readonly, nonnull) id<RLMCollection> fetchedObjects;
 
 /**
  *  Deletes the cached section information with the given name
@@ -142,7 +142,7 @@
  *
  *  @param name The name of the cache file to delete. If name is nil, deletes all cache files.
  */
-+ (void)deleteCacheWithName:(NSString *)name;
++ (void)deleteCacheWithName:(nullable NSString *)name;
 
 /**
  *  Retrieves all the paths for the Realm files being used as FRC caches on disk.
@@ -151,7 +151,7 @@
  *
  *  @return NSArray of NSStrings representing the paths on disk for all FRC cache Realm files
  */
-+ (NSArray *)allCacheRealmPaths;
++ (nonnull NSArray *)allCacheRealmPaths;
 
 /**
  *  Constructor method to initialize the controller
@@ -164,9 +164,9 @@
  *
  *  @return A new instance of RBQFetchedResultsController
  */
-- (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
-        sectionNameKeyPath:(NSString *)sectionNameKeyPath
-                 cacheName:(NSString *)name;
+- (nonnull id)initWithFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
+                sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
+                         cacheName:(nullable NSString *)name;
 
 /**
  *  Method to tell the controller to perform the fetch
@@ -205,7 +205,7 @@
  *
  *  @return The title of the section
  */
-- (NSString *)titleForHeaderInSection:(NSInteger)section;
+- (nonnull NSString *)titleForHeaderInSection:(NSInteger)section;
 
 /**
  *  Method to retrieve the section index given a section name
@@ -216,7 +216,7 @@
  *
  *  @return the index of the section (returns NSNotFound if no section with the given name)
  */
-- (NSUInteger)sectionIndexForSectionName:(NSString *)sectionName;
+- (NSUInteger)sectionIndexForSectionName:(nonnull NSString *)sectionName;
 
 /**
  *  Retrieve the RBQSafeRealmObject for a given index path
@@ -225,7 +225,7 @@
  *
  *  @return RBQSafeRealmObject
  */
-- (RBQSafeRealmObject *)safeObjectAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable RBQSafeRealmObject *)safeObjectAtIndexPath:(nonnull NSIndexPath *)indexPath;
 
 /**
  *  Retrieve the RLMObject for a given index path
@@ -236,7 +236,7 @@
  *
  *  @return RLMObject
  */
-- (id)objectAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable id)objectAtIndexPath:(nonnull NSIndexPath *)indexPath;
 
 /**
  *  Retrieve the index path for a safe object in the fetch request
@@ -245,7 +245,7 @@
  *
  *  @return index path of the object
  */
-- (NSIndexPath *)indexPathForSafeObject:(RBQSafeRealmObject *)safeObject;
+- (nullable NSIndexPath *)indexPathForSafeObject:(nonnull RBQSafeRealmObject *)safeObject;
 
 /**
  *  Retrieve the index path for a RLMObject in the fetch request
@@ -254,7 +254,7 @@
  *
  *  @return index path of the object
  */
-- (NSIndexPath *)indexPathForObject:(RLMObjectBase *)object;
+- (nullable NSIndexPath *)indexPathForObject:(nonnull RLMObjectBase *)object;
 
 /**
  *  Convenience method to safely update the fetch request for an existing RBQFetchResultsController
@@ -263,8 +263,8 @@
  *  @param sectionNameKeyPath the section name key path for this fetch request (if nil, no sections will be shown)
  *  @param performFetch       indicates whether you want to immediately performFetch using the new fetch request to rebuild the cache
  */
-- (void)updateFetchRequest:(RBQFetchRequest *)fetchRequest
-        sectionNameKeyPath:(NSString *)sectionNameKeyPath
+- (void)updateFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
+        sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
             andPeformFetch:(BOOL)performFetch;
 
 @end

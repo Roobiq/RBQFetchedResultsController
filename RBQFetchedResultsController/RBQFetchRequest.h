@@ -21,31 +21,31 @@
 /**
  *  RLMObject class name for the fetch request
  */
-@property (nonatomic, readonly) NSString *entityName;
+@property (nonatomic, readonly, nonnull) NSString *entityName;
 
 /**
  *  The Realm in which the entity for the fetch request is persisted.
  */
-@property (nonatomic, readonly) RLMRealm *realm;
+@property (nonatomic, readonly, nonnull) RLMRealm *realm;
 
 /**
  *  The configuration object used to create an instance of RLMRealm for the fetch request
  */
-@property (nonatomic, readonly) RLMRealmConfiguration *realmConfiguration;
+@property (nonatomic, readonly, nonnull) RLMRealmConfiguration *realmConfiguration;
 
 /**
  *  Predicate supported by Realm
  *
  *  http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates
  */
-@property (nonatomic, strong) NSPredicate *predicate;
+@property (nonatomic, strong, nullable) NSPredicate *predicate;
 
 /**
  *  Array of RLMSortDescriptors
  *
  *  http://realm.io/docs/cocoa/0.89.2/#ordering-results
  */
-@property(nonatomic, strong) NSArray *sortDescriptors;
+@property(nonatomic, strong, nullable) NSArray *sortDescriptors;
 
 
 /**
@@ -57,16 +57,16 @@
  *
  *  @return A new instance of RBQFetchRequest
  */
-+ (instancetype)fetchRequestWithEntityName:(NSString *)entityName
-                                   inRealm:(RLMRealm *)realm
-                                 predicate:(NSPredicate *)predicate;
++ (nonnull instancetype)fetchRequestWithEntityName:(nonnull NSString *)entityName
+                                           inRealm:(nonnull RLMRealm *)realm
+                                         predicate:(nullable NSPredicate *)predicate;
 
 /**
  *  Retrieve all the RLMObjects for this fetch request in its realm.
  *
  *  @return RLMResults or RLMArray for all the objects in the fetch request (not thread-safe).
  */
-- (id<RLMCollection>)fetchObjects;
+- (nonnull id<RLMCollection>)fetchObjects;
 
 /**
  *  Should this object be in our fetch results?
@@ -79,7 +79,7 @@
  *
  *  @return YES if performing fetch would include this object
  */
-- (BOOL)evaluateObject:(RLMObject *)object;
+- (BOOL)evaluateObject:(nonnull RLMObject *)object;
 
 /**
  *  Create RBQFetchRequest in RLMRealm instance with an entity name
@@ -89,7 +89,6 @@
  *
  *  @return A new instance of RBQFetchRequest
  */
-- (instancetype)initWithEntityName:(NSString *)entityName
-                           inRealm:(RLMRealm *)realm;
-
+- (nonnull instancetype)initWithEntityName:(nonnull NSString *)entityName
+                                   inRealm:(nonnull RLMRealm *)realm;
 @end
