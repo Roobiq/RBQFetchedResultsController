@@ -274,11 +274,13 @@ public class FetchedResultsController<T: Object> {
     */
     public func safeObjectAtIndexPath(indexPath: NSIndexPath) -> SafeObject<T>? {
         
-        let rbqSafeObject = self.rbqFetchedResultsController.safeObjectAtIndexPath(indexPath)
+        if let rbqSafeObject = self.rbqFetchedResultsController.safeObjectAtIndexPath(indexPath) {
+            let safeObject = SafeObject<T>(rbqSafeRealmObject: rbqSafeObject)
+            
+            return safeObject
+        }
         
-        let safeObject = SafeObject<T>(rbqSafeRealmObject: rbqSafeObject)
-        
-        return safeObject
+        return nil
     }
     
     /**
@@ -399,21 +401,21 @@ internal class DelegateProxy: NSObject, RBQFetchedResultsControllerDelegate {
     }
     
     // <RBQFetchedResultsControllerDelegate>
-    @objc func controllerWillChangeContent(controller: RBQFetchedResultsController!) {
+    @objc func controllerWillChangeContent(controller: RBQFetchedResultsController) {
         self.delegate.controllerWillChangeContent(controller)
     }
     
-    @objc func controller(controller: RBQFetchedResultsController!, didChangeObject anObject: RBQSafeRealmObject!, atIndexPath indexPath: NSIndexPath!, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath!) {
+    @objc func controller(controller: RBQFetchedResultsController, didChangeObject anObject: RBQSafeRealmObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         
         self.delegate.controller(controller, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
     }
     
-    @objc func controller(controller: RBQFetchedResultsController!, didChangeSection section: RBQFetchedResultsSectionInfo!, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType) {
+    @objc func controller(controller: RBQFetchedResultsController, didChangeSection section: RBQFetchedResultsSectionInfo, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType) {
         
         self.delegate.controller(controller, didChangeSection: section, atIndex: sectionIndex, forChangeType: type)
     }
     
-    @objc func controllerDidChangeContent(controller: RBQFetchedResultsController!) {
+    @objc func controllerDidChangeContent(controller: RBQFetchedResultsController) {
         self.delegate.controllerDidChangeContent(controller)
     }
 }

@@ -71,9 +71,9 @@ public class FetchRequest<T: Object> {
         get {
             var sortDescriptors = [SortDescriptor]()
             
-            for sortDesc: AnyObject in self.rbqFetchRequest.sortDescriptors {
+            if let rbqSortDescriptors = self.rbqFetchRequest.sortDescriptors {
                 
-                if let rlmSortDesc = sortDesc as? RLMSortDescriptor {
+                for rlmSortDesc in rbqSortDescriptors {
                     
                     sortDescriptors.append(SortDescriptor(property: rlmSortDesc.property, ascending: rlmSortDesc.ascending))
                 }
@@ -83,7 +83,7 @@ public class FetchRequest<T: Object> {
         }
         set {
             
-            var rbqSortDescriptors = [AnyObject]()
+            var rbqSortDescriptors = [RLMSortDescriptor]()
             
             for sortDesc in newValue {
                 

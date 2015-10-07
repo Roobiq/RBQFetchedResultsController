@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Realm/RLMCollection.h>
 
-@class RBQFetchRequest, RLMRealm, RLMObject, RLMRealmConfiguration, RLMArray;
+@class RBQFetchRequest, RLMRealm, RLMObject, RLMRealmConfiguration, RLMArray, RLMSortDescriptor;
 
 #pragma mark - RBQFetchRequest
 
@@ -45,7 +45,7 @@
  *
  *  http://realm.io/docs/cocoa/0.89.2/#ordering-results
  */
-@property(nonatomic, strong, nullable) NSArray *sortDescriptors;
+@property(nonatomic, strong, nullable) NSArray<RLMSortDescriptor *> *sortDescriptors;
 
 
 /**
