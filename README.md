@@ -9,9 +9,20 @@ The `RBQFetchedResultsController` (FRC) is a replacement for `NSFetchedResultsCo
 
 `RBQFetchedResultsController` supports tableview sections and implements a drop-in replacement delegate to pass the changes to the tableview for section and row animations.
 
+The Swift API mirrors Objective-C with the following classes:
+* `FetchedResultsController`
+* `FetchRequest`
+* `ChangeLogger`
+* `SafeObject`
+
+####Example
+Basic todo list application built with [ABFRealmTableViewController](https://github.com/bigfish24/ABFRealmTableViewController) which relies on `RBQFetchedResultsController`:
+
+![Todo List Backed By ABFRealmTableViewController](https://github.com/bigfish24/ABFRealmTableViewController/blob/master/images/ABFRealmTableViewController.gif?raw=true "Todo List Backed By ABFRealmTableViewController")
+
 ####How It Works:
 
-Given that Realm does not yet support more fine-grained or object-level notifications, the FRC works by receiving changes from the `RBQRealmNotificationManager` singleton. The notification manager's role is to pass along changes logged to an instance of `RBQRealmChangeLogger`. Each logger is associated with a Realm on a given thread, which allows the developer to log changes manually or through one of the convenience methods on the RLMObject or RLMRealm categories. Once the changes are committed and the Realm instance updates, the object level changes will be passed from the logger to the manager, which will in turn rebroadcast these changes to any listeners.
+Given that Realm does not yet support more fine-grained or object-level notifications, the FRC works by receiving changes from the `RBQRealmNotificationManager` singleton. The notification manager's role is to pass along changes logged to an instance of `RBQRealmChangeLogger`. Each logger is associated with a Realm on a given thread, which allows the developer to log changes manually or through one of the convenience methods on the `RLMObject` or `RLMRealm` categories. Once the changes are committed and the Realm instance updates, the object level changes will be passed from the logger to the manager, which will in turn rebroadcast these changes to any listeners.
 
 #####For example:
 
@@ -23,17 +34,23 @@ Person.firstName = @"Adam";
 
 to broadcast this change would require calling: 
 
+**Objective-C**
 ```Objective-C
 [[RBQRealmChangeLogger defaultLogger] didChangeObject:Person];
 ```
+**Swift**
+```Swift
+ChangeLogger.defaultLogger.didChangeObject(Person)
+```
 There are methods for adds, removes, and changes on `RBQRealmChangeLogger`.
 
-Once Realm updates, the logger will receive the update notification from Realm and broadcast `RBQSafeRealmObjects` for any object originally logged to the RBQRealmNotificationManager, which will then rebroadcast the changes to any listeners.
+Once Realm updates, the logger will receive the update notification from Realm and broadcast `RBQSafeRealmObjects` for any object originally logged to the `RBQRealmNotificationManager`, which will then rebroadcast the changes to any listeners.
 
-**Note: The RBQSafeRealmObject is a class to get around the lack of thread-safety with RLMObject. Any RLMObject with a primary key can be used to create a RBQSafeRealmObject, which then can be used across threads and recreated into the RLMObject via the primary key.**
+**Note: The `RBQSafeRealmObject` is a class to get around the lack of thread-safety with `RLMObject`. Any `RLMObject` with a primary key can be used to create a `RBQSafeRealmObject`, which then can be used across threads and recreated into the `RLMObject` via the primary key.**
 
 The FRC receives the changes from the `RBQRealmNotificationManager` and then identifies changes to sections and rows, which are passed to a tableview controller via the delegate methods:
 
+**Objective-C**
 ```Objective-C
 -(void)controllerWillChangeContent:(RBQFetchedResultsController *)controller;
  
@@ -49,6 +66,17 @@ The FRC receives the changes from the `RBQRealmNotificationManager` and then ide
      forChangeType:(NSFetchedResultsChangeType)type;
 
 -(void)controllerDidChangeContent:(RBQFetchedResultsController *)controller;
+```
+
+**Swift**
+```Swift
+func controllerWillChangeContent<T: Object>(controller: FetchedResultsController<T>)
+
+func controllerDidChangeObject<T: Object>(controller: FetchedResultsController<T>, anObject: SafeObject<T>, indexPath: NSIndexPath?, changeType: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
+
+func controllerDidChangeSection<T:Object>(controller: FetchedResultsController<T>, section: FetchResultsSectionInfo<T>, sectionIndex: UInt, changeType: NSFetchedResultsChangeType)
+
+func controllerDidChangeContent<T: Object>(controller: FetchedResultsController<T>)
 ```
 ####Documentation
 [Click Here](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Roobiq/RBQFetchedResultsController/master/Documentation/html/index.html)
@@ -86,10 +114,13 @@ for (NSString *path in paths) {
 ####Installation
 RBQFetchedResultsController is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
+
+**Objective-C**
 ```
 pod "RBQFetchedResultsController"
 ```
-_**To install the Swift version, add the following to your Podfile:**_
+
+**Swift**
 ```
 use_frameworks!
 
@@ -100,6 +131,7 @@ pod 'SwiftFetchedResultsController'
 
 Build and run/test the Example project in Xcode to see `RBQFetchedResultsController` in action. This project uses CocoaPods. If you don't have [CocoaPods](http://cocoapods.org/) installed, grab it with [sudo] gem install cocoapods.
 
+**Objective-C**
 ```
 git clone http://github.com/Roobiq/RBQFetchedResultsController
 cd RBQFetchedResultsController/RBQFetchedResultsControllerExample
@@ -107,20 +139,16 @@ pod install
 open RBQFetchedResultsControllerExample.xcworkspace
 ```
 
-#####Requirements
-
-* iOS 7+
-* Xcode 6
+**Swift**
+```
+git clone http://github.com/Roobiq/RBQFetchedResultsController
+cd RBQFetchedResultsController/SwiftExample
+pod install
+open RBQFRCSwiftExample.xcworkspace
+```
 
 ####Current State
 The example project includes various functional and unit tests. In addition, the project is used in our [Roobiq](http://www.roobiq.com) app and is quite stable.
-
-_**Realm Swift is now fully supported through a new Swift API via these classes:**_
-
-* FetchedResultsController
-* FetchRequest
-* ChangeLogger
-* SafeObject
 
 Instructions and documentation for the Swift API is forthcoming. Check out the example project in `/SwiftExample` for more details.
 
