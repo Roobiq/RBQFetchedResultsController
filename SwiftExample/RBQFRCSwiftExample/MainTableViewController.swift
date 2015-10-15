@@ -75,7 +75,7 @@ class MainTableViewController: UITableViewController {
             realm.add(object, update: false)
         }
         
-        realm.commitWrite()
+        try! realm.commitWrite()
         
         let predicate = NSPredicate(format: "inTable = YES")
         
@@ -152,7 +152,7 @@ class MainTableViewController: UITableViewController {
         
         let objectsInFirstSection = self.realm!.objects(TestObject).filter("%K == %@", "sectionName","First Section")
         
-        self.realm!.write { () -> Void in
+        try! self.realm!.write { () -> Void in
             self.realm!.deleteWithNotification(objectsInFirstSection)
         }
     }
@@ -164,7 +164,7 @@ class MainTableViewController: UITableViewController {
             
             let realm = self.realm!
             
-            realm.write({ () -> Void in
+            try! realm.write({ () -> Void in
                 realm.deleteWithNotification(object)
             })
         }
@@ -206,7 +206,7 @@ class MainTableViewController: UITableViewController {
                 })
             }
             
-            realm.commitWrite()
+            try! realm.commitWrite()
         }
         else { // Test Moves
             realm.beginWrite()
@@ -262,7 +262,7 @@ class MainTableViewController: UITableViewController {
                 }
             })
             
-            realm.commitWrite()
+            try! realm.commitWrite()
         }
     }
 }

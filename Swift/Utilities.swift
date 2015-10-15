@@ -80,7 +80,7 @@ extension Object {
             
             ChangeLogger.loggerForRealm(realm).didChangeObject(self)
             
-            realm.commitWrite()
+            try! realm.commitWrite()
         }
     }
 }
@@ -190,8 +190,14 @@ extension Realm {
     */
     internal class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
         let rlmConfiguration = RLMRealmConfiguration()
-        rlmConfiguration.path = configuration.path
-        rlmConfiguration.inMemoryIdentifier = configuration.inMemoryIdentifier
+        
+        if (configuration.path != nil) {
+            rlmConfiguration.path = configuration.path
+        }
+        
+        if (configuration.inMemoryIdentifier != nil) {
+            rlmConfiguration.inMemoryIdentifier = configuration.inMemoryIdentifier
+        }
         rlmConfiguration.encryptionKey = configuration.encryptionKey
         rlmConfiguration.readOnly = configuration.readOnly
         rlmConfiguration.schemaVersion = configuration.schemaVersion
