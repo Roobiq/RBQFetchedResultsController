@@ -124,7 +124,11 @@ pod "RBQFetchedResultsController"
 ```
 use_frameworks!
 
+// For Realm 0.96 (use latest)
 pod 'SwiftFetchedResultsController'
+
+// For Realm < 0.96
+pod 'SwiftFetchedResultsController', '2.3'
 ```
 
 ####Demo
