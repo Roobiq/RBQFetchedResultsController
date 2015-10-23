@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Adam Fish. All rights reserved.
 //
 
-#import <RBQFetchedResultsController/RBQFetchedResultsController.h>
-#import <RBQFetchedResultsController/RBQFetchRequest.h>
-#import <RBQFetchedResultsController/RBQSafeRealmObject.h>
-#import <RBQFetchedResultsController/RBQRealmNotificationManager.h>
-#import <RBQFetchedResultsController/RLMObjectBase+Utilities.h>
+#import "RBQFetchedResultsController.h"
+#import "RBQFetchRequest.h"
+#import "RBQSafeRealmObject.h"
+#import "RBQRealmNotificationManager.h"
+#import "RLMObjectBase+Utilities.h"
