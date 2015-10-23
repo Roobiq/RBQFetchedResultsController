@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "RBQSafeRealmObject.h"
+#import <RBQFetchedResultsController/RBQFRC.h>
 #import "TestObject.h"
 #import "RBQTestCase.h"
 

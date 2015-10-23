@@ -1,9 +1,3 @@
-[submodule "RBQFetchedResultsControllerExample/RBQFetchedResultsController/RealmUtilities"]
-	path = RBQFetchedResultsControllerExample/RBQFetchedResultsController/RealmUtilities
-	url = https://github.com/Roobiq/RealmUtilities
-[submodule "RBQFetchedResultsControllerExample/RBQFetchedResultsController/RBQRealmNotificationManager"]
-	path = RBQFetchedResultsControllerExample/RBQFetchedResultsController/RBQRealmNotificationManager
-	url = https://github.com/Roobiq/RBQRealmNotificationManager
 [submodule "RBQFetchedResultsController/RBQRealmNotificationManager"]
 	path = RBQFetchedResultsController/RBQRealmNotificationManager
 	url = https://github.com/Roobiq/RBQRealmNotificationManager
@@ -13,3 +7,6 @@
 [submodule "RBQFetchedResultsController/RBQSafeRealmObject"]
 	path = RBQFetchedResultsController/RBQSafeRealmObject
 	url = https://github.com/Roobiq/RBQSafeRealmObject.git
+[submodule "RBQFetchedResultsController/realm-cocoa"]
+	path = RBQFetchedResultsController/realm-cocoa
+	url = https://github.com/realm/realm-cocoa.git
