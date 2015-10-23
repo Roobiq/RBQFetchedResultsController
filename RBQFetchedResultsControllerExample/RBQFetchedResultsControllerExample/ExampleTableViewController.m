@@ -9,7 +9,9 @@
 #import "ExampleTableViewController.h"
 #import "TestObject.h"
 
-#import <RBQFetchedResultsController/RBQFRC.h>
+#import "RBQFetchedResultsController.h"
+#import "RLMObject+Notifications.h"
+#import "RLMRealm+Notifications.h"
 
 id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}
 
