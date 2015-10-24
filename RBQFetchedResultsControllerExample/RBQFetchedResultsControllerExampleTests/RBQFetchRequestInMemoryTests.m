@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import <RBQFetchedResultsController/RBQFRC.h>
+#import "RBQFetchRequest.h"
 #import <Realm/Realm.h>
 #import "TestObject.h"
 

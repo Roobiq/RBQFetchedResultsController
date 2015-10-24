@@ -1,6 +1,0 @@
-framework module RBQFetchedResultsController {
-    umbrella header "RBQFRC.h"
-    
-    export *
-    module * { export * }
-}

@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import <RBQFetchedResultsController/RBQFRC.h>
+#import "RBQFetchedResultsController.h"
+#import "RBQRealmNotificationManager.h"
+#import "RLMRealm+Notifications.h"
 #import "TestObject.h"
 
 @interface RBQFetchedResultsControllerDelegateTests : XCTestCase <RBQFetchedResultsControllerDelegate>
