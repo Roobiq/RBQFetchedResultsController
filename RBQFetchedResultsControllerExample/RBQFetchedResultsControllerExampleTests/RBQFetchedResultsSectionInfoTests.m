@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "RBQFetchedResultsController.h"
+#import <RBQFetchedResultsController/RBQFetchedResultsController.h>
 #import "TestObject.h"
 #import "RBQTestCase.h"
 

@@ -7,11 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <RBQFetchedResultsController/RBQFRC.h>
 #import <Realm/Realm.h>
-
 #import "TestObject.h"
 #import "RBQTestCase.h"
-#import "RBQFetchedResultsController.h"
 
 @interface RBQFetchRequestTests : RBQTestCase
 

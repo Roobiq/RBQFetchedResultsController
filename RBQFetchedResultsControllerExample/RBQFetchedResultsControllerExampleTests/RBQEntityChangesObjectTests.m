@@ -7,8 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "RBQFetchedResultsController.h"
-#import "RBQRealmNotificationManager.h"
+#import <RBQFetchedResultsController/RBQFRC.h>
 #import "TestObject.h"
 
 @interface RBQEntityChangesObjectTests : XCTestCase

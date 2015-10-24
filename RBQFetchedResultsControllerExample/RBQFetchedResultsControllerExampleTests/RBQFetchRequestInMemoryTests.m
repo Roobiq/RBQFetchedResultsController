@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <Realm/Realm.h>
 
-#import "RBQFetchedResultsController.h"
+#import <RBQFetchedResultsController/RBQFRC.h>
+#import <Realm/Realm.h>
 #import "TestObject.h"
 
 @interface RBQFetchRequestInMemoryTests : XCTestCase

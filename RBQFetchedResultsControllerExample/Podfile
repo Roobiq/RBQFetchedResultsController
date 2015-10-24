@@ -1,8 +1,0 @@
-target 'RBQFetchedResultsControllerExample' do
-  pod 'Realm', '>= 0.95.0'
-end
-
-target 'RBQFetchedResultsControllerExampleTests' do
-  pod 'Realm/Headers'
-end
-
