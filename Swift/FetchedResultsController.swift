@@ -189,7 +189,7 @@ public class FetchedResultsController<T: Object> {
     }
     
     /// The delegate to pass the index path and section changes to.
-    public var delegate: FetchedResultsControllerDelegate?
+    weak public var delegate: FetchedResultsControllerDelegate?
     
     /// The name of the cache used internally to represent the tableview structure.
     public var cacheName: String? {
