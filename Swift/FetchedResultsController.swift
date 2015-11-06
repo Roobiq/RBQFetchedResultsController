@@ -61,7 +61,7 @@ public class FetchResultsSectionInfo<T: Object> {
 /**
 Delegate to pass along the changes identified by the FetchedResultsController.
 */
-public protocol FetchedResultsControllerDelegate {
+public protocol FetchedResultsControllerDelegate: class {
     
     /**
     Indicates that the controller has started identifying changes.
@@ -189,7 +189,7 @@ public class FetchedResultsController<T: Object> {
     }
     
     /// The delegate to pass the index path and section changes to.
-    public var delegate: FetchedResultsControllerDelegate?
+    weak public var delegate: FetchedResultsControllerDelegate?
     
     /// The name of the cache used internally to represent the tableview structure.
     public var cacheName: String? {
@@ -381,7 +381,7 @@ extension FetchedResultsController: DelegateProxyProtocol {
 }
 
 // Internal Proxy To Manage Converting The Objc Delegate
-internal protocol DelegateProxyProtocol {
+internal protocol DelegateProxyProtocol: class {
     func controllerWillChangeContent(controller: RBQFetchedResultsController!)
     
     func controller(controller: RBQFetchedResultsController!, didChangeObject anObject: RBQSafeRealmObject!, atIndexPath indexPath: NSIndexPath!, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath!)
@@ -394,7 +394,7 @@ internal protocol DelegateProxyProtocol {
 // Internal Proxy To Manage Converting The Objc Delegate
 internal class DelegateProxy: NSObject, RBQFetchedResultsControllerDelegate {
     
-    internal let delegate: DelegateProxyProtocol
+    weak internal var delegate: DelegateProxyProtocol?
     
     init(delegate: DelegateProxyProtocol) {
         self.delegate = delegate
@@ -402,20 +402,20 @@ internal class DelegateProxy: NSObject, RBQFetchedResultsControllerDelegate {
     
     // <RBQFetchedResultsControllerDelegate>
     @objc func controllerWillChangeContent(controller: RBQFetchedResultsController) {
-        self.delegate.controllerWillChangeContent(controller)
+        self.delegate?.controllerWillChangeContent(controller)
     }
     
     @objc func controller(controller: RBQFetchedResultsController, didChangeObject anObject: RBQSafeRealmObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         
-        self.delegate.controller(controller, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
+        self.delegate?.controller(controller, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
     }
     
     @objc func controller(controller: RBQFetchedResultsController, didChangeSection section: RBQFetchedResultsSectionInfo, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType) {
         
-        self.delegate.controller(controller, didChangeSection: section, atIndex: sectionIndex, forChangeType: type)
+        self.delegate?.controller(controller, didChangeSection: section, atIndex: sectionIndex, forChangeType: type)
     }
     
     @objc func controllerDidChangeContent(controller: RBQFetchedResultsController) {
-        self.delegate.controllerDidChangeContent(controller)
+        self.delegate?.controllerDidChangeContent(controller)
     }
 }
