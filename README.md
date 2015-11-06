@@ -18,7 +18,7 @@ The Swift API mirrors Objective-C with the following classes:
 ####Example
 Basic todo list application built with [ABFRealmTableViewController](https://github.com/bigfish24/ABFRealmTableViewController) which relies on `RBQFetchedResultsController`:
 
-![Todo List Backed By ABFRealmTableViewController](https://github.com/bigfish24/ABFRealmTableViewController/blob/master/images/ABFRealmTableViewController.gif?raw=true "Todo List Backed By ABFRealmTableViewController")
+![Todo List Backed By ABFRealmTableViewController](http://fat.gfycat.com/TinyMagnificentGermanspaniel.gif "Todo List Backed By ABFRealmTableViewController")
 
 ####How It Works:
 
