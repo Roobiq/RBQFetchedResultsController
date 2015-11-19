@@ -331,7 +331,7 @@ public class FetchedResultsController<T: Object> {
     :param: sectionNameKeyPath the section name key path for this fetch request (if nil, no sections will be shown)
     :param: performFetch       indicates whether you want to immediately performFetch using the new fetch request to rebuild the cache
     */
-    public func updateFetchRequest(fetchRequest: FetchRequest<T>, sectionNameKeyPath: String, performFetch: Bool) {
+    public func updateFetchRequest(fetchRequest: FetchRequest<T>, sectionNameKeyPath: String?, performFetch: Bool) {
         self.rbqFetchedResultsController.updateFetchRequest(fetchRequest.rbqFetchRequest, sectionNameKeyPath: sectionNameKeyPath, andPeformFetch: performFetch)
     }
     
