@@ -427,6 +427,9 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             
             RLMRealm *realm = self.fetchRequest.realm;
             
+            // Call refresh to guarantee latest results
+            [realm refresh];
+            
             RLMObject *object =
             [RBQObjectCacheObject objectInRealm:realm
                                  forCacheObject:cacheObject];
@@ -449,6 +452,9 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             RBQObjectCacheObject *cacheObject = section.objects[indexPath.row];
             
             RLMRealm *realm = self.fetchRequest.realm;
+            
+            // Call refresh to guarantee latest results
+            [realm refresh];
             
             return [RBQObjectCacheObject objectInRealm:realm
                                         forCacheObject:cacheObject];
