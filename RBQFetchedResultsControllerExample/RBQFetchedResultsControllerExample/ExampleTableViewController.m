@@ -227,21 +227,20 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     // Delete the object in the first row
 //    NSIndexPath *firstObjectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
 //    [self deleteObjectAtIndexPath:firstObjectIndexPath];
-    
-    NSLog(@"DID BEGIN DELETE");
-    
-    NSLog(@"Fetched %ld Items Before Delete", (unsigned long)self.fetchedResultsController.fetchedObjects.count);
-    
-    // Test deleting a section (comment out above to test)
-    RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
-
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    
-    [realm beginWriteTransaction];
-    [realm deleteObjectsWithNotification:objectInFirstSection];
-    [realm commitWriteTransaction];
-    
-    NSLog(@"DID END DELETE");
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSLog(@"DID BEGIN DELETE");
+        
+        // Test deleting a section (comment out above to test)
+        RLMResults *objectInFirstSection = [TestObject objectsWhere:@"%K == %@",@"sectionName",@"First Section"];
+        
+        RLMRealm *realm = [RLMRealm defaultRealm];
+        
+        [realm beginWriteTransaction];
+        [realm deleteObjectsWithNotification:objectInFirstSection];
+        [realm commitWriteTransaction];
+        
+        NSLog(@"DID END DELETE");
+    });
 }
 
 - (IBAction)didClickInsertButton:(UIBarButtonItem *)sender
