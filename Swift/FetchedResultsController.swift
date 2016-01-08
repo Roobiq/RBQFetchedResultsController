@@ -126,7 +126,7 @@ public class FetchedResultsController<T: Object> {
     
     :param: name The name of the cache file to delete. If name is nil, deletes all cache files.
     */
-    public class func deleteCache(cacheName: String) {
+    public class func deleteCache(cacheName: String?) {
         RBQFetchedResultsController.deleteCacheWithName(cacheName)
     }
     
