@@ -4,3 +4,5 @@ Pods
 xcuserdata
 xcshareddata
 *.xcworkspace
+
+Carthage/Build
