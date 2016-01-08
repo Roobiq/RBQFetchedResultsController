@@ -514,6 +514,7 @@
 				);
 				INFOPLIST_FILE = RBQFetchedResultsControllerFramework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFramework;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -534,6 +535,7 @@
 				);
 				INFOPLIST_FILE = RBQFetchedResultsControllerFramework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFramework;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -580,6 +582,7 @@
 				6361D74A1C4051A8005CD430 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6361D74B1C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerFrameworkTests" */ = {
 			isa = XCConfigurationList;
@@ -588,6 +591,7 @@
 				6361D74D1C4051A8005CD430 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
