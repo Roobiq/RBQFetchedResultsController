@@ -2,7 +2,5 @@
 Podfile.lock
 Pods
 xcuserdata
-xcshareddata
-*.xcworkspace
 
 Carthage/Build
