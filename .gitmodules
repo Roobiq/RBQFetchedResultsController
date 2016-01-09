@@ -4,3 +4,6 @@
 [submodule "RBQFetchedResultsControllerFramework/Source/RealmUtilities"]
 	path = RBQFetchedResultsControllerFramework/Source/RealmUtilities
 	url = https://github.com/Roobiq/RealmUtilities
+[submodule "RBQFetchedResultsControllerFramework/Source/RBQSafeRealmObject"]
+	path = RBQFetchedResultsControllerFramework/Source/RBQSafeRealmObject
+	url = https://github.com/Roobiq/RBQSafeRealmObject.git
