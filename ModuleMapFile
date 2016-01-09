@@ -1,0 +1,6 @@
+framework module RBQFetchedResultsController {
+umbrella header "RBQFetchedResultsControllerFramework.h"
+
+export *
+module * { export * }
+}

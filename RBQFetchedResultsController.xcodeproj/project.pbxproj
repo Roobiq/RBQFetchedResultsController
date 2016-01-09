@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6361D7381C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7371C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D73F1C4051A8005CD430 /* RBQFetchedResultsControllerFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7341C4051A8005CD430 /* RBQFetchedResultsControllerFramework.framework */; };
+		6361D73F1C4051A8005CD430 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */; };
 		6361D7441C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7431C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift */; };
 		6361D7761C4051ED005CD430 /* RBQControllerCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7501C4051ED005CD430 /* RBQControllerCacheObject.h */; };
 		6361D7771C4051ED005CD430 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7511C4051ED005CD430 /* RBQControllerCacheObject.m */; };
@@ -58,10 +58,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6361D7341C4051A8005CD430 /* RBQFetchedResultsControllerFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RBQFetchedResultsControllerFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RBQFetchedResultsController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6361D7371C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsControllerFramework.h; sourceTree = "<group>"; };
 		6361D7391C4051A8005CD430 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6361D73E1C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RBQFetchedResultsControllerFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6361D73E1C4051A8005CD430 /* RBQFetchedResultsController.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RBQFetchedResultsController.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6361D7431C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBQFetchedResultsControllerFrameworkTests.swift; sourceTree = "<group>"; };
 		6361D7451C4051A8005CD430 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6361D7501C4051ED005CD430 /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6361D73F1C4051A8005CD430 /* RBQFetchedResultsControllerFramework.framework in Frameworks */,
+				6361D73F1C4051A8005CD430 /* RBQFetchedResultsController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,8 +136,8 @@
 		6361D7351C4051A8005CD430 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6361D7341C4051A8005CD430 /* RBQFetchedResultsControllerFramework.framework */,
-				6361D73E1C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.xctest */,
+				6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */,
+				6361D73E1C4051A8005CD430 /* RBQFetchedResultsController.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -277,9 +277,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		6361D7331C4051A8005CD430 /* RBQFetchedResultsControllerFramework */ = {
+		6361D7331C4051A8005CD430 /* RBQFetchedResultsController */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6361D7481C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerFramework" */;
+			buildConfigurationList = 6361D7481C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsController" */;
 			buildPhases = (
 				6361D72F1C4051A8005CD430 /* Sources */,
 				6361D7301C4051A8005CD430 /* Frameworks */,
@@ -290,14 +290,14 @@
 			);
 			dependencies = (
 			);
-			name = RBQFetchedResultsControllerFramework;
+			name = RBQFetchedResultsController;
 			productName = RBQFetchedResultsControllerFramework;
-			productReference = 6361D7341C4051A8005CD430 /* RBQFetchedResultsControllerFramework.framework */;
+			productReference = 6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		6361D73D1C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests */ = {
+		6361D73D1C4051A8005CD430 /* RBQFetchedResultsControllerTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6361D74B1C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerFrameworkTests" */;
+			buildConfigurationList = 6361D74B1C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerTests" */;
 			buildPhases = (
 				6361D73A1C4051A8005CD430 /* Sources */,
 				6361D73B1C4051A8005CD430 /* Frameworks */,
@@ -308,9 +308,9 @@
 			dependencies = (
 				6361D7411C4051A8005CD430 /* PBXTargetDependency */,
 			);
-			name = RBQFetchedResultsControllerFrameworkTests;
+			name = RBQFetchedResultsControllerTests;
 			productName = RBQFetchedResultsControllerFrameworkTests;
-			productReference = 6361D73E1C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.xctest */;
+			productReference = 6361D73E1C4051A8005CD430 /* RBQFetchedResultsController.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -331,7 +331,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6361D72E1C4051A8005CD430 /* Build configuration list for PBXProject "RBQFetchedResultsControllerFramework" */;
+			buildConfigurationList = 6361D72E1C4051A8005CD430 /* Build configuration list for PBXProject "RBQFetchedResultsController" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -343,8 +343,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6361D7331C4051A8005CD430 /* RBQFetchedResultsControllerFramework */,
-				6361D73D1C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests */,
+				6361D7331C4051A8005CD430 /* RBQFetchedResultsController */,
+				6361D73D1C4051A8005CD430 /* RBQFetchedResultsControllerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -406,7 +406,7 @@
 /* Begin PBXTargetDependency section */
 		6361D7411C4051A8005CD430 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6361D7331C4051A8005CD430 /* RBQFetchedResultsControllerFramework */;
+			target = 6361D7331C4051A8005CD430 /* RBQFetchedResultsController */;
 			targetProxy = 6361D7401C4051A8005CD430 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -516,8 +516,9 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "$(SRCROOT)/ModuleMapFile";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFramework;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RBQFetchedResultsController;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -537,8 +538,9 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "$(SRCROOT)/ModuleMapFile";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFramework;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RBQFetchedResultsController;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -549,7 +551,7 @@
 				INFOPLIST_FILE = RBQFetchedResultsControllerFrameworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFrameworkTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RBQFetchedResultsController;
 			};
 			name = Debug;
 		};
@@ -559,14 +561,14 @@
 				INFOPLIST_FILE = RBQFetchedResultsControllerFrameworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFrameworkTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RBQFetchedResultsController;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6361D72E1C4051A8005CD430 /* Build configuration list for PBXProject "RBQFetchedResultsControllerFramework" */ = {
+		6361D72E1C4051A8005CD430 /* Build configuration list for PBXProject "RBQFetchedResultsController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6361D7461C4051A8005CD430 /* Debug */,
@@ -575,7 +577,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6361D7481C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerFramework" */ = {
+		6361D7481C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6361D7491C4051A8005CD430 /* Debug */,
@@ -584,7 +586,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6361D74B1C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerFrameworkTests" */ = {
+		6361D74B1C4051A8005CD430 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6361D74C1C4051A8005CD430 /* Debug */,
