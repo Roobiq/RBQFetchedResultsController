@@ -1,0 +1,3 @@
+[submodule "RBQFetchedResultsControllerFramework/Source/RBQRealmNotificationManager"]
+	path = RBQFetchedResultsControllerFramework/Source/RBQRealmNotificationManager
+	url = https://github.com/Roobiq/RBQRealmNotificationManager
