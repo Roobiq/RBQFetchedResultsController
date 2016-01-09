@@ -112,24 +112,18 @@ for (NSString *path in paths) {
 ```
 
 ####Installation
-RBQFetchedResultsController is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+NOTE: only tested with Swift + Carthage.
 
-**Objective-C**
+`ABFRealmMapView` is available through [Carthage](https://github.com/Carthage/Carthage).
+
+To install using Carthage, simply add the following line to your Cartfile:
 ```
-pod "RBQFetchedResultsController"
+github "ataibarkai/RBQFetchedResultsControllerFramework" "3.0-iOS-Framework"
 ```
 
-**Swift**
-```
-use_frameworks!
 
-// For Realm 0.96 (use latest)
-pod 'SwiftFetchedResultsController'
+CocoaPods support is still pending (please feel free to submite a PR).
 
-// For Realm < 0.96
-pod 'SwiftFetchedResultsController', '2.3'
-```
 
 ####Demo
 
