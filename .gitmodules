@@ -1,15 +1,9 @@
-[submodule "RBQFetchedResultsControllerExample/RBQFetchedResultsController/RealmUtilities"]
-	path = RBQFetchedResultsControllerExample/RBQFetchedResultsController/RealmUtilities
-	url = https://github.com/Roobiq/RealmUtilities
-[submodule "RBQFetchedResultsControllerExample/RBQFetchedResultsController/RBQRealmNotificationManager"]
-	path = RBQFetchedResultsControllerExample/RBQFetchedResultsController/RBQRealmNotificationManager
+[submodule "RBQFetchedResultsControllerFramework/Source/RBQRealmNotificationManager"]
+	path = RBQFetchedResultsControllerFramework/Source/RBQRealmNotificationManager
 	url = https://github.com/Roobiq/RBQRealmNotificationManager
-[submodule "RBQFetchedResultsController/RBQRealmNotificationManager"]
-	path = RBQFetchedResultsController/RBQRealmNotificationManager
-	url = https://github.com/Roobiq/RBQRealmNotificationManager
-[submodule "RBQFetchedResultsController/RealmUtilities"]
-	path = RBQFetchedResultsController/RealmUtilities
+[submodule "RBQFetchedResultsControllerFramework/Source/RealmUtilities"]
+	path = RBQFetchedResultsControllerFramework/Source/RealmUtilities
 	url = https://github.com/Roobiq/RealmUtilities
-[submodule "RBQFetchedResultsController/RBQSafeRealmObject"]
-	path = RBQFetchedResultsController/RBQSafeRealmObject
+[submodule "RBQFetchedResultsControllerFramework/Source/RBQSafeRealmObject"]
+	path = RBQFetchedResultsControllerFramework/Source/RBQSafeRealmObject
 	url = https://github.com/Roobiq/RBQSafeRealmObject.git
