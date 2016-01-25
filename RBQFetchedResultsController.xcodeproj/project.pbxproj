@@ -20,22 +20,22 @@
 		6361D77D1C4051ED005CD430 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7571C4051ED005CD430 /* RBQFetchedResultsController.m */; };
 		6361D77E1C4051ED005CD430 /* RBQFetchRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7581C4051ED005CD430 /* RBQFetchRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D77F1C4051ED005CD430 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7591C4051ED005CD430 /* RBQFetchRequest.m */; };
-		6361D7801C4051ED005CD430 /* RLMObject+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D75C1C4051ED005CD430 /* RLMObject+Notifications.h */; };
+		6361D7801C4051ED005CD430 /* RLMObject+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D75C1C4051ED005CD430 /* RLMObject+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D7811C4051ED005CD430 /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D75D1C4051ED005CD430 /* RLMObject+Notifications.m */; };
-		6361D7821C4051ED005CD430 /* RLMRealm+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D75E1C4051ED005CD430 /* RLMRealm+Notifications.h */; };
+		6361D7821C4051ED005CD430 /* RLMRealm+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D75E1C4051ED005CD430 /* RLMRealm+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D7831C4051ED005CD430 /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D75F1C4051ED005CD430 /* RLMRealm+Notifications.m */; };
-		6361D7841C4051ED005CD430 /* RLMResults+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7601C4051ED005CD430 /* RLMResults+Notifications.h */; };
+		6361D7841C4051ED005CD430 /* RLMResults+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7601C4051ED005CD430 /* RLMResults+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D7851C4051ED005CD430 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7611C4051ED005CD430 /* RLMResults+Notifications.m */; };
 		6361D7861C4051ED005CD430 /* RBQRealmNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7621C4051ED005CD430 /* RBQRealmNotificationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D7871C4051ED005CD430 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7631C4051ED005CD430 /* RBQRealmNotificationManager.m */; };
 		6361D7881C4051ED005CD430 /* RBQSafeRealmObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7651C4051ED005CD430 /* RBQSafeRealmObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D7891C4051ED005CD430 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7661C4051ED005CD430 /* RBQSafeRealmObject.m */; };
-		6361D78A1C4051ED005CD430 /* RLMObject+SafeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7671C4051ED005CD430 /* RLMObject+SafeObject.h */; };
+		6361D78A1C4051ED005CD430 /* RLMObject+SafeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7671C4051ED005CD430 /* RLMObject+SafeObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D78B1C4051ED005CD430 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7681C4051ED005CD430 /* RLMObject+SafeObject.m */; };
 		6361D78C1C4051ED005CD430 /* SafeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7691C4051ED005CD430 /* SafeObject.swift */; };
-		6361D78D1C4051ED005CD430 /* RLMArray+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76B1C4051ED005CD430 /* RLMArray+Utilities.h */; };
+		6361D78D1C4051ED005CD430 /* RLMArray+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76B1C4051ED005CD430 /* RLMArray+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D78E1C4051ED005CD430 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D76C1C4051ED005CD430 /* RLMArray+Utilities.m */; };
-		6361D78F1C4051ED005CD430 /* RLMObject+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76D1C4051ED005CD430 /* RLMObject+Utilities.h */; };
+		6361D78F1C4051ED005CD430 /* RLMObject+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76D1C4051ED005CD430 /* RLMObject+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D7901C4051ED005CD430 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D76E1C4051ED005CD430 /* RLMObject+Utilities.m */; };
 		6361D7911C4051ED005CD430 /* RLMObjectBase+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76F1C4051ED005CD430 /* RLMObjectBase+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D7921C4051ED005CD430 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7701C4051ED005CD430 /* RLMObjectBase+Utilities.m */; };
@@ -258,18 +258,18 @@
 			files = (
 				6361D7781C4051ED005CD430 /* RBQObjectCacheObject.h in Headers */,
 				6361D7861C4051ED005CD430 /* RBQRealmNotificationManager.h in Headers */,
-				6361D7801C4051ED005CD430 /* RLMObject+Notifications.h in Headers */,
 				6361D7761C4051ED005CD430 /* RBQControllerCacheObject.h in Headers */,
 				6361D77A1C4051ED005CD430 /* RBQSectionCacheObject.h in Headers */,
 				6361D77E1C4051ED005CD430 /* RBQFetchRequest.h in Headers */,
-				6361D7881C4051ED005CD430 /* RBQSafeRealmObject.h in Headers */,
-				6361D7381C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h in Headers */,
-				6361D77C1C4051ED005CD430 /* RBQFetchedResultsController.h in Headers */,
+				6361D7801C4051ED005CD430 /* RLMObject+Notifications.h in Headers */,
 				6361D7821C4051ED005CD430 /* RLMRealm+Notifications.h in Headers */,
 				6361D7841C4051ED005CD430 /* RLMResults+Notifications.h in Headers */,
 				6361D78A1C4051ED005CD430 /* RLMObject+SafeObject.h in Headers */,
 				6361D78F1C4051ED005CD430 /* RLMObject+Utilities.h in Headers */,
 				6361D78D1C4051ED005CD430 /* RLMArray+Utilities.h in Headers */,
+				6361D7881C4051ED005CD430 /* RBQSafeRealmObject.h in Headers */,
+				6361D7381C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h in Headers */,
+				6361D77C1C4051ED005CD430 /* RBQFetchedResultsController.h in Headers */,
 				6361D7911C4051ED005CD430 /* RLMObjectBase+Utilities.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

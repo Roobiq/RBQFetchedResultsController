@@ -14,10 +14,22 @@ FOUNDATION_EXPORT double RBQFetchedResultsControllerFrameworkVersionNumber;
 //! Project version string for RBQFetchedResultsControllerFramework.
 FOUNDATION_EXPORT const unsigned char RBQFetchedResultsControllerFrameworkVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <RBQFetchedResultsControllerFramework/PublicHeader.h>
-
+// RBQFetchedResultsController
 #import "RBQFetchedResultsController.h"
 #import "RBQFetchRequest.h"
+
+// RBQSafeRealmObject
 #import "RBQSafeRealmObject.h"
+#import "RLMObject+SafeObject.h"
+
+// RBQRealmNotificationManager
 #import "RBQRealmNotificationManager.h"
+#import "RLMObject+Notifications.h"
+#import "RLMRealm+Notifications.h"
+#import "RLMResults+Notifications.h"
+
+// RealmUtilities
+#import "RLMArray+Utilities.h"
+#import "RLMObject+Utilities.h"
 #import "RLMObjectBase+Utilities.h"
+
