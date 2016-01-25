@@ -24,20 +24,20 @@
 		667F38191A5B2682008E3052 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 667F38171A5B2682008E3052 /* LaunchScreen.xib */; };
 		667F38401A5B26C5008E3052 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F383E1A5B26C5008E3052 /* TestObject.m */; };
 		667F38431A5B27E4008E3052 /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F38421A5B27E4008E3052 /* ExampleTableViewController.m */; };
-		A089091A1B8F95EB002E87DD /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A08908F01B8F95EB002E87DD /* RBQControllerCacheObject.m */; };
-		A089091B1B8F95EB002E87DD /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A08908F21B8F95EB002E87DD /* RBQObjectCacheObject.m */; };
-		A089091C1B8F95EB002E87DD /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A08908F41B8F95EB002E87DD /* RBQSectionCacheObject.m */; };
-		A089091D1B8F95EB002E87DD /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A08908F61B8F95EB002E87DD /* RBQFetchedResultsController.m */; };
-		A089091E1B8F95EB002E87DD /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A08908F81B8F95EB002E87DD /* RBQFetchRequest.m */; };
-		A089091F1B8F95EB002E87DD /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A08908FC1B8F95EB002E87DD /* RLMObject+Notifications.m */; };
-		A08909201B8F95EB002E87DD /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A08908FE1B8F95EB002E87DD /* RLMRealm+Notifications.m */; };
-		A08909211B8F95EB002E87DD /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A08909001B8F95EB002E87DD /* RLMResults+Notifications.m */; };
-		A08909231B8F95EB002E87DD /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A08909031B8F95EB002E87DD /* RBQRealmNotificationManager.m */; };
-		A08909271B8F95EB002E87DD /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A08909091B8F95EB002E87DD /* RBQSafeRealmObject.m */; };
-		A089092A1B8F95EB002E87DD /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A089090D1B8F95EB002E87DD /* RLMObject+SafeObject.m */; };
-		A08909301B8F95EB002E87DD /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A08909151B8F95EB002E87DD /* RLMArray+Utilities.m */; };
-		A08909311B8F95EB002E87DD /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A08909171B8F95EB002E87DD /* RLMObject+Utilities.m */; };
-		A08909321B8F95EB002E87DD /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A08909191B8F95EB002E87DD /* RLMObjectBase+Utilities.m */; };
+		A0FBEB121C56A9B2006E5109 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAE81C56A9B2006E5109 /* RBQControllerCacheObject.m */; };
+		A0FBEB131C56A9B2006E5109 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAEA1C56A9B2006E5109 /* RBQObjectCacheObject.m */; };
+		A0FBEB141C56A9B2006E5109 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAEC1C56A9B2006E5109 /* RBQSectionCacheObject.m */; };
+		A0FBEB151C56A9B2006E5109 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAEE1C56A9B2006E5109 /* RBQFetchedResultsController.m */; };
+		A0FBEB161C56A9B2006E5109 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAF01C56A9B2006E5109 /* RBQFetchRequest.m */; };
+		A0FBEB171C56A9B2006E5109 /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAF41C56A9B2006E5109 /* RLMObject+Notifications.m */; };
+		A0FBEB181C56A9B2006E5109 /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAF61C56A9B2006E5109 /* RLMRealm+Notifications.m */; };
+		A0FBEB191C56A9B2006E5109 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAF81C56A9B2006E5109 /* RLMResults+Notifications.m */; };
+		A0FBEB1B1C56A9B2006E5109 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEAFB1C56A9B2006E5109 /* RBQRealmNotificationManager.m */; };
+		A0FBEB1F1C56A9B2006E5109 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEB011C56A9B2006E5109 /* RBQSafeRealmObject.m */; };
+		A0FBEB221C56A9B2006E5109 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEB051C56A9B2006E5109 /* RLMObject+SafeObject.m */; };
+		A0FBEB281C56A9B2006E5109 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEB0D1C56A9B2006E5109 /* RLMArray+Utilities.m */; };
+		A0FBEB291C56A9B2006E5109 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEB0F1C56A9B2006E5109 /* RLMObject+Utilities.m */; };
+		A0FBEB2A1C56A9B2006E5109 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FBEB111C56A9B2006E5109 /* RLMObjectBase+Utilities.m */; };
 		C4B3210938A228A125D7A4CC /* libPods-RBQFetchedResultsControllerExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB1486A8BB288C322B55EABE /* libPods-RBQFetchedResultsControllerExampleTests.a */; };
 /* End PBXBuildFile section */
 
@@ -80,34 +80,34 @@
 		667F383E1A5B26C5008E3052 /* TestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
 		667F38411A5B27E4008E3052 /* ExampleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleTableViewController.h; sourceTree = "<group>"; };
 		667F38421A5B27E4008E3052 /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleTableViewController.m; sourceTree = "<group>"; };
-		A08908EF1B8F95EB002E87DD /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
-		A08908F01B8F95EB002E87DD /* RBQControllerCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQControllerCacheObject.m; sourceTree = "<group>"; };
-		A08908F11B8F95EB002E87DD /* RBQObjectCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQObjectCacheObject.h; sourceTree = "<group>"; };
-		A08908F21B8F95EB002E87DD /* RBQObjectCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQObjectCacheObject.m; sourceTree = "<group>"; };
-		A08908F31B8F95EB002E87DD /* RBQSectionCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSectionCacheObject.h; sourceTree = "<group>"; };
-		A08908F41B8F95EB002E87DD /* RBQSectionCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSectionCacheObject.m; sourceTree = "<group>"; };
-		A08908F51B8F95EB002E87DD /* RBQFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsController.h; sourceTree = "<group>"; };
-		A08908F61B8F95EB002E87DD /* RBQFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsController.m; sourceTree = "<group>"; };
-		A08908F71B8F95EB002E87DD /* RBQFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchRequest.h; sourceTree = "<group>"; };
-		A08908F81B8F95EB002E87DD /* RBQFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchRequest.m; sourceTree = "<group>"; };
-		A08908FB1B8F95EB002E87DD /* RLMObject+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Notifications.h"; sourceTree = "<group>"; };
-		A08908FC1B8F95EB002E87DD /* RLMObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Notifications.m"; sourceTree = "<group>"; };
-		A08908FD1B8F95EB002E87DD /* RLMRealm+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMRealm+Notifications.h"; sourceTree = "<group>"; };
-		A08908FE1B8F95EB002E87DD /* RLMRealm+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMRealm+Notifications.m"; sourceTree = "<group>"; };
-		A08908FF1B8F95EB002E87DD /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
-		A08909001B8F95EB002E87DD /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
-		A08909021B8F95EB002E87DD /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
-		A08909031B8F95EB002E87DD /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
-		A08909081B8F95EB002E87DD /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
-		A08909091B8F95EB002E87DD /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
-		A089090C1B8F95EB002E87DD /* RLMObject+SafeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+SafeObject.h"; sourceTree = "<group>"; };
-		A089090D1B8F95EB002E87DD /* RLMObject+SafeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+SafeObject.m"; sourceTree = "<group>"; };
-		A08909141B8F95EB002E87DD /* RLMArray+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Utilities.h"; sourceTree = "<group>"; };
-		A08909151B8F95EB002E87DD /* RLMArray+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Utilities.m"; sourceTree = "<group>"; };
-		A08909161B8F95EB002E87DD /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
-		A08909171B8F95EB002E87DD /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
-		A08909181B8F95EB002E87DD /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
-		A08909191B8F95EB002E87DD /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
+		A0FBEAE71C56A9B2006E5109 /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
+		A0FBEAE81C56A9B2006E5109 /* RBQControllerCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQControllerCacheObject.m; sourceTree = "<group>"; };
+		A0FBEAE91C56A9B2006E5109 /* RBQObjectCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQObjectCacheObject.h; sourceTree = "<group>"; };
+		A0FBEAEA1C56A9B2006E5109 /* RBQObjectCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQObjectCacheObject.m; sourceTree = "<group>"; };
+		A0FBEAEB1C56A9B2006E5109 /* RBQSectionCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSectionCacheObject.h; sourceTree = "<group>"; };
+		A0FBEAEC1C56A9B2006E5109 /* RBQSectionCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSectionCacheObject.m; sourceTree = "<group>"; };
+		A0FBEAED1C56A9B2006E5109 /* RBQFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQFetchedResultsController.h; path = ../../RBQFetchedResultsControllerFramework/Source/RBQFetchedResultsController.h; sourceTree = "<group>"; };
+		A0FBEAEE1C56A9B2006E5109 /* RBQFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchedResultsController.m; path = ../../RBQFetchedResultsControllerFramework/Source/RBQFetchedResultsController.m; sourceTree = "<group>"; };
+		A0FBEAEF1C56A9B2006E5109 /* RBQFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQFetchRequest.h; path = ../../RBQFetchedResultsControllerFramework/Source/RBQFetchRequest.h; sourceTree = "<group>"; };
+		A0FBEAF01C56A9B2006E5109 /* RBQFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchRequest.m; path = ../../RBQFetchedResultsControllerFramework/Source/RBQFetchRequest.m; sourceTree = "<group>"; };
+		A0FBEAF31C56A9B2006E5109 /* RLMObject+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Notifications.h"; sourceTree = "<group>"; };
+		A0FBEAF41C56A9B2006E5109 /* RLMObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Notifications.m"; sourceTree = "<group>"; };
+		A0FBEAF51C56A9B2006E5109 /* RLMRealm+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMRealm+Notifications.h"; sourceTree = "<group>"; };
+		A0FBEAF61C56A9B2006E5109 /* RLMRealm+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMRealm+Notifications.m"; sourceTree = "<group>"; };
+		A0FBEAF71C56A9B2006E5109 /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
+		A0FBEAF81C56A9B2006E5109 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
+		A0FBEAFA1C56A9B2006E5109 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
+		A0FBEAFB1C56A9B2006E5109 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
+		A0FBEB001C56A9B2006E5109 /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
+		A0FBEB011C56A9B2006E5109 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
+		A0FBEB041C56A9B2006E5109 /* RLMObject+SafeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+SafeObject.h"; sourceTree = "<group>"; };
+		A0FBEB051C56A9B2006E5109 /* RLMObject+SafeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+SafeObject.m"; sourceTree = "<group>"; };
+		A0FBEB0C1C56A9B2006E5109 /* RLMArray+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Utilities.h"; sourceTree = "<group>"; };
+		A0FBEB0D1C56A9B2006E5109 /* RLMArray+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Utilities.m"; sourceTree = "<group>"; };
+		A0FBEB0E1C56A9B2006E5109 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
+		A0FBEB0F1C56A9B2006E5109 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
+		A0FBEB101C56A9B2006E5109 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
+		A0FBEB111C56A9B2006E5109 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
 		A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RBQFetchedResultsControllerExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1E9F0B065E9219B62951CAC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		C2E60F6FE175B391587A17E0 /* Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExampleTests/Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -234,77 +234,81 @@
 		A08908ED1B8F95EB002E87DD /* RBQFetchedResultsController */ = {
 			isa = PBXGroup;
 			children = (
-				A08908EE1B8F95EB002E87DD /* CacheObjects */,
-				A08908F51B8F95EB002E87DD /* RBQFetchedResultsController.h */,
-				A08908F61B8F95EB002E87DD /* RBQFetchedResultsController.m */,
-				A08908F71B8F95EB002E87DD /* RBQFetchRequest.h */,
-				A08908F81B8F95EB002E87DD /* RBQFetchRequest.m */,
-				A08908F91B8F95EB002E87DD /* RBQRealmNotificationManager */,
-				A08909051B8F95EB002E87DD /* RBQSafeRealmObject */,
-				A08909101B8F95EB002E87DD /* RealmUtilities */,
+				A0FBEAE61C56A9B2006E5109 /* CacheObjects */,
+				A0FBEAED1C56A9B2006E5109 /* RBQFetchedResultsController.h */,
+				A0FBEAEE1C56A9B2006E5109 /* RBQFetchedResultsController.m */,
+				A0FBEAEF1C56A9B2006E5109 /* RBQFetchRequest.h */,
+				A0FBEAF01C56A9B2006E5109 /* RBQFetchRequest.m */,
+				A0FBEAF11C56A9B2006E5109 /* RBQRealmNotificationManager */,
+				A0FBEAFD1C56A9B2006E5109 /* RBQSafeRealmObject */,
+				A0FBEB081C56A9B2006E5109 /* RealmUtilities */,
 			);
 			name = RBQFetchedResultsController;
 			path = ../../RBQFetchedResultsController;
 			sourceTree = "<group>";
 		};
-		A08908EE1B8F95EB002E87DD /* CacheObjects */ = {
+		A0FBEAE61C56A9B2006E5109 /* CacheObjects */ = {
 			isa = PBXGroup;
 			children = (
-				A08908EF1B8F95EB002E87DD /* RBQControllerCacheObject.h */,
-				A08908F01B8F95EB002E87DD /* RBQControllerCacheObject.m */,
-				A08908F11B8F95EB002E87DD /* RBQObjectCacheObject.h */,
-				A08908F21B8F95EB002E87DD /* RBQObjectCacheObject.m */,
-				A08908F31B8F95EB002E87DD /* RBQSectionCacheObject.h */,
-				A08908F41B8F95EB002E87DD /* RBQSectionCacheObject.m */,
+				A0FBEAE71C56A9B2006E5109 /* RBQControllerCacheObject.h */,
+				A0FBEAE81C56A9B2006E5109 /* RBQControllerCacheObject.m */,
+				A0FBEAE91C56A9B2006E5109 /* RBQObjectCacheObject.h */,
+				A0FBEAEA1C56A9B2006E5109 /* RBQObjectCacheObject.m */,
+				A0FBEAEB1C56A9B2006E5109 /* RBQSectionCacheObject.h */,
+				A0FBEAEC1C56A9B2006E5109 /* RBQSectionCacheObject.m */,
 			);
-			path = CacheObjects;
+			name = CacheObjects;
+			path = ../../RBQFetchedResultsControllerFramework/Source/CacheObjects;
 			sourceTree = "<group>";
 		};
-		A08908F91B8F95EB002E87DD /* RBQRealmNotificationManager */ = {
+		A0FBEAF11C56A9B2006E5109 /* RBQRealmNotificationManager */ = {
 			isa = PBXGroup;
 			children = (
-				A08908FA1B8F95EB002E87DD /* Helpers */,
-				A08909021B8F95EB002E87DD /* RBQRealmNotificationManager.h */,
-				A08909031B8F95EB002E87DD /* RBQRealmNotificationManager.m */,
+				A0FBEAF21C56A9B2006E5109 /* Helpers */,
+				A0FBEAFA1C56A9B2006E5109 /* RBQRealmNotificationManager.h */,
+				A0FBEAFB1C56A9B2006E5109 /* RBQRealmNotificationManager.m */,
 			);
-			path = RBQRealmNotificationManager;
+			name = RBQRealmNotificationManager;
+			path = ../../RBQFetchedResultsControllerFramework/Source/RBQRealmNotificationManager;
 			sourceTree = "<group>";
 		};
-		A08908FA1B8F95EB002E87DD /* Helpers */ = {
+		A0FBEAF21C56A9B2006E5109 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				A08908FB1B8F95EB002E87DD /* RLMObject+Notifications.h */,
-				A08908FC1B8F95EB002E87DD /* RLMObject+Notifications.m */,
-				A08908FD1B8F95EB002E87DD /* RLMRealm+Notifications.h */,
-				A08908FE1B8F95EB002E87DD /* RLMRealm+Notifications.m */,
-				A08908FF1B8F95EB002E87DD /* RLMResults+Notifications.h */,
-				A08909001B8F95EB002E87DD /* RLMResults+Notifications.m */,
+				A0FBEAF31C56A9B2006E5109 /* RLMObject+Notifications.h */,
+				A0FBEAF41C56A9B2006E5109 /* RLMObject+Notifications.m */,
+				A0FBEAF51C56A9B2006E5109 /* RLMRealm+Notifications.h */,
+				A0FBEAF61C56A9B2006E5109 /* RLMRealm+Notifications.m */,
+				A0FBEAF71C56A9B2006E5109 /* RLMResults+Notifications.h */,
+				A0FBEAF81C56A9B2006E5109 /* RLMResults+Notifications.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		A08909051B8F95EB002E87DD /* RBQSafeRealmObject */ = {
+		A0FBEAFD1C56A9B2006E5109 /* RBQSafeRealmObject */ = {
 			isa = PBXGroup;
 			children = (
-				A08909081B8F95EB002E87DD /* RBQSafeRealmObject.h */,
-				A08909091B8F95EB002E87DD /* RBQSafeRealmObject.m */,
-				A089090C1B8F95EB002E87DD /* RLMObject+SafeObject.h */,
-				A089090D1B8F95EB002E87DD /* RLMObject+SafeObject.m */,
+				A0FBEB001C56A9B2006E5109 /* RBQSafeRealmObject.h */,
+				A0FBEB011C56A9B2006E5109 /* RBQSafeRealmObject.m */,
+				A0FBEB041C56A9B2006E5109 /* RLMObject+SafeObject.h */,
+				A0FBEB051C56A9B2006E5109 /* RLMObject+SafeObject.m */,
 			);
-			path = RBQSafeRealmObject;
+			name = RBQSafeRealmObject;
+			path = ../../RBQFetchedResultsControllerFramework/Source/RBQSafeRealmObject;
 			sourceTree = "<group>";
 		};
-		A08909101B8F95EB002E87DD /* RealmUtilities */ = {
+		A0FBEB081C56A9B2006E5109 /* RealmUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				A08909141B8F95EB002E87DD /* RLMArray+Utilities.h */,
-				A08909151B8F95EB002E87DD /* RLMArray+Utilities.m */,
-				A08909161B8F95EB002E87DD /* RLMObject+Utilities.h */,
-				A08909171B8F95EB002E87DD /* RLMObject+Utilities.m */,
-				A08909181B8F95EB002E87DD /* RLMObjectBase+Utilities.h */,
-				A08909191B8F95EB002E87DD /* RLMObjectBase+Utilities.m */,
+				A0FBEB0C1C56A9B2006E5109 /* RLMArray+Utilities.h */,
+				A0FBEB0D1C56A9B2006E5109 /* RLMArray+Utilities.m */,
+				A0FBEB0E1C56A9B2006E5109 /* RLMObject+Utilities.h */,
+				A0FBEB0F1C56A9B2006E5109 /* RLMObject+Utilities.m */,
+				A0FBEB101C56A9B2006E5109 /* RLMObjectBase+Utilities.h */,
+				A0FBEB111C56A9B2006E5109 /* RLMObjectBase+Utilities.m */,
 			);
-			path = RealmUtilities;
+			name = RealmUtilities;
+			path = ../../RBQFetchedResultsControllerFramework/Source/RealmUtilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -508,22 +512,22 @@
 			files = (
 				667F38431A5B27E4008E3052 /* ExampleTableViewController.m in Sources */,
 				667F38401A5B26C5008E3052 /* TestObject.m in Sources */,
-				A089091A1B8F95EB002E87DD /* RBQControllerCacheObject.m in Sources */,
-				A08909301B8F95EB002E87DD /* RLMArray+Utilities.m in Sources */,
-				A089092A1B8F95EB002E87DD /* RLMObject+SafeObject.m in Sources */,
-				A08909211B8F95EB002E87DD /* RLMResults+Notifications.m in Sources */,
-				A08909231B8F95EB002E87DD /* RBQRealmNotificationManager.m in Sources */,
-				A089091E1B8F95EB002E87DD /* RBQFetchRequest.m in Sources */,
-				A08909321B8F95EB002E87DD /* RLMObjectBase+Utilities.m in Sources */,
+				A0FBEB121C56A9B2006E5109 /* RBQControllerCacheObject.m in Sources */,
+				A0FBEB281C56A9B2006E5109 /* RLMArray+Utilities.m in Sources */,
+				A0FBEB221C56A9B2006E5109 /* RLMObject+SafeObject.m in Sources */,
+				A0FBEB191C56A9B2006E5109 /* RLMResults+Notifications.m in Sources */,
+				A0FBEB1B1C56A9B2006E5109 /* RBQRealmNotificationManager.m in Sources */,
+				A0FBEB161C56A9B2006E5109 /* RBQFetchRequest.m in Sources */,
+				A0FBEB2A1C56A9B2006E5109 /* RLMObjectBase+Utilities.m in Sources */,
 				667F380E1A5B2682008E3052 /* AppDelegate.m in Sources */,
-				A089091F1B8F95EB002E87DD /* RLMObject+Notifications.m in Sources */,
-				A089091B1B8F95EB002E87DD /* RBQObjectCacheObject.m in Sources */,
-				A08909201B8F95EB002E87DD /* RLMRealm+Notifications.m in Sources */,
-				A08909311B8F95EB002E87DD /* RLMObject+Utilities.m in Sources */,
-				A08909271B8F95EB002E87DD /* RBQSafeRealmObject.m in Sources */,
+				A0FBEB171C56A9B2006E5109 /* RLMObject+Notifications.m in Sources */,
+				A0FBEB131C56A9B2006E5109 /* RBQObjectCacheObject.m in Sources */,
+				A0FBEB181C56A9B2006E5109 /* RLMRealm+Notifications.m in Sources */,
+				A0FBEB291C56A9B2006E5109 /* RLMObject+Utilities.m in Sources */,
+				A0FBEB1F1C56A9B2006E5109 /* RBQSafeRealmObject.m in Sources */,
 				667F380B1A5B2682008E3052 /* main.m in Sources */,
-				A089091D1B8F95EB002E87DD /* RBQFetchedResultsController.m in Sources */,
-				A089091C1B8F95EB002E87DD /* RBQSectionCacheObject.m in Sources */,
+				A0FBEB151C56A9B2006E5109 /* RBQFetchedResultsController.m in Sources */,
+				A0FBEB141C56A9B2006E5109 /* RBQSectionCacheObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
