@@ -7,7 +7,6 @@
 //
 
 import XCTest
-@testable import RBQFetchedResultsController
 
 class RBQFetchedResultsControllerFrameworkTests: XCTestCase {
     

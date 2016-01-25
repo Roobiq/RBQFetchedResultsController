@@ -7,44 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6361D7381C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7371C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6361D73F1C4051A8005CD430 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */; };
-		6361D7441C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7431C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift */; };
-		6361D7761C4051ED005CD430 /* RBQControllerCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7501C4051ED005CD430 /* RBQControllerCacheObject.h */; };
-		6361D7771C4051ED005CD430 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7511C4051ED005CD430 /* RBQControllerCacheObject.m */; };
-		6361D7781C4051ED005CD430 /* RBQObjectCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7521C4051ED005CD430 /* RBQObjectCacheObject.h */; };
-		6361D7791C4051ED005CD430 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7531C4051ED005CD430 /* RBQObjectCacheObject.m */; };
-		6361D77A1C4051ED005CD430 /* RBQSectionCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7541C4051ED005CD430 /* RBQSectionCacheObject.h */; };
-		6361D77B1C4051ED005CD430 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7551C4051ED005CD430 /* RBQSectionCacheObject.m */; };
-		6361D77C1C4051ED005CD430 /* RBQFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7561C4051ED005CD430 /* RBQFetchedResultsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D77D1C4051ED005CD430 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7571C4051ED005CD430 /* RBQFetchedResultsController.m */; };
-		6361D77E1C4051ED005CD430 /* RBQFetchRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7581C4051ED005CD430 /* RBQFetchRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D77F1C4051ED005CD430 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7591C4051ED005CD430 /* RBQFetchRequest.m */; };
-		6361D7801C4051ED005CD430 /* RLMObject+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D75C1C4051ED005CD430 /* RLMObject+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D7811C4051ED005CD430 /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D75D1C4051ED005CD430 /* RLMObject+Notifications.m */; };
-		6361D7821C4051ED005CD430 /* RLMRealm+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D75E1C4051ED005CD430 /* RLMRealm+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D7831C4051ED005CD430 /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D75F1C4051ED005CD430 /* RLMRealm+Notifications.m */; };
-		6361D7841C4051ED005CD430 /* RLMResults+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7601C4051ED005CD430 /* RLMResults+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D7851C4051ED005CD430 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7611C4051ED005CD430 /* RLMResults+Notifications.m */; };
-		6361D7861C4051ED005CD430 /* RBQRealmNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7621C4051ED005CD430 /* RBQRealmNotificationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D7871C4051ED005CD430 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7631C4051ED005CD430 /* RBQRealmNotificationManager.m */; };
-		6361D7881C4051ED005CD430 /* RBQSafeRealmObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7651C4051ED005CD430 /* RBQSafeRealmObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D7891C4051ED005CD430 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7661C4051ED005CD430 /* RBQSafeRealmObject.m */; };
-		6361D78A1C4051ED005CD430 /* RLMObject+SafeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D7671C4051ED005CD430 /* RLMObject+SafeObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D78B1C4051ED005CD430 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7681C4051ED005CD430 /* RLMObject+SafeObject.m */; };
-		6361D78C1C4051ED005CD430 /* SafeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7691C4051ED005CD430 /* SafeObject.swift */; };
-		6361D78D1C4051ED005CD430 /* RLMArray+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76B1C4051ED005CD430 /* RLMArray+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D78E1C4051ED005CD430 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D76C1C4051ED005CD430 /* RLMArray+Utilities.m */; };
-		6361D78F1C4051ED005CD430 /* RLMObject+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76D1C4051ED005CD430 /* RLMObject+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D7901C4051ED005CD430 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D76E1C4051ED005CD430 /* RLMObject+Utilities.m */; };
-		6361D7911C4051ED005CD430 /* RLMObjectBase+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 6361D76F1C4051ED005CD430 /* RLMObjectBase+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6361D7921C4051ED005CD430 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7701C4051ED005CD430 /* RLMObjectBase+Utilities.m */; };
-		6361D7931C4051ED005CD430 /* ChangeLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7721C4051ED005CD430 /* ChangeLogger.swift */; };
-		6361D7941C4051ED005CD430 /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7731C4051ED005CD430 /* FetchedResultsController.swift */; };
-		6361D7951C4051ED005CD430 /* FetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7741C4051ED005CD430 /* FetchRequest.swift */; };
-		6361D7961C4051ED005CD430 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361D7751C4051ED005CD430 /* Utilities.swift */; };
 		6361D7991C4052CC005CD430 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7971C4052CC005CD430 /* Realm.framework */; };
 		6361D79A1C4052CC005CD430 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7981C4052CC005CD430 /* RealmSwift.framework */; };
+		A0519AE71C56DD8200307EB5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0519AE51C56DD8200307EB5 /* Info.plist */; };
+		A0519AE81C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519AE61C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift */; };
+		A0519B0D1C56DDB300307EB5 /* RBQFRC.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B0B1C56DDB300307EB5 /* RBQFRC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B3F1C56EC9A00307EB5 /* RBQControllerCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B0F1C56EC9A00307EB5 /* RBQControllerCacheObject.h */; };
+		A0519B401C56EC9A00307EB5 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B101C56EC9A00307EB5 /* RBQControllerCacheObject.m */; };
+		A0519B411C56EC9A00307EB5 /* RBQObjectCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B111C56EC9A00307EB5 /* RBQObjectCacheObject.h */; };
+		A0519B421C56EC9A00307EB5 /* RBQObjectCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B121C56EC9A00307EB5 /* RBQObjectCacheObject.m */; };
+		A0519B431C56EC9A00307EB5 /* RBQSectionCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B131C56EC9A00307EB5 /* RBQSectionCacheObject.h */; };
+		A0519B441C56EC9A00307EB5 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B141C56EC9A00307EB5 /* RBQSectionCacheObject.m */; };
+		A0519B451C56EC9A00307EB5 /* RBQFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B151C56EC9A00307EB5 /* RBQFetchedResultsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B461C56EC9A00307EB5 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B161C56EC9A00307EB5 /* RBQFetchedResultsController.m */; };
+		A0519B471C56EC9A00307EB5 /* RBQFetchRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B171C56EC9A00307EB5 /* RBQFetchRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B481C56EC9A00307EB5 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B181C56EC9A00307EB5 /* RBQFetchRequest.m */; };
+		A0519B491C56EC9A00307EB5 /* RLMObject+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B1B1C56EC9A00307EB5 /* RLMObject+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B4A1C56EC9A00307EB5 /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B1C1C56EC9A00307EB5 /* RLMObject+Notifications.m */; };
+		A0519B4B1C56EC9A00307EB5 /* RLMRealm+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B1D1C56EC9A00307EB5 /* RLMRealm+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B4C1C56EC9A00307EB5 /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B1E1C56EC9A00307EB5 /* RLMRealm+Notifications.m */; };
+		A0519B4D1C56EC9A00307EB5 /* RLMResults+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B1F1C56EC9A00307EB5 /* RLMResults+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B4E1C56EC9A00307EB5 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B201C56EC9A00307EB5 /* RLMResults+Notifications.m */; };
+		A0519B501C56EC9A00307EB5 /* RBQRealmNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B221C56EC9A00307EB5 /* RBQRealmNotificationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B511C56EC9A00307EB5 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B231C56EC9A00307EB5 /* RBQRealmNotificationManager.m */; };
+		A0519B551C56EC9A00307EB5 /* RBQSafeRealmObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B281C56EC9A00307EB5 /* RBQSafeRealmObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B561C56EC9A00307EB5 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B291C56EC9A00307EB5 /* RBQSafeRealmObject.m */; };
+		A0519B591C56EC9A00307EB5 /* RLMObject+SafeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B2C1C56EC9A00307EB5 /* RLMObject+SafeObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B5A1C56EC9A00307EB5 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B2D1C56EC9A00307EB5 /* RLMObject+SafeObject.m */; };
+		A0519B5B1C56EC9A00307EB5 /* SafeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519B2E1C56EC9A00307EB5 /* SafeObject.swift */; };
+		A0519B601C56EC9A00307EB5 /* RLMArray+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B341C56EC9A00307EB5 /* RLMArray+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B611C56EC9A00307EB5 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B351C56EC9A00307EB5 /* RLMArray+Utilities.m */; };
+		A0519B621C56EC9A00307EB5 /* RLMObject+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B361C56EC9A00307EB5 /* RLMObject+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B631C56EC9A00307EB5 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B371C56EC9A00307EB5 /* RLMObject+Utilities.m */; };
+		A0519B641C56EC9A00307EB5 /* RLMObjectBase+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B381C56EC9A00307EB5 /* RLMObjectBase+Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0519B651C56EC9A00307EB5 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B391C56EC9A00307EB5 /* RLMObjectBase+Utilities.m */; };
+		A0519B661C56EC9A00307EB5 /* ChangeLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519B3B1C56EC9A00307EB5 /* ChangeLogger.swift */; };
+		A0519B671C56EC9A00307EB5 /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519B3C1C56EC9A00307EB5 /* FetchedResultsController.swift */; };
+		A0519B681C56EC9A00307EB5 /* FetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519B3D1C56EC9A00307EB5 /* FetchRequest.swift */; };
+		A0519B691C56EC9A00307EB5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519B3E1C56EC9A00307EB5 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,46 +60,46 @@
 
 /* Begin PBXFileReference section */
 		6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RBQFetchedResultsController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6361D7371C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsControllerFramework.h; sourceTree = "<group>"; };
-		6361D7391C4051A8005CD430 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6361D73E1C4051A8005CD430 /* RBQFetchedResultsController.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RBQFetchedResultsController.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6361D7431C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBQFetchedResultsControllerFrameworkTests.swift; sourceTree = "<group>"; };
-		6361D7451C4051A8005CD430 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6361D7501C4051ED005CD430 /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
-		6361D7511C4051ED005CD430 /* RBQControllerCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQControllerCacheObject.m; sourceTree = "<group>"; };
-		6361D7521C4051ED005CD430 /* RBQObjectCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQObjectCacheObject.h; sourceTree = "<group>"; };
-		6361D7531C4051ED005CD430 /* RBQObjectCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQObjectCacheObject.m; sourceTree = "<group>"; };
-		6361D7541C4051ED005CD430 /* RBQSectionCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSectionCacheObject.h; sourceTree = "<group>"; };
-		6361D7551C4051ED005CD430 /* RBQSectionCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSectionCacheObject.m; sourceTree = "<group>"; };
-		6361D7561C4051ED005CD430 /* RBQFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchedResultsController.h; sourceTree = "<group>"; };
-		6361D7571C4051ED005CD430 /* RBQFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsController.m; sourceTree = "<group>"; };
-		6361D7581C4051ED005CD430 /* RBQFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQFetchRequest.h; sourceTree = "<group>"; };
-		6361D7591C4051ED005CD430 /* RBQFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchRequest.m; sourceTree = "<group>"; };
-		6361D75C1C4051ED005CD430 /* RLMObject+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Notifications.h"; sourceTree = "<group>"; };
-		6361D75D1C4051ED005CD430 /* RLMObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Notifications.m"; sourceTree = "<group>"; };
-		6361D75E1C4051ED005CD430 /* RLMRealm+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMRealm+Notifications.h"; sourceTree = "<group>"; };
-		6361D75F1C4051ED005CD430 /* RLMRealm+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMRealm+Notifications.m"; sourceTree = "<group>"; };
-		6361D7601C4051ED005CD430 /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
-		6361D7611C4051ED005CD430 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
-		6361D7621C4051ED005CD430 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
-		6361D7631C4051ED005CD430 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
-		6361D7651C4051ED005CD430 /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
-		6361D7661C4051ED005CD430 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
-		6361D7671C4051ED005CD430 /* RLMObject+SafeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+SafeObject.h"; sourceTree = "<group>"; };
-		6361D7681C4051ED005CD430 /* RLMObject+SafeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+SafeObject.m"; sourceTree = "<group>"; };
-		6361D7691C4051ED005CD430 /* SafeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeObject.swift; sourceTree = "<group>"; };
-		6361D76B1C4051ED005CD430 /* RLMArray+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Utilities.h"; sourceTree = "<group>"; };
-		6361D76C1C4051ED005CD430 /* RLMArray+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Utilities.m"; sourceTree = "<group>"; };
-		6361D76D1C4051ED005CD430 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
-		6361D76E1C4051ED005CD430 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
-		6361D76F1C4051ED005CD430 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
-		6361D7701C4051ED005CD430 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
-		6361D7721C4051ED005CD430 /* ChangeLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeLogger.swift; sourceTree = "<group>"; };
-		6361D7731C4051ED005CD430 /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
-		6361D7741C4051ED005CD430 /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchRequest.swift; sourceTree = "<group>"; };
-		6361D7751C4051ED005CD430 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		6361D7971C4052CC005CD430 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		6361D7981C4052CC005CD430 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		A0519AE51C56DD8200307EB5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A0519AE61C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RBQFetchedResultsControllerFrameworkTests.swift; sourceTree = "<group>"; };
+		A0519B0A1C56DDB300307EB5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RBQFetchedResultsController/Info.plist; sourceTree = SOURCE_ROOT; };
+		A0519B0B1C56DDB300307EB5 /* RBQFRC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQFRC.h; path = RBQFetchedResultsController/RBQFRC.h; sourceTree = SOURCE_ROOT; };
+		A0519B0F1C56EC9A00307EB5 /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
+		A0519B101C56EC9A00307EB5 /* RBQControllerCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQControllerCacheObject.m; sourceTree = "<group>"; };
+		A0519B111C56EC9A00307EB5 /* RBQObjectCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQObjectCacheObject.h; sourceTree = "<group>"; };
+		A0519B121C56EC9A00307EB5 /* RBQObjectCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQObjectCacheObject.m; sourceTree = "<group>"; };
+		A0519B131C56EC9A00307EB5 /* RBQSectionCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSectionCacheObject.h; sourceTree = "<group>"; };
+		A0519B141C56EC9A00307EB5 /* RBQSectionCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSectionCacheObject.m; sourceTree = "<group>"; };
+		A0519B151C56EC9A00307EB5 /* RBQFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQFetchedResultsController.h; path = RBQFetchedResultsController/Source/RBQFetchedResultsController.h; sourceTree = SOURCE_ROOT; };
+		A0519B161C56EC9A00307EB5 /* RBQFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchedResultsController.m; path = RBQFetchedResultsController/Source/RBQFetchedResultsController.m; sourceTree = SOURCE_ROOT; };
+		A0519B171C56EC9A00307EB5 /* RBQFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQFetchRequest.h; path = RBQFetchedResultsController/Source/RBQFetchRequest.h; sourceTree = SOURCE_ROOT; };
+		A0519B181C56EC9A00307EB5 /* RBQFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchRequest.m; path = RBQFetchedResultsController/Source/RBQFetchRequest.m; sourceTree = SOURCE_ROOT; };
+		A0519B1B1C56EC9A00307EB5 /* RLMObject+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Notifications.h"; sourceTree = "<group>"; };
+		A0519B1C1C56EC9A00307EB5 /* RLMObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Notifications.m"; sourceTree = "<group>"; };
+		A0519B1D1C56EC9A00307EB5 /* RLMRealm+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMRealm+Notifications.h"; sourceTree = "<group>"; };
+		A0519B1E1C56EC9A00307EB5 /* RLMRealm+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMRealm+Notifications.m"; sourceTree = "<group>"; };
+		A0519B1F1C56EC9A00307EB5 /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
+		A0519B201C56EC9A00307EB5 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
+		A0519B221C56EC9A00307EB5 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
+		A0519B231C56EC9A00307EB5 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
+		A0519B281C56EC9A00307EB5 /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
+		A0519B291C56EC9A00307EB5 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
+		A0519B2C1C56EC9A00307EB5 /* RLMObject+SafeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+SafeObject.h"; sourceTree = "<group>"; };
+		A0519B2D1C56EC9A00307EB5 /* RLMObject+SafeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+SafeObject.m"; sourceTree = "<group>"; };
+		A0519B2E1C56EC9A00307EB5 /* SafeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeObject.swift; sourceTree = "<group>"; };
+		A0519B341C56EC9A00307EB5 /* RLMArray+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Utilities.h"; sourceTree = "<group>"; };
+		A0519B351C56EC9A00307EB5 /* RLMArray+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Utilities.m"; sourceTree = "<group>"; };
+		A0519B361C56EC9A00307EB5 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
+		A0519B371C56EC9A00307EB5 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
+		A0519B381C56EC9A00307EB5 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
+		A0519B391C56EC9A00307EB5 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
+		A0519B3B1C56EC9A00307EB5 /* ChangeLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeLogger.swift; sourceTree = "<group>"; };
+		A0519B3C1C56EC9A00307EB5 /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
+		A0519B3D1C56EC9A00307EB5 /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchRequest.swift; sourceTree = "<group>"; };
+		A0519B3E1C56EC9A00307EB5 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,8 +128,8 @@
 			children = (
 				6361D7971C4052CC005CD430 /* Realm.framework */,
 				6361D7981C4052CC005CD430 /* RealmSwift.framework */,
-				6361D7361C4051A8005CD430 /* RBQFetchedResultsControllerFramework */,
-				6361D7421C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests */,
+				6361D7361C4051A8005CD430 /* RBQFetchedResultsController */,
+				A0519AE41C56DD8200307EB5 /* RBQFetchedResultsControllerTests */,
 				6361D7351C4051A8005CD430 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -142,112 +143,119 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6361D7361C4051A8005CD430 /* RBQFetchedResultsControllerFramework */ = {
+		6361D7361C4051A8005CD430 /* RBQFetchedResultsController */ = {
 			isa = PBXGroup;
 			children = (
+				A0519B0B1C56DDB300307EB5 /* RBQFRC.h */,
+				A0519B0A1C56DDB300307EB5 /* Info.plist */,
 				6361D74E1C4051ED005CD430 /* Source */,
-				6361D7371C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h */,
-				6361D7391C4051A8005CD430 /* Info.plist */,
 			);
+			name = RBQFetchedResultsController;
 			path = RBQFetchedResultsControllerFramework;
-			sourceTree = "<group>";
-		};
-		6361D7421C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests */ = {
-			isa = PBXGroup;
-			children = (
-				6361D7431C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift */,
-				6361D7451C4051A8005CD430 /* Info.plist */,
-			);
-			path = RBQFetchedResultsControllerFrameworkTests;
 			sourceTree = "<group>";
 		};
 		6361D74E1C4051ED005CD430 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				6361D74F1C4051ED005CD430 /* CacheObjects */,
-				6361D7561C4051ED005CD430 /* RBQFetchedResultsController.h */,
-				6361D7571C4051ED005CD430 /* RBQFetchedResultsController.m */,
-				6361D7581C4051ED005CD430 /* RBQFetchRequest.h */,
-				6361D7591C4051ED005CD430 /* RBQFetchRequest.m */,
-				6361D75A1C4051ED005CD430 /* RBQRealmNotificationManager */,
-				6361D7641C4051ED005CD430 /* RBQSafeRealmObject */,
-				6361D76A1C4051ED005CD430 /* RealmUtilities */,
-				6361D7711C4051ED005CD430 /* Swift */,
+				A0519B0E1C56EC9A00307EB5 /* CacheObjects */,
+				A0519B151C56EC9A00307EB5 /* RBQFetchedResultsController.h */,
+				A0519B161C56EC9A00307EB5 /* RBQFetchedResultsController.m */,
+				A0519B171C56EC9A00307EB5 /* RBQFetchRequest.h */,
+				A0519B181C56EC9A00307EB5 /* RBQFetchRequest.m */,
+				A0519B191C56EC9A00307EB5 /* RBQRealmNotificationManager */,
+				A0519B251C56EC9A00307EB5 /* RBQSafeRealmObject */,
+				A0519B301C56EC9A00307EB5 /* RealmUtilities */,
+				A0519B3A1C56EC9A00307EB5 /* Swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
 		};
-		6361D74F1C4051ED005CD430 /* CacheObjects */ = {
+		A0519AE41C56DD8200307EB5 /* RBQFetchedResultsControllerTests */ = {
 			isa = PBXGroup;
 			children = (
-				6361D7501C4051ED005CD430 /* RBQControllerCacheObject.h */,
-				6361D7511C4051ED005CD430 /* RBQControllerCacheObject.m */,
-				6361D7521C4051ED005CD430 /* RBQObjectCacheObject.h */,
-				6361D7531C4051ED005CD430 /* RBQObjectCacheObject.m */,
-				6361D7541C4051ED005CD430 /* RBQSectionCacheObject.h */,
-				6361D7551C4051ED005CD430 /* RBQSectionCacheObject.m */,
+				A0519AE51C56DD8200307EB5 /* Info.plist */,
+				A0519AE61C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift */,
 			);
-			path = CacheObjects;
+			name = RBQFetchedResultsControllerTests;
+			path = RBQFetchedResultsController/RBQFetchedResultsControllerTests;
 			sourceTree = "<group>";
 		};
-		6361D75A1C4051ED005CD430 /* RBQRealmNotificationManager */ = {
+		A0519B0E1C56EC9A00307EB5 /* CacheObjects */ = {
 			isa = PBXGroup;
 			children = (
-				6361D75B1C4051ED005CD430 /* Helpers */,
-				6361D7621C4051ED005CD430 /* RBQRealmNotificationManager.h */,
-				6361D7631C4051ED005CD430 /* RBQRealmNotificationManager.m */,
+				A0519B0F1C56EC9A00307EB5 /* RBQControllerCacheObject.h */,
+				A0519B101C56EC9A00307EB5 /* RBQControllerCacheObject.m */,
+				A0519B111C56EC9A00307EB5 /* RBQObjectCacheObject.h */,
+				A0519B121C56EC9A00307EB5 /* RBQObjectCacheObject.m */,
+				A0519B131C56EC9A00307EB5 /* RBQSectionCacheObject.h */,
+				A0519B141C56EC9A00307EB5 /* RBQSectionCacheObject.m */,
 			);
-			path = RBQRealmNotificationManager;
-			sourceTree = "<group>";
+			name = CacheObjects;
+			path = RBQFetchedResultsController/Source/CacheObjects;
+			sourceTree = SOURCE_ROOT;
 		};
-		6361D75B1C4051ED005CD430 /* Helpers */ = {
+		A0519B191C56EC9A00307EB5 /* RBQRealmNotificationManager */ = {
 			isa = PBXGroup;
 			children = (
-				6361D75C1C4051ED005CD430 /* RLMObject+Notifications.h */,
-				6361D75D1C4051ED005CD430 /* RLMObject+Notifications.m */,
-				6361D75E1C4051ED005CD430 /* RLMRealm+Notifications.h */,
-				6361D75F1C4051ED005CD430 /* RLMRealm+Notifications.m */,
-				6361D7601C4051ED005CD430 /* RLMResults+Notifications.h */,
-				6361D7611C4051ED005CD430 /* RLMResults+Notifications.m */,
+				A0519B1A1C56EC9A00307EB5 /* Helpers */,
+				A0519B221C56EC9A00307EB5 /* RBQRealmNotificationManager.h */,
+				A0519B231C56EC9A00307EB5 /* RBQRealmNotificationManager.m */,
+			);
+			name = RBQRealmNotificationManager;
+			path = RBQFetchedResultsController/Source/RBQRealmNotificationManager;
+			sourceTree = SOURCE_ROOT;
+		};
+		A0519B1A1C56EC9A00307EB5 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A0519B1B1C56EC9A00307EB5 /* RLMObject+Notifications.h */,
+				A0519B1C1C56EC9A00307EB5 /* RLMObject+Notifications.m */,
+				A0519B1D1C56EC9A00307EB5 /* RLMRealm+Notifications.h */,
+				A0519B1E1C56EC9A00307EB5 /* RLMRealm+Notifications.m */,
+				A0519B1F1C56EC9A00307EB5 /* RLMResults+Notifications.h */,
+				A0519B201C56EC9A00307EB5 /* RLMResults+Notifications.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		6361D7641C4051ED005CD430 /* RBQSafeRealmObject */ = {
+		A0519B251C56EC9A00307EB5 /* RBQSafeRealmObject */ = {
 			isa = PBXGroup;
 			children = (
-				6361D7651C4051ED005CD430 /* RBQSafeRealmObject.h */,
-				6361D7661C4051ED005CD430 /* RBQSafeRealmObject.m */,
-				6361D7671C4051ED005CD430 /* RLMObject+SafeObject.h */,
-				6361D7681C4051ED005CD430 /* RLMObject+SafeObject.m */,
-				6361D7691C4051ED005CD430 /* SafeObject.swift */,
+				A0519B281C56EC9A00307EB5 /* RBQSafeRealmObject.h */,
+				A0519B291C56EC9A00307EB5 /* RBQSafeRealmObject.m */,
+				A0519B2C1C56EC9A00307EB5 /* RLMObject+SafeObject.h */,
+				A0519B2D1C56EC9A00307EB5 /* RLMObject+SafeObject.m */,
+				A0519B2E1C56EC9A00307EB5 /* SafeObject.swift */,
 			);
-			path = RBQSafeRealmObject;
-			sourceTree = "<group>";
+			name = RBQSafeRealmObject;
+			path = RBQFetchedResultsController/Source/RBQSafeRealmObject;
+			sourceTree = SOURCE_ROOT;
 		};
-		6361D76A1C4051ED005CD430 /* RealmUtilities */ = {
+		A0519B301C56EC9A00307EB5 /* RealmUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				6361D76B1C4051ED005CD430 /* RLMArray+Utilities.h */,
-				6361D76C1C4051ED005CD430 /* RLMArray+Utilities.m */,
-				6361D76D1C4051ED005CD430 /* RLMObject+Utilities.h */,
-				6361D76E1C4051ED005CD430 /* RLMObject+Utilities.m */,
-				6361D76F1C4051ED005CD430 /* RLMObjectBase+Utilities.h */,
-				6361D7701C4051ED005CD430 /* RLMObjectBase+Utilities.m */,
+				A0519B341C56EC9A00307EB5 /* RLMArray+Utilities.h */,
+				A0519B351C56EC9A00307EB5 /* RLMArray+Utilities.m */,
+				A0519B361C56EC9A00307EB5 /* RLMObject+Utilities.h */,
+				A0519B371C56EC9A00307EB5 /* RLMObject+Utilities.m */,
+				A0519B381C56EC9A00307EB5 /* RLMObjectBase+Utilities.h */,
+				A0519B391C56EC9A00307EB5 /* RLMObjectBase+Utilities.m */,
 			);
-			path = RealmUtilities;
-			sourceTree = "<group>";
+			name = RealmUtilities;
+			path = RBQFetchedResultsController/Source/RealmUtilities;
+			sourceTree = SOURCE_ROOT;
 		};
-		6361D7711C4051ED005CD430 /* Swift */ = {
+		A0519B3A1C56EC9A00307EB5 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
-				6361D7721C4051ED005CD430 /* ChangeLogger.swift */,
-				6361D7731C4051ED005CD430 /* FetchedResultsController.swift */,
-				6361D7741C4051ED005CD430 /* FetchRequest.swift */,
-				6361D7751C4051ED005CD430 /* Utilities.swift */,
+				A0519B3B1C56EC9A00307EB5 /* ChangeLogger.swift */,
+				A0519B3C1C56EC9A00307EB5 /* FetchedResultsController.swift */,
+				A0519B3D1C56EC9A00307EB5 /* FetchRequest.swift */,
+				A0519B3E1C56EC9A00307EB5 /* Utilities.swift */,
 			);
-			path = Swift;
-			sourceTree = "<group>";
+			name = Swift;
+			path = RBQFetchedResultsController/Source/Swift;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -256,21 +264,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6361D7781C4051ED005CD430 /* RBQObjectCacheObject.h in Headers */,
-				6361D7861C4051ED005CD430 /* RBQRealmNotificationManager.h in Headers */,
-				6361D7761C4051ED005CD430 /* RBQControllerCacheObject.h in Headers */,
-				6361D77A1C4051ED005CD430 /* RBQSectionCacheObject.h in Headers */,
-				6361D77E1C4051ED005CD430 /* RBQFetchRequest.h in Headers */,
-				6361D7801C4051ED005CD430 /* RLMObject+Notifications.h in Headers */,
-				6361D7821C4051ED005CD430 /* RLMRealm+Notifications.h in Headers */,
-				6361D7841C4051ED005CD430 /* RLMResults+Notifications.h in Headers */,
-				6361D78A1C4051ED005CD430 /* RLMObject+SafeObject.h in Headers */,
-				6361D78F1C4051ED005CD430 /* RLMObject+Utilities.h in Headers */,
-				6361D78D1C4051ED005CD430 /* RLMArray+Utilities.h in Headers */,
-				6361D7881C4051ED005CD430 /* RBQSafeRealmObject.h in Headers */,
-				6361D7381C4051A8005CD430 /* RBQFetchedResultsControllerFramework.h in Headers */,
-				6361D77C1C4051ED005CD430 /* RBQFetchedResultsController.h in Headers */,
-				6361D7911C4051ED005CD430 /* RLMObjectBase+Utilities.h in Headers */,
+				A0519B501C56EC9A00307EB5 /* RBQRealmNotificationManager.h in Headers */,
+				A0519B491C56EC9A00307EB5 /* RLMObject+Notifications.h in Headers */,
+				A0519B471C56EC9A00307EB5 /* RBQFetchRequest.h in Headers */,
+				A0519B551C56EC9A00307EB5 /* RBQSafeRealmObject.h in Headers */,
+				A0519B0D1C56DDB300307EB5 /* RBQFRC.h in Headers */,
+				A0519B451C56EC9A00307EB5 /* RBQFetchedResultsController.h in Headers */,
+				A0519B4B1C56EC9A00307EB5 /* RLMRealm+Notifications.h in Headers */,
+				A0519B4D1C56EC9A00307EB5 /* RLMResults+Notifications.h in Headers */,
+				A0519B591C56EC9A00307EB5 /* RLMObject+SafeObject.h in Headers */,
+				A0519B621C56EC9A00307EB5 /* RLMObject+Utilities.h in Headers */,
+				A0519B601C56EC9A00307EB5 /* RLMArray+Utilities.h in Headers */,
+				A0519B641C56EC9A00307EB5 /* RLMObjectBase+Utilities.h in Headers */,
+				A0519B411C56EC9A00307EB5 /* RBQObjectCacheObject.h in Headers */,
+				A0519B3F1C56EC9A00307EB5 /* RBQControllerCacheObject.h in Headers */,
+				A0519B431C56EC9A00307EB5 /* RBQSectionCacheObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +369,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0519AE71C56DD8200307EB5 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,25 +380,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6361D7951C4051ED005CD430 /* FetchRequest.swift in Sources */,
-				6361D7831C4051ED005CD430 /* RLMRealm+Notifications.m in Sources */,
-				6361D7901C4051ED005CD430 /* RLMObject+Utilities.m in Sources */,
-				6361D78C1C4051ED005CD430 /* SafeObject.swift in Sources */,
-				6361D7931C4051ED005CD430 /* ChangeLogger.swift in Sources */,
-				6361D7891C4051ED005CD430 /* RBQSafeRealmObject.m in Sources */,
-				6361D77B1C4051ED005CD430 /* RBQSectionCacheObject.m in Sources */,
-				6361D7811C4051ED005CD430 /* RLMObject+Notifications.m in Sources */,
-				6361D7941C4051ED005CD430 /* FetchedResultsController.swift in Sources */,
-				6361D77F1C4051ED005CD430 /* RBQFetchRequest.m in Sources */,
-				6361D78B1C4051ED005CD430 /* RLMObject+SafeObject.m in Sources */,
-				6361D7791C4051ED005CD430 /* RBQObjectCacheObject.m in Sources */,
-				6361D7871C4051ED005CD430 /* RBQRealmNotificationManager.m in Sources */,
-				6361D7961C4051ED005CD430 /* Utilities.swift in Sources */,
-				6361D77D1C4051ED005CD430 /* RBQFetchedResultsController.m in Sources */,
-				6361D78E1C4051ED005CD430 /* RLMArray+Utilities.m in Sources */,
-				6361D7771C4051ED005CD430 /* RBQControllerCacheObject.m in Sources */,
-				6361D7851C4051ED005CD430 /* RLMResults+Notifications.m in Sources */,
-				6361D7921C4051ED005CD430 /* RLMObjectBase+Utilities.m in Sources */,
+				A0519B611C56EC9A00307EB5 /* RLMArray+Utilities.m in Sources */,
+				A0519B4C1C56EC9A00307EB5 /* RLMRealm+Notifications.m in Sources */,
+				A0519B691C56EC9A00307EB5 /* Utilities.swift in Sources */,
+				A0519B651C56EC9A00307EB5 /* RLMObjectBase+Utilities.m in Sources */,
+				A0519B5B1C56EC9A00307EB5 /* SafeObject.swift in Sources */,
+				A0519B661C56EC9A00307EB5 /* ChangeLogger.swift in Sources */,
+				A0519B441C56EC9A00307EB5 /* RBQSectionCacheObject.m in Sources */,
+				A0519B4A1C56EC9A00307EB5 /* RLMObject+Notifications.m in Sources */,
+				A0519B481C56EC9A00307EB5 /* RBQFetchRequest.m in Sources */,
+				A0519B631C56EC9A00307EB5 /* RLMObject+Utilities.m in Sources */,
+				A0519B561C56EC9A00307EB5 /* RBQSafeRealmObject.m in Sources */,
+				A0519B421C56EC9A00307EB5 /* RBQObjectCacheObject.m in Sources */,
+				A0519B511C56EC9A00307EB5 /* RBQRealmNotificationManager.m in Sources */,
+				A0519B5A1C56EC9A00307EB5 /* RLMObject+SafeObject.m in Sources */,
+				A0519B461C56EC9A00307EB5 /* RBQFetchedResultsController.m in Sources */,
+				A0519B401C56EC9A00307EB5 /* RBQControllerCacheObject.m in Sources */,
+				A0519B681C56EC9A00307EB5 /* FetchRequest.swift in Sources */,
+				A0519B671C56EC9A00307EB5 /* FetchedResultsController.swift in Sources */,
+				A0519B4E1C56EC9A00307EB5 /* RLMResults+Notifications.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,7 +406,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6361D7441C4051A8005CD430 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */,
+				A0519AE81C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,11 +521,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = RBQFetchedResultsControllerFramework/Info.plist;
+				INFOPLIST_FILE = RBQFetchedResultsController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/RBQFetchedResultsControllerFramework/ModuleMapFile";
+				MODULEMAP_FILE = "$(SRCROOT)/RBQFetchedResultsController/ModuleMapFile";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsController;
 				PRODUCT_NAME = RBQFetchedResultsController;
 				SKIP_INSTALL = YES;
@@ -534,11 +543,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = RBQFetchedResultsControllerFramework/Info.plist;
+				INFOPLIST_FILE = RBQFetchedResultsController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/RBQFetchedResultsControllerFramework/ModuleMapFile";
+				MODULEMAP_FILE = "$(SRCROOT)/RBQFetchedResultsController/ModuleMapFile";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsController;
 				PRODUCT_NAME = RBQFetchedResultsController;
 				SKIP_INSTALL = YES;

@@ -9,7 +9,7 @@
 #import "ExampleTableViewController.h"
 #import "TestObject.h"
 
-#import <RBQFetchedResultsController/RBQFetchedResultsControllerFramework.h>
+#import <RBQFetchedResultsController/RBQFRC.h>
 #import <Realm/Realm.h>
 
 id NULL_IF_NIL(id x) {return x ? x : NSNull.null;}

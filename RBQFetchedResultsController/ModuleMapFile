@@ -1,5 +1,5 @@
 framework module RBQFetchedResultsController {
-umbrella header "RBQFetchedResultsControllerFramework.h"
+umbrella header "RBQFRC.h"
 
 export *
 module * { export * }
