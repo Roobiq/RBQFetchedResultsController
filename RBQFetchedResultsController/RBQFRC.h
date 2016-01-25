@@ -1,6 +1,6 @@
 //
-//  RBQFetchedResultsControllerFramework.h
-//  RBQFetchedResultsControllerFramework
+//  RBQFRC.h
+//  RBQFetchedResultsController
 //
 //  Created by Atai Barkai on 1/8/16.
 //  Copyright © 2016 Atai Barkai. All rights reserved.
