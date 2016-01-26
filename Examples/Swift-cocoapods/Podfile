@@ -1,0 +1,12 @@
+use_frameworks!
+
+target 'RBQFRCSwiftExample' do
+  pod 'RealmSwift', ">=0.96"
+  pod 'RBQFetchedResultsController', :path => '../../'
+  pod 'SwiftFetchedResultsController', :path => '../../'
+end
+
+target 'RBQFRCSwiftExampleTests' do
+  pod 'RealmSwift', ">=0.96"
+end
+
