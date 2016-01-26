@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "7.0"
   s.source       = { :git => "https://github.com/Roobiq/RBQFetchedResultsController.git", :tag => "v#{s.version}", :submodules => true }
   s.source_files  = "RBQFetchedResultsController/Source/**/*.{h,m}", "RBQFetchedResultsController/RBQFRC.h"
+  s.exclude_files = "RBQFetchedResultsController/Source/Swift/*"
   s.requires_arc = true
   s.dependency "Realm", ">=0.95"
 

@@ -1,0 +1,11 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+
+target 'RBQFetchedResultsControllerExample' do
+    pod 'Realm', '>= 0.95'
+    pod 'RBQFetchedResultsController', :path => '../../'
+end
+
+target 'RBQFetchedResultsControllerExampleTests' do
+    pod 'Realm/Headers'
+end
