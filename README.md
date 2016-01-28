@@ -1,5 +1,7 @@
 RBQFetchedResultsController
 ===========================
+[![CocoaPods](https://img.shields.io/cocoapods/v/RBQFetchedResultsController.svg)]()
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 #####Drop-in replacement for `NSFetchedResultsController` backed by Realm.
 
@@ -112,8 +114,10 @@ for (NSString *path in paths) {
 ```
 
 ####Installation
-RBQFetchedResultsController is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+`RBQFetchedResultsController` is available through [CocoaPods](http://cocoapods.org) or [Carthage](https://github.com/Carthage/Carthage). 
+
+####Cocoapods
+To install it, simply add the following line to your Podfile:
 
 **Objective-C**
 ```
@@ -131,6 +135,17 @@ pod 'SwiftFetchedResultsController'
 pod 'SwiftFetchedResultsController', '2.3'
 ```
 
+Then run `pod install`.
+
+####Carthage
+To install it, simply add the following line to your Cartfile:
+
+```
+github "Roobiq/RBQFetchedResultsController"
+```
+
+Then run `carthage update` and drag `RBQFetchedResultsController.framework` from the appropriate platform directory in `Carthage/Build/` to the "Linked Frameworks and Libraries" section of your Xcode project’s "General”" settings.
+
 ####Demo
 
 Build and run/test the Example project in Xcode to see `RBQFetchedResultsController` in action. This project uses CocoaPods. If you don't have [CocoaPods](http://cocoapods.org/) installed, grab it with [sudo] gem install cocoapods.
@@ -138,7 +153,9 @@ Build and run/test the Example project in Xcode to see `RBQFetchedResultsControl
 **Objective-C**
 ```
 git clone http://github.com/Roobiq/RBQFetchedResultsController
-cd RBQFetchedResultsController/RBQFetchedResultsControllerExample
+git submodule init
+git submodule update
+cd Examples/ObjC
 pod install
 open RBQFetchedResultsControllerExample.xcworkspace
 ```
@@ -146,10 +163,16 @@ open RBQFetchedResultsControllerExample.xcworkspace
 **Swift**
 ```
 git clone http://github.com/Roobiq/RBQFetchedResultsController
-cd RBQFetchedResultsController/SwiftExample
+git submodule init
+git submodule update
+cd Examples/Swift
 pod install
 open RBQFRCSwiftExample.xcworkspace
 ```
+
+**Note:** the example projects install the framework by directly including the source files and using Cocoapods to install Realm. There are also example projects that test/demonstrate installation of the framework with Cocoapods and Carthage. For the Cocoapods install example apps (`ObjC-cocoapods`/`Swift-cocoapods`) the framework is installed as a development pod, referencing the local podspec and source files. Follow the same instructions as above, since the `pod install` will simply include the framework.
+
+For the Carthage example apps (`ObjC-carthage`/`Swift-carthage`), you must run `carthage update` after `git submodule update` in the steps above so that Carthage can build the Realm framework(s) locally. The example project then uses the `RBQFetchedResultsController.xcodeproj` directly in the same way as you would the resulting framework produced by Carthage.
 
 ####Current State
 The example project includes various functional and unit tests. In addition, the project is used in our [Roobiq](http://www.roobiq.com) app and is quite stable.
