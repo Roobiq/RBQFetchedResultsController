@@ -139,6 +139,8 @@ Build and run/test the Example project in Xcode to see `RBQFetchedResultsControl
 ```
 git clone http://github.com/Roobiq/RBQFetchedResultsController
 cd RBQFetchedResultsController/RBQFetchedResultsControllerExample
+git submodule init
+git submodule update
 pod install
 open RBQFetchedResultsControllerExample.xcworkspace
 ```
@@ -147,6 +149,8 @@ open RBQFetchedResultsControllerExample.xcworkspace
 ```
 git clone http://github.com/Roobiq/RBQFetchedResultsController
 cd RBQFetchedResultsController/SwiftExample
+git submodule init
+git submodule update
 pod install
 open RBQFRCSwiftExample.xcworkspace
 ```
