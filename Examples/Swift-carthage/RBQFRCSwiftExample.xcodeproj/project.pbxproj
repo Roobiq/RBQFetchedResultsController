@@ -12,6 +12,7 @@
 		A05FA4F51B6185AE0000C9B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F41B6185AE0000C9B2 /* Images.xcassets */; };
 		A05FA4F81B6185AE0000C9B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F61B6185AE0000C9B2 /* LaunchScreen.xib */; };
 		A05FA5041B6185AE0000C9B2 /* RBQFRCSwiftExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA5031B6185AE0000C9B2 /* RBQFRCSwiftExampleTests.swift */; };
+		A090E5D51C73B3BB0046788B /* SwiftFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */; };
 		A0AB74621B6C389700923940 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AB74611B6C389700923940 /* MainTableViewController.swift */; };
 		A0BC27BF1C56DA8300306449 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27BA1C56DA7500306449 /* RBQFetchedResultsController.framework */; };
 		A0BC27C21C56DA8D00306449 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27C01C56DA8D00306449 /* Realm.framework */; };
@@ -27,6 +28,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = A05FA4E71B6185AE0000C9B2;
 			remoteInfo = RBQFRCSwiftExample;
+		};
+		A090E5CF1C73B3B50046788B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0BC27B41C56DA7500306449 /* RBQFetchedResultsController.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A090E59F1C73B17B0046788B;
+			remoteInfo = SwiftFetchedResultsController;
+		};
+		A090E5D31C73B3B60046788B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0BC27B41C56DA7500306449 /* RBQFetchedResultsController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A090E5A01C73B17B0046788B;
+			remoteInfo = SwiftFetchedResultsController;
 		};
 		A0BC27B91C56DA7500306449 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -87,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A090E5D51C73B3BB0046788B /* SwiftFetchedResultsController.framework in Frameworks */,
 				A0BC27C21C56DA8D00306449 /* Realm.framework in Frameworks */,
 				A0BC27BF1C56DA8300306449 /* RBQFetchedResultsController.framework in Frameworks */,
 				A0BC27C41C56DA8D00306449 /* RealmSwift.framework in Frameworks */,
@@ -175,6 +191,7 @@
 			children = (
 				A0BC27BA1C56DA7500306449 /* RBQFetchedResultsController.framework */,
 				A0BC27BC1C56DA7500306449 /* RBQFetchedResultsController.xctest */,
+				A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -194,6 +211,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A090E5D01C73B3B50046788B /* PBXTargetDependency */,
 				A0BC27BE1C56DA7C00306449 /* PBXTargetDependency */,
 			);
 			name = RBQFRCSwiftExample;
@@ -267,6 +285,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SwiftFetchedResultsController.framework;
+			remoteRef = A090E5D31C73B3B60046788B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		A0BC27BA1C56DA7500306449 /* RBQFetchedResultsController.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -376,6 +401,11 @@
 			isa = PBXTargetDependency;
 			target = A05FA4E71B6185AE0000C9B2 /* RBQFRCSwiftExample */;
 			targetProxy = A05FA4FE1B6185AE0000C9B2 /* PBXContainerItemProxy */;
+		};
+		A090E5D01C73B3B50046788B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftFetchedResultsController;
+			targetProxy = A090E5CF1C73B3B50046788B /* PBXContainerItemProxy */;
 		};
 		A0BC27BE1C56DA7C00306449 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

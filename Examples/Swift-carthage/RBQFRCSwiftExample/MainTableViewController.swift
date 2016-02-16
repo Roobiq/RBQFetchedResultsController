@@ -9,7 +9,7 @@
 import UIKit
 import Realm
 import RealmSwift
-import RBQFetchedResultsController
+import SwiftFetchedResultsController
 
 // MARK: -
 
