@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "SwiftFetchedResultsController"
-  s.version      = "3.0"
+  s.version      = "3.0.1"
   s.summary      = "Swift drop-in replacement for NSFetchedResultsController backed by Realm"
   s.description  = <<-DESC
                     The FetchedResultsController (FRC) is a Swift replacement for NSFetchedResultsController when used in conjunction with the ChangeLogger class. The controller and delegate follow the same paradigm as NSFetchedResultsController, and allow the developer to monitor changes of a Realm Swift Object subclass.
