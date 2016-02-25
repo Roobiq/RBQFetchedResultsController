@@ -132,6 +132,11 @@
 @property (nonatomic, readonly, nonnull) id<RLMCollection> fetchedObjects;
 
 /**
+ *  Returns all the section titles if using a section name key path
+ */
+@property(nonatomic, readonly, nullable) NSArray <NSString *> *sectionIndexTitles;
+
+/**
  *  Deletes the cached section information with the given name
  *
  *  If name is not nil, then the cache will be cleaned, but not deleted from disk. 

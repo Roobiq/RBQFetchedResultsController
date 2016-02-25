@@ -600,6 +600,19 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     return nil;
 }
 
+- (NSArray<NSString *> *)sectionIndexTitles
+{
+    RBQControllerCacheObject *cache = [self cache];
+    
+    if (cache) {
+        NSArray *titles = [cache.sections valueForKey:@"name"];
+        
+        return titles;
+    }
+    
+    return nil;
+}
+
 #pragma mark - Private
 
 - (void)dealloc
