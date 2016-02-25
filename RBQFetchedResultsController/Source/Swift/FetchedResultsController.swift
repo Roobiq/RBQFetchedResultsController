@@ -201,6 +201,11 @@ public class FetchedResultsController<T: Object> {
         return self.fetchRequest.fetchObjects()
     }
     
+    /// Returns all the section titles if using a section name key path
+    public var sectionIndexTitles: [String]? {
+        return self.rbqFetchedResultsController.sectionIndexTitles
+    }
+    
     // MARK: Functions
     
     /**
