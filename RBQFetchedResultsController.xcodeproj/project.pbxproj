@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6361D73F1C4051A8005CD430 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */; };
 		6361D7991C4052CC005CD430 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7971C4052CC005CD430 /* Realm.framework */; };
-		6361D79A1C4052CC005CD430 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7981C4052CC005CD430 /* RealmSwift.framework */; };
 		A0519AE71C56DD8200307EB5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0519AE51C56DD8200307EB5 /* Info.plist */; };
 		A0519AE81C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519AE61C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift */; };
 		A0519B0D1C56DDB300307EB5 /* RBQFRC.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B0B1C56DDB300307EB5 /* RBQFRC.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -122,7 +121,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6361D7991C4052CC005CD430 /* Realm.framework in Frameworks */,
-				6361D79A1C4052CC005CD430 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
