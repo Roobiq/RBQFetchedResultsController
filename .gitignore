@@ -19,6 +19,7 @@ DerivedData
 Podfile.lock
 Pods
 xcuserdata
+*.resolved
 
 Carthage/Build
 
