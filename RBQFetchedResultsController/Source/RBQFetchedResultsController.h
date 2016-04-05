@@ -270,6 +270,6 @@
  */
 - (void)updateFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
         sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
-            andPeformFetch:(BOOL)performFetch;
+            andPerformFetch:(BOOL)performFetch;
 
 @end
