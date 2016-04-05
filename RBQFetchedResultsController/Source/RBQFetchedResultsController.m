@@ -571,7 +571,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 - (void)updateFetchRequest:(RBQFetchRequest *)fetchRequest
         sectionNameKeyPath:(NSString *)sectionNameKeyPath
-            andPeformFetch:(BOOL)performFetch
+            andPerformFetch:(BOOL)performFetch
 {
     @synchronized(self) {
         // Turn off change notifications since we are replacing fetch request
