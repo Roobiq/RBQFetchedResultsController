@@ -261,7 +261,10 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 // Create Realm instance for cache name
 + (RLMRealm *)realmForCacheName:(NSString *)cacheName
 {
-    return [RLMRealm realmWithPath:[RBQFetchedResultsController cachePathWithName:cacheName]];
+    RLMRealmConfiguration *config = [RLMRealmConfiguration defaultConfiguration];
+    config.path = [RBQFetchedResultsController cachePathWithName:cacheName];
+    config.encryptionKey = nil;
+    return [RLMRealm realmWithConfiguration:config error:nil];
 }
 
 //  Create a file path for Realm cache with a given name
@@ -1814,6 +1817,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     }
     else {
         RLMRealmConfiguration *inMemoryConfiguration = [RLMRealmConfiguration defaultConfiguration];
+        inMemoryConfiguration.encryptionKey = nil;
         inMemoryConfiguration.inMemoryIdentifier = [self nameForFetchRequest:self.fetchRequest];
         
         RLMRealm *realm = [RLMRealm realmWithConfiguration:inMemoryConfiguration
