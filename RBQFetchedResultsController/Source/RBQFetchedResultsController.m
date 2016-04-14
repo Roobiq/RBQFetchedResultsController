@@ -370,6 +370,10 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 - (BOOL)performFetch
 {
+    if ([self.delegate respondsToSelector:@selector(controllerWillPerformFetch:)]) {
+        [self.delegate controllerWillPerformFetch:self];
+    }
+    
     if (self.fetchRequest) {
         
         if (self.cacheName) {
@@ -387,6 +391,10 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         
         // Only register for changes after the cache was created!
         [self registerChangeNotifications];
+        
+        if ([self.delegate respondsToSelector:@selector(controllerDidPerformFetch:)]) {
+            [self.delegate controllerDidPerformFetch:self];
+        }
         
         return YES;
     }
