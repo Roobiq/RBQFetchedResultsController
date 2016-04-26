@@ -153,7 +153,7 @@ class MainTableViewController: UITableViewController {
         let objectsInFirstSection = self.realm!.objects(TestObject).filter("%K == %@", "sectionName","First Section")
         
         try! self.realm!.write { () -> Void in
-            self.realm!.deleteWithNotification(objectsInFirstSection)
+            self.realm!.delete(objectsInFirstSection)
         }
     }
     
@@ -165,7 +165,7 @@ class MainTableViewController: UITableViewController {
             let realm = self.realm!
             
             try! realm.write({ () -> Void in
-                realm.deleteWithNotification(object)
+                realm.delete(object)
             })
         }
     }
@@ -195,15 +195,10 @@ class MainTableViewController: UITableViewController {
                 newObject!.key = "\(title)\(sortIndex)"
                 newObject!.inTable = true
                 
-                realm.addWithNotification(newObject!, update: false)
+                realm.add(newObject!, update: false)
             }
             else {
-                newObject?.changeWithNotification({ (object) -> Void in
-                    if let testObject = object as? TestObject {
-                        
-                        testObject.inTable = true
-                    }
-                })
+                newObject?.inTable = true
             }
             
             try! realm.commitWrite()
@@ -222,45 +217,23 @@ class MainTableViewController: UITableViewController {
             let sixthObject = self.fetchedResultsController?.objectAtIndexPath(indexPathSixthRow)
             let ninthObject = realm.objects(TestObject).filter("%K == %@", "title","Cell 9")
             
-            fifthObject?.changeWithNotification({ (object) -> Void in
-                if let testObject = object as? TestObject {
-                    
-                    testObject.sortIndex += 1
-                }
-            })
+            fifthObject?.sortIndex += 1
             
-            sixthObject?.changeWithNotification({ (object) -> Void in
-                if let testObject = object as? TestObject {
-                    
-                    testObject.sortIndex -= 1
-                }
-            })
+            sixthObject?.sortIndex -= 1
             
-            firstObject?.changeWithNotification({ (object) -> Void in
-                if let testObject = object as? TestObject {
-                    
-                    testObject.inTable = false
-                }
-            })
+            firstObject?.inTable = false
             
-            thirdObject?.changeWithNotification({ (object) -> Void in
-                if let testObject = object as? TestObject {
-                    
-                    testObject.title = "Testing Move And Update"
-                }
-            })
+            thirdObject?.title = "Testing Move And Update"
             
-            ninthObject.first?.changeWithNotification({ (object) -> Void in
-                if let testObject = object as? TestObject {
-                    
-                    if testObject.sectionName == "First Section" {
-                       testObject.sectionName = "Second Section"
-                    }
-                    else {
-                        testObject.sectionName = "First Section"
-                    }
+            if let testObject = ninthObject.first {
+                
+                if testObject.sectionName == "First Section" {
+                    testObject.sectionName = "Second Section"
                 }
-            })
+                else {
+                    testObject.sectionName = "First Section"
+                }
+            }
             
             try! realm.commitWrite()
         }

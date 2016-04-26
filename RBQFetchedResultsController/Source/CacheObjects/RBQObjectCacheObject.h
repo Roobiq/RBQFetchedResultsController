@@ -93,6 +93,13 @@
 + (RLMObject *)objectInRealm:(RLMRealm *)realm
               forCacheObject:(RBQObjectCacheObject *)cacheObject;
 
+/**
+ *  Retrieve the primary key value from the primary key string value
+ *
+ *  @return Instance of the original RLMObject's primary key value
+ */
+- (id)primaryKeyValue;
+
 @end
 
 // This protocol enables typed collections. i.e.:

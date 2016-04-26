@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		35FE7FFFF20D16A996AE6C4F /* Pods_RBQFRCSwiftExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA749329087952B377950732 /* Pods_RBQFRCSwiftExample.framework */; };
 		8C3E004436C357D677AEDFE4 /* Pods_RBQFRCSwiftExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D495B5411AC2EC1C30253A /* Pods_RBQFRCSwiftExampleTests.framework */; };
-		A0519BB51C56F88C00307EB5 /* ChangeLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519BB11C56F88C00307EB5 /* ChangeLogger.swift */; };
 		A0519BB61C56F88C00307EB5 /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519BB21C56F88C00307EB5 /* FetchedResultsController.swift */; };
 		A0519BB71C56F88C00307EB5 /* FetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519BB31C56F88C00307EB5 /* FetchRequest.swift */; };
 		A0519BB81C56F88C00307EB5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519BB41C56F88C00307EB5 /* Utilities.swift */; };
@@ -18,10 +17,6 @@
 		A0519BE71C56F89B00307EB5 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BBF1C56F89B00307EB5 /* RBQSectionCacheObject.m */; };
 		A0519BE81C56F89B00307EB5 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BC11C56F89B00307EB5 /* RBQFetchedResultsController.m */; };
 		A0519BE91C56F89B00307EB5 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BC31C56F89B00307EB5 /* RBQFetchRequest.m */; };
-		A0519BEA1C56F89B00307EB5 /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BC71C56F89B00307EB5 /* RLMObject+Notifications.m */; };
-		A0519BEB1C56F89B00307EB5 /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BC91C56F89B00307EB5 /* RLMRealm+Notifications.m */; };
-		A0519BEC1C56F89B00307EB5 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BCB1C56F89B00307EB5 /* RLMResults+Notifications.m */; };
-		A0519BEE1C56F89B00307EB5 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BCE1C56F89B00307EB5 /* RBQRealmNotificationManager.m */; };
 		A0519BF21C56F89B00307EB5 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BD41C56F89B00307EB5 /* RBQSafeRealmObject.m */; };
 		A0519BF51C56F89B00307EB5 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BD81C56F89B00307EB5 /* RLMObject+SafeObject.m */; };
 		A0519BF61C56F89B00307EB5 /* SafeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519BD91C56F89B00307EB5 /* SafeObject.swift */; };
@@ -63,7 +58,6 @@
 		0BDC3169BF385B2C5A6ABF0C /* Pods-RBQFRCSwiftExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCSwiftExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCSwiftExampleTests/Pods-RBQFRCSwiftExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		2EB3D3DF0161ABB7AC2E39C9 /* Pods-RBQFRCSwiftExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFRCSwiftExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFRCSwiftExample/Pods-RBQFRCSwiftExample.debug.xcconfig"; sourceTree = "<group>"; };
 		49D495B5411AC2EC1C30253A /* Pods_RBQFRCSwiftExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RBQFRCSwiftExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A0519BB11C56F88C00307EB5 /* ChangeLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangeLogger.swift; path = ../../RBQFetchedResultsController/Source/Swift/ChangeLogger.swift; sourceTree = "<group>"; };
 		A0519BB21C56F88C00307EB5 /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchedResultsController.swift; path = ../../RBQFetchedResultsController/Source/Swift/FetchedResultsController.swift; sourceTree = "<group>"; };
 		A0519BB31C56F88C00307EB5 /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchRequest.swift; path = ../../RBQFetchedResultsController/Source/Swift/FetchRequest.swift; sourceTree = "<group>"; };
 		A0519BB41C56F88C00307EB5 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = ../../RBQFetchedResultsController/Source/Swift/Utilities.swift; sourceTree = "<group>"; };
@@ -281,7 +275,6 @@
 		A08909331B8F970A002E87DD /* Swift */ = {
 			isa = PBXGroup;
 			children = (
-				A0519BB11C56F88C00307EB5 /* ChangeLogger.swift */,
 				A0519BB21C56F88C00307EB5 /* FetchedResultsController.swift */,
 				A0519BB31C56F88C00307EB5 /* FetchRequest.swift */,
 				A0519BB41C56F88C00307EB5 /* Utilities.swift */,
@@ -518,14 +511,9 @@
 				A0519BE81C56F89B00307EB5 /* RBQFetchedResultsController.m in Sources */,
 				A0519BB81C56F88C00307EB5 /* Utilities.swift in Sources */,
 				A0AB74621B6C389700923940 /* MainTableViewController.swift in Sources */,
-				A0519BEA1C56F89B00307EB5 /* RLMObject+Notifications.m in Sources */,
 				A0519BF51C56F89B00307EB5 /* RLMObject+SafeObject.m in Sources */,
 				A0519BE71C56F89B00307EB5 /* RBQSectionCacheObject.m in Sources */,
 				A0519BF61C56F89B00307EB5 /* SafeObject.swift in Sources */,
-				A0519BB51C56F88C00307EB5 /* ChangeLogger.swift in Sources */,
-				A0519BEB1C56F89B00307EB5 /* RLMRealm+Notifications.m in Sources */,
-				A0519BEE1C56F89B00307EB5 /* RBQRealmNotificationManager.m in Sources */,
-				A0519BEC1C56F89B00307EB5 /* RLMResults+Notifications.m in Sources */,
 				A05FA4EE1B6185AE0000C9B2 /* AppDelegate.swift in Sources */,
 				A0519BE91C56F89B00307EB5 /* RBQFetchRequest.m in Sources */,
 			);

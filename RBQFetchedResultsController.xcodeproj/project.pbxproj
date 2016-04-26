@@ -10,7 +10,6 @@
 		6361D73F1C4051A8005CD430 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */; };
 		6361D7991C4052CC005CD430 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7971C4052CC005CD430 /* Realm.framework */; };
 		A0519AE71C56DD8200307EB5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0519AE51C56DD8200307EB5 /* Info.plist */; };
-		A0519AE81C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519AE61C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift */; };
 		A0519B0D1C56DDB300307EB5 /* RBQFRC.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B0B1C56DDB300307EB5 /* RBQFRC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0519B3F1C56EC9A00307EB5 /* RBQControllerCacheObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B0F1C56EC9A00307EB5 /* RBQControllerCacheObject.h */; };
 		A0519B401C56EC9A00307EB5 /* RBQControllerCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B101C56EC9A00307EB5 /* RBQControllerCacheObject.m */; };
@@ -22,14 +21,6 @@
 		A0519B461C56EC9A00307EB5 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B161C56EC9A00307EB5 /* RBQFetchedResultsController.m */; };
 		A0519B471C56EC9A00307EB5 /* RBQFetchRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B171C56EC9A00307EB5 /* RBQFetchRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0519B481C56EC9A00307EB5 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B181C56EC9A00307EB5 /* RBQFetchRequest.m */; };
-		A0519B491C56EC9A00307EB5 /* RLMObject+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B1B1C56EC9A00307EB5 /* RLMObject+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A0519B4A1C56EC9A00307EB5 /* RLMObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B1C1C56EC9A00307EB5 /* RLMObject+Notifications.m */; };
-		A0519B4B1C56EC9A00307EB5 /* RLMRealm+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B1D1C56EC9A00307EB5 /* RLMRealm+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A0519B4C1C56EC9A00307EB5 /* RLMRealm+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B1E1C56EC9A00307EB5 /* RLMRealm+Notifications.m */; };
-		A0519B4D1C56EC9A00307EB5 /* RLMResults+Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B1F1C56EC9A00307EB5 /* RLMResults+Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A0519B4E1C56EC9A00307EB5 /* RLMResults+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B201C56EC9A00307EB5 /* RLMResults+Notifications.m */; };
-		A0519B501C56EC9A00307EB5 /* RBQRealmNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B221C56EC9A00307EB5 /* RBQRealmNotificationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A0519B511C56EC9A00307EB5 /* RBQRealmNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B231C56EC9A00307EB5 /* RBQRealmNotificationManager.m */; };
 		A0519B551C56EC9A00307EB5 /* RBQSafeRealmObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B281C56EC9A00307EB5 /* RBQSafeRealmObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0519B561C56EC9A00307EB5 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B291C56EC9A00307EB5 /* RBQSafeRealmObject.m */; };
 		A0519B591C56EC9A00307EB5 /* RLMObject+SafeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A0519B2C1C56EC9A00307EB5 /* RLMObject+SafeObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -44,7 +35,7 @@
 		A090E5C91C73B23F0046788B /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7971C4052CC005CD430 /* Realm.framework */; };
 		A090E5CA1C73B2420046788B /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7981C4052CC005CD430 /* RealmSwift.framework */; };
 		A090E5CD1C73B2E30046788B /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7341C4051A8005CD430 /* RBQFetchedResultsController.framework */; };
-		A0F2DB721C73C642002BE6BA /* ChangeLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2DB6C1C73C642002BE6BA /* ChangeLogger.swift */; };
+		A0C594D51CCF0E5E0041A382 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6361D7971C4052CC005CD430 /* Realm.framework */; };
 		A0F2DB731C73C642002BE6BA /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2DB6D1C73C642002BE6BA /* FetchedResultsController.swift */; };
 		A0F2DB741C73C642002BE6BA /* FetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2DB6E1C73C642002BE6BA /* FetchRequest.swift */; };
 		A0F2DB761C73C642002BE6BA /* SwiftFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = A0F2DB701C73C642002BE6BA /* SwiftFetchedResultsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,7 +65,6 @@
 		6361D7971C4052CC005CD430 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		6361D7981C4052CC005CD430 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		A0519AE51C56DD8200307EB5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A0519AE61C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RBQFetchedResultsControllerFrameworkTests.swift; sourceTree = "<group>"; };
 		A0519B0A1C56DDB300307EB5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RBQFetchedResultsController/Info.plist; sourceTree = SOURCE_ROOT; };
 		A0519B0B1C56DDB300307EB5 /* RBQFRC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQFRC.h; path = RBQFetchedResultsController/RBQFRC.h; sourceTree = SOURCE_ROOT; };
 		A0519B0F1C56EC9A00307EB5 /* RBQControllerCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQControllerCacheObject.h; sourceTree = "<group>"; };
@@ -87,14 +77,6 @@
 		A0519B161C56EC9A00307EB5 /* RBQFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchedResultsController.m; path = RBQFetchedResultsController/Source/RBQFetchedResultsController.m; sourceTree = SOURCE_ROOT; };
 		A0519B171C56EC9A00307EB5 /* RBQFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RBQFetchRequest.h; path = RBQFetchedResultsController/Source/RBQFetchRequest.h; sourceTree = SOURCE_ROOT; };
 		A0519B181C56EC9A00307EB5 /* RBQFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RBQFetchRequest.m; path = RBQFetchedResultsController/Source/RBQFetchRequest.m; sourceTree = SOURCE_ROOT; };
-		A0519B1B1C56EC9A00307EB5 /* RLMObject+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Notifications.h"; sourceTree = "<group>"; };
-		A0519B1C1C56EC9A00307EB5 /* RLMObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Notifications.m"; sourceTree = "<group>"; };
-		A0519B1D1C56EC9A00307EB5 /* RLMRealm+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMRealm+Notifications.h"; sourceTree = "<group>"; };
-		A0519B1E1C56EC9A00307EB5 /* RLMRealm+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMRealm+Notifications.m"; sourceTree = "<group>"; };
-		A0519B1F1C56EC9A00307EB5 /* RLMResults+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Notifications.h"; sourceTree = "<group>"; };
-		A0519B201C56EC9A00307EB5 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
-		A0519B221C56EC9A00307EB5 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
-		A0519B231C56EC9A00307EB5 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
 		A0519B281C56EC9A00307EB5 /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
 		A0519B291C56EC9A00307EB5 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
 		A0519B2C1C56EC9A00307EB5 /* RLMObject+SafeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+SafeObject.h"; sourceTree = "<group>"; };
@@ -107,7 +89,6 @@
 		A0519B381C56EC9A00307EB5 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
 		A0519B391C56EC9A00307EB5 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
 		A090E5A01C73B17B0046788B /* SwiftFetchedResultsController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftFetchedResultsController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A0F2DB6C1C73C642002BE6BA /* ChangeLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangeLogger.swift; path = RBQFetchedResultsController/Source/Swift/ChangeLogger.swift; sourceTree = SOURCE_ROOT; };
 		A0F2DB6D1C73C642002BE6BA /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchedResultsController.swift; path = RBQFetchedResultsController/Source/Swift/FetchedResultsController.swift; sourceTree = SOURCE_ROOT; };
 		A0F2DB6E1C73C642002BE6BA /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchRequest.swift; path = RBQFetchedResultsController/Source/Swift/FetchRequest.swift; sourceTree = SOURCE_ROOT; };
 		A0F2DB6F1C73C642002BE6BA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RBQFetchedResultsController/Source/Swift/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -128,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0C594D51CCF0E5E0041A382 /* Realm.framework in Frameworks */,
 				6361D73F1C4051A8005CD430 /* RBQFetchedResultsController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -190,7 +172,6 @@
 			isa = PBXGroup;
 			children = (
 				A0519AE51C56DD8200307EB5 /* Info.plist */,
-				A0519AE61C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift */,
 			);
 			name = RBQFetchedResultsControllerTests;
 			path = RBQFetchedResultsController/RBQFetchedResultsControllerTests;
@@ -209,30 +190,6 @@
 			name = CacheObjects;
 			path = RBQFetchedResultsController/Source/CacheObjects;
 			sourceTree = SOURCE_ROOT;
-		};
-		A0519B191C56EC9A00307EB5 /* RBQRealmNotificationManager */ = {
-			isa = PBXGroup;
-			children = (
-				A0519B1A1C56EC9A00307EB5 /* Helpers */,
-				A0519B221C56EC9A00307EB5 /* RBQRealmNotificationManager.h */,
-				A0519B231C56EC9A00307EB5 /* RBQRealmNotificationManager.m */,
-			);
-			name = RBQRealmNotificationManager;
-			path = RBQFetchedResultsController/Source/RBQRealmNotificationManager;
-			sourceTree = SOURCE_ROOT;
-		};
-		A0519B1A1C56EC9A00307EB5 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				A0519B1B1C56EC9A00307EB5 /* RLMObject+Notifications.h */,
-				A0519B1C1C56EC9A00307EB5 /* RLMObject+Notifications.m */,
-				A0519B1D1C56EC9A00307EB5 /* RLMRealm+Notifications.h */,
-				A0519B1E1C56EC9A00307EB5 /* RLMRealm+Notifications.m */,
-				A0519B1F1C56EC9A00307EB5 /* RLMResults+Notifications.h */,
-				A0519B201C56EC9A00307EB5 /* RLMResults+Notifications.m */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
 		};
 		A0519B251C56EC9A00307EB5 /* RBQSafeRealmObject */ = {
 			isa = PBXGroup;
@@ -264,7 +221,6 @@
 		A0F2DB5C1C73C467002BE6BA /* SwiftFetchedResultsController */ = {
 			isa = PBXGroup;
 			children = (
-				A0F2DB6C1C73C642002BE6BA /* ChangeLogger.swift */,
 				A0F2DB6D1C73C642002BE6BA /* FetchedResultsController.swift */,
 				A0F2DB6E1C73C642002BE6BA /* FetchRequest.swift */,
 				A0F2DB6F1C73C642002BE6BA /* Info.plist */,
@@ -283,7 +239,6 @@
 				A0519B161C56EC9A00307EB5 /* RBQFetchedResultsController.m */,
 				A0519B171C56EC9A00307EB5 /* RBQFetchRequest.h */,
 				A0519B181C56EC9A00307EB5 /* RBQFetchRequest.m */,
-				A0519B191C56EC9A00307EB5 /* RBQRealmNotificationManager */,
 				A0519B251C56EC9A00307EB5 /* RBQSafeRealmObject */,
 				A0519B301C56EC9A00307EB5 /* RealmUtilities */,
 			);
@@ -297,14 +252,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0519B501C56EC9A00307EB5 /* RBQRealmNotificationManager.h in Headers */,
-				A0519B491C56EC9A00307EB5 /* RLMObject+Notifications.h in Headers */,
 				A0519B471C56EC9A00307EB5 /* RBQFetchRequest.h in Headers */,
 				A0519B551C56EC9A00307EB5 /* RBQSafeRealmObject.h in Headers */,
 				A0519B0D1C56DDB300307EB5 /* RBQFRC.h in Headers */,
 				A0519B451C56EC9A00307EB5 /* RBQFetchedResultsController.h in Headers */,
-				A0519B4B1C56EC9A00307EB5 /* RLMRealm+Notifications.h in Headers */,
-				A0519B4D1C56EC9A00307EB5 /* RLMResults+Notifications.h in Headers */,
 				A0519B591C56EC9A00307EB5 /* RLMObject+SafeObject.h in Headers */,
 				A0519B621C56EC9A00307EB5 /* RLMObject+Utilities.h in Headers */,
 				A0519B601C56EC9A00307EB5 /* RLMArray+Utilities.h in Headers */,
@@ -452,19 +403,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0519B611C56EC9A00307EB5 /* RLMArray+Utilities.m in Sources */,
-				A0519B4C1C56EC9A00307EB5 /* RLMRealm+Notifications.m in Sources */,
 				A0519B651C56EC9A00307EB5 /* RLMObjectBase+Utilities.m in Sources */,
 				A0519B441C56EC9A00307EB5 /* RBQSectionCacheObject.m in Sources */,
-				A0519B4A1C56EC9A00307EB5 /* RLMObject+Notifications.m in Sources */,
 				A0519B481C56EC9A00307EB5 /* RBQFetchRequest.m in Sources */,
 				A0519B631C56EC9A00307EB5 /* RLMObject+Utilities.m in Sources */,
 				A0519B561C56EC9A00307EB5 /* RBQSafeRealmObject.m in Sources */,
 				A0519B421C56EC9A00307EB5 /* RBQObjectCacheObject.m in Sources */,
-				A0519B511C56EC9A00307EB5 /* RBQRealmNotificationManager.m in Sources */,
 				A0519B5A1C56EC9A00307EB5 /* RLMObject+SafeObject.m in Sources */,
 				A0519B461C56EC9A00307EB5 /* RBQFetchedResultsController.m in Sources */,
 				A0519B401C56EC9A00307EB5 /* RBQControllerCacheObject.m in Sources */,
-				A0519B4E1C56EC9A00307EB5 /* RLMResults+Notifications.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,7 +419,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0519AE81C56DD8200307EB5 /* RBQFetchedResultsControllerFrameworkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,7 +430,6 @@
 				A090E5B21C73B1CA0046788B /* SafeObject.swift in Sources */,
 				A0F2DB731C73C642002BE6BA /* FetchedResultsController.swift in Sources */,
 				A0F2DB771C73C642002BE6BA /* Utilities.swift in Sources */,
-				A0F2DB721C73C642002BE6BA /* ChangeLogger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -640,6 +585,10 @@
 		6361D74C1C4051A8005CD430 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RBQFetchedResultsControllerFrameworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFrameworkTests;
@@ -650,6 +599,10 @@
 		6361D74D1C4051A8005CD430 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = RBQFetchedResultsControllerFrameworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Atai.RBQFetchedResultsControllerFrameworkTests;

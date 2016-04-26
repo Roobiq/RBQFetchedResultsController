@@ -233,7 +233,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         RLMRealm *realm = [RLMRealm defaultRealm];
         
         [realm beginWriteTransaction];
-        [realm deleteObjectsWithNotification:objectInFirstSection];
+        [realm deleteObjects:objectInFirstSection];
         [realm commitWriteTransaction];
         
         NSLog(@"DID END DELETE");
@@ -261,7 +261,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     [realm beginWriteTransaction];
     
-    [realm deleteObjectWithNotification:object];
+    [realm deleteObject:object];
     
     [realm commitWriteTransaction];
 }
@@ -293,12 +293,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             newObject.key = [NSString stringWithFormat:@"%@%ld",title, (long)sortIndex];
             newObject.inTable = YES;
             
-            [realm addObjectWithNotification:newObject];
+            [realm addObject:newObject];
         }
         else {
-            [newObject changeWithNotification:^(TestObject *testObject) {
-                testObject.inTable = YES;
-            }];
+            newObject.inTable = YES;
         }
         
         [realm commitWriteTransaction];
@@ -318,36 +316,22 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         TestObject *sixthObject = [self.fetchedResultsController objectAtIndexPath:indexPathSixthRow];
         RLMResults *ninthObject = [TestObject objectsInRealm:realm where:@"%K == %@",@"title",@"Cell 9"];
         
-        [fifthObject changeWithNotification:^(TestObject *testObject) {
-            
-            testObject.sortIndex += 1;
-        }];
+        fifthObject.sortIndex += 1;
         
-        [sixthObject changeWithNotification:^(TestObject *testObject) {
-            
-            testObject.sortIndex -= 1;
-        }];
+        sixthObject.sortIndex -= 1;
         
-        [firstObject changeWithNotification:^(TestObject *testObject) {
-            
-            testObject.inTable = NO;
-        }];
+        firstObject.inTable = NO;
         
-        [thirdObject changeWithNotification:^(TestObject *testObject) {
-            
-            testObject.title = @"Testing Move And Update";
-        }];
+        thirdObject.title = @"Testing Move And Update";
         
         if (ninthObject.firstObject) {
-            [ninthObject.firstObject changeWithNotification:^(TestObject *testObject) {
-                
-                if ([testObject.sectionName isEqualToString:@"First Section"]) {
-                    testObject.sectionName = @"Second Section";
-                }
-                else {
-                    testObject.sectionName = @"First Section";
-                }
-            }];
+            TestObject *object = ninthObject.firstObject;
+            if ([object.sectionName isEqualToString:@"First Section"]) {
+                object.sectionName = @"Second Section";
+            }
+            else {
+                object.sectionName = @"First Section";
+            }
         }
         
          //Test an inserted section that's not first

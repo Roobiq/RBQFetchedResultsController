@@ -9,9 +9,9 @@
 #import "RBQFetchedResultsController.h"
 
 #import "RLMObject+Utilities.h"
-#import "RBQRealmNotificationManager.h"
 #import "RBQControllerCacheObject.h"
 #import "RBQSectionCacheObject.h"
+#import "RLMObject+Utilities.h"
 
 #import <objc/runtime.h>
 
@@ -24,7 +24,10 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 @interface RBQFetchedResultsController ()
 
-@property (strong, nonatomic) RBQNotificationToken *notificationToken;
+@property (nonatomic, strong) RLMNotificationToken *notificationToken;
+@property (nonatomic, strong) id<RLMCollection> notificationCollection;
+@property (nonatomic, strong) NSRunLoop *notificationRunLoop;
+
 @property (strong, nonatomic) RLMRealm *inMemoryRealm;
 @property (strong, nonatomic) RLMRealm *realmForMainThread; // Improves scroll performance
 
@@ -261,7 +264,9 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 // Create Realm instance for cache name
 + (RLMRealm *)realmForCacheName:(NSString *)cacheName
 {
-    return [RLMRealm realmWithPath:[RBQFetchedResultsController cachePathWithName:cacheName]];
+    NSURL *url = [NSURL fileURLWithPath:[RBQFetchedResultsController cachePathWithName:cacheName]];
+    
+    return [RLMRealm realmWithURL:url];
 }
 
 //  Create a file path for Realm cache with a given name
@@ -621,45 +626,103 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     [self unregisterChangeNotifications];
 }
 
+- (NSSet *)safeObjectsFromChanges:(NSArray<NSNumber *> *)changes
+                   withCollection:(id<RLMCollection>)collection
+                      isInsertion:(BOOL)isInsertion
+{
+    NSMutableSet *set = [NSMutableSet setWithCapacity:changes.count];
+    
+    RLMRealm *cacheRealm = [self cacheRealm];
+    
+    for (NSNumber *index in changes) {
+        RBQSafeRealmObject *safeObject = nil;
+        
+        if (isInsertion) {
+            RLMObject *object = [collection objectAtIndex:index.unsignedIntegerValue];
+            safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
+        }
+        else {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstObjectIndex <= %@ AND lastObjectIndex >= %@", index, index];
+            RLMResults *sections = [RBQSectionCacheObject objectsInRealm:cacheRealm withPredicate:predicate];
+            RBQSectionCacheObject *section = sections.firstObject;
+            NSUInteger row = index.unsignedIntegerValue - section.firstObjectIndex;
+            RBQObjectCacheObject *objectCache = [section.objects objectAtIndex:row];
+            safeObject = [[RBQSafeRealmObject alloc] initWithClassName:objectCache.className
+                                                       primaryKeyValue:objectCache.primaryKeyValue
+                                                        primaryKeyType:(RLMPropertyType)objectCache.primaryKeyType
+                                                                 realm:collection.realm];
+        }
+        
+        [set addObject:safeObject];
+    }
+    
+    return set.copy;
+}
+
 // Register the change notification from RBQRealmNotificationManager
 // Is no-op if the change notifications are already registered
 - (void)registerChangeNotifications
 {
     typeof(self) __weak weakSelf = self;
     
-    // Register for RBQRealmNotificationManager changes
-    if (!self.notificationToken) {
+    // Setup run loop
+    if (!self.notificationRunLoop) {
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            CFRunLoopPerformBlock(CFRunLoopGetCurrent(), kCFRunLoopDefaultMode, ^{
+                weakSelf.notificationRunLoop = [NSRunLoop currentRunLoop];
+                
+                dispatch_semaphore_signal(sem);
+            });
+            
+            CFRunLoopRun();
+        });
         
-        self.notificationToken =
-        [[RBQRealmNotificationManager defaultManager] addNotificationBlock:
-         ^(NSDictionary *entityChanges,
-           RLMRealm *realm)
-         {
-             
-             // Grab the entity changes object if it is available
-             RBQEntityChangesObject *entityChangesObject =
-             [entityChanges objectForKey:weakSelf.fetchRequest.entityName];
-             
-             if (entityChangesObject &&
-                 ([realm.path isEqualToString:weakSelf.fetchRequest.realmConfiguration.path] ||
-                  [realm.configuration.inMemoryIdentifier isEqualToString:weakSelf.fetchRequest.realmConfiguration.inMemoryIdentifier])) {
-
-                 [weakSelf calculateChangesWithAddedSafeObjects:entityChangesObject.addedSafeObjects
-                                             deletedSafeObjects:entityChangesObject.deletedSafeObjects
-                                             changedSafeObjects:entityChangesObject.changedSafeObjects
-                                                          realm:realm];
-             }
-         }];
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
     }
+    
+    CFRunLoopPerformBlock(self.notificationRunLoop.getCFRunLoop, kCFRunLoopDefaultMode, ^{
+        if (weakSelf.notificationToken) {
+            [weakSelf.notificationToken stop];
+            weakSelf.notificationToken = nil;
+            weakSelf.notificationCollection = nil;
+        }
+        
+        weakSelf.notificationCollection = weakSelf.fetchRequest.fetchObjects;
+        weakSelf.notificationToken = [weakSelf.notificationCollection
+                                      addNotificationBlock:^(id<RLMCollection>  _Nullable collection,
+                                                             RLMCollectionChange * _Nullable change,
+                                                             NSError * _Nullable error) {
+                                          if (!error &&
+                                              change) {
+                                              // Create the change sets
+                                              NSSet *addedSafeObjects = [weakSelf safeObjectsFromChanges:change.insertions withCollection:collection isInsertion:YES];
+                                              NSSet *deletedSafeObjects = [weakSelf safeObjectsFromChanges:change.deletions withCollection:collection isInsertion:NO];
+                                              NSSet *changedSafeObjects = [weakSelf safeObjectsFromChanges:change.modifications withCollection:collection isInsertion:NO];
+                                              
+                                              [weakSelf calculateChangesWithAddedSafeObjects:addedSafeObjects
+                                                                          deletedSafeObjects:deletedSafeObjects
+                                                                          changedSafeObjects:changedSafeObjects
+                                                                                       realm:collection.realm];
+                                          }
+                                      }];
+    });
+    
+    CFRunLoopWakeUp(self.notificationRunLoop.getCFRunLoop);
 }
 
 - (void)unregisterChangeNotifications
 {
     // Remove the notifications
     if (self.notificationToken) {
-        [[RBQRealmNotificationManager defaultManager] removeNotification:self.notificationToken];
-        
+        [self.notificationToken stop];
         self.notificationToken = nil;
+    }
+    
+    // Stop the run loop
+    if (self.notificationRunLoop) {
+        CFRunLoopStop(self.notificationRunLoop.getCFRunLoop);
+        self.notificationRunLoop = nil;
     }
 }
 
@@ -928,8 +991,6 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         NSUInteger count = 0;
         
         for (RLMObject *object in fetchResults) {
-            // Keep track of the count
-            count ++;
             
             if (sectionNameKeyPath) {
                 
@@ -941,6 +1002,8 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                     
                     // If we already gathered up the section objects, then save them
                     if (section.objects.count > 0) {
+                        
+                        section.lastObjectIndex = count;
                         
                         // Add the section to Realm
                         [cacheRealm addOrUpdateObject:section];
@@ -954,11 +1017,13 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                     
                     // Reset the section object array
                     section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
+                    
+                    section.firstObjectIndex = count;
                 }
             }
             
             // Save the final section (or if not using sections, the only section)
-            if (count == fetchResults.count) {
+            if (count == fetchResults.count - 1) {
                 
                 // Add the section to Realm
                 [cacheRealm addOrUpdateObject:section];
@@ -977,6 +1042,9 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             }
             
             [controllerCache.objects addObject:cacheObject];
+            
+            // Keep track of the count
+            count ++;
         }
         
         // Set the section name key path, if available
@@ -1823,7 +1891,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         // We don't use the cache since this is deprecated
         // If the realm path changed (new fetch request then hold onto the new one)
         if (!self.inMemoryRealm ||
-            ![realm.path.lastPathComponent isEqualToString:self.inMemoryRealm.path.lastPathComponent]) {
+            ![realm.configuration.fileURL.path.lastPathComponent isEqualToString:self.inMemoryRealm.configuration.fileURL.path.lastPathComponent]) {
             
             self.inMemoryRealm = realm;
         }

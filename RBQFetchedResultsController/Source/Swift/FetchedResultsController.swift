@@ -337,7 +337,7 @@ public class FetchedResultsController<T: Object> {
     :param: performFetch       indicates whether you want to immediately performFetch using the new fetch request to rebuild the cache
     */
     public func updateFetchRequest(fetchRequest: FetchRequest<T>, sectionNameKeyPath: String?, performFetch: Bool) {
-        self.rbqFetchedResultsController.updateFetchRequest(fetchRequest.rbqFetchRequest, sectionNameKeyPath: sectionNameKeyPath, andPeformFetch: performFetch)
+        self.rbqFetchedResultsController.updateFetchRequest(fetchRequest.rbqFetchRequest, sectionNameKeyPath: sectionNameKeyPath, andPerformFetch: performFetch)
     }
     
     // MARK: Private functions/properties

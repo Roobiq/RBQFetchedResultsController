@@ -126,6 +126,19 @@
              };
 }
 
+#pragma mark - Public Instance
+
+- (id)primaryKeyValue
+{
+    if (self.primaryKeyType == RLMPropertyTypeInt) {
+        NSNumber *numberFromString = @(self.primaryKeyStringValue.integerValue);
+        
+        return numberFromString;
+    }
+    
+    return self.primaryKeyStringValue;
+}
+
 #pragma mark - Equality
 
 - (BOOL)isEqualToObject:(RBQObjectCacheObject *)object
