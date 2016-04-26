@@ -266,7 +266,11 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 {
     NSURL *url = [NSURL fileURLWithPath:[RBQFetchedResultsController cachePathWithName:cacheName]];
     
-    return [RLMRealm realmWithURL:url];
+    RLMRealmConfiguration *config = [RLMRealmConfiguration defaultConfiguration];
+    config.fileURL = url;
+    config.objectClasses = @[RBQControllerCacheObject.class, RBQObjectCacheObject.class, RBQSectionCacheObject.class];
+    
+    return [RLMRealm realmWithConfiguration:config error:nil];;
 }
 
 //  Create a file path for Realm cache with a given name
@@ -1883,6 +1887,9 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     else {
         RLMRealmConfiguration *inMemoryConfiguration = [RLMRealmConfiguration defaultConfiguration];
         inMemoryConfiguration.inMemoryIdentifier = [self nameForFetchRequest:self.fetchRequest];
+        inMemoryConfiguration.objectClasses = @[RBQControllerCacheObject.class,
+                                                RBQObjectCacheObject.class,
+                                                RBQSectionCacheObject.class];
         
         RLMRealm *realm = [RLMRealm realmWithConfiguration:inMemoryConfiguration
                                                      error:nil];
