@@ -268,6 +268,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     
     RLMRealmConfiguration *config = [RLMRealmConfiguration defaultConfiguration];
     config.fileURL = url;
+    config.encryptionKey = nil;
     config.objectClasses = @[RBQControllerCacheObject.class, RBQObjectCacheObject.class, RBQSectionCacheObject.class];
     
     return [RLMRealm realmWithConfiguration:config error:nil];;
@@ -1887,6 +1888,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     else {
         RLMRealmConfiguration *inMemoryConfiguration = [RLMRealmConfiguration defaultConfiguration];
         inMemoryConfiguration.inMemoryIdentifier = [self nameForFetchRequest:self.fetchRequest];
+        inMemoryConfiguration.encryptionKey = nil;
         inMemoryConfiguration.objectClasses = @[RBQControllerCacheObject.class,
                                                 RBQObjectCacheObject.class,
                                                 RBQSectionCacheObject.class];
