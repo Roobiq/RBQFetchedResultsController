@@ -62,8 +62,8 @@ extension Realm {
     internal class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
         let rlmConfiguration = RLMRealmConfiguration()
         
-        if (configuration.path != nil) {
-            rlmConfiguration.path = configuration.path
+        if (configuration.fileURL != nil) {
+            rlmConfiguration.fileURL = configuration.fileURL
         }
         
         if (configuration.inMemoryIdentifier != nil) {
