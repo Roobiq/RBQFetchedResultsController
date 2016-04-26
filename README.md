@@ -61,34 +61,7 @@ func controllerDidChangeContent<T: Object>(controller: FetchedResultsController<
 [Click Here](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Roobiq/RBQFetchedResultsController/master/Documentation/html/index.html)
 
 #####Migrations
-Realm by default loads all of the properties defined in your models to all Realm files created by your app, which includes the cache files that the FRC uses internally. As a result, if you need to migrate your models, you will need to call: 
-```
-setSchemaVersion:forRealmAtPath:withMigrationBlock:
-```
-for all the paths that correspond to the cache files the FRC has persisted to disk. To simplify getting the paths, there is a class method that retrieves all the paths, which you then iterate over like this:
-```Objective-C
-NSMutableArray *paths =
-    [NSMutableArray arrayWithArray:[RBQFetchedResultsController allCacheRealmPaths]];
-
-/**
- * Add the paths to your main Realm files to the mutable array...
- */
- 
-for (NSString *path in paths) {
-        // Notice setSchemaVersion is set to 1, this is always set manually. It must be
-        // higher than the previous version (oldSchemaVersion) or an RLMException is thrown
-        [RLMRealm setSchemaVersion:1
-                    forRealmAtPath:path
-                withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {
-                    // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                    if (oldSchemaVersion < 1) {
-                        // Nothing to do!
-                        // Realm will automatically detect new properties and removed properties
-                        // And will update the schema on disk automatically
-                    }
-                }];
-    }
-```
+**Starting with v4.0, `RBQFetchedResultsController` now only uses the schemas specific to its internal Realm for section caching. This means handling migrations of the cache Realm is no longer necessary!**
 
 ####Installation
 `RBQFetchedResultsController` is available through [CocoaPods](http://cocoapods.org) or [Carthage](https://github.com/Carthage/Carthage). 
