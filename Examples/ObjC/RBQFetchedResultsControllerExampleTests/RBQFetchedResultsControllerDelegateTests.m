@@ -10,8 +10,6 @@
 #import <XCTest/XCTest.h>
 
 #import "RBQFetchedResultsController.h"
-#import "RBQRealmNotificationManager.h"
-#import "RLMRealm+Notifications.h"
 #import "TestObject.h"
 
 @interface RBQFetchedResultsControllerDelegateTests : XCTestCase <RBQFetchedResultsControllerDelegate>
@@ -142,7 +140,7 @@
     
     [self.inMemoryRealm beginWriteTransaction];
     
-    [self.inMemoryRealm deleteObjectsWithNotification:objectInFirstSection];
+    [self.inMemoryRealm deleteObjects:objectInFirstSection];
     
     [self.inMemoryRealm commitWriteTransaction];
         
@@ -170,8 +168,6 @@
     TestObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     [self.inMemoryRealm beginWriteTransaction];
-    
-    [[RBQRealmChangeLogger loggerForRealm:self.inMemoryRealm] willDeleteObject:object];
     
     [self.inMemoryRealm deleteObject:object];
     

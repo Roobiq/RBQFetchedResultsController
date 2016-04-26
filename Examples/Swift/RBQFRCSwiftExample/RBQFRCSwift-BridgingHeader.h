@@ -9,5 +9,4 @@
 #import "RBQFetchedResultsController.h"
 #import "RBQFetchRequest.h"
 #import "RBQSafeRealmObject.h"
-#import "RBQRealmNotificationManager.h"
 #import "RLMObjectBase+Utilities.h"

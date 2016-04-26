@@ -22,12 +22,6 @@ FOUNDATION_EXPORT const unsigned char RBQFetchedResultsControllerFrameworkVersio
 #import "RBQSafeRealmObject.h"
 #import "RLMObject+SafeObject.h"
 
-// RBQRealmNotificationManager
-#import "RBQRealmNotificationManager.h"
-#import "RLMObject+Notifications.h"
-#import "RLMRealm+Notifications.h"
-#import "RLMResults+Notifications.h"
-
 // RealmUtilities
 #import "RLMArray+Utilities.h"
 #import "RLMObject+Utilities.h"

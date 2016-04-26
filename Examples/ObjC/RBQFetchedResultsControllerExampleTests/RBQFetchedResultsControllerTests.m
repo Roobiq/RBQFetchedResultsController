@@ -87,7 +87,7 @@
     XCTAssert(fetchedResultsController.fetchedObjects.count == 10);
     NSPredicate *anotherPredicate = [NSPredicate predicateWithFormat:@"inTable = NO"];
     RBQFetchRequest *anotherFetchRequest = [RBQFetchRequest fetchRequestWithEntityName:@"TestObject" inRealm:[RLMRealm defaultRealm] predicate: anotherPredicate];
-    [fetchedResultsController updateFetchRequest:anotherFetchRequest sectionNameKeyPath:@"sectionName" andPeformFetch:YES];
+    [fetchedResultsController updateFetchRequest:anotherFetchRequest sectionNameKeyPath:@"sectionName" andPerformFetch:YES];
     XCTAssert(fetchedResultsController.fetchedObjects.count == 0);
 }
 
