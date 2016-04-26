@@ -1008,7 +1008,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                     // If we already gathered up the section objects, then save them
                     if (section.objects.count > 0) {
                         
-                        section.lastObjectIndex = count;
+                        section.lastObjectIndex = count - 1; // We advanced already so we need to save previous index
                         
                         // Add the section to Realm
                         [cacheRealm addOrUpdateObject:section];
@@ -1029,6 +1029,8 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             
             // Save the final section (or if not using sections, the only section)
             if (count == fetchResults.count - 1) {
+                
+                section.lastObjectIndex = count; // Set the last object index
                 
                 // Add the section to Realm
                 [cacheRealm addOrUpdateObject:section];
