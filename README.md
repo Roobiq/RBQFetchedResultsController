@@ -7,14 +7,15 @@ RBQFetchedResultsController
 
 ##### _Now Supports Realm Swift With A Complete Swift API!_
 
-The `RBQFetchedResultsController` (FRC) is a replacement for `NSFetchedResultsController` when used in conjunction with `RBQRealmNotificationManager` and `RBQRealmChangeLogger`. The controller and delegate follow the same paradigm as `NSFetchedResultsController`, and allow the developer to monitor changes of a `RLMObject` subclass.
+The `RBQFetchedResultsController` (FRC) is a replacement for `NSFetchedResultsController` that works with [Realm](http://www.realm.io). The controller and delegate follow the same paradigm as `NSFetchedResultsController`, and allow the developer to monitor changes of a `RLMObject` subclass.
 
 `RBQFetchedResultsController` supports tableview sections and implements a drop-in replacement delegate to pass the changes to the tableview for section and row animations.
+
+**Realm class requires a primary key to work with `RBQFetchedResultsController`**
 
 The Swift API mirrors Objective-C with the following classes:
 * `FetchedResultsController`
 * `FetchRequest`
-* `ChangeLogger`
 * `SafeObject`
 
 ####Example
@@ -24,33 +25,9 @@ Basic todo list application built with [ABFRealmTableViewController](https://git
 
 ####How It Works:
 
-Given that Realm does not yet support more fine-grained or object-level notifications, the FRC works by receiving changes from the `RBQRealmNotificationManager` singleton. The notification manager's role is to pass along changes logged to an instance of `RBQRealmChangeLogger`. Each logger is associated with a Realm on a given thread, which allows the developer to log changes manually or through one of the convenience methods on the `RLMObject` or `RLMRealm` categories. Once the changes are committed and the Realm instance updates, the object level changes will be passed from the logger to the manager, which will in turn rebroadcast these changes to any listeners.
+**Starting with v4.0 and Realm v0.99, `RBQFetchedResultsController` works automatically with Realm's fine-grained notification support. It is recommended to use Realm's API directly instead of `RBQFetchedResultsController` unless you need support for sections.**
 
-#####For example:
-
-If one was to change a property firstName on a `RLMObject` subclass Person via:
-
-```Objective-C
-Person.firstName = @"Adam"; 
-```
-
-to broadcast this change would require calling: 
-
-**Objective-C**
-```Objective-C
-[[RBQRealmChangeLogger defaultLogger] didChangeObject:Person];
-```
-**Swift**
-```Swift
-ChangeLogger.defaultLogger.didChangeObject(Person)
-```
-There are methods for adds, removes, and changes on `RBQRealmChangeLogger`.
-
-Once Realm updates, the logger will receive the update notification from Realm and broadcast `RBQSafeRealmObjects` for any object originally logged to the `RBQRealmNotificationManager`, which will then rebroadcast the changes to any listeners.
-
-**Note: The `RBQSafeRealmObject` is a class to get around the lack of thread-safety with `RLMObject`. Any `RLMObject` with a primary key can be used to create a `RBQSafeRealmObject`, which then can be used across threads and recreated into the `RLMObject` via the primary key.**
-
-The FRC receives the changes from the `RBQRealmNotificationManager` and then identifies changes to sections and rows, which are passed to a tableview controller via the delegate methods:
+Changes produced by Realm will be reprocessed to calculate changes accomodating any sections. These changes will then be passed to a delegate:
 
 **Objective-C**
 ```Objective-C
@@ -140,11 +117,16 @@ Then run `pod install`.
 ####Carthage
 To install it, simply add the following line to your Cartfile:
 
+**Objective-C**
 ```
 github "Roobiq/RBQFetchedResultsController"
 ```
+**Swift**
+```
+github "Roobiq/SwiftFetchedResultsController"
+```
 
-Then run `carthage update` and drag `RBQFetchedResultsController.framework` from the appropriate platform directory in `Carthage/Build/` to the "Linked Frameworks and Libraries" section of your Xcode project’s "General”" settings.
+Then run `carthage update` and drag `RBQFetchedResultsController.framework` or `SwiftFetchedResultsController.framework` from the appropriate platform directory in `Carthage/Build/` to the "Linked Frameworks and Libraries" section of your Xcode project’s "General" settings.
 
 ####Demo
 
@@ -176,41 +158,3 @@ For the Carthage example apps (`ObjC-carthage`/`Swift-carthage`), you must run `
 
 ####Current State
 The example project includes various functional and unit tests. In addition, the project is used in our [Roobiq](http://www.roobiq.com) app and is quite stable.
-
-Instructions and documentation for the Swift API is forthcoming. Check out the example project in `/SwiftExample` for more details.
-
-**`RLMRealm` and `RLMObject` categories are included that contain methods to simplify calling RBQRealmChangeLogger:**
-
-```Objective-C
-// RLMRealm
-- (void)addObjectWithNotification:(RLMObject *)object;
-
-- (void)addObjectsWithNotification:(id<NSFastEnumeration>)array;
-
-- (void)addOrUpdateObjectWithNotification:(RLMObject *)object;
-
-- (void)addOrUpdateObjectsFromArrayWithNotification:(id<NSFastEnumeration>)array;
-
-- (void)deleteObjectWithNotification:(RLMObject *)object;
-
-- (void)deleteObjectsWithNotification:(id<NSFastEnumeration>)array;
-
-// RLMObject
-typedef void(^RBQChangeNotificationBlock)(id object);
-
-- (void)changeWithNotification:(RBQChangeNotificationBlock)block;
-
-- (void)changeWithNotificationInTransaction:(RBQChangeNotificationBlock)block;
-```
-####Current Limitations:
-
-1. **The FRC is not currently able to handle RLMObject edits that switch between threads with one thread occurring on a serial queue.**
-  
-  For example, if an edit to an RLMObject occurs on a background queue (serial or concurrent), and is followed directly after with an edit on the main thread, the FRC can be deadlocked. This limitation is due to the FRC processing all edits serially, with each edit occurring synchronously on the caller thread, and needing to wait on the delegate call backs (which are on the main thread).
-
-  Thus if a main thread edit occurs directly after a background thread edit, the main thread will be waiting on the processing of the background thread to finish in the FRC, while the background thread is waiting on the main thread to perform the dispatched delegate call. 
-
-  **As a result, we recommend to perform all RLMObject edits that are being tracked by an FRC on a background queue (a general best practice anyway).**
-
-2. Finer-grained notifications down to the key path value change would enable even further performance improvements to the FRC.
- 
