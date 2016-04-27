@@ -98,16 +98,16 @@
 - (void)controllerDidChangeContent:(nonnull RBQFetchedResultsController *)controller;
 
 /**
- *  This method is called before the controller performing fetch.
+ *  This method is called before the controller performs the fetch.
  *
- *  @param controller controller instance that performing fetch
+ *  @param controller controller instance that will perform the fetch
  */
 - (void)controllerWillPerformFetch:(nonnull RBQFetchedResultsController *)controller;
 
 /**
- *  This method is called when the controller successfully fetching objects. It will not executed if the fetchRequest is nil.
+ *  This method is called after the controller successfully fetches objects. It will not be called if the fetchRequest is nil.
  *
- *  @param controller controller instance that performing fetch
+ *  @param controller controller instance that performed the fetch
  */
 - (void)controllerDidPerformFetch:(nonnull RBQFetchedResultsController *)controller;
 
