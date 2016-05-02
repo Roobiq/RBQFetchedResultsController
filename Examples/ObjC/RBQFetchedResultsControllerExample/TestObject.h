@@ -8,7 +8,7 @@
 
 #import <Realm/Realm.h>
 
-@interface TestObject : RLMObject
+@interface TestObject : RLMObject <NSCopying>
 
 @property NSString *title;
 

@@ -1,5 +1,5 @@
 //
-//  RBQFetchedResultsControllerDelegateTests.m
+//  RBQFetchedResultsControllerWithSectionsDelegateTests.m
 //  RBQFetchedResultsControllerExample
 //
 //  Created by Adam Fish on 1/10/15.
@@ -15,7 +15,7 @@
 
 static char kAssociatedObjectKey;
 
-@interface RBQFetchedResultsControllerDelegateTests : XCTestCase <RBQFetchedResultsControllerDelegate>
+@interface RBQFetchedResultsControllerWithSectionsDelegateTests : XCTestCase <RBQFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) XCTestExpectation *controllerWillChangeContentExpectation;
 @property (strong, nonatomic) XCTestExpectation *controllerDidChangeObjectExpectation;
@@ -28,7 +28,7 @@ static char kAssociatedObjectKey;
 
 @end
 
-@implementation RBQFetchedResultsControllerDelegateTests
+@implementation RBQFetchedResultsControllerWithSectionsDelegateTests
 
 - (void)setUp
 {
@@ -81,7 +81,7 @@ static char kAssociatedObjectKey;
     
     self.fetchedResultsController =
     [[RBQFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                           sectionNameKeyPath:nil
+                                           sectionNameKeyPath:@"sectionName"
                                                     cacheName:nil];
     
     self.fetchedResultsController.delegate = self;
@@ -119,7 +119,6 @@ static char kAssociatedObjectKey;
 
 - (void)testControllerDidChangeObject
 {
-    self.controllerWillChangeContentExpectation = [self expectationWithDescription:@"FRC Will Change Content Fired"];
     self.controllerDidChangeObjectExpectation = [self expectationWithDescription:@"FRC Did Change Object Fired"];
     self.controllerDidChangeContentExpectation = [self expectationWithDescription:@"FRC Did Change Content Fired"];
     
@@ -128,6 +127,27 @@ static char kAssociatedObjectKey;
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
         
+        XCTAssertNil(error, @"%@", error.localizedDescription);
+    }];
+}
+
+- (void)testControllerDidChangeSection
+{
+    self.controllerDidChangeObjectExpectation = [self expectationWithDescription:@"FRC Did Change Object Fired"];
+    self.controllerDidChangeSectionExpectation = [self expectationWithDescription:@"FRC Did Change Section Fired"];
+    self.controllerDidChangeContentExpectation = [self expectationWithDescription:@"FRC Did Change Content Fired"];
+    
+    // Test deleting a section
+    RLMResults *objectInFirstSection = [TestObject objectsInRealm:self.inMemoryRealm
+                                                            where:@"%K == %@",@"sectionName",@"First Section"];
+    
+    [self.inMemoryRealm beginWriteTransaction];
+    
+    [self.inMemoryRealm deleteObjects:objectInFirstSection];
+    
+    [self.inMemoryRealm commitWriteTransaction];
+        
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
         XCTAssertNil(error, @"%@", error.localizedDescription);
     }];
 }

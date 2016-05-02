@@ -991,6 +991,8 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             currentSectionTitle = @"";
             
             section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
+            
+            section.firstObjectIndex = 0;
         }
         
         NSUInteger count = 0;

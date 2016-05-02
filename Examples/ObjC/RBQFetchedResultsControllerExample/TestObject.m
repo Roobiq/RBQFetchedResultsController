@@ -42,4 +42,16 @@
     return object;
 }
 
+- (id)copyWithZone:(nullable NSZone *)zone
+{
+    TestObject *object = [[TestObject allocWithZone:zone] init];
+    object.title = self.title;
+    object.sortIndex = self.sortIndex;
+    object.sectionName = self.sectionName;
+    object.key = self.key;
+    object.inTable = self.inTable;
+    
+    return object;
+}
+
 @end

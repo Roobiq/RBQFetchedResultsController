@@ -14,7 +14,6 @@
 		49527C0F1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49527C0E1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m */; };
 		49DF57321B17B09900BA8DDC /* RBQFetchRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DF57301B17B09900BA8DDC /* RBQFetchRequestTests.m */; };
 		660F4C0A1B19413B00492DAE /* RBQFetchRequestInMemoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 660F4C091B19413B00492DAE /* RBQFetchRequestInMemoryTests.m */; };
-		662C46951A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 662C46941A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m */; };
 		667F380B1A5B2682008E3052 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F380A1A5B2682008E3052 /* main.m */; };
 		667F380E1A5B2682008E3052 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 667F380D1A5B2682008E3052 /* AppDelegate.m */; };
 		667F38141A5B2682008E3052 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 667F38121A5B2682008E3052 /* Main.storyboard */; };
@@ -32,6 +31,8 @@
 		A0519BAE1C56F84800307EB5 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B931C56F84800307EB5 /* RLMArray+Utilities.m */; };
 		A0519BAF1C56F84800307EB5 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B951C56F84800307EB5 /* RLMObject+Utilities.m */; };
 		A0519BB01C56F84800307EB5 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519B971C56F84800307EB5 /* RLMObjectBase+Utilities.m */; };
+		A0C5E0A91CD7CE6300CD2892 /* RBQFetchedResultsControllerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A0C5E0A81CD7CE6300CD2892 /* RBQFetchedResultsControllerDelegateTests.m */; };
+		A0C5E0AB1CD7CF3200CD2892 /* RBQFetchedResultsControllerWithSectionsDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A0C5E0AA1CD7CF3200CD2892 /* RBQFetchedResultsControllerWithSectionsDelegateTests.m */; };
 		C4B3210938A228A125D7A4CC /* libPods-RBQFetchedResultsControllerExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB1486A8BB288C322B55EABE /* libPods-RBQFetchedResultsControllerExampleTests.a */; };
 /* End PBXBuildFile section */
 
@@ -57,7 +58,6 @@
 		49DF57301B17B09900BA8DDC /* RBQFetchRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchRequestTests.m; sourceTree = "<group>"; };
 		55AAFFD7A898D4859B81F711 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		660F4C091B19413B00492DAE /* RBQFetchRequestInMemoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchRequestInMemoryTests.m; sourceTree = "<group>"; };
-		662C46941A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsControllerDelegateTests.m; sourceTree = "<group>"; };
 		667F38051A5B2682008E3052 /* RBQFetchedResultsControllerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RBQFetchedResultsControllerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		667F38091A5B2682008E3052 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		667F380A1A5B2682008E3052 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -92,6 +92,8 @@
 		A0519B951C56F84800307EB5 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
 		A0519B961C56F84800307EB5 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
 		A0519B971C56F84800307EB5 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
+		A0C5E0A81CD7CE6300CD2892 /* RBQFetchedResultsControllerDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsControllerDelegateTests.m; sourceTree = "<group>"; };
+		A0C5E0AA1CD7CF3200CD2892 /* RBQFetchedResultsControllerWithSectionsDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQFetchedResultsControllerWithSectionsDelegateTests.m; sourceTree = "<group>"; };
 		A13FCB967FD2B7FFC0B9713C /* libPods-RBQFetchedResultsControllerExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RBQFetchedResultsControllerExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1E9F0B065E9219B62951CAC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		C2E60F6FE175B391587A17E0 /* Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RBQFetchedResultsControllerExampleTests/Pods-RBQFetchedResultsControllerExampleTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -182,7 +184,8 @@
 				4921A5FD1B1A781F00CA32B7 /* RBQTestCase.h */,
 				4921A5FE1B1A781F00CA32B7 /* RBQTestCase.m */,
 				4921A5F81B1A643500CA32B7 /* RBQFetchedResultsControllerTests.m */,
-				662C46941A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m */,
+				A0C5E0A81CD7CE6300CD2892 /* RBQFetchedResultsControllerDelegateTests.m */,
+				A0C5E0AA1CD7CF3200CD2892 /* RBQFetchedResultsControllerWithSectionsDelegateTests.m */,
 				49DF57301B17B09900BA8DDC /* RBQFetchRequestTests.m */,
 				660F4C091B19413B00492DAE /* RBQFetchRequestInMemoryTests.m */,
 				49527C081B17F47500C115A3 /* RBQSafeRealmObjectTests.m */,
@@ -318,7 +321,7 @@
 		667F37FD1A5B2682008E3052 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Roobiq;
 				TargetAttributes = {
 					667F38041A5B2682008E3052 = {
@@ -489,11 +492,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				660F4C0A1B19413B00492DAE /* RBQFetchRequestInMemoryTests.m in Sources */,
+				A0C5E0AB1CD7CF3200CD2892 /* RBQFetchedResultsControllerWithSectionsDelegateTests.m in Sources */,
+				A0C5E0A91CD7CE6300CD2892 /* RBQFetchedResultsControllerDelegateTests.m in Sources */,
 				49527C0F1B18144C00C115A3 /* RBQFetchedResultsSectionInfoTests.m in Sources */,
 				49DF57321B17B09900BA8DDC /* RBQFetchRequestTests.m in Sources */,
 				49527C091B17F47500C115A3 /* RBQSafeRealmObjectTests.m in Sources */,
 				4921A5F91B1A643500CA32B7 /* RBQFetchedResultsControllerTests.m in Sources */,
-				662C46951A623B6200A8D145 /* RBQFetchedResultsControllerDelegateTests.m in Sources */,
 				4921A5FF1B1A781F00CA32B7 /* RBQTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -548,6 +552,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -614,6 +619,7 @@
 				INFOPLIST_FILE = RBQFetchedResultsControllerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Roobiq.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -626,6 +632,7 @@
 				INFOPLIST_FILE = RBQFetchedResultsControllerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Roobiq.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -642,6 +649,7 @@
 				);
 				INFOPLIST_FILE = RBQFetchedResultsControllerExampleTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Roobiq.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RBQFetchedResultsControllerExample.app/RBQFetchedResultsControllerExample";
 			};
@@ -655,6 +663,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = RBQFetchedResultsControllerExampleTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Roobiq.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RBQFetchedResultsControllerExample.app/RBQFetchedResultsControllerExample";
 			};
