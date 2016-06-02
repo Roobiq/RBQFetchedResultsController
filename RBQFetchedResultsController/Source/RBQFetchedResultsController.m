@@ -655,7 +655,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             safeObject = [RBQSafeRealmObject safeObjectFromObject:object];
         }
         else {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstObjectIndex <= %@ AND lastObjectIndex >= %@", index, index];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstObjectIndex <= %@ AND lastObjectIndex >= %@ AND objects.@count > 0", index, index];
             RLMResults *sections = [RBQSectionCacheObject objectsInRealm:cacheRealm withPredicate:predicate];
             RBQSectionCacheObject *section = sections.firstObject;
             NSUInteger row = index.unsignedIntegerValue - section.firstObjectIndex;
@@ -891,7 +891,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     for (NSOrderedSet *objectChanges in @[derivedChanges.deletedObjectChanges,
                                           derivedChanges.insertedObjectChanges,
                                           derivedChanges.movedObjectChanges]) {
-        
+
         for (RBQObjectChangeObject *objectChange in objectChanges) {
             
             if (objectChange.changeType == NSFetchedResultsChangeDelete) {
@@ -915,12 +915,12 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                 RBQSectionCacheObject *section =
                 [RBQSectionCacheObject objectInRealm:state.cacheRealm
                                        forPrimaryKey:objectChange.updatedCacheObject.sectionKeyPathValue];
-                
-#ifdef DEBUG
-                NSAssert(objectChange.updatedIndexpath.row <= section.objects.count, @"Attemting to insert at index beyond bounds!");
-#endif
+                NSInteger insertIndex = objectChange.updatedIndexpath.row;
+                if (insertIndex >= section.objects.count) {
+                    insertIndex = section.objects.count - 1;
+                }
                 [section.objects insertObject:objectChange.updatedCacheObject
-                                      atIndex:objectChange.updatedIndexpath.row];
+                                      atIndex:insertIndex];
                 
                 objectChange.updatedCacheObject.section = section;
             }
