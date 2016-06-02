@@ -29,7 +29,7 @@ static NSString *testRealmFileName = @"test.realm";
     NSString *testRealmFile = [documentsPath stringByAppendingPathComponent:testRealmFileName];
     
     RLMRealmConfiguration *defaultConfig = [RLMRealmConfiguration defaultConfiguration];
-    defaultConfig.path = testRealmFile;
+    defaultConfig.fileURL = [NSURL fileURLWithPath:testRealmFile];
     
     [RLMRealmConfiguration setDefaultConfiguration:defaultConfig];
     

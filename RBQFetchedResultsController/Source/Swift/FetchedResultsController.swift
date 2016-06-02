@@ -107,8 +107,6 @@ public protocol FetchedResultsControllerDelegate: class {
     */
     func controllerDidChangeContent<T: Object>(controller: FetchedResultsController<T>)
 
-
-
     /**
     This method is called before the controller performs the fetch.
 
@@ -122,6 +120,20 @@ public protocol FetchedResultsControllerDelegate: class {
     :param: controller controller instance that performed the fetch
     */
     func controllerDidPerformFetch<T: Object>(controller: FetchedResultsController<T>)
+}
+
+/**
+ Default implementation of the optional methods in FetchedResultsControllerDelegate
+ 
+ Conforming class only has to implement these if it wants to override
+ 
+ :nodoc:
+ */
+public extension FetchedResultsControllerDelegate {
+    // NOOP
+    func controllerWillPerformFetch<T: Object>(controller: FetchedResultsController<T>) {}
+    // NOOP
+    func controllerDidPerformFetch<T: Object>(controller: FetchedResultsController<T>) {}
 }
 
 /**
@@ -458,7 +470,6 @@ internal class DelegateProxy: NSObject, RBQFetchedResultsControllerDelegate {
     @objc func controllerDidChangeContent(controller: RBQFetchedResultsController) {
         self.delegate?.controllerDidChangeContent(controller)
     }
-
 
     @objc func controllerWillPerformFetch(controller: RBQFetchedResultsController) {
         self.delegate?.controllerWillPerformFetch(controller)
