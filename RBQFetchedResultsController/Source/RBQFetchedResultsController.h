@@ -204,6 +204,13 @@
 - (void)reset;
 
 /**
+ *  Call these method to registerChangeNotifications or unregisterNotifications 
+ *
+ *  A potential use case would be if you have many stacked views and only want certain view to receive notifications.
+ */
+- (void)unregisterNotifications;
+- (void)registerChangeNotifications
+/**
  *  Method to retrieve the number of rows for a given section index
  *
  *  @param index section index
