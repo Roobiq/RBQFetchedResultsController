@@ -260,8 +260,8 @@ public class FetchedResultsController<T: Object> {
      
     */
 
-    public func unregisterNotifications() {
-        self.rbqFetchedResultsController.unregisterNotifications()
+    public func unregisterChangeNotifications() {
+        self.rbqFetchedResultsController.unregisterChangeNotifications()
     }
 
     public func registerChangeNotifications() {
