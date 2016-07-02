@@ -1,6 +1,6 @@
 [submodule "RBQFetchedResultsController/Source/RBQSafeRealmObject"]
 	path = RBQFetchedResultsController/Source/RBQSafeRealmObject
-	url = https://github.com/Roobiq/RBQSafeRealmObject.git
+	url = file:///Users/phatblat/dev/ios/pods/RBQSafeRealmObject
 [submodule "RBQFetchedResultsController/Source/RealmUtilities"]
 	path = RBQFetchedResultsController/Source/RealmUtilities
-	url = https://github.com/Roobiq/RealmUtilities.git
+	url = file:///Users/phatblat/dev/ios/pods/RealmUtilities
