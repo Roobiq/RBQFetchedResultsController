@@ -26,7 +26,7 @@ extension Object {
     
     :returns: Bool indicating if the object is in a given Realm
     */
-    public func isContainedIn(realm: Realm) -> Bool {
+    public func isContainedIn(_ realm: Realm) -> Bool {
         
         if self.objectSchema.primaryKeyProperty == nil {
             return false
@@ -35,9 +35,9 @@ extension Object {
             return false
         }
         
-        let primaryKeyValue: AnyObject? = Object.primaryKeyValueForObject(self)
+        let primaryKeyValue: AnyObject? = Object.primaryKeyValue(forObject: self)
         
-        let object = realm.dynamicObjectForPrimaryKey(self.objectSchema.className, key: primaryKeyValue!)
+        let object = realm.dynamicObject(ofType: self.objectSchema.className, forPrimaryKey: primaryKeyValue!)
         
         if object != nil {
             return true
@@ -59,7 +59,7 @@ extension Realm {
     
     :nodoc:
     */
-    internal class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
+    internal class func toRLMConfiguration(_ configuration: Configuration) -> RLMRealmConfiguration {
         let rlmConfiguration = RLMRealmConfiguration()
         
         if (configuration.fileURL != nil) {

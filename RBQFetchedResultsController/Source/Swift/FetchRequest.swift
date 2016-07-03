@@ -24,7 +24,7 @@ public class FetchRequest<T: Object> {
     
     :returns: A new instance of FetchRequest
     */
-    public init(realm: Realm, predicate: NSPredicate) {
+    public init(realm: Realm, predicate: Predicate) {
         let entityName = T.className()
         
         self.realmConfiguration = realm.configuration
@@ -33,7 +33,7 @@ public class FetchRequest<T: Object> {
         
         let rlmRealm = try! RLMRealm(configuration: rlmConfiguration)
         
-        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, inRealm: rlmRealm, predicate: predicate)
+        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, in: rlmRealm, predicate: predicate)
     }
     
     // MARK: Properties
@@ -54,7 +54,7 @@ public class FetchRequest<T: Object> {
     /// Predicate supported by Realm
     ///
     /// http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates
-    public var predicate: NSPredicate? {
+    public var predicate: Predicate? {
         get {
             return self.rbqFetchRequest.predicate
         }
@@ -67,9 +67,9 @@ public class FetchRequest<T: Object> {
     /// Array of SortDescriptors
     ///
     /// http://realm.io/docs/cocoa/0.89.2/#ordering-results
-    public var sortDescriptors: [SortDescriptor] {
+    public var sortDescriptors: [RealmSwift.SortDescriptor] {
         get {
-            var sortDescriptors = [SortDescriptor]()
+            var sortDescriptors: [RealmSwift.SortDescriptor] = []
             
             if let rbqSortDescriptors = self.rbqFetchRequest.sortDescriptors {
                 
@@ -104,18 +104,19 @@ public class FetchRequest<T: Object> {
     @return Results for all the objects in the fetch request (not thread-safe).
     */
     public func fetchObjects() -> Results<T> {
-        
-        var fetchResults = self.realm.objects(T)
-        
+
+//        var fetchResults = self.realm.objects(T)
+        var fetchResults = self.realm.allObjects(ofType: T)
+
         // If we have a predicate use it
         
         if let predicate = self.predicate {
-            fetchResults = fetchResults.filter(predicate)
+            fetchResults = fetchResults.filter(using: predicate)
         }
         
         // If we have sort descriptors then use them
         if (self.sortDescriptors.count > 0) {
-            fetchResults = fetchResults.sorted(self.sortDescriptors)
+            fetchResults = fetchResults.sorted(with: self.sortDescriptors)
         }
         
         return fetchResults
@@ -132,10 +133,10 @@ public class FetchRequest<T: Object> {
     
     :returns: YES if performing fetch would include this object
     */
-    public func evaluateObject(object: T) -> Bool {
+    public func evaluateObject(_ object: T) -> Bool {
         
         if let predicate = self.predicate {
-            return predicate.evaluateWithObject(object)
+            return predicate.evaluate(with: object)
         }
         
         return true
