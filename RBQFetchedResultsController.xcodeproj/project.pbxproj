@@ -339,7 +339,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Atai Barkai";
 				TargetAttributes = {
 					6361D7331C4051A8005CD430 = {
@@ -649,6 +649,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Roobiq.SwiftFetchedResultsController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
