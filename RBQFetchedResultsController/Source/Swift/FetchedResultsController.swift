@@ -208,7 +208,7 @@ public class FetchedResultsController<T: Object> {
     
     // MARK: Properties
 	
-	public var debug: Bool {
+	public var logging: Bool {
 		get {
 			return self.rbqFetchedResultsController.logging
 		}
