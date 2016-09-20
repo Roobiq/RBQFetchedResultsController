@@ -122,6 +122,8 @@
  */
 @interface RBQFetchedResultsController : NSObject
 
+@property (nonatomic) bool logging;
+
 /**
  *  The fetch request for the controller
  */

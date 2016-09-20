@@ -207,6 +207,16 @@ public class FetchedResultsController<T: Object> {
     }
     
     // MARK: Properties
+	
+	public var logging: Bool {
+		get {
+			return self.rbqFetchedResultsController.logging
+		}
+		
+		set {
+			self.rbqFetchedResultsController.logging = newValue
+		}
+	}
     
     /// The fetch request for the controller
     public let fetchRequest: FetchRequest<T>
