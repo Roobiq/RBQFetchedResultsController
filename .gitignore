@@ -24,8 +24,8 @@ xcuserdata
 *.resolved
 
 # Carthage
-Carthage/Build
+Carthage/
 
-# CocoaPod
+# CocoaPods
 Podfile.lock
-Pods
+Pods/
