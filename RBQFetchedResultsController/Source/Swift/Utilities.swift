@@ -35,7 +35,7 @@ extension Object {
             return false
         }
         
-        let primaryKeyValue: AnyObject? = Object.primaryKeyValue(forObject: self)
+        let primaryKeyValue: Any? = Object.primaryKeyValue(forObject: self)
         
         let object = realm.dynamicObject(ofType: self.objectSchema.className, forPrimaryKey: primaryKeyValue!)
         

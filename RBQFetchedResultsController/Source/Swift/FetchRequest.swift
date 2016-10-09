@@ -106,17 +106,17 @@ public class FetchRequest<T: Object> {
     public func fetchObjects() -> Results<T> {
 
 //        var fetchResults = self.realm.objects(T)
-        var fetchResults = self.realm.allObjects(ofType: T)
+        var fetchResults = self.realm.objects(T.self)
 
         // If we have a predicate use it
         
         if let predicate = self.predicate {
-            fetchResults = fetchResults.filter(using: predicate)
+            fetchResults = fetchResults.filter(predicate)
         }
         
         // If we have sort descriptors then use them
         if (self.sortDescriptors.count > 0) {
-            fetchResults = fetchResults.sorted(with: self.sortDescriptors)
+            fetchResults = fetchResults.sorted(by: self.sortDescriptors)
         }
         
         return fetchResults

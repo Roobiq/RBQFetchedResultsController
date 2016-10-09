@@ -29,7 +29,7 @@ public class FetchResultsSectionInfo<T: Object> {
     public var objects: Results<T> {
         
         if self.sectionNameKeyPath != nil {
-            return self.fetchRequest.fetchObjects().filter(using: "%K == %@", self.sectionNameKeyPath!, self.rbqFetchedResultsSectionInfo.name)
+            return self.fetchRequest.fetchObjects().filter("%K == %@", self.sectionNameKeyPath!, self.rbqFetchedResultsSectionInfo.name)
         }
         
         return self.fetchRequest.fetchObjects()
@@ -173,7 +173,7 @@ public class FetchedResultsController<T: Object> {
         
         let allPaths = RBQFetchedResultsController.allCacheRealmPaths()
         
-        for aPath: AnyObject in allPaths {
+        for aPath in allPaths {
             
             if let path = aPath as? String {
                 
@@ -328,9 +328,9 @@ public class FetchedResultsController<T: Object> {
     :returns: Object
     */
     public func objectAtIndexPath(_ indexPath: IndexPath) -> T? {
-        
-        if let rlmObject: AnyObject = self.rbqFetchedResultsController.object(at: indexPath) {
-            
+
+        if let rlmObject = self.rbqFetchedResultsController.object(at: indexPath) {
+
             return unsafeBitCast(rlmObject, to: T.self)
         }
         
@@ -454,7 +454,7 @@ internal class DelegateProxy: Object, RBQFetchedResultsControllerDelegate {
         fatalError("init() has not been implemented")
     }
 
-    required init(value: AnyObject, schema: RLMSchema) {
+    required init(value: Any, schema: RLMSchema) {
         fatalError("init(value:schema:) has not been implemented")
     }
 
@@ -471,7 +471,6 @@ internal class DelegateProxy: Object, RBQFetchedResultsControllerDelegate {
     @objc func controllerWillChangeContent(_ controller: RBQFetchedResultsController) {
         self.delegate?.controllerWillChangeContent(controller)
     }
-
 
 //    func controllerDidChangeObject<T: Object>(_ controller: FetchedResultsController<T>, anObject: SafeObject<T>, indexPath: NSIndexPath?, changeType: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
 
