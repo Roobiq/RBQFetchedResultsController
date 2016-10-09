@@ -1,3 +1,7 @@
+# macOS
+.DS_Store
+
+# Xcode
 build/
 *.pbxuser
 !default.pbxuser
@@ -15,12 +19,13 @@ DerivedData
 *.ipa
 *.xcuserstate
 *.xcworkspace
-.DS_Store
-Podfile.lock
-Pods
 xcuserdata
+*.xcscmblueprint
 *.resolved
 
+# Carthage
 Carthage/Build
 
-
+# CocoaPod
+Podfile.lock
+Pods
