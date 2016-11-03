@@ -24,7 +24,7 @@ public class FetchRequest<T: Object> {
     
     :returns: A new instance of FetchRequest
     */
-    public init(realm: Realm, predicate: Predicate) {
+    public init(realm: Realm, predicate: NSPredicate) {
         let entityName = T.className()
         
         self.realmConfiguration = realm.configuration
@@ -54,7 +54,7 @@ public class FetchRequest<T: Object> {
     /// Predicate supported by Realm
     ///
     /// http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates
-    public var predicate: Predicate? {
+    public var predicate: NSPredicate? {
         get {
             return self.rbqFetchRequest.predicate
         }
