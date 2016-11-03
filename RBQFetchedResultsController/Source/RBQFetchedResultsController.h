@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Roobiq. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "RBQFetchRequest.h"
-#import "RBQSafeRealmObject.h"
+#import <RBQSafeRealmObject/RBQSafeRealmObject.h>
+#import <Foundation/Foundation.h>
 
 @import CoreData;
 

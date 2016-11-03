@@ -7,6 +7,7 @@
 //
 
 #import "RBQObjectCacheObject.h"
+#import "RBQSectionCacheObject.h"
 #import "RLMObjectBase+Utilities.h"
 
 #import <Realm/RLMRealm_Dynamic.h>

@@ -19,11 +19,11 @@ FOUNDATION_EXPORT const unsigned char RBQFetchedResultsControllerFrameworkVersio
 #import "RBQFetchRequest.h"
 
 // RBQSafeRealmObject
-#import "RBQSafeRealmObject.h"
-#import "RLMObject+SafeObject.h"
+#import <RBQSafeRealmObject/RBQSafeRealmObject.h>
+#import <RBQSafeRealmObject/RLMObject+SafeObject.h>
 
 // RealmUtilities
-#import "RLMArray+Utilities.h"
-#import "RLMObject+Utilities.h"
-#import "RLMObjectBase+Utilities.h"
+#import <RealmUtilities/RLMArray+Utilities.h>
+#import <RealmUtilities/RLMObject+Utilities.h>
+#import <RealmUtilities/RLMObjectBase+Utilities.h>
 
