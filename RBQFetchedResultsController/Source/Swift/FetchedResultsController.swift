@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Adam Fish. All rights reserved.
 //
 
+import SafeRealmObject
+import SwiftFetchedResultsController
 import Realm
 import RealmSwift
 
