@@ -7,7 +7,6 @@
 //
 
 import SafeRealmObject
-import SwiftFetchedResultsController
 import Realm
 import RealmSwift
 
