@@ -531,6 +531,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Realm.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Debug;
 		};
@@ -547,6 +548,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Realm.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Release;
 		};
