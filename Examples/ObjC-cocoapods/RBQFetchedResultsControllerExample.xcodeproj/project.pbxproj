@@ -195,12 +195,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 667F38281A5B2682008E3052 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerExample" */;
 			buildPhases = (
-				C2363A6E112DFA1F5D0CC63D /* Check Pods Manifest.lock */,
+				C2363A6E112DFA1F5D0CC63D /* [CP] Check Pods Manifest.lock */,
 				667F38011A5B2682008E3052 /* Sources */,
 				667F38021A5B2682008E3052 /* Frameworks */,
 				667F38031A5B2682008E3052 /* Resources */,
-				B9BFA561CD25E6C9E9B29EFC /* Copy Pods Resources */,
-				6B57DA87B5F6EBBD43419156 /* Embed Pods Frameworks */,
+				B9BFA561CD25E6C9E9B29EFC /* [CP] Copy Pods Resources */,
+				6B57DA87B5F6EBBD43419156 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -215,12 +215,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 667F382B1A5B2682008E3052 /* Build configuration list for PBXNativeTarget "RBQFetchedResultsControllerExampleTests" */;
 			buildPhases = (
-				9B401FA15D601D5CB3315A09 /* Check Pods Manifest.lock */,
+				9B401FA15D601D5CB3315A09 /* [CP] Check Pods Manifest.lock */,
 				667F381A1A5B2682008E3052 /* Sources */,
 				667F381B1A5B2682008E3052 /* Frameworks */,
 				667F381C1A5B2682008E3052 /* Resources */,
-				B6FCDB37CDC4597707C67FAB /* Copy Pods Resources */,
-				02E18E61C6FBFC5EC1EEF01A /* Embed Pods Frameworks */,
+				B6FCDB37CDC4597707C67FAB /* [CP] Copy Pods Resources */,
+				02E18E61C6FBFC5EC1EEF01A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -290,14 +290,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02E18E61C6FBFC5EC1EEF01A /* Embed Pods Frameworks */ = {
+		02E18E61C6FBFC5EC1EEF01A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,14 +305,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFetchedResultsControllerExampleTests/Pods-RBQFetchedResultsControllerExampleTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6B57DA87B5F6EBBD43419156 /* Embed Pods Frameworks */ = {
+		6B57DA87B5F6EBBD43419156 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -320,29 +320,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9B401FA15D601D5CB3315A09 /* Check Pods Manifest.lock */ = {
+		9B401FA15D601D5CB3315A09 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run \'pod install\' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		B6FCDB37CDC4597707C67FAB /* Copy Pods Resources */ = {
+		B6FCDB37CDC4597707C67FAB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,14 +350,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFetchedResultsControllerExampleTests/Pods-RBQFetchedResultsControllerExampleTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B9BFA561CD25E6C9E9B29EFC /* Copy Pods Resources */ = {
+		B9BFA561CD25E6C9E9B29EFC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,19 +365,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFetchedResultsControllerExample/Pods-RBQFetchedResultsControllerExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C2363A6E112DFA1F5D0CC63D /* Check Pods Manifest.lock */ = {
+		C2363A6E112DFA1F5D0CC63D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run \'pod install\' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
