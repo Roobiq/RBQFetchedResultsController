@@ -13,21 +13,21 @@ import RealmSwift
 /**
 This class is used by the FetchedResultsController to pass along section info.
 */
-public class FetchResultsSectionInfo<T: Object> {
+open class FetchResultsSectionInfo<T: Object> {
     
     // MARK: Properties
     
     /**
     The number of objects in the section.
     */
-    public var numberOfObjects: UInt {
+    open var numberOfObjects: UInt {
         return self.rbqFetchedResultsSectionInfo.numberOfObjects
     }
     
     /**
     The objects in the section (generated on-demand and not thread-safe).
     */
-    public var objects: Results<T> {
+    open var objects: Results<T> {
         
         if self.sectionNameKeyPath != nil {
             return self.fetchRequest.fetchObjects().filter("%K == %@", self.sectionNameKeyPath!, self.rbqFetchedResultsSectionInfo.name)
@@ -39,7 +39,7 @@ public class FetchResultsSectionInfo<T: Object> {
     /**
     The name of the section.
     */
-    public var name: String {
+    open var name: String {
         return self.rbqFetchedResultsSectionInfo.name
     }
     
@@ -142,7 +142,7 @@ public extension FetchedResultsControllerDelegate {
 /**
 The class is used to monitor changes from a RBQRealmNotificationManager to convert these changes into specific index path or section index changes. Typically this is used to back a UITableView and support animations when items are inserted, deleted, or changed.
 */
-public class FetchedResultsController<T: Object> {
+open class FetchedResultsController<T: Object> {
     
     // MARK: Class Functions
     
@@ -157,7 +157,7 @@ public class FetchedResultsController<T: Object> {
     
     :param: name The name of the cache file to delete. If name is nil, deletes all cache files.
     */
-    public class func deleteCache(_ cacheName: String) {
+    open class func deleteCache(_ cacheName: String) {
         RBQFetchedResultsController.deleteCache(withName: cacheName)
     }
     
@@ -168,7 +168,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: NSArray of NSStrings representing the paths on disk for all FRC cache Realm files
     */
-    public class func allCacheRealmPaths() -> [String] {
+    open class func allCacheRealmPaths() -> [String] {
         
         var paths = [String]()
         
@@ -212,28 +212,28 @@ public class FetchedResultsController<T: Object> {
     // MARK: Properties
     
     /// The fetch request for the controller
-    public let fetchRequest: FetchRequest<T>
+    open let fetchRequest: FetchRequest<T>
     
     /// The section name key path used to create the sections. Can be nil if no sections.
-    public var sectionNameKeyPath: String? {
+    open var sectionNameKeyPath: String? {
         return self.rbqFetchedResultsController.sectionNameKeyPath
     }
     
     /// The delegate to pass the index path and section changes to.
-    weak public var delegate: FetchedResultsControllerDelegate?
+    weak open var delegate: FetchedResultsControllerDelegate?
     
     /// The name of the cache used internally to represent the tableview structure.
-    public var cacheName: String? {
+    open var cacheName: String? {
         return self.rbqFetchedResultsController.cacheName
     }
     
     /// All the objects that match the fetch request.
-    public var fetchedObjects: Results<T> {
+    open var fetchedObjects: Results<T> {
         return self.fetchRequest.fetchObjects()
     }
     
     /// Returns all the section titles if using a section name key path
-    public var sectionIndexTitles: [String]? {
+    open var sectionIndexTitles: [String]? {
         return self.rbqFetchedResultsController.sectionIndexTitles
     }
     
@@ -244,7 +244,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: Indicates if the fetch was successful
     */
-    public func performFetch() -> Bool {
+    open func performFetch() -> Bool {
         return self.rbqFetchedResultsController.performFetch()
     }
     
@@ -253,7 +253,7 @@ public class FetchedResultsController<T: Object> {
     
     A potential use case would be to call this in a @catch after trying to call endUpdates for the table view. If an exception is thrown, then the cache will be rebuilt and you can call reloadData on the table view.
     */
-    public func reset() {
+    open func reset() {
         self.rbqFetchedResultsController.reset()
     }
     
@@ -264,7 +264,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: number of rows in the section
     */
-    public func numberOfRowsForSectionIndex(_ index: Int) -> Int {
+    open func numberOfRowsForSectionIndex(_ index: Int) -> Int {
         return self.rbqFetchedResultsController.numberOfRows(forSectionIndex: index)
     }
     
@@ -273,7 +273,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: number of sections
     */
-    public func numberOfSections() -> Int {
+    open func numberOfSections() -> Int {
         return self.rbqFetchedResultsController.numberOfSections()
     }
     
@@ -284,7 +284,7 @@ public class FetchedResultsController<T: Object> {
     *
     :returns: The title of the section
     */
-    public func titleForHeaderInSection(_ section: Int) -> String {
+    open func titleForHeaderInSection(_ section: Int) -> String {
         return self.rbqFetchedResultsController.titleForHeader(inSection: section)
     }
     
@@ -297,7 +297,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: the index of the section (returns NSNotFound if no section with the given name)
     */
-    public func sectionIndexForSectionName(_ sectionName: String) -> UInt {
+    open func sectionIndexForSectionName(_ sectionName: String) -> UInt {
         return self.rbqFetchedResultsController.sectionIndex(forSectionName: sectionName)
     }
     
@@ -308,7 +308,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: SafeObject
     */
-    public func safeObjectAtIndexPath(_ indexPath: IndexPath) -> SafeObject<T>? {
+    open func safeObjectAtIndexPath(_ indexPath: IndexPath) -> SafeObject<T>? {
         
         if let rbqSafeObject = self.rbqFetchedResultsController.safeObject(at: indexPath) {
             let safeObject = SafeObject<T>(rbqSafeRealmObject: rbqSafeObject)
@@ -328,7 +328,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: Object
     */
-    public func objectAtIndexPath(_ indexPath: IndexPath) -> T? {
+    open func objectAtIndexPath(_ indexPath: IndexPath) -> T? {
 
         if let rlmObject = self.rbqFetchedResultsController.object(at: indexPath) {
 
@@ -345,7 +345,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: index path of the object
     */
-    public func indexPathForSafeObject(_ safeObject: SafeObject<T>) -> IndexPath? {
+    open func indexPathForSafeObject(_ safeObject: SafeObject<T>) -> IndexPath? {
         return self.rbqFetchedResultsController.indexPath(forSafeObject: safeObject.rbqSafeRealmObject)
     }
     
@@ -356,8 +356,8 @@ public class FetchedResultsController<T: Object> {
     
     :returns: index path of the object
     */
-    public func indexPathForObject(_ object: T) -> IndexPath? {
-        return self.rbqFetchedResultsController.indexPath(forObject: object)
+    open func indexPathForObject(_ object: T) -> IndexPath? {
+        return self.rbqFetchedResultsController.indexPath(forObject: object as! RLMObjectBase)
     }
     
     /**
@@ -367,7 +367,7 @@ public class FetchedResultsController<T: Object> {
     :param: sectionNameKeyPath the section name key path for this fetch request (if nil, no sections will be shown)
     :param: performFetch       indicates whether you want to immediately performFetch using the new fetch request to rebuild the cache
     */
-    public func updateFetchRequest(_ fetchRequest: FetchRequest<T>, sectionNameKeyPath: String?, performFetch: Bool) {
+    open func updateFetchRequest(_ fetchRequest: FetchRequest<T>, sectionNameKeyPath: String?, performFetch: Bool) {
         self.rbqFetchedResultsController.updateFetchRequest(fetchRequest.rbqFetchRequest, sectionNameKeyPath: sectionNameKeyPath, andPerformFetch: performFetch)
     }
     
