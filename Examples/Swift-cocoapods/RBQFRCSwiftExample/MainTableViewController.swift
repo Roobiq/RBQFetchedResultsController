@@ -6,10 +6,11 @@
 //  Copyright (c) 2015 Adam Fish. All rights reserved.
 //
 
-import UIKit
 import Realm
 import RealmSwift
+import SafeRealmObject
 import SwiftFetchedResultsController
+import UIKit
 
 // MARK: -
 
@@ -92,7 +93,7 @@ class MainTableViewController: UITableViewController {
         
         self.fetchedResultsController!.delegate = self
         
-        self.fetchedResultsController!.performFetch()
+        _ = self.fetchedResultsController!.performFetch()
     }
 
     override func didReceiveMemoryWarning() {
