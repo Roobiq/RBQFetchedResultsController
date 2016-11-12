@@ -2,9 +2,9 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
 target 'RBQFetchedResultsControllerExample' do
-    pod 'RBQFetchedResultsController', :path => '../../'
+  pod 'RBQFetchedResultsController', path: '../../'
 
-    target 'RBQFetchedResultsControllerExampleTests' do
-        inherit! :search_paths
-    end
+  target 'RBQFetchedResultsControllerExampleTests' do
+    inherit! :search_paths
+  end
 end

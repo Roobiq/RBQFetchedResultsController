@@ -4,8 +4,8 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'RBQFRCSwiftExample' do
-  pod 'RBQFetchedResultsController', :path => '../../'
-  pod 'SwiftFetchedResultsController', :path => '../../'
+  pod 'RBQFetchedResultsController', path: '../../'
+  pod 'SwiftFetchedResultsController', path: '../../'
 
   target 'RBQFRCSwiftExampleTests' do
     inherit! :search_paths

@@ -6,8 +6,8 @@ workspace 'RBQFetchedResultsController'
 
 abstract_target 'Shared' do
 
-  pod 'RBQSafeRealmObject', path: '../RBQSafeRealmObject'
-  pod 'SafeRealmObject', path: '../RBQSafeRealmObject'
+  pod 'RBQSafeRealmObject'
+  pod 'SafeRealmObject'
   pod 'RealmUtilities'
 
   target 'RBQFetchedResultsController' do

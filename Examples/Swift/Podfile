@@ -4,7 +4,8 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'RBQFRCSwiftExample' do
-  pod 'RealmSwift', ">=0.96"
+  pod 'RealmUtilities'
+  pod 'SafeRealmObject'
 
   target 'RBQFRCSwiftExampleTests' do
     inherit! :search_paths
