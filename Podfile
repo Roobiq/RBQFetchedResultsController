@@ -1,8 +1,8 @@
 source 'https://github.com/CocoaPods/Specs'
+platform :ios, '8.0'
 
 project 'RBQFetchedResultsController'
 workspace 'RBQFetchedResultsController'
-platform :ios, '8.0'
 
 abstract_target 'Shared' do
 

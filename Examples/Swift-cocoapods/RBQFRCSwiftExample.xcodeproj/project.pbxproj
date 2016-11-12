@@ -496,7 +496,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2EB3D3DF0161ABB7AC2E39C9 /* Pods-RBQFRCSwiftExample.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -516,7 +515,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C77E796F0D8802AD9AB18EAF /* Pods-RBQFRCSwiftExample.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
