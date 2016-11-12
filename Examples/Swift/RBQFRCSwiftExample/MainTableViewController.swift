@@ -92,7 +92,7 @@ class MainTableViewController: UITableViewController {
         
         self.fetchedResultsController!.delegate = self
         
-        self.fetchedResultsController!.performFetch()
+        let _ = self.fetchedResultsController!.performFetch()
     }
 
     override func didReceiveMemoryWarning() {
@@ -151,7 +151,7 @@ class MainTableViewController: UITableViewController {
     }
     @IBAction func didPressDeleteButton(_ sender: UIBarButtonItem) {
         
-        let objectsInFirstSection = self.realm!.objects(TestObject).filter("%K == %@", "sectionName","First Section")
+        let objectsInFirstSection = self.realm!.objects(TestObject.self).filter("%K == %@", "sectionName","First Section")
         
         try! self.realm!.write { () -> Void in
             self.realm!.delete(objectsInFirstSection)
@@ -186,8 +186,8 @@ class MainTableViewController: UITableViewController {
             
             let title = "Cell \(sortIndex)"
             
-            var newObject = realm.objectForPrimaryKey(TestObject.self, key: "\(title)\(sortIndex)")
-            
+            var newObject = realm.object(ofType: TestObject.self, forPrimaryKey: "\(title)\(sortIndex)" as AnyObject)
+
             if newObject == nil {
                 newObject = TestObject()
                 newObject!.title = title
@@ -216,7 +216,7 @@ class MainTableViewController: UITableViewController {
             let thirdObject = self.fetchedResultsController?.objectAtIndexPath(indexPathThirdRow)
             let fifthObject = self.fetchedResultsController?.objectAtIndexPath(indexPathFifthRow)
             let sixthObject = self.fetchedResultsController?.objectAtIndexPath(indexPathSixthRow)
-            let ninthObject = realm.objects(TestObject).filter("%K == %@", "title","Cell 9")
+            let ninthObject = realm.objects(TestObject.self).filter("%K == %@", "title","Cell 9")
             
             fifthObject?.sortIndex += 1
             

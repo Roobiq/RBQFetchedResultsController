@@ -358,7 +358,7 @@ open class FetchedResultsController<T: Object> {
     :returns: index path of the object
     */
     open func indexPathForObject(_ object: T) -> IndexPath? {
-        return self.rbqFetchedResultsController.indexPath(forObject: object as! RLMObjectBase)
+        return self.rbqFetchedResultsController.indexPath(forObject: object as RLMObjectBase)
     }
     
     /**
