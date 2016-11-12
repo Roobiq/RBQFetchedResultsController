@@ -4,26 +4,22 @@ project 'RBQFetchedResultsController'
 workspace 'RBQFetchedResultsController'
 platform :ios, '8.0'
 
-def shared_pods
+abstract_target 'Shared' do
+
   pod 'RBQSafeRealmObject', path: '../RBQSafeRealmObject'
   pod 'SafeRealmObject', path: '../RBQSafeRealmObject'
   pod 'RealmUtilities'
-end
 
-target 'RBQFetchedResultsController' do
-  use_frameworks!
-  shared_pods
+  target 'RBQFetchedResultsController' do
+    use_frameworks!
 
-  target 'RBQFetchedResultsControllerTests' do
-    inherit! :search_paths
+    target 'RBQFetchedResultsControllerTests' do
+      inherit! :search_paths
+    end
   end
-end
 
-target 'SwiftFetchedResultsController' do
-  use_frameworks!
-  shared_pods
+  target 'SwiftFetchedResultsController' do
+    use_frameworks!
+  end
 
-  pod 'RBQSafeRealmObject', path: '../RBQSafeRealmObject'
-  pod 'SafeRealmObject', path: '../RBQSafeRealmObject'
-  pod 'RealmUtilities'
 end
