@@ -12,16 +12,18 @@ build/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata
-*.xccheckout
 *.moved-aside
 DerivedData
 *.hmap
 *.ipa
-*.xcuserstate
-*.xcworkspace
-xcuserdata
-*.xcscmblueprint
 *.resolved
+*.xcuserstate
+xcuserdata
+*.xccheckout
+*.xcscmblueprint
+
+# Only ignore example workspaces
+Examples/**/*.xcworkspace
 
 # Carthage
 Carthage/
