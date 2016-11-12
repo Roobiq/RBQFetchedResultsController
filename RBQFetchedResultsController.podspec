@@ -14,7 +14,10 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/Roobiq"
   s.platform     = :ios, "7.0"
   s.source       = { :git => "https://github.com/Roobiq/RBQFetchedResultsController.git", :tag => "v#{s.version}", :submodules => true }
-  s.source_files  = "RBQFetchedResultsController/Source/**/*.{h,m}", "RBQFetchedResultsController/RBQFRC.h"
+  s.source_files  = [
+    "RBQFetchedResultsController/Source/**/*.{h,m}",
+    "RBQFetchedResultsController/RBQFRC.h"
+  ]
   s.exclude_files = "RBQFetchedResultsController/Source/Swift/*"
   s.requires_arc = true
   s.dependency "Realm", ">=1.0.0"
