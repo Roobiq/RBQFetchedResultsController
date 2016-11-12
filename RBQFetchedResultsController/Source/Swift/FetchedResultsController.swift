@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Adam Fish. All rights reserved.
 //
 
+import RBQSafeRealmObject
 import SafeRealmObject
 import Realm
 import RealmSwift
