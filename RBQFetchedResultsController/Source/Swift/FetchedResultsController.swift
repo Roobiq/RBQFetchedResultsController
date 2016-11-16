@@ -448,21 +448,9 @@ internal protocol DelegateProxyProtocol: class {
 }
 
 // Internal Proxy To Manage Converting The Objc Delegate
-internal class DelegateProxy: Object, RBQFetchedResultsControllerDelegate {
-    
+internal class DelegateProxy: NSObject, RBQFetchedResultsControllerDelegate {
+
     weak internal var delegate: DelegateProxyProtocol?
-
-    required init() {
-        fatalError("init() has not been implemented")
-    }
-
-    required init(value: Any, schema: RLMSchema) {
-        fatalError("init(value:schema:) has not been implemented")
-    }
-
-    required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        fatalError("init(realm:schema:) has not been implemented")
-    }
 
     init(delegate: DelegateProxyProtocol) {
         self.delegate = delegate
