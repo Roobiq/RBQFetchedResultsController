@@ -244,28 +244,29 @@ class MainTableViewController: UITableViewController {
 // MARK: -
 
 extension MainTableViewController: FetchedResultsControllerDelegate {
+
     func controllerWillChangeContent<T : Object>(_ controller: FetchedResultsController<T>) {
         self.tableView.beginUpdates()
     }
 
-    func controller<T : Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath) {
+    public func controller<T : Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
 
         let tableView = self.tableView
 
         switch type {
 
         case .insert:
-            tableView?.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
+            tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
 
         case .delete:
-            tableView?.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+            tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
 
         case .update:
-            tableView?.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+            tableView?.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
 
         case .move:
-            tableView?.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-            tableView?.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
+            tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
+            tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
         }
     }
     

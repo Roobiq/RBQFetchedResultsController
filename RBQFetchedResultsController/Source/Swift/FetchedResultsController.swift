@@ -92,7 +92,7 @@ public protocol FetchedResultsControllerDelegate: class {
     
 //    func controllerDidChangeObject<T: Object>(_ controller: FetchedResultsController<T>, anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
 
-    func controller<T: Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath)
+    func controller<T: Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
     
     /**
     The fetched results controller reports changes to its section before changes to the fetched result objects.
