@@ -71,29 +71,26 @@ public protocol FetchedResultsControllerDelegate: class {
     :param: controller controller instance that noticed the change on its fetched objects
     */
     func controllerWillChangeContent<T: Object>(_ controller: FetchedResultsController<T>)
-    
+
     /**
     Notifies the delegate that a fetched object has been changed due to an add, remove, move, or update. Enables FetchedResultsController change tracking.
-    
+
     Changes are reported with the following heuristics:
-    
+
     On add and remove operations, only the added/removed object is reported. It’s assumed that all objects that come after the affected object are also moved, but these moves are not reported.
     
     A move is reported when the changed attribute on the object is one of the sort descriptors used in the fetch request. An update of the object is assumed in this case, but no separate update message is sent to the delegate.
     
     An update is reported when an object’s state changes, but the changed attributes aren’t part of the sort keys.
-    
+
     :param: controller controller instance that noticed the change on its fetched objects
     :param: anObject changed object represented as a SafeObject for thread safety
     :param: indexPath indexPath of changed object (nil for inserts)
     :param: type indicates if the change was an insert, delete, move, or update
     :param: newIndexPath the destination path for inserted or moved objects, nil otherwise
     */
-    
-//    func controllerDidChangeObject<T: Object>(_ controller: FetchedResultsController<T>, anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
-
     func controller<T: Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
-    
+
     /**
     The fetched results controller reports changes to its section before changes to the fetched result objects.
     
