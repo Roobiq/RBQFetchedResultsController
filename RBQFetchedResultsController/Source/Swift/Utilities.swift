@@ -61,6 +61,16 @@ extension Realm {
     */
     internal class func toRLMConfiguration(_ configuration: Configuration) -> RLMRealmConfiguration {
         let rlmConfiguration = RLMRealmConfiguration()
+
+        if let syncConfig = configuration.syncConfiguration {
+            rlmConfiguration.syncConfiguration = RLMSyncConfiguration(user: syncConfig.user, realmURL: syncConfig.realmURL)
+        }
+
+        if let objectTypes = configuration.objectTypes {
+            rlmConfiguration.objectClasses = objectTypes.map { (type) -> AnyClass in
+                return type
+            }
+        }
         
         if (configuration.fileURL != nil) {
             rlmConfiguration.fileURL = configuration.fileURL
