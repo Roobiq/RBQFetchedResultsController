@@ -66,9 +66,26 @@ extension Realm {
             rlmConfiguration.syncConfiguration = RLMSyncConfiguration(user: syncConfig.user, realmURL: syncConfig.realmURL)
         }
 
-        if let objectTypes = configuration.objectTypes {
-            rlmConfiguration.objectClasses = objectTypes.map { (type) -> AnyClass in
-                return type
+        // Hack to get around issue with cache objects appearing in Realm
+        // when building RBQFRC not as a framework
+        let mirror = Mirror(reflecting: configuration)
+        for child in mirror.children {
+            if "customSchema" == child.label {
+                let customSchema = child.value as! RLMSchema
+
+                let schemaSubset = customSchema.objectSchema.filter({ (objectSchema) -> Bool in
+                    let cacheObjectNames = ["RBQControllerCacheObject",
+                                            "RBQObjectCacheObject",
+                                            "RBQSectionCacheObject"]
+
+                    if cacheObjectNames.contains(objectSchema.objectName) {
+                        return false
+                    }
+
+                    return true
+                })
+                
+                rlmConfiguration.objectClasses = schemaSubset.map { $0.objectClass }
             }
         }
         
