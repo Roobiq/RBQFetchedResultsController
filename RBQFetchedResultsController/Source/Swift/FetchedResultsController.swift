@@ -459,21 +459,15 @@ internal class DelegateProxy: NSObject, RBQFetchedResultsControllerDelegate {
         self.delegate?.controllerWillChangeContent(controller)
     }
 
-//    func controllerDidChangeObject<T: Object>(_ controller: FetchedResultsController<T>, anObject: SafeObject<T>, indexPath: NSIndexPath?, changeType: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
-
-    // CD: func controller(NSFetchedResultsController<NSFetchRequestResult>, didChange: AnyObject, at: IndexPath?, for: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
-    // TODO: Export objc methods with this signature
     @objc func controller(_ controller: RBQFetchedResultsController, didChange anObject: RBQSafeRealmObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         self.delegate?.controller(controller, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
     }
 
-    // CD: func controller(NSFetchedResultsController<NSFetchRequestResult>, didChange: NSFetchedResultsSectionInfo, atSectionIndex: Int, for: NSFetchedResultsChangeType)
     @objc func controller(_ controller: RBQFetchedResultsController, didChangeSection section: RBQFetchedResultsSectionInfo, at sectionIndex: UInt, for type: NSFetchedResultsChangeType) {
-        
+
         self.delegate?.controller(controller, didChangeSection: section, atIndex: sectionIndex, forChangeType: type)
     }
 
-    // CD: func controllerDidChangeContent(NSFetchedResultsController<NSFetchRequestResult>)
     @objc func controllerDidChangeContent(_ controller: RBQFetchedResultsController) {
         self.delegate?.controllerDidChangeContent(controller)
     }
