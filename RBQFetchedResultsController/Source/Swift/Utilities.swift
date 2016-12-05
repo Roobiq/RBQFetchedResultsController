@@ -70,10 +70,9 @@ extension Realm {
         // when building RBQFRC not as a framework
         let mirror = Mirror(reflecting: configuration)
         for child in mirror.children {
-            if "customSchema" == child.label {
-                let customSchema = child.value as! RLMSchema
-
-                let schemaSubset = customSchema.objectSchema.filter({ (objectSchema) -> Bool in
+            if let customSchema = child.value as? RLMSchema, "customSchema" == child.label {
+                // Filter out cache objects
+                let schemaSubset = customSchema.objectSchema.filter { (objectSchema) -> Bool in
                     let cacheObjectNames = ["RBQControllerCacheObject",
                                             "RBQObjectCacheObject",
                                             "RBQSectionCacheObject"]
@@ -83,12 +82,12 @@ extension Realm {
                     }
 
                     return true
-                })
-                
+                }
+
                 rlmConfiguration.objectClasses = schemaSubset.map { $0.objectClass }
             }
         }
-        
+
         if (configuration.fileURL != nil) {
             rlmConfiguration.fileURL = configuration.fileURL
         }
