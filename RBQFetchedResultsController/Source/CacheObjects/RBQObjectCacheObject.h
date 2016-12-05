@@ -6,9 +6,8 @@
 //  Copyright (c) 2015 Roobiq. All rights reserved.
 //
 
+#import <RBQSafeRealmObject/RBQSafeRealmObject.h>
 #import <Realm/Realm.h>
-#import "RBQSafeRealmObject.h"
-#import "RBQSectionCacheObject.h"
 
 @class RBQSectionCacheObject;
 

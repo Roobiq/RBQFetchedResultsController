@@ -8,5 +8,5 @@
 
 #import "RBQFetchedResultsController.h"
 #import "RBQFetchRequest.h"
-#import "RBQSafeRealmObject.h"
-#import "RLMObjectBase+Utilities.h"
+#import <RBQSafeRealmObject/RBQSafeRealmObject.h>
+#import <RealmUtilities/RLMObjectBase+Utilities.h>

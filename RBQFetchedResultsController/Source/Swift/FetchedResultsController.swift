@@ -6,30 +6,32 @@
 //  Copyright (c) 2015 Adam Fish. All rights reserved.
 //
 
+import RBQSafeRealmObject
+import SafeRealmObject
 import Realm
 import RealmSwift
 
 /**
 This class is used by the FetchedResultsController to pass along section info.
 */
-public class FetchResultsSectionInfo<T: Object> {
+open class FetchResultsSectionInfo<T: Object> {
     
     // MARK: Properties
     
     /**
     The number of objects in the section.
     */
-    public var numberOfObjects: UInt {
+    open var numberOfObjects: UInt {
         return self.rbqFetchedResultsSectionInfo.numberOfObjects
     }
     
     /**
     The objects in the section (generated on-demand and not thread-safe).
     */
-    public var objects: Results<T> {
+    open var objects: Results<T> {
         
         if self.sectionNameKeyPath != nil {
-            return self.fetchRequest.fetchObjects().filter("%K == %@", self.sectionNameKeyPath!,self.rbqFetchedResultsSectionInfo.name)
+            return self.fetchRequest.fetchObjects().filter("%K == %@", self.sectionNameKeyPath!, self.rbqFetchedResultsSectionInfo.name)
         }
         
         return self.fetchRequest.fetchObjects()
@@ -38,7 +40,7 @@ public class FetchResultsSectionInfo<T: Object> {
     /**
     The name of the section.
     */
-    public var name: String {
+    open var name: String {
         return self.rbqFetchedResultsSectionInfo.name
     }
     
@@ -68,28 +70,27 @@ public protocol FetchedResultsControllerDelegate: class {
     
     :param: controller controller instance that noticed the change on its fetched objects
     */
-    func controllerWillChangeContent<T: Object>(controller: FetchedResultsController<T>)
-    
+    func controllerWillChangeContent<T: Object>(_ controller: FetchedResultsController<T>)
+
     /**
     Notifies the delegate that a fetched object has been changed due to an add, remove, move, or update. Enables FetchedResultsController change tracking.
-    
+
     Changes are reported with the following heuristics:
-    
+
     On add and remove operations, only the added/removed object is reported. It’s assumed that all objects that come after the affected object are also moved, but these moves are not reported.
     
     A move is reported when the changed attribute on the object is one of the sort descriptors used in the fetch request. An update of the object is assumed in this case, but no separate update message is sent to the delegate.
     
     An update is reported when an object’s state changes, but the changed attributes aren’t part of the sort keys.
-    
+
     :param: controller controller instance that noticed the change on its fetched objects
     :param: anObject changed object represented as a SafeObject for thread safety
     :param: indexPath indexPath of changed object (nil for inserts)
     :param: type indicates if the change was an insert, delete, move, or update
     :param: newIndexPath the destination path for inserted or moved objects, nil otherwise
     */
-    
-    func controllerDidChangeObject<T: Object>(controller: FetchedResultsController<T>, anObject: SafeObject<T>, indexPath: NSIndexPath?, changeType: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
-    
+    func controller<T: Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
+
     /**
     The fetched results controller reports changes to its section before changes to the fetched result objects.
     
@@ -98,28 +99,28 @@ public protocol FetchedResultsControllerDelegate: class {
     :param: sectionIndex the section index of the changed section
     :param: type         indicates if the change was an insert or delete
     */
-    func controllerDidChangeSection<T:Object>(controller: FetchedResultsController<T>, section: FetchResultsSectionInfo<T>, sectionIndex: UInt, changeType: NSFetchedResultsChangeType)
+    func controllerDidChangeSection<T:Object>(_ controller: FetchedResultsController<T>, section: FetchResultsSectionInfo<T>, sectionIndex: UInt, changeType: NSFetchedResultsChangeType)
     
     /**
     This method is called at the end of processing changes by the controller
     
     :param: controller controller instance that noticed the change on its fetched objects
     */
-    func controllerDidChangeContent<T: Object>(controller: FetchedResultsController<T>)
+    func controllerDidChangeContent<T: Object>(_ controller: FetchedResultsController<T>)
 
     /**
     This method is called before the controller performs the fetch.
 
      :param: controller controller instance that will perform the fetch
      */
-    func controllerWillPerformFetch<T: Object>(controller: FetchedResultsController<T>)
+    func controllerWillPerformFetch<T: Object>(_ controller: FetchedResultsController<T>)
 
     /**
     This method is called after the controller successfully fetches objects. It will not be called if the fetchRequest is nil.
 
     :param: controller controller instance that performed the fetch
     */
-    func controllerDidPerformFetch<T: Object>(controller: FetchedResultsController<T>)
+    func controllerDidPerformFetch<T: Object>(_ controller: FetchedResultsController<T>)
 }
 
 /**
@@ -131,15 +132,15 @@ public protocol FetchedResultsControllerDelegate: class {
  */
 public extension FetchedResultsControllerDelegate {
     // NOOP
-    func controllerWillPerformFetch<T: Object>(controller: FetchedResultsController<T>) {}
+    func controllerWillPerformFetch<T: Object>(_ controller: FetchedResultsController<T>) {}
     // NOOP
-    func controllerDidPerformFetch<T: Object>(controller: FetchedResultsController<T>) {}
+    func controllerDidPerformFetch<T: Object>(_ controller: FetchedResultsController<T>) {}
 }
 
 /**
 The class is used to monitor changes from a RBQRealmNotificationManager to convert these changes into specific index path or section index changes. Typically this is used to back a UITableView and support animations when items are inserted, deleted, or changed.
 */
-public class FetchedResultsController<T: Object> {
+open class FetchedResultsController<T: Object> {
     
     // MARK: Class Functions
     
@@ -154,8 +155,8 @@ public class FetchedResultsController<T: Object> {
     
     :param: name The name of the cache file to delete. If name is nil, deletes all cache files.
     */
-    public class func deleteCache(cacheName: String) {
-        RBQFetchedResultsController.deleteCacheWithName(cacheName)
+    open class func deleteCache(_ cacheName: String) {
+        RBQFetchedResultsController.deleteCache(withName: cacheName)
     }
     
     /**
@@ -165,13 +166,13 @@ public class FetchedResultsController<T: Object> {
     
     :returns: NSArray of NSStrings representing the paths on disk for all FRC cache Realm files
     */
-    public class func allCacheRealmPaths() -> [String] {
+    open class func allCacheRealmPaths() -> [String] {
         
         var paths = [String]()
         
         let allPaths = RBQFetchedResultsController.allCacheRealmPaths()
         
-        for aPath: AnyObject in allPaths {
+        for aPath in allPaths {
             
             if let path = aPath as? String {
                 
@@ -219,28 +220,28 @@ public class FetchedResultsController<T: Object> {
 	}
     
     /// The fetch request for the controller
-    public let fetchRequest: FetchRequest<T>
+    open let fetchRequest: FetchRequest<T>
     
     /// The section name key path used to create the sections. Can be nil if no sections.
-    public var sectionNameKeyPath: String? {
+    open var sectionNameKeyPath: String? {
         return self.rbqFetchedResultsController.sectionNameKeyPath
     }
     
     /// The delegate to pass the index path and section changes to.
-    weak public var delegate: FetchedResultsControllerDelegate?
+    weak open var delegate: FetchedResultsControllerDelegate?
     
     /// The name of the cache used internally to represent the tableview structure.
-    public var cacheName: String? {
+    open var cacheName: String? {
         return self.rbqFetchedResultsController.cacheName
     }
     
     /// All the objects that match the fetch request.
-    public var fetchedObjects: Results<T> {
+    open var fetchedObjects: Results<T> {
         return self.fetchRequest.fetchObjects()
     }
     
     /// Returns all the section titles if using a section name key path
-    public var sectionIndexTitles: [String]? {
+    open var sectionIndexTitles: [String]? {
         return self.rbqFetchedResultsController.sectionIndexTitles
     }
     
@@ -251,7 +252,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: Indicates if the fetch was successful
     */
-    public func performFetch() -> Bool {
+    open func performFetch() -> Bool {
         return self.rbqFetchedResultsController.performFetch()
     }
     
@@ -260,7 +261,7 @@ public class FetchedResultsController<T: Object> {
     
     A potential use case would be to call this in a @catch after trying to call endUpdates for the table view. If an exception is thrown, then the cache will be rebuilt and you can call reloadData on the table view.
     */
-    public func reset() {
+    open func reset() {
         self.rbqFetchedResultsController.reset()
     }
     
@@ -271,8 +272,8 @@ public class FetchedResultsController<T: Object> {
     
     :returns: number of rows in the section
     */
-    public func numberOfRowsForSectionIndex(index: Int) -> Int {
-        return self.rbqFetchedResultsController.numberOfRowsForSectionIndex(index)
+    open func numberOfRowsForSectionIndex(_ index: Int) -> Int {
+        return self.rbqFetchedResultsController.numberOfRows(forSectionIndex: index)
     }
     
     /**
@@ -280,7 +281,7 @@ public class FetchedResultsController<T: Object> {
     
     :returns: number of sections
     */
-    public func numberOfSections() -> Int {
+    open func numberOfSections() -> Int {
         return self.rbqFetchedResultsController.numberOfSections()
     }
     
@@ -291,8 +292,8 @@ public class FetchedResultsController<T: Object> {
     *
     :returns: The title of the section
     */
-    public func titleForHeaderInSection(section: Int) -> String {
-        return self.rbqFetchedResultsController.titleForHeaderInSection(section)
+    open func titleForHeaderInSection(_ section: Int) -> String {
+        return self.rbqFetchedResultsController.titleForHeader(inSection: section)
     }
     
     /**
@@ -304,8 +305,8 @@ public class FetchedResultsController<T: Object> {
     
     :returns: the index of the section (returns NSNotFound if no section with the given name)
     */
-    public func sectionIndexForSectionName(sectionName: String) -> UInt {
-        return self.rbqFetchedResultsController.sectionIndexForSectionName(sectionName)
+    open func sectionIndexForSectionName(_ sectionName: String) -> UInt {
+        return self.rbqFetchedResultsController.sectionIndex(forSectionName: sectionName)
     }
     
     /**
@@ -315,9 +316,9 @@ public class FetchedResultsController<T: Object> {
     
     :returns: SafeObject
     */
-    public func safeObjectAtIndexPath(indexPath: NSIndexPath) -> SafeObject<T>? {
+    open func safeObjectAtIndexPath(_ indexPath: IndexPath) -> SafeObject<T>? {
         
-        if let rbqSafeObject = self.rbqFetchedResultsController.safeObjectAtIndexPath(indexPath) {
+        if let rbqSafeObject = self.rbqFetchedResultsController.safeObject(at: indexPath) {
             let safeObject = SafeObject<T>(rbqSafeRealmObject: rbqSafeObject)
             
             return safeObject
@@ -335,11 +336,11 @@ public class FetchedResultsController<T: Object> {
     
     :returns: Object
     */
-    public func objectAtIndexPath(indexPath: NSIndexPath) -> T? {
-        
-        if let rlmObject: AnyObject = self.rbqFetchedResultsController.objectAtIndexPath(indexPath) {
-            
-            return unsafeBitCast(rlmObject, T.self)
+    open func objectAtIndexPath(_ indexPath: IndexPath) -> T? {
+
+        if let rlmObject = self.rbqFetchedResultsController.object(at: indexPath) {
+
+            return unsafeBitCast(rlmObject as! RLMObjectBase, to: T.self)
         }
         
         return nil
@@ -352,8 +353,8 @@ public class FetchedResultsController<T: Object> {
     
     :returns: index path of the object
     */
-    public func indexPathForSafeObject(safeObject: SafeObject<T>) -> NSIndexPath? {
-        return self.rbqFetchedResultsController.indexPathForSafeObject(safeObject.rbqSafeRealmObject)
+    open func indexPathForSafeObject(_ safeObject: SafeObject<T>) -> IndexPath? {
+        return self.rbqFetchedResultsController.indexPath(forSafeObject: safeObject.rbqSafeRealmObject)
     }
     
     /**
@@ -363,8 +364,8 @@ public class FetchedResultsController<T: Object> {
     
     :returns: index path of the object
     */
-    public func indexPathForObject(object: T) -> NSIndexPath? {
-        return self.rbqFetchedResultsController.indexPathForObject(object)
+    open func indexPathForObject(_ object: T) -> IndexPath? {
+        return self.rbqFetchedResultsController.indexPath(forObject: object as RLMObjectBase)
     }
     
     /**
@@ -374,7 +375,7 @@ public class FetchedResultsController<T: Object> {
     :param: sectionNameKeyPath the section name key path for this fetch request (if nil, no sections will be shown)
     :param: performFetch       indicates whether you want to immediately performFetch using the new fetch request to rebuild the cache
     */
-    public func updateFetchRequest(fetchRequest: FetchRequest<T>, sectionNameKeyPath: String?, performFetch: Bool) {
+    open func updateFetchRequest(_ fetchRequest: FetchRequest<T>, sectionNameKeyPath: String?, performFetch: Bool) {
         self.rbqFetchedResultsController.updateFetchRequest(fetchRequest.rbqFetchRequest, sectionNameKeyPath: sectionNameKeyPath, andPerformFetch: performFetch)
     }
     
@@ -388,25 +389,25 @@ public class FetchedResultsController<T: Object> {
 // Internal Proxy To Manage Converting The Objc Delegate
 extension FetchedResultsController: DelegateProxyProtocol {
 
-    func controllerWillChangeContent(controller: RBQFetchedResultsController!) {
+    func controllerWillChangeContent(_ controller: RBQFetchedResultsController!) {
         if let delegate = self.delegate {
             
             delegate.controllerWillChangeContent(self)
         }
     }
     
-    func controller(controller: RBQFetchedResultsController!, didChangeObject anObject: RBQSafeRealmObject!, atIndexPath indexPath: NSIndexPath!, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath!) {
-        
+    func controller(_ controller: RBQFetchedResultsController!, didChangeObject anObject: RBQSafeRealmObject!, atIndexPath indexPath: IndexPath!, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath!) {
+    
         if let delegate = self.delegate {
             
             let safeObject = SafeObject<T>(rbqSafeRealmObject: anObject)
             
-            delegate.controllerDidChangeObject(self, anObject: safeObject, indexPath: indexPath, changeType: type, newIndexPath: newIndexPath)
+            delegate.controller(self, didChangeObject: safeObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
         }
     }
     
-    func controller(controller: RBQFetchedResultsController!, didChangeSection section: RBQFetchedResultsSectionInfo!, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType) {
-        
+    func controller(_ controller: RBQFetchedResultsController!, didChangeSection section: RBQFetchedResultsSectionInfo!, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType) {
+    
         if let delegate = self.delegate {
             
             let sectionInfo = FetchResultsSectionInfo<T>(rbqFetchedResultsSectionInfo: section, fetchRequest: self.fetchRequest, sectionNameKeyPath: self.sectionNameKeyPath)
@@ -415,21 +416,21 @@ extension FetchedResultsController: DelegateProxyProtocol {
         }
     }
     
-    func controllerDidChangeContent(controller: RBQFetchedResultsController!) {
+    func controllerDidChangeContent(_ controller: RBQFetchedResultsController!) {
         if let delegate = self.delegate {
-            
+
             delegate.controllerDidChangeContent(self)
         }
     }
 
-    func controllerWillPerformFetch(controller: RBQFetchedResultsController!) {
+    func controllerWillPerformFetch(_ controller: RBQFetchedResultsController!) {
         if let delegate = self.delegate {
             delegate.controllerWillPerformFetch(self)
         }
 
     }
 
-    func controllerDidPerformFetch(controller: RBQFetchedResultsController!) {
+    func controllerDidPerformFetch(_ controller: RBQFetchedResultsController!) {
         if let delegate = self.delegate {
 
             delegate.controllerDidPerformFetch(self)
@@ -440,52 +441,52 @@ extension FetchedResultsController: DelegateProxyProtocol {
 
 // Internal Proxy To Manage Converting The Objc Delegate
 internal protocol DelegateProxyProtocol: class {
-    func controllerWillChangeContent(controller: RBQFetchedResultsController!)
+    func controllerWillChangeContent(_ controller: RBQFetchedResultsController!)
     
-    func controller(controller: RBQFetchedResultsController!, didChangeObject anObject: RBQSafeRealmObject!, atIndexPath indexPath: NSIndexPath!, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath!)
+    func controller(_ controller: RBQFetchedResultsController!, didChangeObject anObject: RBQSafeRealmObject!, atIndexPath indexPath: IndexPath!, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath!)
     
-    func controller(controller: RBQFetchedResultsController!, didChangeSection section: RBQFetchedResultsSectionInfo!, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType)
+    func controller(_ controller: RBQFetchedResultsController!, didChangeSection section: RBQFetchedResultsSectionInfo!, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType)
     
-    func controllerDidChangeContent(controller: RBQFetchedResultsController!)
+    func controllerDidChangeContent(_ controller: RBQFetchedResultsController!)
 
-    func controllerWillPerformFetch(controller: RBQFetchedResultsController!)
+    func controllerWillPerformFetch(_ controller: RBQFetchedResultsController!)
 
-    func controllerDidPerformFetch(controller: RBQFetchedResultsController!)
+    func controllerDidPerformFetch(_ controller: RBQFetchedResultsController!)
 }
 
 // Internal Proxy To Manage Converting The Objc Delegate
 internal class DelegateProxy: NSObject, RBQFetchedResultsControllerDelegate {
-    
+
     weak internal var delegate: DelegateProxyProtocol?
-    
+
     init(delegate: DelegateProxyProtocol) {
         self.delegate = delegate
+        super.init()
     }
-    
+
     // <RBQFetchedResultsControllerDelegate>
-    @objc func controllerWillChangeContent(controller: RBQFetchedResultsController) {
+    @objc func controllerWillChangeContent(_ controller: RBQFetchedResultsController) {
         self.delegate?.controllerWillChangeContent(controller)
     }
-    
-    @objc func controller(controller: RBQFetchedResultsController, didChangeObject anObject: RBQSafeRealmObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        
+
+    @objc func controller(_ controller: RBQFetchedResultsController, didChange anObject: RBQSafeRealmObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         self.delegate?.controller(controller, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
     }
-    
-    @objc func controller(controller: RBQFetchedResultsController, didChangeSection section: RBQFetchedResultsSectionInfo, atIndex sectionIndex: UInt, forChangeType type: NSFetchedResultsChangeType) {
-        
+
+    @objc func controller(_ controller: RBQFetchedResultsController, didChangeSection section: RBQFetchedResultsSectionInfo, at sectionIndex: UInt, for type: NSFetchedResultsChangeType) {
+
         self.delegate?.controller(controller, didChangeSection: section, atIndex: sectionIndex, forChangeType: type)
     }
-    
-    @objc func controllerDidChangeContent(controller: RBQFetchedResultsController) {
+
+    @objc func controllerDidChangeContent(_ controller: RBQFetchedResultsController) {
         self.delegate?.controllerDidChangeContent(controller)
     }
 
-    @objc func controllerWillPerformFetch(controller: RBQFetchedResultsController) {
+    @objc func controllerWillPerformFetch(_ controller: RBQFetchedResultsController) {
         self.delegate?.controllerWillPerformFetch(controller)
     }
 
-    @objc func controllerDidPerformFetch(controller: RBQFetchedResultsController) {
+    @objc func controllerDidPerformFetch(_ controller: RBQFetchedResultsController) {
         self.delegate?.controllerDidPerformFetch(controller)
     }
 

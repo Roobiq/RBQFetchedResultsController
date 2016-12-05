@@ -2,9 +2,10 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
 target 'RBQFetchedResultsControllerExample' do
-    pod 'Realm', '>= 0.95'
-end
+  pod 'RealmUtilities'
+  pod 'RBQSafeRealmObject'
 
-target 'RBQFetchedResultsControllerExampleTests' do
-    pod 'Realm/Headers'
+  target 'RBQFetchedResultsControllerExampleTests' do
+    inherit! :search_paths
+  end
 end

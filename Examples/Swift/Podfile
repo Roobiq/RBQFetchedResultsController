@@ -1,10 +1,13 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+
 use_frameworks!
 
 target 'RBQFRCSwiftExample' do
-  pod 'RealmSwift', ">=0.96"
-end
+  pod 'RealmUtilities'
+  pod 'SafeRealmObject'
 
-target 'RBQFRCSwiftExampleTests' do
-  pod 'RealmSwift', ">=0.96"
+  target 'RBQFRCSwiftExampleTests' do
+    inherit! :search_paths
+  end
 end
-

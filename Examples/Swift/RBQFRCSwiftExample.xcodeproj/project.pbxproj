@@ -17,12 +17,6 @@
 		A0519BE71C56F89B00307EB5 /* RBQSectionCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BBF1C56F89B00307EB5 /* RBQSectionCacheObject.m */; };
 		A0519BE81C56F89B00307EB5 /* RBQFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BC11C56F89B00307EB5 /* RBQFetchedResultsController.m */; };
 		A0519BE91C56F89B00307EB5 /* RBQFetchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BC31C56F89B00307EB5 /* RBQFetchRequest.m */; };
-		A0519BF21C56F89B00307EB5 /* RBQSafeRealmObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BD41C56F89B00307EB5 /* RBQSafeRealmObject.m */; };
-		A0519BF51C56F89B00307EB5 /* RLMObject+SafeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BD81C56F89B00307EB5 /* RLMObject+SafeObject.m */; };
-		A0519BF61C56F89B00307EB5 /* SafeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0519BD91C56F89B00307EB5 /* SafeObject.swift */; };
-		A0519BFB1C56F89B00307EB5 /* RLMArray+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BE01C56F89B00307EB5 /* RLMArray+Utilities.m */; };
-		A0519BFC1C56F89B00307EB5 /* RLMObject+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BE21C56F89B00307EB5 /* RLMObject+Utilities.m */; };
-		A0519BFD1C56F89B00307EB5 /* RLMObjectBase+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A0519BE41C56F89B00307EB5 /* RLMObjectBase+Utilities.m */; };
 		A05FA4EE1B6185AE0000C9B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA4ED1B6185AE0000C9B2 /* AppDelegate.swift */; };
 		A05FA4F31B6185AE0000C9B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F11B6185AE0000C9B2 /* Main.storyboard */; };
 		A05FA4F51B6185AE0000C9B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F41B6185AE0000C9B2 /* Images.xcassets */; };
@@ -79,17 +73,6 @@
 		A0519BCB1C56F89B00307EB5 /* RLMResults+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Notifications.m"; sourceTree = "<group>"; };
 		A0519BCD1C56F89B00307EB5 /* RBQRealmNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQRealmNotificationManager.h; sourceTree = "<group>"; };
 		A0519BCE1C56F89B00307EB5 /* RBQRealmNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQRealmNotificationManager.m; sourceTree = "<group>"; };
-		A0519BD31C56F89B00307EB5 /* RBQSafeRealmObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBQSafeRealmObject.h; sourceTree = "<group>"; };
-		A0519BD41C56F89B00307EB5 /* RBQSafeRealmObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBQSafeRealmObject.m; sourceTree = "<group>"; };
-		A0519BD71C56F89B00307EB5 /* RLMObject+SafeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+SafeObject.h"; sourceTree = "<group>"; };
-		A0519BD81C56F89B00307EB5 /* RLMObject+SafeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+SafeObject.m"; sourceTree = "<group>"; };
-		A0519BD91C56F89B00307EB5 /* SafeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeObject.swift; sourceTree = "<group>"; };
-		A0519BDF1C56F89B00307EB5 /* RLMArray+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Utilities.h"; sourceTree = "<group>"; };
-		A0519BE01C56F89B00307EB5 /* RLMArray+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Utilities.m"; sourceTree = "<group>"; };
-		A0519BE11C56F89B00307EB5 /* RLMObject+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObject+Utilities.h"; sourceTree = "<group>"; };
-		A0519BE21C56F89B00307EB5 /* RLMObject+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObject+Utilities.m"; sourceTree = "<group>"; };
-		A0519BE31C56F89B00307EB5 /* RLMObjectBase+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMObjectBase+Utilities.h"; sourceTree = "<group>"; };
-		A0519BE41C56F89B00307EB5 /* RLMObjectBase+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMObjectBase+Utilities.m"; sourceTree = "<group>"; };
 		A05FA4E81B6185AE0000C9B2 /* RBQFRCSwiftExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RBQFRCSwiftExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A05FA4EC1B6185AE0000C9B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A05FA4ED1B6185AE0000C9B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -184,33 +167,6 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		A0519BD01C56F89B00307EB5 /* RBQSafeRealmObject */ = {
-			isa = PBXGroup;
-			children = (
-				A0519BD31C56F89B00307EB5 /* RBQSafeRealmObject.h */,
-				A0519BD41C56F89B00307EB5 /* RBQSafeRealmObject.m */,
-				A0519BD71C56F89B00307EB5 /* RLMObject+SafeObject.h */,
-				A0519BD81C56F89B00307EB5 /* RLMObject+SafeObject.m */,
-				A0519BD91C56F89B00307EB5 /* SafeObject.swift */,
-			);
-			name = RBQSafeRealmObject;
-			path = ../../RBQFetchedResultsController/Source/RBQSafeRealmObject;
-			sourceTree = "<group>";
-		};
-		A0519BDB1C56F89B00307EB5 /* RealmUtilities */ = {
-			isa = PBXGroup;
-			children = (
-				A0519BDF1C56F89B00307EB5 /* RLMArray+Utilities.h */,
-				A0519BE01C56F89B00307EB5 /* RLMArray+Utilities.m */,
-				A0519BE11C56F89B00307EB5 /* RLMObject+Utilities.h */,
-				A0519BE21C56F89B00307EB5 /* RLMObject+Utilities.m */,
-				A0519BE31C56F89B00307EB5 /* RLMObjectBase+Utilities.h */,
-				A0519BE41C56F89B00307EB5 /* RLMObjectBase+Utilities.m */,
-			);
-			name = RealmUtilities;
-			path = ../../RBQFetchedResultsController/Source/RealmUtilities;
-			sourceTree = "<group>";
-		};
 		A05FA4DF1B6185AE0000C9B2 = {
 			isa = PBXGroup;
 			children = (
@@ -292,8 +248,6 @@
 				A0519BC21C56F89B00307EB5 /* RBQFetchRequest.h */,
 				A0519BC31C56F89B00307EB5 /* RBQFetchRequest.m */,
 				A0519BC41C56F89B00307EB5 /* RBQRealmNotificationManager */,
-				A0519BD01C56F89B00307EB5 /* RBQSafeRealmObject */,
-				A0519BDB1C56F89B00307EB5 /* RealmUtilities */,
 			);
 			name = RBQFetchedResultsController;
 			path = ../../RBQFetchedResultsController;
@@ -306,13 +260,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A05FA5071B6185AE0000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCSwiftExample" */;
 			buildPhases = (
-				8F82510D9BCCDF2C922FBAAD /* Check Pods Manifest.lock */,
+				8F82510D9BCCDF2C922FBAAD /* [CP] Check Pods Manifest.lock */,
 				A05FA4E41B6185AE0000C9B2 /* Sources */,
 				A05FA4E51B6185AE0000C9B2 /* Frameworks */,
 				A05FA4E61B6185AE0000C9B2 /* Resources */,
 				A05FA5131B6185F30000C9B2 /* Embed Frameworks */,
-				A91DB259BDB4C06DA82ECFAA /* Embed Pods Frameworks */,
-				A2C59954025416B38AD4621C /* Copy Pods Resources */,
+				A91DB259BDB4C06DA82ECFAA /* [CP] Embed Pods Frameworks */,
+				A2C59954025416B38AD4621C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -327,12 +281,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A05FA50A1B6185AE0000C9B2 /* Build configuration list for PBXNativeTarget "RBQFRCSwiftExampleTests" */;
 			buildPhases = (
-				0BAC064F8923B4D07295C7EB /* Check Pods Manifest.lock */,
+				0BAC064F8923B4D07295C7EB /* [CP] Check Pods Manifest.lock */,
 				A05FA4F91B6185AE0000C9B2 /* Sources */,
 				A05FA4FA1B6185AE0000C9B2 /* Frameworks */,
 				A05FA4FB1B6185AE0000C9B2 /* Resources */,
-				3CFF26782BB12C184090942C /* Embed Pods Frameworks */,
-				8D7C6A3CCEEAE266BF7667B9 /* Copy Pods Resources */,
+				3CFF26782BB12C184090942C /* [CP] Embed Pods Frameworks */,
+				8D7C6A3CCEEAE266BF7667B9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -351,14 +305,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Adam Fish";
 				TargetAttributes = {
 					A05FA4E71B6185AE0000C9B2 = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0810;
 					};
 					A05FA4FC1B6185AE0000C9B2 = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0810;
 						TestTargetID = A05FA4E71B6185AE0000C9B2;
 					};
 				};
@@ -403,29 +359,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0BAC064F8923B4D07295C7EB /* Check Pods Manifest.lock */ = {
+		0BAC064F8923B4D07295C7EB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		3CFF26782BB12C184090942C /* Embed Pods Frameworks */ = {
+		3CFF26782BB12C184090942C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -433,14 +389,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFRCSwiftExampleTests/Pods-RBQFRCSwiftExampleTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8D7C6A3CCEEAE266BF7667B9 /* Copy Pods Resources */ = {
+		8D7C6A3CCEEAE266BF7667B9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,29 +404,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFRCSwiftExampleTests/Pods-RBQFRCSwiftExampleTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F82510D9BCCDF2C922FBAAD /* Check Pods Manifest.lock */ = {
+		8F82510D9BCCDF2C922FBAAD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		A2C59954025416B38AD4621C /* Copy Pods Resources */ = {
+		A2C59954025416B38AD4621C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,14 +434,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RBQFRCSwiftExample/Pods-RBQFRCSwiftExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A91DB259BDB4C06DA82ECFAA /* Embed Pods Frameworks */ = {
+		A91DB259BDB4C06DA82ECFAA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -500,20 +456,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0519BF21C56F89B00307EB5 /* RBQSafeRealmObject.m in Sources */,
-				A0519BFC1C56F89B00307EB5 /* RLMObject+Utilities.m in Sources */,
 				A0519BE61C56F89B00307EB5 /* RBQObjectCacheObject.m in Sources */,
-				A0519BFB1C56F89B00307EB5 /* RLMArray+Utilities.m in Sources */,
 				A0519BB71C56F88C00307EB5 /* FetchRequest.swift in Sources */,
 				A0519BE51C56F89B00307EB5 /* RBQControllerCacheObject.m in Sources */,
 				A0519BB61C56F88C00307EB5 /* FetchedResultsController.swift in Sources */,
-				A0519BFD1C56F89B00307EB5 /* RLMObjectBase+Utilities.m in Sources */,
 				A0519BE81C56F89B00307EB5 /* RBQFetchedResultsController.m in Sources */,
 				A0519BB81C56F88C00307EB5 /* Utilities.swift in Sources */,
 				A0AB74621B6C389700923940 /* MainTableViewController.swift in Sources */,
-				A0519BF51C56F89B00307EB5 /* RLMObject+SafeObject.m in Sources */,
 				A0519BE71C56F89B00307EB5 /* RBQSectionCacheObject.m in Sources */,
-				A0519BF61C56F89B00307EB5 /* SafeObject.swift in Sources */,
 				A05FA4EE1B6185AE0000C9B2 /* AppDelegate.swift in Sources */,
 				A0519BE91C56F89B00307EB5 /* RBQFetchRequest.m in Sources */,
 			);
@@ -570,8 +520,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -616,8 +568,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -636,6 +590,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -656,6 +611,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Realm.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/RBQFRCSwiftExample/RBQFRCSwift-BridgingHeader.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -674,6 +630,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Realm.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/RBQFRCSwiftExample/RBQFRCSwift-BridgingHeader.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -691,6 +648,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Realm.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RBQFRCSwiftExample.app/RBQFRCSwiftExample";
 			};
 			name = Debug;
@@ -705,6 +663,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Realm.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RBQFRCSwiftExample.app/RBQFRCSwiftExample";
 			};
 			name = Release;

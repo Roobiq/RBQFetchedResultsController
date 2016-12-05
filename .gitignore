@@ -1,3 +1,7 @@
+# macOS
+.DS_Store
+
+# Xcode
 build/
 *.pbxuser
 !default.pbxuser
@@ -8,19 +12,22 @@ build/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata
-*.xccheckout
 *.moved-aside
 DerivedData
 *.hmap
 *.ipa
-*.xcuserstate
-*.xcworkspace
-.DS_Store
-Podfile.lock
-Pods
-xcuserdata
 *.resolved
+*.xcuserstate
+xcuserdata
+*.xccheckout
+*.xcscmblueprint
 
-Carthage/Build
+# Only ignore example workspaces
+Examples/**/*.xcworkspace
 
+# Carthage
+Carthage/
 
+# CocoaPods
+Podfile.lock
+Pods/

@@ -12,7 +12,7 @@ import RealmSwift
 /**
 This class is used by the FetchedResultsController to represent the properties of the fetch. The FetchRequest is specific to one Object and uses an NSPredicate and array of SortDescriptors to define the query.
 */
-public class FetchRequest<T: Object> {
+open class FetchRequest<T: Object> {
     
     // MARK: Initializers
     
@@ -33,28 +33,28 @@ public class FetchRequest<T: Object> {
         
         let rlmRealm = try! RLMRealm(configuration: rlmConfiguration)
         
-        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, inRealm: rlmRealm, predicate: predicate)
+        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, in: rlmRealm, predicate: predicate)
     }
     
     // MARK: Properties
     
     /// Object class name for the fetch request
-    public var entityName: String {
+    open var entityName: String {
         return self.rbqFetchRequest.entityName
     }
     
     /// The Realm in which the entity for the fetch request is persisted.
-    public var realm: Realm {
+    open var realm: Realm {
         return try! Realm(configuration: self.realmConfiguration)
     }
     
     /// The configuration object used to create an instance of Realm for the fetch request
-    public let realmConfiguration: Realm.Configuration
+    open let realmConfiguration: Realm.Configuration
     
     /// Predicate supported by Realm
     ///
     /// http://realm.io/docs/cocoa/0.89.2/#querying-with-predicates
-    public var predicate: NSPredicate? {
+    open var predicate: NSPredicate? {
         get {
             return self.rbqFetchRequest.predicate
         }
@@ -67,9 +67,9 @@ public class FetchRequest<T: Object> {
     /// Array of SortDescriptors
     ///
     /// http://realm.io/docs/cocoa/0.89.2/#ordering-results
-    public var sortDescriptors: [SortDescriptor] {
+    open var sortDescriptors: [RealmSwift.SortDescriptor] {
         get {
-            var sortDescriptors = [SortDescriptor]()
+            var sortDescriptors: [RealmSwift.SortDescriptor] = []
             
             if let rbqSortDescriptors = self.rbqFetchRequest.sortDescriptors {
                 
@@ -103,10 +103,11 @@ public class FetchRequest<T: Object> {
     
     @return Results for all the objects in the fetch request (not thread-safe).
     */
-    public func fetchObjects() -> Results<T> {
-        
-        var fetchResults = self.realm.objects(T)
-        
+    open func fetchObjects() -> Results<T> {
+
+//        var fetchResults = self.realm.objects(T)
+        var fetchResults = self.realm.objects(T.self)
+
         // If we have a predicate use it
         
         if let predicate = self.predicate {
@@ -115,7 +116,7 @@ public class FetchRequest<T: Object> {
         
         // If we have sort descriptors then use them
         if (self.sortDescriptors.count > 0) {
-            fetchResults = fetchResults.sorted(self.sortDescriptors)
+            fetchResults = fetchResults.sorted(by: self.sortDescriptors)
         }
         
         return fetchResults
@@ -132,10 +133,10 @@ public class FetchRequest<T: Object> {
     
     :returns: YES if performing fetch would include this object
     */
-    public func evaluateObject(object: T) -> Bool {
+    open func evaluateObject(_ object: T) -> Bool {
         
         if let predicate = self.predicate {
-            return predicate.evaluateWithObject(object)
+            return predicate.evaluate(with: object)
         }
         
         return true

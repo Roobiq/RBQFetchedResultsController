@@ -26,7 +26,7 @@ extension Object {
     
     :returns: Bool indicating if the object is in a given Realm
     */
-    public func isContainedIn(realm: Realm) -> Bool {
+    public func isContainedIn(_ realm: Realm) -> Bool {
         
         if self.objectSchema.primaryKeyProperty == nil {
             return false
@@ -35,9 +35,9 @@ extension Object {
             return false
         }
         
-        let primaryKeyValue: AnyObject? = Object.primaryKeyValueForObject(self)
+        let primaryKeyValue: Any? = Object.primaryKeyValue(forObject: self)
         
-        let object = realm.dynamicObjectForPrimaryKey(self.objectSchema.className, key: primaryKeyValue!)
+        let object = realm.dynamicObject(ofType: self.objectSchema.className, forPrimaryKey: primaryKeyValue!)
         
         if object != nil {
             return true
@@ -59,9 +59,35 @@ extension Realm {
     
     :nodoc:
     */
-    internal class func toRLMConfiguration(configuration: Configuration) -> RLMRealmConfiguration {
+    internal class func toRLMConfiguration(_ configuration: Configuration) -> RLMRealmConfiguration {
         let rlmConfiguration = RLMRealmConfiguration()
-        
+
+        if let syncConfig = configuration.syncConfiguration {
+            rlmConfiguration.syncConfiguration = RLMSyncConfiguration(user: syncConfig.user, realmURL: syncConfig.realmURL)
+        }
+
+        // Hack to get around issue with cache objects appearing in Realm
+        // when building RBQFRC not as a framework
+        let mirror = Mirror(reflecting: configuration)
+        for child in mirror.children {
+            if let customSchema = child.value as? RLMSchema, "customSchema" == child.label {
+                // Filter out cache objects
+                let schemaSubset = customSchema.objectSchema.filter { (objectSchema) -> Bool in
+                    let cacheObjectNames = ["RBQControllerCacheObject",
+                                            "RBQObjectCacheObject",
+                                            "RBQSectionCacheObject"]
+
+                    if cacheObjectNames.contains(objectSchema.objectName) {
+                        return false
+                    }
+
+                    return true
+                }
+
+                rlmConfiguration.objectClasses = schemaSubset.map { $0.objectClass }
+            }
+        }
+
         if (configuration.fileURL != nil) {
             rlmConfiguration.fileURL = configuration.fileURL
         }
