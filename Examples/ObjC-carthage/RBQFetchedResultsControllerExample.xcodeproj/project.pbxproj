@@ -19,6 +19,10 @@
 		A0BC27B01C56DA0000306449 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FBECB01C56D6E3006E5109 /* RBQFetchedResultsController.framework */; };
 		A0BC27B11C56DA0000306449 /* RBQFetchedResultsController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0FBECB01C56D6E3006E5109 /* RBQFetchedResultsController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A0C594D31CCF0D490041A382 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0FBECB01C56D6E3006E5109 /* RBQFetchedResultsController.framework */; };
+		F9C9CC4A1DF6BE3400A85A48 /* RBQSafeRealmObject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC441DF6BE1500A85A48 /* RBQSafeRealmObject.framework */; };
+		F9C9CC4B1DF6BE3400A85A48 /* RBQSafeRealmObject.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC441DF6BE1500A85A48 /* RBQSafeRealmObject.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F9C9CC4C1DF6BE3400A85A48 /* RealmUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC451DF6BE1500A85A48 /* RealmUtilities.framework */; };
+		F9C9CC4D1DF6BE3400A85A48 /* RealmUtilities.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC451DF6BE1500A85A48 /* RealmUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +77,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F9C9CC4B1DF6BE3400A85A48 /* RBQSafeRealmObject.framework in Embed Frameworks */,
+				F9C9CC4D1DF6BE3400A85A48 /* RealmUtilities.framework in Embed Frameworks */,
 				A0951C401C87A5E5006AB5D7 /* Realm.framework in Embed Frameworks */,
 				A0BC27B11C56DA0000306449 /* RBQFetchedResultsController.framework in Embed Frameworks */,
 			);
@@ -97,6 +103,8 @@
 		667F38421A5B27E4008E3052 /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleTableViewController.m; sourceTree = "<group>"; };
 		A0951C3E1C87A5E5006AB5D7 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ../../Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		A0FBECAA1C56D6E3006E5109 /* RBQFetchedResultsController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RBQFetchedResultsController.xcodeproj; path = ../../RBQFetchedResultsController.xcodeproj; sourceTree = "<group>"; };
+		F9C9CC441DF6BE1500A85A48 /* RBQSafeRealmObject.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RBQSafeRealmObject.framework; path = ../../Carthage/Build/iOS/RBQSafeRealmObject.framework; sourceTree = "<group>"; };
+		F9C9CC451DF6BE1500A85A48 /* RealmUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmUtilities.framework; path = ../../Carthage/Build/iOS/RealmUtilities.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +112,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9C9CC4A1DF6BE3400A85A48 /* RBQSafeRealmObject.framework in Frameworks */,
+				F9C9CC4C1DF6BE3400A85A48 /* RealmUtilities.framework in Frameworks */,
 				A0951C3F1C87A5E5006AB5D7 /* Realm.framework in Frameworks */,
 				A0BC27B01C56DA0000306449 /* RBQFetchedResultsController.framework in Frameworks */,
 			);
@@ -123,6 +133,8 @@
 		19B744AA72655FFA5B118084 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9C9CC441DF6BE1500A85A48 /* RBQSafeRealmObject.framework */,
+				F9C9CC451DF6BE1500A85A48 /* RealmUtilities.framework */,
 				A0951C3E1C87A5E5006AB5D7 /* Realm.framework */,
 				A0FBECAA1C56D6E3006E5109 /* RBQFetchedResultsController.xcodeproj */,
 			);
