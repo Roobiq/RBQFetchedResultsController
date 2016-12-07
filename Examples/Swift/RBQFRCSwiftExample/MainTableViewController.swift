@@ -291,7 +291,4 @@ extension MainTableViewController: FetchedResultsControllerDelegate {
     func controllerDidChangeContent<T : Object>(_ controller: FetchedResultsController<T>) {
         self.tableView.endUpdates()
     }
-
-    func controllerWillPerformFetch<T : Object>(_ controller: FetchedResultsController<T>) {}
-    func controllerDidPerformFetch<T : Object>(_ controller: FetchedResultsController<T>) {}
 }

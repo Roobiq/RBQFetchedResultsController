@@ -21,11 +21,10 @@
 		F9C9CC511DF6BE8B00A85A48 /* RBQFetchedResultsController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27BA1C56DA7500306449 /* RBQFetchedResultsController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F9C9CC541DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */; };
 		F9C9CC551DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F9C9CC5B1DF6BEB300A85A48 /* RBQSafeRealmObject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC581DF6BEAC00A85A48 /* RBQSafeRealmObject.framework */; };
 		F9C9CC5C1DF6BEB300A85A48 /* RBQSafeRealmObject.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC581DF6BEAC00A85A48 /* RBQSafeRealmObject.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F9C9CC5D1DF6BEB300A85A48 /* RealmUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC591DF6BEAC00A85A48 /* RealmUtilities.framework */; };
-		F9C9CC5F1DF6BEB300A85A48 /* SafeRealmObject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC5A1DF6BEAC00A85A48 /* SafeRealmObject.framework */; };
 		F9C9CC601DF6BEB300A85A48 /* SafeRealmObject.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC5A1DF6BEAC00A85A48 /* SafeRealmObject.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F9C9CC661DF71C1500A85A48 /* RealmUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC591DF6BEAC00A85A48 /* RealmUtilities.framework */; };
+		F9C9CC671DF71C1500A85A48 /* RealmUtilities.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC591DF6BEAC00A85A48 /* RealmUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +96,7 @@
 				F9C9CC5C1DF6BEB300A85A48 /* RBQSafeRealmObject.framework in Embed Frameworks */,
 				A0BC27C51C56DA8D00306449 /* RealmSwift.framework in Embed Frameworks */,
 				F9C9CC551DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Embed Frameworks */,
+				F9C9CC671DF71C1500A85A48 /* RealmUtilities.framework in Embed Frameworks */,
 				F9C9CC601DF6BEB300A85A48 /* SafeRealmObject.framework in Embed Frameworks */,
 				F9C9CC511DF6BE8B00A85A48 /* RBQFetchedResultsController.framework in Embed Frameworks */,
 				A0BC27C31C56DA8D00306449 /* Realm.framework in Embed Frameworks */,
@@ -130,11 +130,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9C9CC5B1DF6BEB300A85A48 /* RBQSafeRealmObject.framework in Frameworks */,
 				A0BC27C21C56DA8D00306449 /* Realm.framework in Frameworks */,
+				F9C9CC661DF71C1500A85A48 /* RealmUtilities.framework in Frameworks */,
 				F9C9CC541DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Frameworks */,
-				F9C9CC5D1DF6BEB300A85A48 /* RealmUtilities.framework in Frameworks */,
-				F9C9CC5F1DF6BEB300A85A48 /* SafeRealmObject.framework in Frameworks */,
 				F9C9CC501DF6BE8B00A85A48 /* RBQFetchedResultsController.framework in Frameworks */,
 				A0BC27C41C56DA8D00306449 /* RealmSwift.framework in Frameworks */,
 			);
@@ -283,7 +281,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Adam Fish";
 				TargetAttributes = {
 					A05FA4E71B6185AE0000C9B2 = {
@@ -494,8 +492,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -541,8 +541,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -561,6 +563,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

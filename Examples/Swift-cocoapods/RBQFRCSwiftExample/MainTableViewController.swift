@@ -49,10 +49,10 @@ class MainTableViewController: UITableViewController {
     var fetchedResultsController: FetchedResultsController<TestObject>?
     
     var realm: Realm?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let realm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "Test"))
         
         self.realm = realm
@@ -93,48 +93,48 @@ class MainTableViewController: UITableViewController {
         
         self.fetchedResultsController!.delegate = self
         
-        _ = self.fetchedResultsController!.performFetch()
+        let _ = self.fetchedResultsController!.performFetch()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
-
+        
         return self.fetchedResultsController!.numberOfSections()
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
+        
         return self.fetchedResultsController!.numberOfRowsForSectionIndex(section)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.fetchedResultsController!.titleForHeaderInSection(section)
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) 
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath)
+        
         // Configure the cell...
         
         let object = self.fetchedResultsController?.objectAtIndexPath(indexPath)
-
+        
         cell.textLabel?.text = object?.title
         
         return cell
     }
-
+    
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return NO if you do not want the specified item to be editable.
         return true
     }
-
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -142,7 +142,7 @@ class MainTableViewController: UITableViewController {
             self.deleteObjectAtIndexPath(indexPath)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     
     // MARK: - Button Actions
@@ -175,11 +175,11 @@ class MainTableViewController: UITableViewController {
     fileprivate func insertObject() {
         
         let realm = self.realm!
-            
+        
         let indexPathFirstRow = IndexPath(row: 0, section: 0)
-            
+        
         let object = self.fetchedResultsController?.objectAtIndexPath(indexPathFirstRow)
-            
+        
         if (object?.sortIndex)! > 0 {
             realm.beginWrite()
             
@@ -245,35 +245,28 @@ class MainTableViewController: UITableViewController {
 // MARK: -
 
 extension MainTableViewController: FetchedResultsControllerDelegate {
-    public func controller<T : Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath) {
-    }
-
+    
     func controllerWillChangeContent<T : Object>(_ controller: FetchedResultsController<T>) {
         self.tableView.beginUpdates()
     }
     
-    func controllerDidChangeObject<T : Object>(_ controller: FetchedResultsController<T>, anObject: SafeObject<T>, indexPath: IndexPath?, changeType: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    public func controller<T : Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         
         let tableView = self.tableView
         
-        switch changeType {
+        switch type {
             
         case .insert:
-            
             tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
             
         case .delete:
-            
             tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
             
         case .update:
-            
             tableView?.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
             
         case .move:
-            
             tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
-            
             tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
         }
     }
@@ -299,5 +292,4 @@ extension MainTableViewController: FetchedResultsControllerDelegate {
     func controllerDidChangeContent<T : Object>(_ controller: FetchedResultsController<T>) {
         self.tableView.endUpdates()
     }
-
 }

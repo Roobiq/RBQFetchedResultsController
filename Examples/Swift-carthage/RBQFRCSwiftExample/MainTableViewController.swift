@@ -9,6 +9,7 @@
 import UIKit
 import Realm
 import RealmSwift
+import SafeRealmObject
 import SwiftFetchedResultsController
 
 // MARK: -
@@ -28,7 +29,7 @@ class TestObject: Object {
         return "key"
     }
     
-    class func testObject(title: String, sortIndex: Int, inTable: Bool) -> TestObject {
+    class func testObject(_ title: String, sortIndex: Int, inTable: Bool) -> TestObject {
         let object = TestObject()
         
         object.title = title
@@ -48,10 +49,10 @@ class MainTableViewController: UITableViewController {
     var fetchedResultsController: FetchedResultsController<TestObject>?
     
     var realm: Realm?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let realm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "Test"))
         
         self.realm = realm
@@ -92,66 +93,66 @@ class MainTableViewController: UITableViewController {
         
         self.fetchedResultsController!.delegate = self
         
-        self.fetchedResultsController!.performFetch()
+        let _ = self.fetchedResultsController!.performFetch()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        
         return self.fetchedResultsController!.numberOfSections()
     }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return self.fetchedResultsController!.numberOfRowsForSectionIndex(section)
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.fetchedResultsController!.titleForHeaderInSection(section)
     }
-
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("customCell", forIndexPath: indexPath) 
-
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath)
+        
         // Configure the cell...
         
         let object = self.fetchedResultsController?.objectAtIndexPath(indexPath)
-
+        
         cell.textLabel?.text = object?.title
         
         return cell
     }
-
+    
     // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return NO if you do not want the specified item to be editable.
         return true
     }
-
+    
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
             self.deleteObjectAtIndexPath(indexPath)
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     
     // MARK: - Button Actions
     
-    @IBAction func didPressInsertButton(sender: UIBarButtonItem) {
+    @IBAction func didPressInsertButton(_ sender: UIBarButtonItem) {
         self.insertObject()
     }
-    @IBAction func didPressDeleteButton(sender: UIBarButtonItem) {
+    @IBAction func didPressDeleteButton(_ sender: UIBarButtonItem) {
         
-        let objectsInFirstSection = self.realm!.objects(TestObject).filter("%K == %@", "sectionName","First Section")
+        let objectsInFirstSection = self.realm!.objects(TestObject.self).filter("%K == %@", "sectionName","First Section")
         
         try! self.realm!.write { () -> Void in
             self.realm!.delete(objectsInFirstSection)
@@ -160,7 +161,7 @@ class MainTableViewController: UITableViewController {
     
     // MARK: - Private
     
-    private func deleteObjectAtIndexPath(indexPath: NSIndexPath) {
+    fileprivate func deleteObjectAtIndexPath(_ indexPath: IndexPath) {
         if let object = self.fetchedResultsController?.objectAtIndexPath(indexPath) {
             
             let realm = self.realm!
@@ -171,22 +172,22 @@ class MainTableViewController: UITableViewController {
         }
     }
     
-    private func insertObject() {
+    fileprivate func insertObject() {
         
         let realm = self.realm!
-            
-        let indexPathFirstRow = NSIndexPath(forRow: 0, inSection: 0)
-            
+        
+        let indexPathFirstRow = IndexPath(row: 0, section: 0)
+        
         let object = self.fetchedResultsController?.objectAtIndexPath(indexPathFirstRow)
-            
-        if object?.sortIndex > 0 {
+        
+        if (object?.sortIndex)! > 0 {
             realm.beginWrite()
             
             let sortIndex = object!.sortIndex - 1
             
             let title = "Cell \(sortIndex)"
             
-            var newObject = realm.objectForPrimaryKey(TestObject.self, key: "\(title)\(sortIndex)")
+            var newObject = realm.object(ofType: TestObject.self, forPrimaryKey: "\(title)\(sortIndex)" as AnyObject)
             
             if newObject == nil {
                 newObject = TestObject()
@@ -207,16 +208,16 @@ class MainTableViewController: UITableViewController {
         else { // Test Moves
             realm.beginWrite()
             
-            let indexPathFifthRow = NSIndexPath(forRow: 5, inSection: 0)
-            let indexPathThirdRow = NSIndexPath(forRow: 3, inSection: 0)
-            let indexPathSixthRow = NSIndexPath(forRow: 6, inSection: 0)
-            let indexPathFirstRow = NSIndexPath(forRow: 0, inSection: 0)
+            let indexPathFifthRow = IndexPath(row: 5, section: 0)
+            let indexPathThirdRow = IndexPath(row: 3, section: 0)
+            let indexPathSixthRow = IndexPath(row: 6, section: 0)
+            let indexPathFirstRow = IndexPath(row: 0, section: 0)
             
             let firstObject = self.fetchedResultsController?.objectAtIndexPath(indexPathFirstRow)
             let thirdObject = self.fetchedResultsController?.objectAtIndexPath(indexPathThirdRow)
             let fifthObject = self.fetchedResultsController?.objectAtIndexPath(indexPathFifthRow)
             let sixthObject = self.fetchedResultsController?.objectAtIndexPath(indexPathSixthRow)
-            let ninthObject = realm.objects(TestObject).filter("%K == %@", "title","Cell 9")
+            let ninthObject = realm.objects(TestObject.self).filter("%K == %@", "title","Cell 9")
             
             fifthObject?.sortIndex += 1
             
@@ -244,58 +245,51 @@ class MainTableViewController: UITableViewController {
 // MARK: -
 
 extension MainTableViewController: FetchedResultsControllerDelegate {
-    func controllerWillChangeContent<T : Object>(controller: FetchedResultsController<T>) {
+    
+    func controllerWillChangeContent<T : Object>(_ controller: FetchedResultsController<T>) {
         self.tableView.beginUpdates()
     }
     
-    func controllerDidChangeObject<T : Object>(controller: FetchedResultsController<T>, anObject: SafeObject<T>, indexPath: NSIndexPath?, changeType: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    public func controller<T : Object>(_ controller: FetchedResultsController<T>, didChangeObject anObject: SafeObject<T>, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         
         let tableView = self.tableView
         
-        switch changeType {
+        switch type {
             
-        case .Insert:
+        case .insert:
+            tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
             
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
+        case .delete:
+            tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
             
-        case .Delete:
+        case .update:
+            tableView?.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
             
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
-            
-        case .Update:
-            
-            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
-            
-        case .Move:
-            
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
-            
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: UITableViewRowAnimation.Fade)
+        case .move:
+            tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
+            tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
         }
     }
     
-    func controllerDidChangeSection<T : Object>(controller: FetchedResultsController<T>, section: FetchResultsSectionInfo<T>, sectionIndex: UInt, changeType: NSFetchedResultsChangeType) {
+    func controllerDidChangeSection<T : Object>(_ controller: FetchedResultsController<T>, section: FetchResultsSectionInfo<T>, sectionIndex: UInt, changeType: NSFetchedResultsChangeType) {
         
         let tableView = self.tableView
         
-        if changeType == NSFetchedResultsChangeType.Insert {
+        if changeType == NSFetchedResultsChangeType.insert {
             
-            let indexSet = NSIndexSet(index: Int(sectionIndex))
+            let indexSet = IndexSet(integer: Int(sectionIndex))
             
-            tableView.insertSections(indexSet, withRowAnimation: UITableViewRowAnimation.Fade)
+            tableView?.insertSections(indexSet, with: UITableViewRowAnimation.fade)
         }
-        else if changeType == NSFetchedResultsChangeType.Delete {
+        else if changeType == NSFetchedResultsChangeType.delete {
             
-            let indexSet = NSIndexSet(index: Int(sectionIndex))
+            let indexSet = IndexSet(integer: Int(sectionIndex))
             
-            tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.Fade)
+            tableView?.deleteSections(indexSet, with: UITableViewRowAnimation.fade)
         }
     }
     
-    func controllerDidChangeContent<T : Object>(controller: FetchedResultsController<T>) {
+    func controllerDidChangeContent<T : Object>(_ controller: FetchedResultsController<T>) {
         self.tableView.endUpdates()
     }
-
-    func controllerWillPerformFetch<T : Object>(controller: FetchedResultsController<T>) {}
-    func controllerDidPerformFetch<T : Object>(controller: FetchedResultsController<T>) {}
 }
