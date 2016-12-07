@@ -10,6 +10,7 @@ import Foundation
 import RealmSwift
 import Realm
 import Realm.Dynamic
+import RealmUtilities
 
 /**
 This utility category provides convenience methods to retrieve the 

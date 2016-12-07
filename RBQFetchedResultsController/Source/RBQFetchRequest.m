@@ -7,11 +7,11 @@
 //
 
 #import "RBQFetchRequest.h"
-#import "RLMObject+Utilities.h"
-#import "RBQSafeRealmObject.h"
 
 #import <Realm/Realm.h>
 #import <Realm/RLMRealm_Dynamic.h>
+#import <RBQSafeRealmObject/RBQSafeRealmObject.h>
+#import <RealmUtilities/RLMObject+Utilities.h>
 
 @interface RBQFetchRequest ()
 

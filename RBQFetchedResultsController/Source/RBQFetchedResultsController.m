@@ -8,12 +8,11 @@
 
 #import "RBQFetchedResultsController.h"
 
-#import "RLMObject+Utilities.h"
 #import "RBQControllerCacheObject.h"
 #import "RBQSectionCacheObject.h"
-#import "RLMObject+Utilities.h"
 
 #import <objc/runtime.h>
+#import <RealmUtilities/RLMObject+Utilities.h>
 
 @import UIKit;
 

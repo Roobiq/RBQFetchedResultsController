@@ -12,13 +12,19 @@
 		A05FA4F51B6185AE0000C9B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F41B6185AE0000C9B2 /* Images.xcassets */; };
 		A05FA4F81B6185AE0000C9B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05FA4F61B6185AE0000C9B2 /* LaunchScreen.xib */; };
 		A05FA5041B6185AE0000C9B2 /* RBQFRCSwiftExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05FA5031B6185AE0000C9B2 /* RBQFRCSwiftExampleTests.swift */; };
-		A090E5D51C73B3BB0046788B /* SwiftFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */; };
 		A0AB74621B6C389700923940 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AB74611B6C389700923940 /* MainTableViewController.swift */; };
-		A0BC27BF1C56DA8300306449 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27BA1C56DA7500306449 /* RBQFetchedResultsController.framework */; };
 		A0BC27C21C56DA8D00306449 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27C01C56DA8D00306449 /* Realm.framework */; };
 		A0BC27C31C56DA8D00306449 /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27C01C56DA8D00306449 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A0BC27C41C56DA8D00306449 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27C11C56DA8D00306449 /* RealmSwift.framework */; };
 		A0BC27C51C56DA8D00306449 /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27C11C56DA8D00306449 /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F9C9CC501DF6BE8B00A85A48 /* RBQFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27BA1C56DA7500306449 /* RBQFetchedResultsController.framework */; };
+		F9C9CC511DF6BE8B00A85A48 /* RBQFetchedResultsController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0BC27BA1C56DA7500306449 /* RBQFetchedResultsController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F9C9CC541DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */; };
+		F9C9CC551DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A090E5D41C73B3B60046788B /* SwiftFetchedResultsController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F9C9CC5C1DF6BEB300A85A48 /* RBQSafeRealmObject.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC581DF6BEAC00A85A48 /* RBQSafeRealmObject.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F9C9CC601DF6BEB300A85A48 /* SafeRealmObject.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC5A1DF6BEAC00A85A48 /* SafeRealmObject.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F9C9CC661DF71C1500A85A48 /* RealmUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC591DF6BEAC00A85A48 /* RealmUtilities.framework */; };
+		F9C9CC671DF71C1500A85A48 /* RealmUtilities.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9C9CC591DF6BEAC00A85A48 /* RealmUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +70,20 @@
 			remoteGlobalIDString = 6361D7331C4051A8005CD430;
 			remoteInfo = RBQFetchedResultsController;
 		};
+		F9C9CC521DF6BE8B00A85A48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0BC27B41C56DA7500306449 /* RBQFetchedResultsController.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6361D7331C4051A8005CD430;
+			remoteInfo = RBQFetchedResultsController;
+		};
+		F9C9CC561DF6BE8B00A85A48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0BC27B41C56DA7500306449 /* RBQFetchedResultsController.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A090E59F1C73B17B0046788B;
+			remoteInfo = SwiftFetchedResultsController;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -73,7 +93,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F9C9CC5C1DF6BEB300A85A48 /* RBQSafeRealmObject.framework in Embed Frameworks */,
 				A0BC27C51C56DA8D00306449 /* RealmSwift.framework in Embed Frameworks */,
+				F9C9CC551DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Embed Frameworks */,
+				F9C9CC671DF71C1500A85A48 /* RealmUtilities.framework in Embed Frameworks */,
+				F9C9CC601DF6BEB300A85A48 /* SafeRealmObject.framework in Embed Frameworks */,
+				F9C9CC511DF6BE8B00A85A48 /* RBQFetchedResultsController.framework in Embed Frameworks */,
 				A0BC27C31C56DA8D00306449 /* Realm.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -95,6 +120,9 @@
 		A0BC27B41C56DA7500306449 /* RBQFetchedResultsController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RBQFetchedResultsController.xcodeproj; path = ../../RBQFetchedResultsController.xcodeproj; sourceTree = "<group>"; };
 		A0BC27C01C56DA8D00306449 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ../../Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		A0BC27C11C56DA8D00306449 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = ../../Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		F9C9CC581DF6BEAC00A85A48 /* RBQSafeRealmObject.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RBQSafeRealmObject.framework; path = ../../Carthage/Build/iOS/RBQSafeRealmObject.framework; sourceTree = "<group>"; };
+		F9C9CC591DF6BEAC00A85A48 /* RealmUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmUtilities.framework; path = ../../Carthage/Build/iOS/RealmUtilities.framework; sourceTree = "<group>"; };
+		F9C9CC5A1DF6BEAC00A85A48 /* SafeRealmObject.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafeRealmObject.framework; path = ../../Carthage/Build/iOS/SafeRealmObject.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,9 +130,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A090E5D51C73B3BB0046788B /* SwiftFetchedResultsController.framework in Frameworks */,
 				A0BC27C21C56DA8D00306449 /* Realm.framework in Frameworks */,
-				A0BC27BF1C56DA8300306449 /* RBQFetchedResultsController.framework in Frameworks */,
+				F9C9CC661DF71C1500A85A48 /* RealmUtilities.framework in Frameworks */,
+				F9C9CC541DF6BE8B00A85A48 /* SwiftFetchedResultsController.framework in Frameworks */,
+				F9C9CC501DF6BE8B00A85A48 /* RBQFetchedResultsController.framework in Frameworks */,
 				A0BC27C41C56DA8D00306449 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,6 +151,9 @@
 		8BEDE2E49A674D438DD0CE47 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9C9CC581DF6BEAC00A85A48 /* RBQSafeRealmObject.framework */,
+				F9C9CC591DF6BEAC00A85A48 /* RealmUtilities.framework */,
+				F9C9CC5A1DF6BEAC00A85A48 /* SafeRealmObject.framework */,
 				A0BC27C01C56DA8D00306449 /* Realm.framework */,
 				A0BC27C11C56DA8D00306449 /* RealmSwift.framework */,
 				A0BC27B41C56DA7500306449 /* RBQFetchedResultsController.xcodeproj */,
@@ -213,6 +245,8 @@
 			dependencies = (
 				A090E5D01C73B3B50046788B /* PBXTargetDependency */,
 				A0BC27BE1C56DA7C00306449 /* PBXTargetDependency */,
+				F9C9CC531DF6BE8B00A85A48 /* PBXTargetDependency */,
+				F9C9CC571DF6BE8B00A85A48 /* PBXTargetDependency */,
 			);
 			name = RBQFRCSwiftExample;
 			productName = RBQFRCSwiftExample;
@@ -247,7 +281,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Adam Fish";
 				TargetAttributes = {
 					A05FA4E71B6185AE0000C9B2 = {
@@ -413,6 +447,16 @@
 			name = RBQFetchedResultsController;
 			targetProxy = A0BC27BD1C56DA7C00306449 /* PBXContainerItemProxy */;
 		};
+		F9C9CC531DF6BE8B00A85A48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RBQFetchedResultsController;
+			targetProxy = F9C9CC521DF6BE8B00A85A48 /* PBXContainerItemProxy */;
+		};
+		F9C9CC571DF6BE8B00A85A48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftFetchedResultsController;
+			targetProxy = F9C9CC561DF6BE8B00A85A48 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -448,8 +492,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -495,8 +541,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -515,6 +563,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -524,6 +573,7 @@
 		A05FA5081B6185AE0000C9B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -540,6 +590,7 @@
 		A05FA5091B6185AE0000C9B2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
