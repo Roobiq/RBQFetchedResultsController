@@ -29,7 +29,7 @@ open class FetchRequest<T: Object> {
         
         self.realmConfiguration = realm.configuration
         
-        let rlmConfiguration: RLMRealmConfiguration = Realm.toRLMConfiguration(realm.configuration)
+        let rlmConfiguration: RLMRealmConfiguration = ObjectiveCSupport.convert(object: realm.configuration)
         
         let rlmRealm = try! RLMRealm(configuration: rlmConfiguration)
         
