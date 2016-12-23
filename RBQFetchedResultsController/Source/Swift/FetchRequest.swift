@@ -20,11 +20,11 @@ open class FetchRequest<T: Object> {
     Constructor method to create a fetch request for a given entity name in a specific Realm.
     
     :param: realm      Realm in which the Object is persisted (if passing in-memory Realm, make sure to keep a strong reference elsewhere since fetch request only stores the path)
-    :param predicate  NSPredicate that represents the search query
+    :param predicate  NSPredicate that represents the search query or nil if all objects should be included
     
     :returns: A new instance of FetchRequest
     */
-    public init(realm: Realm, predicate: NSPredicate) {
+    public init(realm: Realm, predicate: NSPredicate?) {
         let entityName = T.className()
         
         self.realmConfiguration = realm.configuration
