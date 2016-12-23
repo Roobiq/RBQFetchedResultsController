@@ -872,12 +872,11 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         for (RBQSectionChangeObject *sectionChange in sectionChanges) {
             
             if (sectionChange.changeType == NSFetchedResultsChangeDelete) {
-                
 #ifdef DEBUG
                 NSAssert(sectionChange.previousIndex.unsignedIntegerValue < state.cache.sections.count, @"Attemting to delete index that is already gone!");
 #endif
                 // Remove the section from Realm cache
-                [state.cache.sections removeObjectAtIndex:sectionChange.previousIndex.unsignedIntegerValue];
+                [state.cache.realm deleteObject:sectionChange.section];
             }
             else if (sectionChange.changeType == NSFetchedResultsChangeInsert) {
                 
