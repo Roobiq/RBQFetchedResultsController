@@ -362,6 +362,13 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 #pragma mark - Public Instance
 
+- (nonnull id)initWithFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
+                sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
+                         cacheName:(nullable NSString *)name
+{
+    return [self initWithFetchRequest:fetchRequest sectionNameKeyPath:sectionNameKeyPath sectionNameKeyType:RLMPropertyTypeString cacheName:name];
+}
+
 - (id)initWithFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
                 sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
                 sectionNameKeyType:(RLMPropertyType)sectionNameKeyType
@@ -373,6 +380,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         _cacheName = name;
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
+        NSAssert(sectionNameKeyType == RLMPropertyTypeString || sectionNameKeyType == RLMPropertyTypeDate || sectionNameKeyType == RLMPropertyTypeInt, @"not support type");
         _sectionNameKeyType = sectionNameKeyType;
 #ifdef DEBUG
 		_logging = true;
@@ -558,6 +566,22 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     return 0;
 }
 
+- (NSString *)titleForHeaderInSection:(NSInteger)section
+{
+    RBQControllerCacheObject *cache = [self cache];
+    
+    if (cache) {
+        
+        if (section < cache.sections.count) {
+            RBQSectionCacheObject *sectionInfo = cache.sections[section];
+            
+            return sectionInfo.name;
+        }
+    }
+    
+    return @"";
+}
+
 - (id)objectForHeaderInSection:(NSInteger)section
 {
     RBQControllerCacheObject *cache = [self cache];
@@ -571,7 +595,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         }
     }
     
-    return @"";
+    return nil;
 }
 
 - (NSUInteger)sectionIndexForSectionName:(NSString *)sectionName
