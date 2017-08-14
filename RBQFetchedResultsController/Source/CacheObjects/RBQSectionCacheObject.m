@@ -10,11 +10,11 @@
 
 @implementation RBQSectionCacheObject
 
-+ (instancetype)cacheWithName:(NSString *)name
++ (instancetype)cacheWithName:(NSString *)name keyType:(RLMPropertyType)keyType
 {
     RBQSectionCacheObject *section = [[RBQSectionCacheObject alloc] init];
     section.name = name;
-    
+    section.keyType = keyType;
     return section;
 }
 
@@ -43,5 +43,24 @@
 {
     return [self isEqualToObject:object];
 }
+
+- (id)value
+{
+    if (self.keyType == RLMPropertyTypeInt) {
+        NSNumber *numberFromString = @(self.name.integerValue);
+        
+        return numberFromString;
+    }
+    if (self.keyType == RLMPropertyTypeDate) {
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        format.dateStyle = NSDateFormatterMediumStyle;
+        format.timeStyle = NSDateFormatterFullStyle;
+        NSDate *dateFromString = [format dateFromString:self.name];
+        
+        return dateFromString;
+    }
+    return self.name;
+}
+
 
 @end

@@ -32,9 +32,9 @@
 @property (nonatomic, readonly, nonnull) id<RLMCollection> objects;
 
 /**
- *  The name of the section.
+ *  The value of the section.
  */
-@property (nonatomic, readonly, nonnull) NSString *name;
+@property (nonatomic, readonly, nonnull) id value;
 
 @end
 
@@ -135,6 +135,11 @@
 @property (nonatomic, readonly, nullable) NSString *sectionNameKeyPath;
 
 /**
+ *  The section name key path used to create the sections. Can be nil if no sections.
+ */
+@property (nonatomic, readonly, assign) RLMPropertyType sectionNameKeyType;
+
+/**
  *  The delegate to pass the index path and section changes to.
  */
 @property (nonatomic, weak, nullable) id <RBQFetchedResultsControllerDelegate> delegate;
@@ -189,6 +194,7 @@
  */
 - (nonnull id)initWithFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
                 sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
+                sectionNameKeyType:(RLMPropertyType)sectionNameKeyType
                          cacheName:(nullable NSString *)name;
 
 /**
@@ -222,13 +228,13 @@
 - (NSInteger)numberOfSections;
 
 /**
- *  Method to retrieve the title for a given section index
+ *  Method to retrieve the object for a given section index
  *
  *  @param section section index
  *
- *  @return The title of the section
+ *  @return The object of the section
  */
-- (nonnull NSString *)titleForHeaderInSection:(NSInteger)section;
+- (id _Nullable )objectForHeaderInSection:(NSInteger)section;
 
 /**
  *  Method to retrieve the section index given a section name

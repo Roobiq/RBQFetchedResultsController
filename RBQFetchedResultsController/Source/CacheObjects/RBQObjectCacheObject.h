@@ -33,8 +33,8 @@
 /**
  *  Primary key type (use to convert the string value if necessary)
  *
- * @warning Only supports RLMPropertyTypeInt and RLMPropertyTypeString, which are the only
- * supported Realm primary key types as of v0.90.5.
+ * @warning Only supports RLMPropertyTypeInt ,RLMPropertyTypeString and RLMPropertyTypeDate, which are the only
+ * supported Realm primary key types as of v1.0.
  */
 @property NSInteger primaryKeyType;
 
