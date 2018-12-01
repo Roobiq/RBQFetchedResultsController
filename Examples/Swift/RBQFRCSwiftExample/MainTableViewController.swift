@@ -14,15 +14,15 @@ import RealmSwift
 // MARK: -
 
 class TestObject: Object {
-    dynamic var title = ""
+    @objc dynamic var title = ""
     
-    dynamic var sortIndex = 0
+    @objc dynamic var sortIndex = 0
     
-    dynamic var sectionName = ""
+    @objc dynamic var sectionName = ""
     
-    dynamic var key = ""
+    @objc dynamic var key = ""
     
-    dynamic var inTable: Bool = false
+    @objc dynamic var inTable: Bool = false
     
     override class func primaryKey() -> String? {
         return "key"
@@ -135,7 +135,7 @@ class MainTableViewController: UITableViewController {
     }
 
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
             self.deleteObjectAtIndexPath(indexPath)
@@ -256,17 +256,17 @@ extension MainTableViewController: FetchedResultsControllerDelegate {
         switch type {
 
         case .insert:
-            tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
+            tableView?.insertRows(at: [newIndexPath!], with: UITableView.RowAnimation.fade)
 
         case .delete:
-            tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
+            tableView?.deleteRows(at: [indexPath!], with: UITableView.RowAnimation.fade)
 
         case .update:
-            tableView?.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
+            tableView?.reloadRows(at: [indexPath!], with: UITableView.RowAnimation.fade)
 
         case .move:
-            tableView?.deleteRows(at: [indexPath!], with: UITableViewRowAnimation.fade)
-            tableView?.insertRows(at: [newIndexPath!], with: UITableViewRowAnimation.fade)
+            tableView?.deleteRows(at: [indexPath!], with: UITableView.RowAnimation.fade)
+            tableView?.insertRows(at: [newIndexPath!], with: UITableView.RowAnimation.fade)
         }
     }
     
@@ -278,13 +278,13 @@ extension MainTableViewController: FetchedResultsControllerDelegate {
             
             let indexSet = IndexSet(integer: Int(sectionIndex))
             
-            tableView?.insertSections(indexSet, with: UITableViewRowAnimation.fade)
+            tableView?.insertSections(indexSet, with: UITableView.RowAnimation.fade)
         }
         else if changeType == NSFetchedResultsChangeType.delete {
             
             let indexSet = IndexSet(integer: Int(sectionIndex))
             
-            tableView?.deleteSections(indexSet, with: UITableViewRowAnimation.fade)
+            tableView?.deleteSections(indexSet, with: UITableView.RowAnimation.fade)
         }
     }
     
