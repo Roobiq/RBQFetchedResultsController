@@ -220,7 +220,7 @@ open class FetchedResultsController<T: Object> {
 	}
     
     /// The fetch request for the controller
-    open let fetchRequest: FetchRequest<T>
+    public let fetchRequest: FetchRequest<T>
     
     /// The section name key path used to create the sections. Can be nil if no sections.
     open var sectionNameKeyPath: String? {
@@ -340,7 +340,7 @@ open class FetchedResultsController<T: Object> {
 
         if let rlmObject = self.rbqFetchedResultsController.object(at: indexPath) {
 
-            return unsafeBitCast(rlmObject as! RLMObjectBase, to: T.self)
+            return unsafeDowncast(rlmObject as! RLMObjectBase, to: T.self)
         }
         
         return nil

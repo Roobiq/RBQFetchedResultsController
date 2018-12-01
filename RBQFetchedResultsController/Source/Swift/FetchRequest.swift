@@ -49,7 +49,7 @@ open class FetchRequest<T: Object> {
     }
     
     /// The configuration object used to create an instance of Realm for the fetch request
-    open let realmConfiguration: Realm.Configuration
+    public let realmConfiguration: Realm.Configuration
     
     /// Predicate supported by Realm
     ///

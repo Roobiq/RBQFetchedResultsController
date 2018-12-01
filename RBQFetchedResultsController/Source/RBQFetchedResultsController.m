@@ -1974,7 +1974,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     return [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
 }
 
-- (void)runOnMainThread:(void (^)())mainThreadBlock
+- (void)runOnMainThread:(void (^)(void))mainThreadBlock
 {
     if ([NSThread isMainThread]) {
         mainThreadBlock();
