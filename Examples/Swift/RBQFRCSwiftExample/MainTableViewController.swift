@@ -82,9 +82,9 @@ class MainTableViewController: UITableViewController {
         
         let fetchRequest = FetchRequest<TestObject>(realm: realm, predicate: predicate)
         
-        let sortDescriptor = SortDescriptor(property: "sortIndex", ascending: true)
+        let sortDescriptor = SortDescriptor(keyPath: "sortIndex", ascending: true)
         
-        let sortDescriptorSection = SortDescriptor(property: "sectionName", ascending: true)
+        let sortDescriptorSection = SortDescriptor(keyPath: "sectionName", ascending: true)
         
         fetchRequest.sortDescriptors = [sortDescriptorSection, sortDescriptor]
         
