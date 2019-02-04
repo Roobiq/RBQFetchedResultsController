@@ -49,7 +49,7 @@ open class FetchRequest<T: Object> {
     }
     
     /// The configuration object used to create an instance of Realm for the fetch request
-    open let realmConfiguration: Realm.Configuration
+    public let realmConfiguration: Realm.Configuration
     
     /// Predicate supported by Realm
     ///
@@ -75,7 +75,7 @@ open class FetchRequest<T: Object> {
                 
                 for rlmSortDesc in rbqSortDescriptors {
                     
-                    sortDescriptors.append(SortDescriptor(property: rlmSortDesc.property, ascending: rlmSortDesc.ascending))
+                    sortDescriptors.append(SortDescriptor(keyPath: rlmSortDesc.keyPath, ascending: rlmSortDesc.ascending))
                 }
             }
             
@@ -87,7 +87,7 @@ open class FetchRequest<T: Object> {
             
             for sortDesc in newValue {
                 
-                let rlmSortDesc = RLMSortDescriptor(property: sortDesc.property, ascending: sortDesc.ascending)
+                let rlmSortDesc = RLMSortDescriptor(keyPath: sortDesc.keyPath, ascending: sortDesc.ascending)
                 
                 rbqSortDescriptors.append(rlmSortDesc)
             }

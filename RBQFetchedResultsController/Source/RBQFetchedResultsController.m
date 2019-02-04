@@ -699,7 +699,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     
     CFRunLoopPerformBlock(self.notificationRunLoop.getCFRunLoop, kCFRunLoopDefaultMode, ^{
         if (weakSelf.notificationToken) {
-            [weakSelf.notificationToken stop];
+            [weakSelf.notificationToken invalidate];
             weakSelf.notificationToken = nil;
             weakSelf.notificationCollection = nil;
         }
@@ -731,7 +731,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 {
     // Remove the notifications
     if (self.notificationToken) {
-        [self.notificationToken stop];
+        [self.notificationToken invalidate];
         self.notificationToken = nil;
     }
     
@@ -1974,7 +1974,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     return [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
 }
 
-- (void)runOnMainThread:(void (^)())mainThreadBlock
+- (void)runOnMainThread:(void (^)(void))mainThreadBlock
 {
     if ([NSThread isMainThread]) {
         mainThreadBlock();
