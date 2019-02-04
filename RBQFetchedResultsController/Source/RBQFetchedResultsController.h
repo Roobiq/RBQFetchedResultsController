@@ -32,9 +32,9 @@
 @property (nonatomic, readonly, nonnull) id<RLMCollection> objects;
 
 /**
- *  The name of the section.
+ *  The value of the section.
  */
-@property (nonatomic, readonly, nonnull) NSString *name;
+@property (nonatomic, readonly, nonnull) id value;
 
 @end
 
@@ -135,6 +135,11 @@
 @property (nonatomic, readonly, nullable) NSString *sectionNameKeyPath;
 
 /**
+ *  The section name key path used to create the sections. Can be nil if no sections.
+ */
+@property (nonatomic, readonly, assign) RLMPropertyType sectionNameKeyType;
+
+/**
  *  The delegate to pass the index path and section changes to.
  */
 @property (nonatomic, weak, nullable) id <RBQFetchedResultsControllerDelegate> delegate;
@@ -192,6 +197,24 @@
                          cacheName:(nullable NSString *)name;
 
 /**
+ *  Constructor method to initialize the controller
+ *
+ *  @warning Specify a cache name if deletion of the cache later on is necessary
+ *
+ *  @param fetchRequest       the RBQFetchRequest for the controller
+ *  @param sectionNameKeyPath A key path on result objects that returns the section name. Pass nil to indicate that the controller should generate a single section. If this key path is not the same as that specified by the first sort descriptor in fetchRequest, they must generate the same relative orderings.
+ *  @param sectionNameKeyType the PropertyType of key path on result objects that returns the section name.
+ *  @param name               the cache name (if nil, cache will not be persisted and built using an in-memory Realm)
+ *
+ *  @return A new instance of RBQFetchedResultsController
+ */
+
+- (nonnull id)initWithFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
+                sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
+                sectionNameKeyType:(RLMPropertyType)sectionNameKeyType
+                         cacheName:(nullable NSString *)name;
+
+/**
  *  Method to tell the controller to perform the fetch
  *
  *  @return Indicates if the fetch was successful
@@ -222,13 +245,13 @@
 - (NSInteger)numberOfSections;
 
 /**
- *  Method to retrieve the title for a given section index
+ *  Method to retrieve the object for a given section index
  *
  *  @param section section index
  *
- *  @return The title of the section
+ *  @return The object of the section
  */
-- (nonnull NSString *)titleForHeaderInSection:(NSInteger)section;
+- (id _Nullable )objectForHeaderInSection:(NSInteger)section;
 
 /**
  *  Method to retrieve the section index given a section name

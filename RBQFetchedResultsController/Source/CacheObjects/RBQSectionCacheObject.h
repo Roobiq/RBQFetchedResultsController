@@ -45,7 +45,17 @@ RLM_ARRAY_TYPE(RBQObjectCacheObject)
  *
  *  @return A new instance of RBQSectionCacheObject
  */
-+ (instancetype)cacheWithName:(NSString *)name;
++ (instancetype)cacheWithName:(NSString *)name keyType:(RLMPropertyType)keyType;
+
+/**
+ *  key type (use to convert the string value if necessary)
+ *
+ * @warning Only supports RLMPropertyTypeInt ,RLMPropertyTypeString and RLMPropertyTypeDate which are the only
+ * supported Realm primary key types as of v1.0.
+ */
+@property NSInteger keyType;
+
+- (id)value;
 
 @end
 

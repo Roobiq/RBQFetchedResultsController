@@ -43,21 +43,21 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 @property (strong, nonatomic) NSString *sectionNameKeyPath;
 
 // Create a RBQFetchedResultsSectionInfo
-+ (instancetype)createSectionWithName:(NSString *)sectionName
++ (instancetype)createSectionWithName:(id)sectionValue
                    sectionNameKeyPath:(NSString *)sectionNameKeyPath
                          fetchRequest:(RBQFetchRequest *)fetchRequest;
 
 @end
 
 @implementation RBQFetchedResultsSectionInfo
-@synthesize name = _name;
+@synthesize value = _value;
 
-+ (instancetype)createSectionWithName:(NSString *)sectionName
++ (instancetype)createSectionWithName:(id)sectionValue
                    sectionNameKeyPath:(NSString *)sectionNameKeyPath
                          fetchRequest:(RBQFetchRequest *)fetchRequest
 {
     RBQFetchedResultsSectionInfo *sectionInfo = [[RBQFetchedResultsSectionInfo alloc] init];
-    sectionInfo->_name = sectionName;
+    sectionInfo->_value = sectionValue;
     sectionInfo.sectionNameKeyPath = sectionNameKeyPath;
     sectionInfo.fetchRequest = fetchRequest;
     
@@ -70,7 +70,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         
         id<RLMCollection> fetchResults = [self.fetchRequest fetchObjects];
         
-        return [fetchResults objectsWhere:@"%K == %@", self.sectionNameKeyPath, self.name];
+        return [fetchResults objectsWhere:@"%K == %@", self.sectionNameKeyPath, self.value];
     }
     else if (self.fetchRequest) {
         return [self.fetchRequest fetchObjects];
@@ -362,9 +362,17 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
 
 #pragma mark - Public Instance
 
-- (id)initWithFetchRequest:(RBQFetchRequest *)fetchRequest
-        sectionNameKeyPath:(NSString *)sectionNameKeyPath
-                 cacheName:(NSString *)name
+- (nonnull id)initWithFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
+                sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
+                         cacheName:(nullable NSString *)name
+{
+    return [self initWithFetchRequest:fetchRequest sectionNameKeyPath:sectionNameKeyPath sectionNameKeyType:RLMPropertyTypeString cacheName:name];
+}
+
+- (id)initWithFetchRequest:(nonnull RBQFetchRequest *)fetchRequest
+                sectionNameKeyPath:(nullable NSString *)sectionNameKeyPath
+                sectionNameKeyType:(RLMPropertyType)sectionNameKeyType
+                         cacheName:(nullable NSString *)name
 {
     self = [super init];
     
@@ -372,7 +380,8 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         _cacheName = name;
         _fetchRequest = fetchRequest;
         _sectionNameKeyPath = sectionNameKeyPath;
-		
+        NSAssert(sectionNameKeyType == RLMPropertyTypeString || sectionNameKeyType == RLMPropertyTypeDate || sectionNameKeyType == RLMPropertyTypeInt, @"not support type");
+        _sectionNameKeyType = sectionNameKeyType;
 #ifdef DEBUG
 		_logging = true;
 #endif
@@ -393,13 +402,15 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             [self createCacheWithRealm:[self cacheRealm]
                              cacheName:self.cacheName
                        forFetchRequest:self.fetchRequest
-                    sectionNameKeyPath:self.sectionNameKeyPath];
+                    sectionNameKeyPath:self.sectionNameKeyPath
+                    sectionNameKeyType:self.sectionNameKeyType];
         }
         else {
             [self createCacheWithRealm:[self cacheRealm]
                              cacheName:[self nameForFetchRequest:self.fetchRequest]
                        forFetchRequest:self.fetchRequest
-                    sectionNameKeyPath:self.sectionNameKeyPath];
+                    sectionNameKeyPath:self.sectionNameKeyPath
+                    sectionNameKeyType:self.sectionNameKeyType];
         }
         
         // Only register for changes after the cache was created!
@@ -569,6 +580,22 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     }
     
     return @"";
+}
+
+- (id)objectForHeaderInSection:(NSInteger)section
+{
+    RBQControllerCacheObject *cache = [self cache];
+    
+    if (cache) {
+        
+        if (section < cache.sections.count) {
+            RBQSectionCacheObject *sectionInfo = cache.sections[section];
+            
+            return sectionInfo.value;
+        }
+    }
+    
+    return nil;
 }
 
 - (NSUInteger)sectionIndexForSectionName:(NSString *)sectionName
@@ -962,6 +989,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                    cacheName:(NSString *)cacheName
              forFetchRequest:(RBQFetchRequest *)fetchRequest
           sectionNameKeyPath:(NSString *)sectionNameKeyPath
+          sectionNameKeyType:(RLMPropertyType)sectionNameKeyType
 {
     id<RLMCollection> fetchResults = [fetchRequest fetchObjects];
     
@@ -1001,7 +1029,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             
             currentSectionTitle = @"";
             
-            section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
+            section = [RBQSectionCacheObject cacheWithName:currentSectionTitle keyType:sectionNameKeyType];
             
             section.firstObjectIndex = 0;
         }
@@ -1013,10 +1041,12 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
             if (sectionNameKeyPath) {
                 
                 // Check your sectionNameKeyPath if a crash occurs...
-                NSString *sectionTitle = [object valueForKeyPath:sectionNameKeyPath];
+                id sectionObject = [object valueForKeyPath:sectionNameKeyPath];
+                
+                NSString *sectionTitle = [self getStringForSectionKeyValue:sectionObject sectionNameKeyType:sectionNameKeyType];
                 
                 // New Section Found --> Process It
-                if (![sectionTitle isEqualToString:currentSectionTitle]) {
+                if (![sectionTitle isEqual:currentSectionTitle]) {
                     
                     // If we already gathered up the section objects, then save them
                     if (section.objects.count > 0) {
@@ -1034,7 +1064,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                     currentSectionTitle = sectionTitle;
                     
                     // Reset the section object array
-                    section = [RBQSectionCacheObject cacheWithName:currentSectionTitle];
+                    section = [RBQSectionCacheObject cacheWithName:currentSectionTitle keyType:sectionNameKeyType];
                     
                     section.firstObjectIndex = count;
                 }
@@ -1077,6 +1107,29 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
     }
     
     [cacheRealm commitWriteTransaction];
+}
+
+- (NSString *)getStringForSectionKeyValue:(id)sectionObject sectionNameKeyType:(RLMPropertyType)sectionNameKeyType
+{
+    NSString *sectionTitle;
+    if (sectionNameKeyType == RLMPropertyTypeString) {
+        sectionTitle = (NSString *)sectionObject;
+    }
+    else if (sectionNameKeyType == RLMPropertyTypeInt) {
+        sectionTitle = ((NSNumber *)sectionObject).stringValue;
+    }
+    else if (sectionNameKeyType == RLMPropertyTypeDate) {
+        NSString *dateString = [NSDateFormatter localizedStringFromDate:(NSDate *)sectionObject
+                                                              dateStyle:NSDateFormatterMediumStyle
+                                                              timeStyle:NSDateFormatterFullStyle];
+        sectionTitle = dateString;
+    }
+    else {
+        @throw([NSException exceptionWithName:@"Unsupported primary key type"
+                                       reason:@"RBQFetchedResultsController only supports NSString or int/NSInteger primary keys"
+                                     userInfo:nil]);
+    }
+    return sectionTitle;
 }
 
 #pragma mark - RBQStateObject
@@ -1148,30 +1201,33 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
                     continue;
                 }
             
-            NSString *sectionTitle = nil;
+            id sectionValue = nil;
             
             if (object &&
                 self.sectionNameKeyPath) {
-                sectionTitle = [object valueForKeyPath:self.sectionNameKeyPath];
+                sectionValue = [object valueForKeyPath:self.sectionNameKeyPath];
             }
             else if (self.sectionNameKeyPath) {
                 RBQObjectCacheObject *oldCacheObject =
                 [RBQObjectCacheObject objectInRealm:state.cacheRealm
                                       forPrimaryKey:primaryKeyStringValue];
                 
-                sectionTitle = oldCacheObject.section.name;
+                sectionValue = oldCacheObject.section.value;
             }
             // We aren't using sections so create a dummy one with no text
             else {
-                sectionTitle = @"";
+                sectionValue = @"";
             }
-            
-            if (sectionTitle) {
+             NSString *sectionTitle = [self getStringForSectionKeyValue:sectionValue sectionNameKeyType:self.sectionNameKeyType];
+            if (sectionValue) {
+               
+                
                 RBQSectionCacheObject *section = [RBQSectionCacheObject objectInRealm:state.cacheRealm
                                                                         forPrimaryKey:sectionTitle];
                 
                 if (!section) {
-                    section = [RBQSectionCacheObject cacheWithName:sectionTitle];
+                   
+                    section = [RBQSectionCacheObject cacheWithName:sectionTitle keyType:self.sectionNameKeyType];
                 }
                 
                 [cacheSectionsInChangeSet addObject:section];
@@ -1241,7 +1297,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         if (self.sectionNameKeyPath) {
             sectionResults = [state.fetchResults objectsWhere:@"%K == %@",
                               self.sectionNameKeyPath,
-                              section.name];
+                              section.value];
         }
         // We aren't using sections, so just use all results
         else {
@@ -1441,7 +1497,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         NSInteger oldSectionIndex = [sectionChanges.oldCacheSections indexOfObject:section];
         
         RBQFetchedResultsSectionInfo *sectionInfo =
-        [RBQFetchedResultsSectionInfo createSectionWithName:section.name
+        [RBQFetchedResultsSectionInfo createSectionWithName:section.value
                                          sectionNameKeyPath:self.sectionNameKeyPath
                                                fetchRequest:self.fetchRequest];
         
@@ -1470,7 +1526,7 @@ static void * RBQArrayFetchRequestContext = &RBQArrayFetchRequestContext;
         NSInteger newSectionIndex = [sectionChanges.sortedNewCacheSections indexOfObject:section];
         
         RBQFetchedResultsSectionInfo *sectionInfo =
-        [RBQFetchedResultsSectionInfo createSectionWithName:section.name
+        [RBQFetchedResultsSectionInfo createSectionWithName:section.value
                                          sectionNameKeyPath:self.sectionNameKeyPath
                                                fetchRequest:self.fetchRequest];
         

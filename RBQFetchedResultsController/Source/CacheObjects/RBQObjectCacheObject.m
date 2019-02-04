@@ -37,6 +37,12 @@
     else if (cacheObject.primaryKeyType == RLMPropertyTypeInt) {
         cacheObject.primaryKeyStringValue = ((NSNumber *)primaryKeyValue).stringValue;
     }
+    else if (cacheObject.primaryKeyType == RLMPropertyTypeDate) {
+        NSString *dateString = [NSDateFormatter localizedStringFromDate:(NSDate *)primaryKeyValue
+                                                              dateStyle:NSDateFormatterMediumStyle
+                                                              timeStyle:NSDateFormatterFullStyle];
+        cacheObject.primaryKeyStringValue = dateString;
+    }
     else {
         @throw([self unsupportedPrimaryKeyTypeException]);
     }
@@ -57,6 +63,12 @@
     }
     else if (cacheObject.primaryKeyType == RLMPropertyTypeInt) {
         cacheObject.primaryKeyStringValue = ((NSNumber *)safeObject.primaryKeyValue).stringValue;
+    }
+    else if (cacheObject.primaryKeyType == RLMPropertyTypeDate) {
+        NSString *dateString = [NSDateFormatter localizedStringFromDate:(NSDate *)safeObject.primaryKeyValue
+                                                              dateStyle:NSDateFormatterMediumStyle
+                                                              timeStyle:NSDateFormatterFullStyle];
+        cacheObject.primaryKeyStringValue = dateString;
     }
     else {
         @throw([self unsupportedPrimaryKeyTypeException]);
@@ -86,6 +98,14 @@
             return [RBQObjectCacheObject objectInRealm:realm
                                          forPrimaryKey:primaryKeyStringValue];
         }
+        else if (primaryKeyType == RLMPropertyTypeDate) {
+            NSString *primaryKeyStringValue = [NSDateFormatter localizedStringFromDate:(NSDate *)primaryKeyValue
+                                                                  dateStyle:NSDateFormatterMediumStyle
+                                                                  timeStyle:NSDateFormatterFullStyle];
+            return [RBQObjectCacheObject objectInRealm:realm
+                                         forPrimaryKey:primaryKeyStringValue];
+        }
+
         else {
             @throw([self unsupportedPrimaryKeyTypeException]);
         }
@@ -105,6 +125,11 @@
         NSNumber *numberFromString = @(cacheObject.primaryKeyStringValue.longLongValue);
         
         return [realm objectWithClassName:cacheObject.className forPrimaryKey:numberFromString];
+    }
+    else if (cacheObject.primaryKeyType == RLMPropertyTypeDate) {
+        NSDate *dateFromKey = (NSDate *)cacheObject.primaryKeyValue;
+        
+        return [realm objectWithClassName:cacheObject.className forPrimaryKey:dateFromKey];
     }
     else {
         @throw ([self unsupportedPrimaryKeyTypeException]);
@@ -136,7 +161,14 @@
         
         return numberFromString;
     }
-    
+    if (self.primaryKeyType == RLMPropertyTypeDate) {
+        NSDateFormatter *format = [[NSDateFormatter alloc] init];
+        format.dateStyle = NSDateFormatterMediumStyle;
+        format.timeStyle = NSDateFormatterFullStyle;
+        NSDate *dateFromString = [format dateFromString:self.primaryKeyStringValue];;
+        
+        return dateFromString;
+    }
     return self.primaryKeyStringValue;
 }
 
@@ -153,6 +185,10 @@
              object.primaryKeyType == RLMPropertyTypeInt) {
         
         return self.primaryKeyStringValue.integerValue == object.primaryKeyStringValue.integerValue;
+    }
+    else if (self.primaryKeyType == RLMPropertyTypeDate &&
+             object.primaryKeyType == RLMPropertyTypeDate) {
+        return [(NSDate *)self.primaryKeyValue isEqualToDate:(NSDate *)object.primaryKeyValue];
     }
     else {
         return [super isEqual:object];
