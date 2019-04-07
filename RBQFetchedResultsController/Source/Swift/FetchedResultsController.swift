@@ -264,7 +264,21 @@ open class FetchedResultsController<T: Object> {
     open func reset() {
         self.rbqFetchedResultsController.reset()
     }
-    
+    /**
+    Call these method to registerChangeNotifications or unregisterNotifications 
+
+    A potential use case would be if you have many stacked views and only want certain view to receive notifications.
+     
+    */
+
+    public func unregisterChangeNotifications() {
+        self.rbqFetchedResultsController.unregisterChangeNotifications()
+    }
+
+    public func registerChangeNotifications() {
+        self.rbqFetchedResultsController.registerChangeNotifications()
+    }
+
     /**
     Method to retrieve the number of rows for a given section index
     
